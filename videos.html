@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Video Classes</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; padding-bottom: 40px; }
+        
+        .videos-header { background-color: #0b1e47; color: white; padding: 20px 5%; text-align: center; border-bottom: 4px solid #ffcc00; }
+        .videos-header h1 { margin: 0; font-size: 26px; color: #ffcc00; }
+        .videos-header p { margin: 5px 0 0 0; font-size: 14px; opacity: 0.9; }
+
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        
+        /* मुख्य दो सेक्शन के बड़े बटन */
+        .main-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        @media (max-width: 600px) { .main-sections { grid-template-columns: 1fr; } }
+        
+        .section-btn { background: white; padding: 25px; border-radius: 16px; text-align: center; box-shadow: 0 6px 15px rgba(0,0,0,0.05); border: 2px solid #e2e8f0; cursor: pointer; font-size: 20px; font-weight: 700; color: #0b1e47; transition: 0.2s; }
+        .section-btn:hover { border-color: #0b1e47; background-color: #f1f5f9; transform: translateY(-2px); }
+        .section-btn.active { background-color: #0b1e47; color: white; border-color: #0b1e47; }
+
+        /* डिस्प्लेिया */
+        .content-panel { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; display: none; }
+        .panel-title { font-size: 22px; font-weight: 700; color: #0b1e47; margin-top: 0; margin-bottom: 20px; border-bottom: 2px solid #ffcc00; padding-bottom: 8px; }
+        
+        /* सब्जेक्ट्स ग्रिड (GK/GS के लिए) */
+        .subject-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; }
+        .subject-card { background: #f8fafc; border: 1px solid #cbd5e1; padding: 18px 10px; border-radius: 10px; text-decoration: none; color: #1e293b; font-weight: 600; text-align: center; transition: 0.2s; cursor: pointer; }
+        .subject-card:hover { background: #ffcc00; color: #0b1e47; border-color: #ffcc00; transform: translateY(-2px); }
+        .subject-card.sub-active { background: #0b1e47; color: white; border-color: #0b1e47; }
+
+        /* सब-पैनल्स (डैश्ड बॉक्स) */
+        .sub-panel { background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 20px; margin-top: 25px; display: none; }
+        .sub-panel-title { font-weight: 700; color: #0b1e47; margin-bottom: 15px; font-size: 16px; border-left: 4px solid #ffcc00; padding-left: 8px; }
+
+        /* दो श्रेणी कार्ड्स ग्रिड (Theory, Test Explanation के लिए) */
+        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media (max-width: 500px) { .category-grid { grid-template-columns: 1fr; } }
+        
+        .category-card { background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; }
+        .category-info { display: flex; flex-direction: column; }
+        .cat-title { font-size: 15px; font-weight: 700; color: #1e293b; }
+        .cat-desc { font-size: 12px; color: #64748b; margin-top: 3px; }
+        
+        /* बटन्स स्टाइल */
+        .btn-watch { background-color: #ff0000; color: white; text-decoration: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: bold; text-align: center; transition: 0.2s; }
+        .btn-watch:hover { background-color: #cc0000; }
+        .btn-soon { background-color: #e2e8f0; color: #94a3b8; padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: bold; text-align: center; cursor: not-allowed; }
+
+        .btn-back { display: inline-block; margin-top: 25px; color: #64748b; text-decoration: none; font-weight: 600; font-size: 14px; }
+        .btn-back:hover { color: #0b1e47; }
+    </style>
+</head>
+<body>
+
+    <div class="videos-header">
+        <h1>MEDHAVI STUDY POINT</h1>
+        <p>📺 विषयवार वीडियो लेक्चर्स एवं डिजिटल कक्षाएं 📺</p>
+    </div>
+
+    <div class="container">
+        
+        <!-- दो मुख्य सेक्शन्स -->
+        <div class="main-sections">
+            <div class="section-btn" id="btnHomeScience" onclick="showSection('homescience')">📘 Home Science Lectures</div>
+            <div class="section-btn" id="btnGKGS" onclick="showSection('gkgs')">📕 GK / GS Lectures</div>
+        </div>
+
+        <!-- 1. Home Science का पैनल -->
+        <div id="panelHomeScience" class="content-panel">
+            <div class="panel-title">Home Science - Video Categories</div>
+            <div class="category-grid">
+                <!-- थ्योरी क्लास -->
+                <div class="category-card">
+                    <div class="category-info">
+                        <span class="cat-title">📖 Theory Classes</span>
+                        <span class="cat-desc">गृह विज्ञान संपूर्ण थ्योरी वीडियो लेक्चर्स</span>
+                    </div>
+                    <a href="https://www.youtube.com/@medhavistudypoint" target="_blank" class="btn-watch">▶ प्लेलिस्ट खोलें</a>
+                </div>
+                <!-- टेस्ट व्याख्या -->
+                <div class="category-card">
+                    <div class="category-info">
+                        <span class="cat-title">📝 Test Explanation</span>
+                        <span class="cat-desc font-size:12px;">मॉक टेस्ट प्रश्नों की वीडियो व्याख्या</span>
+                    </div>
+                    <a href="https://www.youtube.com/@medhavistudypoint" target="_blank" class="btn-watch">▶ प्लेलिस्ट खोलें</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. GK/GS का पैनल -->
+        <div id="panelGKGS" class="content-panel">
+            <div class="panel-title">GK / GS - Select Subject</div>
+            
+            <!-- सब्जेक्ट्स की लिस्ट -->
+            <div class="subject-grid">
+                <div class="subject-card" id="subPolity" onclick="toggleSubject('polity')">🏛️ Polity</div>
+                <div class="subject-card" id="subHistory" onclick="toggleSubject('history')">📜 History</div>
+                <div class="subject-card" id="subGeography" onclick="toggleSubject('geography')">🌍 Geography</div>
+                <div class="subject-card" id="subEconomics" onclick="toggleSubject('economics')">💰 Economics</div>
+                <div class="subject-card" id="subScience" onclick="toggleSubject('science')">🔬 Science</div>
+                <div class="subject-card" id="subEnvironment" onclick="toggleSubject('environment')">🌱 Environment</div>
+                <div class="subject-card" id="subComputer" onclick="toggleSubject('computer')">💻 Computer</div>
+                <div class="subject-card" id="subUPSpecial" onclick="toggleSubject('upspecial')">🏹 UP Special</div>
+            </div>
+
+            <!-- ================= सब-पैनल्स (सारे सब्जेक्ट्स के 2-कैटेगरी बॉक्स) ================= -->
+
+            <!-- 1. Polity Panel -->
+            <div id="panelPolity" class="sub-panel">
+                <div class="sub-panel-title">🏛️ Indian Polity (भारतीय राजव्यवस्था)</div>
+                <div class="category-grid">
+                    <div class="category-card">
+                        <div class="category-info"><span class="cat-title">📖 Theory Classes</span><span class="cat-desc">राजव्यवस्था थ्योरी लेक्चर्स</span></div>
+                        <a href="https://www.youtube.com/@medhavistudypoint" target="_blank" class="btn-watch">▶ प्लेलिस्ट खोलें</a>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-info"><span class="cat-title">📝 Test Explanation</span><span class="cat-desc">टेस्ट सीरीज वीडियो डिस्कशन</span></div>
+                        <a href="https://www.youtube.com/@medhavistudypoint" target="_blank" class="btn-watch">▶ प्लेलिस्ट खोलें</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. History Panel -->
+            <div id="panelHistory" class="sub-panel">
+                <div class="sub-panel-title">📜 History (इतिहास)</div>
+                <div class="category-grid">
+                    <div class="category-card"><div class="category-info"><span class="cat-title">📖 Theory Classes</span></div><span class="btn-soon">जल्द आ रहा है</span></div>
+                    <div class="category-card"><div class="category-info"><span class="cat-title">📝 Test Explanation</span></div><span class="btn-soon">जल्द आ रहा है</span></div>
+                </div>
+            </div>
+
+            <!-- 3. Geography Panel -->
+            <div id="panelGeography" class="sub-panel">
+                <div class="sub-panel-title">🌍 Geography (भूगोल)</div>
+                <div class="category-grid">
+                    <div class="category-card"><div class="category-info"><span class="cat-title">📖 Theory Classes</span></div><span class="btn-soon">जल्द आ रहा है</span></div>
+                    <div class="category-card"><div class="category-info"><span class="cat-title">📝 Test Explanation</span></div><span class="btn-soon">जल्द आ रहा है</span></div>
+                </div>
+            </div>
+
+            <!-- 4. Economics Panel -->
+            <div id="panelEconomics" class="sub-panel">
+                <div class="sub-panel-title">💰 Economics (अर्थव्यवस्था)</div>
+                <div class="category-grid">
+                    <div class="category-card"><div class="category-info"><span class="cat-title">📖 Theory Classes</span></div><span class="btn-soon">जल्द आ रहा है</span></div>
+                    <div class="category-card"><div class="category-info"><span class="cat-title">📝 Test Explanation</span></div><span class="btn-soon">जल्द आ रहा है</span></div>
+                </div>
+            </div>
+
+            <!-- 5. Science Panel -->
+            <div id="panelScience" class="sub-panel">
+                <div class="sub-panel-title">🔬 Science (सामान्य विज्ञान)</div>
+                <div class="category-grid">
+                    <div class="category-card"><div class="category-info"><span class="cat-title">📖 Theory Classes</span></div><span class="btn-soon">जल्द आ रहा है</span></div>
+                    <div class="category-card"><div class="category-info"><span class="cat-title">📝 Test Explanation</span></div><span class="btn-soon">जल्द आ रहा है</span></div>
+                </div>
+            </div>
+
+            <!-- 6. Environment Panel -->
+            <div id="panelEnvironment" class="sub-panel">
+                <div class="sub-panel-title">🌱 Environment (पर्यावरण)</div>
+                <div class="category-grid">
+                    <div class="category-card"><div class="category-info"><span class="cat-title">📖 Theory Classes</span></div><span class="btn-soon">जल्द आ रहा है</span></div>
+                    <div class="category-card"><div class="category-info"><span class="cat-title">📝 Test Explanation</span></div><span class="btn-soon">जल्द आ रहा है</span></div>
+                </div>
+            </div>
+
+            <!-- 7. Computer Panel -->
+            <div id="panelComputer" class="sub-panel">
+                <div class="sub-panel-title">💻 Computer (कंप्यूटर ज्ञान)</div>
+                <div class="category-grid">
+                    <div class="category-card"><div class="category-info"><span class="cat-title">📖 Theory Classes</span></div><span class="btn-soon">जल्द आ रहा है</span></div>
+                    <div class="category-card"><div class="category-info"><span class="cat-title">📝 Test Explanation</span></div><span class="btn-soon">जल्द आ रहा है</span></div>
+                </div>
+            </div>
+
+            <!-- 8. UP Special Panel -->
+            <div id="panelUPSpecial" class="sub-panel">
+                <div class="sub-panel-title">🏹 UP Special (उत्तर प्रदेश विशेष)</div>
+                <div class="category-grid">
+                    <div class="category-card"><div class="category-info"><span class="cat-title">📖 Theory Classes</span></div><span class="btn-soon">जल्द आ रहा है</span></div>
+                    <div class="category-card"><div class="category-info"><span class="cat-title">📝 Test Explanation</span></div><span class="btn-soon">जल्द आ रहा है</span></div>
+                </div>
+            </div>
+
+        </div>
+
+        <a href="index.html" class="btn-back">🔙 मुख्य होमपेज पर वापस जाएं</a>
+    </div>
+
+    <script>
+        const allSubjects = ['polity', 'history', 'geography', 'economics', 'science', 'environment', 'computer', 'upspecial'];
+
+        function showSection(section) {
+            document.getElementById('btnHomeScience').classList.remove('active');
+            document.getElementById('btnGKGS').classList.remove('active');
+            document.getElementById('panelHomeScience').style.display = 'none';
+            document.getElementById('panelGKGS').style.display = 'none';
+            
+            hideAllSubPanels();
+            
+            if(section === 'homescience') {
+                document.getElementById('btnHomeScience').classList.add('active');
+                document.getElementById('panelHomeScience').style.display = 'block';
+            } else if(section === 'gkgs') {
+                document.getElementById('btnGKGS').classList.add('active');
+                document.getElementById('panelGKGS').style.display = 'block';
+            }
+        }
+
+        function toggleSubject(subjectTarget) {
+            const formattedName = subjectTarget.charAt(0).toUpperCase() + subjectTarget.slice(1);
+            const targetPanel = document.getElementById('panel' + formattedName);
+            const targetCard = document.getElementById('sub' + formattedName);
+            
+            if(targetPanel.style.display === 'block') {
+                targetPanel.style.display = 'none';
+                targetCard.classList.remove('sub-active');
+            } else {
+                hideAllSubPanels();
+                targetPanel.style.display = 'block';
+                targetCard.classList.add('sub-active');
+            }
+        }
+
+        function hideAllSubPanels() {
+            allSubjects.forEach(sub => {
+                const formatted = sub.charAt(0).toUpperCase() + sub.slice(1);
+                const p = document.getElementById('panel' + formatted);
+                const c = document.getElementById('sub' + formatted);
+                if(p) p.style.display = 'none';
+                if(c) c.classList.remove('sub-active');
+            });
+        }
+    </script>
+</body>
+          </html>
+          
