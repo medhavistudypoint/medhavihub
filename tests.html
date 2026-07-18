@@ -26,7 +26,7 @@
         .content-panel { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; display: none; }
         .panel-title { font-size: 22px; font-weight: 700; color: #0b1e47; margin-top: 0; margin-bottom: 20px; border-bottom: 2px solid #ffcc00; padding-bottom: 8px; }
         
-        /* टेस्ट लिस्ट (Home Science के लिए) */
+        /* टेस्ट लिस्ट ग्रिड */
         .test-list { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         @media (max-width: 500px) { .test-list { grid-template-columns: 1fr; } }
         .test-card { background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 10px; text-decoration: none; color: #1e293b; font-weight: 600; text-align: center; transition: 0.2s; }
@@ -36,6 +36,10 @@
         .subject-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; }
         .subject-card { background: #f8fafc; border: 1px solid #cbd5e1; padding: 18px 10px; border-radius: 10px; text-decoration: none; color: #1e293b; font-weight: 600; text-align: center; transition: 0.2s; cursor: pointer; }
         .subject-card:hover { background: #ffcc00; color: #0b1e47; border-color: #ffcc00; transform: translateY(-2px); }
+        .subject-card.sub-active { background: #0b1e47; color: white; border-color: #0b1e47; }
+
+        /* सभी सब्जेक्ट्स के सब-पैनल्स (डैश्ड बॉक्स) */
+        .sub-panel { background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 20px; margin-top: 25px; display: none; }
 
         .btn-back { display: inline-block; margin-top: 25px; color: #64748b; text-decoration: none; font-weight: 600; font-size: 14px; }
         .btn-back:hover { color: #0b1e47; }
@@ -70,32 +74,106 @@
         <!-- 2. GK/GS का पैनल -->
         <div id="panelGKGS" class="content-panel">
             <div class="panel-title">GK / GS - Select Subject</div>
+            
+            <!-- सब्जेक्ट्स की लिस्ट -->
             <div class="subject-grid">
-                <a href="polity/test1.html" class="subject-card">🏛️ Polity</a>
-                <div class="subject-card" onclick="alert('History टेस्ट जल्द आ रहे हैं!')">📜 History</div>
-                <div class="subject-card" onclick="alert('Geography टेस्ट जल्द आ रहे हैं!')">🌍 Geography</div>
-                <div class="subject-card" onclick="alert('Economics टेस्ट जल्द आ रहे हैं!')">💰 Economics</div>
-                <div class="subject-card" onclick="alert('Science टेस्ट जल्द आ रहे हैं!')">🔬 Science</div>
-                <div class="subject-card" onclick="alert('Environment टेस्ट जल्द आ रहे हैं!')">🌱 Environment</div>
-                <div class="subject-card" onclick="alert('Computer टेस्ट जल्द आ रहे हैं!')">💻 Computer</div>
-                <div class="subject-card" onclick="alert('UP Special टेस्ट जल्द आ रहे हैं!')">🏹 UP Special</div>
+                <div class="subject-card" id="subPolity" onclick="toggleSubject('polity')">🏛️ Polity</div>
+                <div class="subject-card" id="subHistory" onclick="toggleSubject('history')">📜 History</div>
+                <div class="subject-card" id="subGeography" onclick="toggleSubject('geography')">🌍 Geography</div>
+                <div class="subject-card" id="subEconomics" onclick="toggleSubject('economics')">💰 Economics</div>
+                <div class="subject-card" id="subScience" onclick="toggleSubject('science')">🔬 Science</div>
+                <div class="subject-card" id="subEnvironment" onclick="toggleSubject('environment')">🌱 Environment</div>
+                <div class="subject-card" id="subComputer" onclick="toggleSubject('computer')">💻 Computer</div>
+                <div class="subject-card" id="subUPSpecial" onclick="toggleSubject('upspecial')">🏹 UP Special</div>
             </div>
+
+            <!-- ================= सब-पैनल्स की लिस्ट (सारे सब्जेक्ट्स के लिए) ================= -->
+
+            <!-- 1. Polity Panel -->
+            <div id="panelPolity" class="sub-panel">
+                <div style="font-weight: 700; color: #0b1e47; margin-bottom: 12px; font-size: 15px;">🏛️ Polity - Available Tests:</div>
+                <div class="test-list">
+                    <a href="polity/test1.html" class="test-card">📝 Polity Test - 1</a>
+                    <a href="polity/test2.html" class="test-card">📝 Polity Test - 2</a>
+                    <a href="polity/test3.html" class="test-card">📝 Polity Test - 3</a>
+                </div>
+            </div>
+
+            <!-- 2. History Panel -->
+            <div id="panelHistory" class="sub-panel">
+                <div style="font-weight: 700; color: #0b1e47; margin-bottom: 12px; font-size: 15px;">📜 History - Available Tests:</div>
+                <div class="test-list">
+                    <a href="history/test1.html" class="test-card">📝 History Test - 1</a>
+                    <a href="history/test2.html" class="test-card">📝 History Test - 2</a>
+                </div>
+            </div>
+
+            <!-- 3. Geography Panel -->
+            <div id="panelGeography" class="sub-panel">
+                <div style="font-weight: 700; color: #0b1e47; margin-bottom: 12px; font-size: 15px;">🌍 Geography - Available Tests:</div>
+                <div class="test-list">
+                    <a href="geography/test1.html" class="test-card">📝 Geography Test - 1</a>
+                </div>
+            </div>
+
+            <!-- 4. Economics Panel -->
+            <div id="panelEconomics" class="sub-panel">
+                <div style="font-weight: 700; color: #0b1e47; margin-bottom: 12px; font-size: 15px;">💰 Economics - Available Tests:</div>
+                <div class="test-list">
+                    <a href="economics/test1.html" class="test-card">📝 Economics Test - 1</a>
+                </div>
+            </div>
+
+            <!-- 5. Science Panel -->
+            <div id="panelScience" class="sub-panel">
+                <div style="font-weight: 700; color: #0b1e47; margin-bottom: 12px; font-size: 15px;">🔬 Science - Available Tests:</div>
+                <div class="test-list">
+                    <a href="science/test1.html" class="test-card">📝 Science Test - 1</a>
+                </div>
+            </div>
+
+            <!-- 6. Environment Panel -->
+            <div id="panelEnvironment" class="sub-panel">
+                <div style="font-weight: 700; color: #0b1e47; margin-bottom: 12px; font-size: 15px;">🌱 Environment - Available Tests:</div>
+                <div class="test-list">
+                    <a href="environment/test1.html" class="test-card">📝 Environment Test - 1</a>
+                </div>
+            </div>
+
+            <!-- 7. Computer Panel -->
+            <div id="panelComputer" class="sub-panel">
+                <div style="font-weight: 700; color: #0b1e47; margin-bottom: 12px; font-size: 15px;">💻 Computer - Available Tests:</div>
+                <div class="test-list">
+                    <a href="computer/test1.html" class="test-card">📝 Computer Test - 1</a>
+                </div>
+            </div>
+
+            <!-- 8. UP Special Panel -->
+            <div id="panelUPSpecial" class="sub-panel">
+                <div style="font-weight: 700; color: #0b1e47; margin-bottom: 12px; font-size: 15px;">🏹 UP Special - Available Tests:</div>
+                <div class="test-list">
+                    <a href="upspecial/test1.html" class="test-card">📝 UP Special Test - 1</a>
+                </div>
+            </div>
+
         </div>
 
         <a href="index.html" class="btn-back">🔙 मुख्य होमपेज पर वापस जाएं</a>
     </div>
 
     <script>
+        // सभी विषयों की लिस्ट जावास्क्रिप्ट के लिए
+        const allSubjects = ['polity', 'history', 'geography', 'economics', 'science', 'environment', 'computer', 'upspecial'];
+
         function showSection(section) {
-            // बटन्स की एक्टिव स्टेट रीसेट करना
             document.getElementById('btnHomeScience').classList.remove('active');
             document.getElementById('btnGKGS').classList.remove('active');
-            
-            // पैनल्स को छिपाना
             document.getElementById('panelHomeScience').style.display = 'none';
             document.getElementById('panelGKGS').style.display = 'none';
             
-            // चुने हुए सेक्शन को एक्टिव करना और दिखाना
+            // GK/GS के सारे सब-पैनल्स को बंद करना
+            hideAllSubPanels();
+            
             if(section === 'homescience') {
                 document.getElementById('btnHomeScience').classList.add('active');
                 document.getElementById('panelHomeScience').style.display = 'block';
@@ -104,7 +182,37 @@
                 document.getElementById('panelGKGS').style.display = 'block';
             }
         }
+
+        // किसी एक विषय पर क्लिक करने का डायनामिक फंक्शन
+        function toggleSubject(subjectTarget) {
+            // पहली अक्षर को बड़ा बनाने के लिए (जैसे polity -> Polity)
+            const formattedName = subjectTarget.charAt(0).toUpperCase() + subjectTarget.slice(1);
+            const targetPanel = document.getElementById('panel' + formattedName);
+            const targetCard = document.getElementById('sub' + formattedName);
+            
+            // अगर वही पैनल पहले से खुला है तो उसे बंद कर दो
+            if(targetPanel.style.display === 'block') {
+                targetPanel.style.display = 'none';
+                targetCard.classList.remove('sub-active');
+            } else {
+                // पहले से खुले किसी भी दूसरे पैनल को बंद करो
+                hideAllSubPanels();
+                // अब चुने हुए पैनल को खोलो
+                targetPanel.style.display = 'block';
+                targetCard.classList.add('sub-active');
+            }
+        }
+
+        // सारे सब-पैनल्स छिपाने का कॉमन फंक्शन
+        function hideAllSubPanels() {
+            allSubjects.forEach(sub => {
+                const formatted = sub.charAt(0).toUpperCase() + sub.slice(1);
+                const p = document.getElementById('panel' + formatted);
+                const c = document.getElementById('sub' + formatted);
+                if(p) p.style.display = 'none';
+                if(c) c.classList.remove('sub-active');
+            });
+        }
     </script>
 </body>
 </html>
-
