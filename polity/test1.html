@@ -220,14 +220,6 @@
             { id: 5, question: "Q_5. लोक सभा का सदस्य बनने के लिए न्यूनतम आयु कितनी होनी चाहिए?", options: ["18 वर्ष", "21 वर्ष", "25 वर्ष", "30 वर्ष"], correct: 2 }
         ];
 
-       const dataset = [
-            { id: 1, question: "Q_1. भारतीय संविधान का जनक किसे माना जाता है?", options: ["डॉ. राजेन्द्र प्रसाद", "जवाहरलाल नेहरू", "डॉ. बी. आर. अम्बेडकर", "सरदार वल्लभभाई पटेल"], correct: 2 },
-            { id: 2, question: "Q_2. संविधान के किस भाग में मौलिक अधिकारों (Fundamental Rights) का वर्णन है?", options: ["भाग I", "भाग II", "भाग III", "भाग IV"], correct: 2 },
-            { id: 3, question: "Q_3. भारत के राष्ट्रपति को पद की शपथ कौन दिलाता है?", options: ["भारत के मुख्य न्यायाधीश (CJI)", "प्रधानमंत्री", "उपराष्ट्रपति", "लोकसभा अध्यक्ष"], correct: 0 },
-            { id: 4, question: "Q_4. भारतीय संविधान की प्रस्तावना में 'धर्मनिरपेक्ष' शब्द किस संशोधन द्वारा जोड़ा गया?", options: ["44वां संशोधन", "42वां संशोधन", "24वां संशोधन", "86वां संशोधन"], correct: 1 },
-            { id: 5, question: "Q_5. लोक सभा का सदस्य बनने के लिए न्यूनतम आयु कितनी होनी चाहिए?", options: ["18 वर्ष", "21 वर्ष", "25 वर्ष", "30 वर्ष"], correct: 2 }
-        ];
-
         let activeIndex = 0;
         const totalDurationSec = 5 * 60; 
         let timeRemainingSec = totalDurationSec;
@@ -283,6 +275,7 @@
             const s = timeRemainingSec % 60;
             document.getElementById('countdownTimer').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
         }
+
 
         function displayQuestionCard(idx) {
             activeIndex = idx;
@@ -381,7 +374,7 @@
         }
 
         function forceAutomaticSubmission() {
-            alert("समय समाप्त! आपका टेस्ट अपने आप सबमिट हो रहा है।");
+            alert("समय समाप्त! आपका टेस्ट अपने आप सबमिट हो रहा.।");
             processFinalCalculation();
         }
 
@@ -497,5 +490,4 @@
         }
     </script>
 </body>
-</html> 
-        
+</html>
