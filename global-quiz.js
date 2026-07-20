@@ -7,9 +7,9 @@ let countdownTimerId = null;
 let studentName = "";
 let isReattemptMode = false;
 
-// null = Not Visited (White), -1 = Skipped/Visited (Red), >=0 = Answered (Green)
-let userResponses = new Array(dataset.length).fill(null);
-let markedMatrix = new Array(dataset.length).fill(false);
+// null = Not Visited (White), -1 = Skipped (Red), -2 = Visited but not answered yet, >=0 = Answered (Green)
+let userResponses = [];
+let markedMatrix = [];
 
 document.addEventListener('contextmenu', event => event.preventDefault()); 
 document.onkeydown = function(e) {
@@ -59,8 +59,13 @@ function validateAndStartQuiz() {
         return;
     }
     
-    userResponses = new Array(dataset.length).fill(null);
-    markedMatrix = new Array(dataset.length).fill(false);
+    userResponses = new Array(dataset.length);
+    markedMatrix = new Array(dataset.length);
+    for(let i = 0; i < dataset.length; i++) {
+        userResponses[i] = null;
+        markedMatrix[i] = false;
+    }
+    
     timeRemainingSec = totalDurationSec;
     
     document.getElementById("boxLoginGate").classList.add("hidden");
@@ -94,13 +99,26 @@ function renderTimerString() {
     if(timerElem) timerElem.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
+function checkAndMarkPreviousVisited(prevIdx) {
+    // जब हम किसी प्रश्न को छोड़कर आगे या दूसरे प्रश्न पर जाते हैं,
+    // अगर उसका उत्तर नहीं दिया गया है (null या -2), तो उसे Skipped (-1 यानी लाल) कर देंगे।
+    if (userResponses[prevIdx] === null || userResponses[prevIdx] === -2) {
+        userResponses[prevIdx] = -1;
+    }
+}
+
 function displayQuestionCard(idx) {
+    // पुराने वाले प्रश्न की स्थिति जांचें कि क्या वह स्किप हुआ है
+    if (activeIndex !== idx) {
+        checkAndMarkPreviousVisited(activeIndex);
+    }
+
     activeIndex = idx;
     const item = dataset[idx];
     
-    // अगर पहली बार इस प्रश्न पर आए हैं और उत्तर नहीं दिया है, तो Skipped/Visited (-1) मार्क करें
+    // वर्तमान प्रश्न अगर बिल्कुल नया है, तो उसे अभी लाल नहीं करेंगे, वह सफेद ही रहेगा (जब तक इससे आगे न जाएं)
     if (userResponses[idx] === null) {
-        userResponses[idx] = -1;
+        userResponses[idx] = -2; // -2 मतलब अभी खुला है (Visited but current)
     }
 
     document.getElementById('lblCurrentNum').innerText = idx + 1;
@@ -142,7 +160,7 @@ function assignSelection(oIdx) {
 }
 
 function doClearAnswer() {
-    userResponses[activeIndex] = -1;
+    userResponses[activeIndex] = -2; // वापस वर्तमान खुले हुए स्टेट में लाएं
     markedMatrix[activeIndex] = false;
     displayQuestionCard(activeIndex);
 }
@@ -177,20 +195,20 @@ function buildPaletteGrid() {
     
     for (let i = 0; i < dataset.length; i++) {
         const cell = document.createElement('div');
-        cell.className = 'palette-cell ';
+        cell.className = 'palette-cell';
         
-        // ग्रिड क्लास लॉजिक - होम साइंस की तरह
+        // ग्रिड रंग लॉजिक
         if (markedMatrix[i]) {
-            cell.classList.add('pal-marked'); // बैंगनी (Marked)
-        } else if (userResponses[i] >= 0) {
-            cell.classList.add('pal-answered'); // हरा (Answered)
+            cell.classList.add('pal-marked'); // बैंगनी
+        } else if (userResponses[i] !== null && userResponses[i] >= 0) {
+            cell.classList.add('pal-answered'); // हरा
         } else if (userResponses[i] === -1) {
             cell.classList.add('pal-visited'); // लाल (Skipped)
         } else {
-            cell.classList.add('pal-unvisited'); // सफेद (Unvisited)
+            cell.classList.add('pal-unvisited'); // सफेद (Unvisited या वर्तमान खुला हुआ)
         }
 
-        // वर्तमान एक्टिव प्रश्न पर लाल/ऑरेंज बॉर्डर देने के लिए
+        // वर्तमान एक्टिव प्रश्न पर लाल बॉर्डर (यह हमेशा सफेद बैकग्राउंड के साथ दिखेगा जब तक उत्तर न दें)
         if (i === activeIndex) {
             cell.classList.add('active-current-q');
         }
@@ -202,12 +220,14 @@ function buildPaletteGrid() {
 }
 
 function forceAutomaticSubmission() {
+    checkAndMarkPreviousVisited(activeIndex);
     alert("समय समाप्त! आपका टेस्ट अपने आप सबमिट हो रहा है।");
     processFinalCalculation();
 }
 
 function triggerTestSubmission() {
     if (confirm("क्या आप वाकई अपना test सबमिट करना चाहते हैं?")) {
+        checkAndMarkPreviousVisited(activeIndex);
         clearInterval(countdownTimerId);
         processFinalCalculation();
     }
@@ -239,7 +259,7 @@ function processFinalCalculation() {
         let cardClass = 'review-card-item ';
         let statusText = '';
         
-        if (userAns === null || userAns === -1) {
+        if (userAns === null || userAns === -1 || userAns === -2) {
             skipped++;
             cardClass += 'skipped-left';
             statusText = '<span class="review-status-mark status-skipped">⚪ छोड़ा गया</span>';
@@ -256,7 +276,7 @@ function processFinalCalculation() {
         const cardHTML = `
             <div class="${cardClass}">
                 <div class="review-question-row">${statusText} ${item.question}</div>
-                <div class="review-data-line"><b>आपका उत्तर:</b> ${userAns >= 0 ? item.options[userAns] : 'अनांसरित'}</div>
+                <div class="review-data-line"><b>आपका उत्तर:</b> ${(userAns !== null && userAns >= 0) ? item.options[userAns] : 'अनांसरित'}</div>
                 <div class="review-data-line"><b>सही उत्तर:</b> ${item.options[item.correct]}</div>
             </div>
         `;
@@ -362,4 +382,4 @@ function captureCardAndOpenGroup() {
             }
         }, "image/png");
     });
-                    }
+}
