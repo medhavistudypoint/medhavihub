@@ -264,7 +264,7 @@ body {
 }
 
 /* ==========================================
-   🎯 QUESTION PALETTE GRID - FIXED COLORS
+   🎯 QUESTION PALETTE GRID - EXACT COLOR LOGIC
    ========================================== */
 .grid-matrix {
     display: grid;
@@ -273,6 +273,7 @@ body {
     margin-bottom: 20px;
 }
 
+/* डिफ़ॉल्ट डिब्बा: सफ़ेद (Unvisited) */
 .palette-cell {
     height: 40px;
     border-radius: 8px;
@@ -284,38 +285,47 @@ body {
     user-select: none;
     font-size: 15px;
     transition: transform 0.1s;
+    background-color: #ffffff !important;
+    border: 2px solid #cbd5e1 !important;
+    color: #475569 !important;
 }
 
 .palette-cell:active {
     transform: scale(0.95);
 }
 
-/* 1. Unvisited (सफेद - नहीं देखा गया) */
-.pal-unvisited {
+/* 1. Unvisited (सफ़ेद - नहीं देखा गया) */
+.palette-cell.pal-unvisited {
     background-color: #ffffff !important;
     border: 2px solid #cbd5e1 !important;
     color: #475569 !important;
 }
 
 /* 2. Visited / Skipped (लाल - देखा पर उत्तर नहीं दिया) */
-.pal-visited {
+.palette-cell.pal-visited {
     background-color: #ef4444 !important;
     border: 2px solid #dc2626 !important;
     color: #ffffff !important;
 }
 
 /* 3. Answered / Attempted (हरा - केवल उत्तर देने पर) */
-.pal-answered {
+.palette-cell.pal-answered {
     background-color: #16a34a !important;
     border: 2px solid #15803d !important;
     color: #ffffff !important;
 }
 
 /* 4. Marked for Review (बैंगनी - मार्क किया गया) */
-.pal-marked {
+.palette-cell.pal-marked {
     background-color: #9333ea !important;
     border: 2px solid #7e22ce !important;
     color: #ffffff !important;
+}
+
+/* 5. वर्तमान प्रश्न पर लाल बॉर्डर (Current Active Question) */
+.palette-cell.active-current-q {
+    border: 3px solid #ef4444 !important;
+    font-weight: 800;
 }
 
 .btn-submit-trigger {
@@ -447,8 +457,3 @@ body {
 .status-correct { color: #16a34a; }
 .status-incorrect { color: #dc2626; }
 .status-skipped { color: #64748b; }
-/* वर्तमान प्रश्न पर रेड बॉर्डर (होम साइंस स्टाइल) */
-.palette-cell.active-current-q {
-    border: 2px solid #ef4444 !important;
-    font-weight: bold;
-}
