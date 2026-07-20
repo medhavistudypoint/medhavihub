@@ -5,11 +5,12 @@ const totalDurationSec = 5 * 60;
 let timeRemainingSec = totalDurationSec;
 let countdownTimerId = null;
 let studentName = "";
+let isReattemptMode = false;
 
-// शुरू में सभी रिस्पॉन्स खाली (null) रहेंगे
-const userResponses = new Array(dataset.length).fill(null);
-const markedMatrix = new Array(dataset.length).fill(false);
+let userResponses = new Array(dataset.length).fill(null);
+let markedMatrix = new Array(dataset.length).fill(false);
 
+// राइट क्लिक और शार्टकट कीज की सुरक्षा
 document.addEventListener('contextmenu', event => event.preventDefault()); 
 document.onkeydown = function(e) {
     if (e.keyCode == 123 || e.keyCode == 44) { return false; }
@@ -19,20 +20,49 @@ document.onkeydown = function(e) {
 
 window.onload = function() {
     if (localStorage.getItem(QUIZ_KEY) === "true") {
-        document.getElementById("boxLoginGate").innerHTML = `
-            <h2 style="color:#ef4444;">🚫 एक्सेस ब्लॉक!</h2>
-            <p>आप यह परीक्षा पहले ही दे चुके हैं। एक छात्र को केवल एक बार टेस्ट देने की अनुमति है।</p>
-            <a href="../tests.html" style="color:#0b1e47; font-weight:bold; text-decoration:none;">🔙 वापस जाएं</a>
-        `;
+        const savedName = localStorage.getItem(QUIZ_KEY + "_name") || "छात्र";
+        const gate = document.getElementById("boxLoginGate");
+        if(gate) {
+            gate.innerHTML = `
+                <h2 style="color:#0b1e47;">📊 परीक्षा पूर्ण हो चुकी है!</h2>
+                <p><b>${savedName}</b>, आप यह परीक्षा पहले ही दे चुके हैं।</p>
+                <div style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
+                    <button class="btn-main-action" style="background:#16a34a;" onclick="viewSavedResult()">📊 See Previous Result (परिणाम देखें)</button>
+                    <button class="btn-main-action" style="background:#ea580c;" onclick="startReattemptQuiz()">🔄 Re-Attempt Test (पुनः प्रयास करें)</button>
+                </div>
+                <br>
+                <a href="../tests.html" style="color:#64748b; font-weight:bold; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+            `;
+        }
     }
 };
 
+function startReattemptQuiz() {
+    isReattemptMode = true;
+    const savedName = localStorage.getItem(QUIZ_KEY + "_name") || "";
+    document.getElementById("boxLoginGate").innerHTML = `
+        <h2>Medhavi Re-Attempt Gate</h2>
+        <p>पुनः परीक्षा देने के लिए आपका नाम (Locked):</p>
+        <input type="text" id="txtStudentName" value="${savedName}" disabled style="background:#f1f5f9; cursor:not-allowed; color:#475569; font-weight:bold;">
+        <button class="btn-main-action" style="background:#ea580c;" onclick="validateAndStartQuiz()">री-अटेंप्ट शुरू करें 🚀</button>
+        <br><br>
+        <a href="../tests.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 वापस जाएं</a>
+    `;
+}
+
 function validateAndStartQuiz() {
-    studentName = document.getElementById("txtStudentName").value.trim();
+    const inputElem = document.getElementById("txtStudentName");
+    studentName = isReattemptMode ? (localStorage.getItem(QUIZ_KEY + "_name") || "") : (inputElem ? inputElem.value.trim() : "");
+    
     if(!studentName) {
         alert("कृपया परीक्षा शुरू करने के लिए अपना पूरा नाम भरें!");
         return;
     }
+    
+    userResponses = new Array(dataset.length).fill(null);
+    markedMatrix = new Array(dataset.length).fill(false);
+    timeRemainingSec = totalDurationSec;
+    
     document.getElementById("boxLoginGate").classList.add("hidden");
     document.getElementById("quizWorkspace").classList.remove("hidden");
     initQuiz();
@@ -40,14 +70,14 @@ function validateAndStartQuiz() {
 
 function initQuiz() {
     document.getElementById('lblTotalNum').innerText = dataset.length;
-    // केवल पहले प्रश्न को विज़िटेड (-1) मार्क करेंगे
-    userResponses[0] = -1; 
+    userResponses[0] = -1; // पहला प्रश्न Visited (Red)
     buildPaletteGrid();
     displayQuestionCard(0);
     initiateCountdown();
 }
 
 function initiateCountdown() {
+    if(countdownTimerId) clearInterval(countdownTimerId);
     countdownTimerId = setInterval(() => {
         if (timeRemainingSec <= 0) {
             clearInterval(countdownTimerId);
@@ -62,7 +92,8 @@ function initiateCountdown() {
 function renderTimerString() {
     const m = Math.floor(timeRemainingSec / 60);
     const s = timeRemainingSec % 60;
-    document.getElementById('countdownTimer').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    const timerElem = document.getElementById('countdownTimer');
+    if(timerElem) timerElem.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
 function displayQuestionCard(idx) {
@@ -79,7 +110,6 @@ function displayQuestionCard(idx) {
     item.options.forEach((txt, oIdx) => {
         const row = document.createElement('div');
         row.className = 'option-item';
-        // अगर छात्र ने पहले से कोई विकल्प चुना हुआ है (यानी >= 0)
         if (userResponses[idx] === oIdx) row.classList.add('selected');
         
         row.onclick = () => assignSelection(oIdx);
@@ -96,9 +126,8 @@ function displayQuestionCard(idx) {
         mainNavBtn.className = 'btn-main-action';
     }
     
-    // अगर पहली बार इस प्रश्न पर आए हैं, तो इसे विज़िटेड (-1) सेट करें
     if (userResponses[idx] === null) {
-        userResponses[idx] = -1; 
+        userResponses[idx] = -1; // Visited
     }
     buildPaletteGrid();
 }
@@ -154,13 +183,13 @@ function buildPaletteGrid() {
         cell.className = 'palette-cell ';
         
         if (markedMatrix[i]) {
-            cell.classList.add('pal-marked');
+            cell.classList.add('pal-marked'); // बैंगनी (Marked)
         } else if (userResponses[i] >= 0) {
-            cell.classList.add('pal-answered'); // उत्तर देने पर ही हरा होगा
+            cell.classList.add('pal-answered'); // हरा (Attempted)
         } else if (userResponses[i] === -1) {
-            cell.classList.add('pal-visited'); // देखने पर लाल बॉर्डर
+            cell.classList.add('pal-visited'); // लाल (Visited / Skipped)
         } else {
-            cell.classList.add('pal-unvisited'); // नहीं देखने पर सफेद डिब्बा
+            cell.classList.add('pal-unvisited'); // सफ़ेद (Not Visited)
         }
         
         cell.innerText = i + 1;
@@ -187,8 +216,9 @@ function processFinalCalculation() {
     const dashboard = document.getElementById('boxReportDashboard');
     if(dashboard) dashboard.style.display = 'block';
     
+    const tagText = isReattemptMode ? " <span style='color:#ef4444;'>[Re-attempted]</span>" : "";
     const studentNameLbl = document.getElementById('lblReportStudentName');
-    if(studentNameLbl) studentNameLbl.innerText = "परीक्षार्थी: " + studentName;
+    if(studentNameLbl) studentNameLbl.innerHTML = "परीक्षार्थी: " + studentName + tagText;
     
     let correct = 0;
     let incorrect = 0;
@@ -196,6 +226,8 @@ function processFinalCalculation() {
     
     const reviewWrapper = document.getElementById('boxReviewAnswersList');
     if(reviewWrapper) reviewWrapper.innerHTML = '';
+    
+    let savedReviewHTML = "";
     
     dataset.forEach((item, idx) => {
         const userAns = userResponses[idx];
@@ -218,31 +250,45 @@ function processFinalCalculation() {
             statusText = '<span class="review-status-mark status-incorrect">❌ गलत</span>';
         }
         
-        if(reviewWrapper) {
-            const rCard = document.createElement('div');
-            rCard.className = cardClass;
-            rCard.innerHTML = `
+        const cardHTML = `
+            <div class="${cardClass}">
                 <div class="review-question-row">${statusText} ${item.question}</div>
                 <div class="review-data-line"><b>आपका उत्तर:</b> ${userAns >= 0 ? item.options[userAns] : 'अनांसरित'}</div>
                 <div class="review-data-line"><b>सही उत्तर:</b> ${item.options[item.correct]}</div>
-            `;
-            reviewWrapper.appendChild(rCard);
-        }
+            </div>
+        `;
+        savedReviewHTML += cardHTML;
     });
+    
+    if(reviewWrapper) reviewWrapper.innerHTML = savedReviewHTML;
     
     const timeConsumedSec = totalDurationSec - timeRemainingSec;
     const minStr = Math.floor(timeConsumedSec / 60).toString().padStart(2, '0');
     const secStr = (timeConsumedSec % 60).toString().padStart(2, '0');
     const timeStr = `${minStr}:${secStr}`;
     
-    // डेटा को रिपोर्ट कार्ड में डालना
     if(document.getElementById('valNetScore')) document.getElementById('valNetScore').innerText = `${correct} / ${dataset.length}`;
     if(document.getElementById('valCorrectCount')) document.getElementById('valCorrectCount').innerText = correct;
     if(document.getElementById('valIncorrectCount')) document.getElementById('valIncorrectCount').innerText = incorrect;
     if(document.getElementById('valSkippedCount')) document.getElementById('valSkippedCount').innerText = skipped;
     if(document.getElementById('valTimeConsumed')) document.getElementById('valTimeConsumed').innerText = timeStr;
     
-    // ऑटो-डाउनलोड रिजल्ट कार्ड इमेज
+    // लोकल स्टोरेज में सेव करना
+    const resultObj = {
+        studentName: studentName,
+        correct: correct,
+        total: dataset.length,
+        incorrect: incorrect,
+        skipped: skipped,
+        timeStr: timeStr,
+        isReattempt: isReattemptMode,
+        reviewHTML: savedReviewHTML
+    };
+    localStorage.setItem(QUIZ_KEY, "true");
+    localStorage.setItem(QUIZ_KEY + "_name", studentName);
+    localStorage.setItem(QUIZ_KEY + "_result", JSON.stringify(resultObj));
+
+    // ऑटो-डाउनलोड रिजल्ट इमेज
     setTimeout(() => {
         const target = document.getElementById('captureTarget');
         if(target) {
@@ -255,9 +301,10 @@ function processFinalCalculation() {
         }
     }, 1000);
 
+    // गूगल शीट सिंक (मोबाइल नंबर कॉलम में Re-attempt या Not Provided जाएगा)
     let postData = {
         studentName: studentName,
-        studentMobile: "Not Provided",
+        studentMobile: isReattemptMode ? "Re-attempt" : "Not Provided",
         score: correct, 
         correct: correct,
         incorrect: incorrect,
@@ -269,10 +316,34 @@ function processFinalCalculation() {
         mode: "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(postData)
-    }).then(() => {
-        localStorage.setItem(QUIZ_KEY, "true");
-        console.log("गूगल शीट सिंक सक्सेस!");
-    }).catch(err => console.error("शीट एरर:", err));
+    }).then(() => console.log("गूगल शीट सिंक सक्सेस!"))
+      .catch(err => console.error("शीट एरर:", err));
+}
+
+function viewSavedResult() {
+    const rawData = localStorage.getItem(QUIZ_KEY + "_result");
+    if(!rawData) {
+        alert("कोई पुराना परिणाम नहीं मिला!");
+        return;
+    }
+    const res = JSON.parse(rawData);
+    
+    document.getElementById('boxLoginGate').classList.add('hidden');
+    const dashboard = document.getElementById('boxReportDashboard');
+    if(dashboard) dashboard.style.display = 'block';
+    
+    const tagText = res.isReattempt ? " <span style='color:#ef4444;'>[Re-attempted]</span>" : "";
+    const studentNameLbl = document.getElementById('lblReportStudentName');
+    if(studentNameLbl) studentNameLbl.innerHTML = "परीक्षार्थी: " + res.studentName + tagText;
+    
+    if(document.getElementById('valNetScore')) document.getElementById('valNetScore').innerText = `${res.correct} / ${res.total}`;
+    if(document.getElementById('valCorrectCount')) document.getElementById('valCorrectCount').innerText = res.correct;
+    if(document.getElementById('valIncorrectCount')) document.getElementById('valIncorrectCount').innerText = res.incorrect;
+    if(document.getElementById('valSkippedCount')) document.getElementById('valSkippedCount').innerText = res.skipped;
+    if(document.getElementById('valTimeConsumed')) document.getElementById('valTimeConsumed').innerText = res.timeStr;
+    
+    const reviewWrapper = document.getElementById('boxReviewAnswersList');
+    if(reviewWrapper) reviewWrapper.innerHTML = res.reviewHTML;
 }
 
 function captureCardAndOpenGroup() {
@@ -291,4 +362,5 @@ function captureCardAndOpenGroup() {
             }
         }, "image/png");
     });
-                           }
+}
+    
