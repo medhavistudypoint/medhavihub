@@ -60,14 +60,59 @@
             <div class="section-btn" id="btnGKGS" onclick="showSection('gkgs')">📕 GK / GS (सामान्य अध्ययन)</div>
         </div>
 
-        <!-- 1. Home Science का पैनल -->
+                <!-- 1. Home Science का पैनल (सब-सेक्शन्स के साथ) -->
         <div id="panelHomeScience" class="content-panel">
-            <div class="panel-title">Home Science - Available Tests</div>
-            <div class="test-list">
-                <a href="javascript:void(0);" class="test-card test-card-timer" data-start="2026-07-19T16:42:00" data-end="2026-07-20T19:00:00" data-link="homescience/test1.html" style="display: flex; justify-content: space-between; align-items: center;"><span>📝 Mock Test - 1</span><span class="status-msg" style="font-size: 13px; font-weight: bold;">Loading...</span></a>
-    
+            <div class="panel-title">Home Science - Select Category</div>
+            
+            <!-- Home Science के सब-सेक्शन्स के बटन -->
+            <div class="subject-grid">
+                <div class="subject-card" id="subHSDaily" onclick="toggleHSSection('daily')">📅 Daily Mock Test</div>
+                <div class="subject-card" id="subHSTgtPgt" onclick="toggleHSSection('tgtpgt')">🎯 TGT / PGT</div>
+                <div class="subject-card" id="subHSNetPyq" onclick="toggleHSSection('netpyq')">📜 NET / JRF Previous Year</div>
+                <div class="subject-card" id="subHSNetMock" onclick="toggleHSSection('netmock')">🏆 NET / JRF Mock Test</div>
             </div>
+
+            <!-- ===== सब-सेक्शन्स के अंदर के टेस्ट बॉक्स ===== -->
+
+            <!-- 1. Daily Mock Test Panel -->
+            <div id="panelHSDaily" class="sub-panel">
+                <div style="font-weight: 700; color: #0b1e47; margin-bottom: 12px; font-size: 15px;">📅 Daily Mock Test - Available Tests:</div>
+                <div class="test-list">
+                    <a href="javascript:void(0);" class="test-card test-card-timer" data-start="2026-07-19T16:42:00" data-end="2026-07-20T19:00:00" data-link="homescience/daily/test1.html" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>📝 Mock Test - 1</span>
+                        <span class="status-msg" style="font-size: 13px; font-weight: bold;">Loading...</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 2. TGT / PGT Panel -->
+            <div id="panelHSTgtPgt" class="sub-panel">
+                <div style="font-weight: 700; color: #0b1e47; margin-bottom: 12px; font-size: 15px;">🎯 TGT / PGT - Available Tests:</div>
+                <div class="test-list">
+                    <a href="homescience/tgtpgt/test1.html" class="test-card">📝 TGT/PGT Test - 1</a>
+                    <a href="homescience/tgtpgt/test2.html" class="test-card">📝 TGT/PGT Test - 2</a>
+                </div>
+            </div>
+
+            <!-- 3. NET / JRF Previous Year Paper Panel -->
+            <div id="panelHSNetPyq" class="sub-panel">
+                <div style="font-weight: 700; color: #0b1e47; margin-bottom: 12px; font-size: 15px;">📜 NET / JRF Previous Year Papers:</div>
+                <div class="test-list">
+                    <a href="homescience/netpyq/2023.html" class="test-card">📝 NET/JRF 2023 Paper</a>
+                    <a href="homescience/netpyq/2024.html" class="test-card">📝 NET/JRF 2024 Paper</a>
+                </div>
+            </div>
+
+            <!-- 4. NET / JRF Mock Test Panel -->
+            <div id="panelHSNetMock" class="sub-panel">
+                <div style="font-weight: 700; color: #0b1e47; margin-bottom: 12px; font-size: 15px;">🏆 NET / JRF Mock Tests:</div>
+                <div class="test-list">
+                    <a href="homescience/netmock/test1.html" class="test-card">📝 NET/JRF Mock Test - 1</a>
+                </div>
+            </div>
+
         </div>
+        
 
         <!-- 2. GK/GS का पैनल -->
         <div id="panelGKGS" class="content-panel">
@@ -208,7 +253,32 @@
         }
 
         // सारे सब-पैनल्स छिपाने का कॉमन फंक्शन
+                // Home Science के सेक्शन्स टॉगल करने का नया फंक्शन
+        function toggleHSSection(secTarget) {
+            const secMap = {
+                'daily': { panel: 'panelHSDaily', card: 'subHSDaily' },
+                'tgtpgt': { panel: 'panelHSTgtPgt', card: 'subHSTgtPgt' },
+                'netpyq': { panel: 'panelHSNetPyq', card: 'subHSNetPyq' },
+                'netmock': { panel: 'panelHSNetMock', card: 'subHSNetMock' }
+            };
+
+            const target = secMap[secTarget];
+            const targetPanel = document.getElementById(target.panel);
+            const targetCard = document.getElementById(target.card);
+            
+            if(targetPanel.style.display === 'block') {
+                targetPanel.style.display = 'none';
+                targetCard.classList.remove('sub-active');
+            } else {
+                hideAllSubPanels();
+                targetPanel.style.display = 'block';
+                targetCard.classList.add('sub-active');
+            }
+        }
+
+        // सभी सब-पैनल्स छिपाने का अपडेटेड फंक्शन
         function hideAllSubPanels() {
+            // GK/GS पैनल्स बंद करना
             allSubjects.forEach(sub => {
                 const formatted = sub.charAt(0).toUpperCase() + sub.slice(1);
                 const p = document.getElementById('panel' + formatted);
@@ -216,7 +286,17 @@
                 if(p) p.style.display = 'none';
                 if(c) c.classList.remove('sub-active');
             });
+
+            // Home Science पैनल्स बंद करना
+            const hsMap = ['HSDaily', 'HSTgtPgt', 'HSNetPyq', 'HSNetMock'];
+            hsMap.forEach(sec => {
+                const p = document.getElementById('panel' + sec);
+                const c = document.getElementById('sub' + sec);
+                if(p) p.style.display = 'none';
+                if(c) c.classList.remove('sub-active');
+            });
         }
+        
 
     function updateStatus() {
         const now = new Date().getTime();
