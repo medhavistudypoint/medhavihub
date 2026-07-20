@@ -19,35 +19,38 @@ body {
     display: none !important;
 }
 
-/* Watermark Overlay - Large & High Visibility */
+/* Multi-line Repeating Watermark Pattern */
 .watermark-overlay {
     position: fixed;
-    top: 38%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
     width: 100vw;
+    height: 100vh;
     pointer-events: none !important;
     z-index: 999999 !important;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-around;
     align-items: center;
     overflow: hidden;
+    opacity: 0.18;
 }
 
 .watermark-text {
-    font-size: 32px; /* 👈 मोबाइल स्क्रीन पर बड़ा और साफ़ दिखेगा */
+    font-size: 22px;
     font-weight: 900;
-    color: rgba(11, 30, 71, 0.20); /* 👈 डार्कनेस बढ़ाकर 20% कर दी गई है */
-    transform: rotate(-25deg);
+    color: #0b1e47;
+    transform: rotate(-22deg);
     white-space: nowrap;
     user-select: none;
     letter-spacing: 2px;
+    margin: 30px 0;
 }
 
-/* बड़े स्क्रीन (लैपटॉप/टैबलेट) के लिए साइज अपने आप और बड़ा हो जाएगा */
 @media (min-width: 768px) {
     .watermark-text {
-        font-size: 55px;
+        font-size: 28px;
+        margin: 45px 0;
     }
 }
 
