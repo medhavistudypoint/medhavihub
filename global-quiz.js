@@ -7,10 +7,10 @@ let countdownTimerId = null;
 let studentName = "";
 let isReattemptMode = false;
 
+// null = Not Visited (White), -1 = Skipped/Visited (Red), >=0 = Answered (Green)
 let userResponses = new Array(dataset.length).fill(null);
 let markedMatrix = new Array(dataset.length).fill(false);
 
-// राइट क्लिक और शार्टकट कीज की सुरक्षा
 document.addEventListener('contextmenu', event => event.preventDefault()); 
 document.onkeydown = function(e) {
     if (e.keyCode == 123 || e.keyCode == 44) { return false; }
@@ -70,8 +70,6 @@ function validateAndStartQuiz() {
 
 function initQuiz() {
     document.getElementById('lblTotalNum').innerText = dataset.length;
-    userResponses[0] = -1; // पहला प्रश्न Visited (Red)
-    buildPaletteGrid();
     displayQuestionCard(0);
     initiateCountdown();
 }
@@ -100,6 +98,11 @@ function displayQuestionCard(idx) {
     activeIndex = idx;
     const item = dataset[idx];
     
+    // अगर पहली बार इस प्रश्न पर आए हैं और उत्तर नहीं दिया है, तो Skipped/Visited (-1) मार्क करें
+    if (userResponses[idx] === null) {
+        userResponses[idx] = -1;
+    }
+
     document.getElementById('lblCurrentNum').innerText = idx + 1;
     document.getElementById('boxQuestionText').innerText = item.question;
     
@@ -126,9 +129,6 @@ function displayQuestionCard(idx) {
         mainNavBtn.className = 'btn-main-action';
     }
     
-    if (userResponses[idx] === null) {
-        userResponses[idx] = -1; // Visited
-    }
     buildPaletteGrid();
 }
 
@@ -154,7 +154,6 @@ function doToggleMark() {
 
 function doNavigatePrev() {
     if (activeIndex > 0) {
-        if (userResponses[activeIndex - 1] === null) userResponses[activeIndex - 1] = -1;
         displayQuestionCard(activeIndex - 1);
     }
 }
@@ -163,13 +162,11 @@ function handleMainAction() {
     if (activeIndex === dataset.length - 1) {
         triggerTestSubmission();
     } else {
-        if (userResponses[activeIndex + 1] === null) userResponses[activeIndex + 1] = -1;
         displayQuestionCard(activeIndex + 1);
     }
 }
 
 function jumpToTargetIdx(idx) {
-    if (userResponses[idx] === null) userResponses[idx] = -1;
     displayQuestionCard(idx);
 }
 
@@ -182,14 +179,20 @@ function buildPaletteGrid() {
         const cell = document.createElement('div');
         cell.className = 'palette-cell ';
         
+        // ग्रिड क्लास लॉजिक - होम साइंस की तरह
         if (markedMatrix[i]) {
             cell.classList.add('pal-marked'); // बैंगनी (Marked)
         } else if (userResponses[i] >= 0) {
-            cell.classList.add('pal-answered'); // हरा (Attempted)
+            cell.classList.add('pal-answered'); // हरा (Answered)
         } else if (userResponses[i] === -1) {
-            cell.classList.add('pal-visited'); // लाल (Visited / Skipped)
+            cell.classList.add('pal-visited'); // लाल (Skipped)
         } else {
-            cell.classList.add('pal-unvisited'); // सफ़ेद (Not Visited)
+            cell.classList.add('pal-unvisited'); // सफेद (Unvisited)
+        }
+
+        // वर्तमान एक्टिव प्रश्न पर लाल/ऑरेंज बॉर्डर देने के लिए
+        if (i === activeIndex) {
+            cell.classList.add('active-current-q');
         }
         
         cell.innerText = i + 1;
@@ -273,7 +276,6 @@ function processFinalCalculation() {
     if(document.getElementById('valSkippedCount')) document.getElementById('valSkippedCount').innerText = skipped;
     if(document.getElementById('valTimeConsumed')) document.getElementById('valTimeConsumed').innerText = timeStr;
     
-    // लोकल स्टोरेज में सेव करना
     const resultObj = {
         studentName: studentName,
         correct: correct,
@@ -288,7 +290,6 @@ function processFinalCalculation() {
     localStorage.setItem(QUIZ_KEY + "_name", studentName);
     localStorage.setItem(QUIZ_KEY + "_result", JSON.stringify(resultObj));
 
-    // ऑटो-डाउनलोड रिजल्ट इमेज
     setTimeout(() => {
         const target = document.getElementById('captureTarget');
         if(target) {
@@ -301,7 +302,6 @@ function processFinalCalculation() {
         }
     }, 1000);
 
-    // गूगल शीट सिंक (मोबाइल नंबर कॉलम में Re-attempt या Not Provided जाएगा)
     let postData = {
         studentName: studentName,
         studentMobile: isReattemptMode ? "Re-attempt" : "Not Provided",
@@ -362,5 +362,4 @@ function captureCardAndOpenGroup() {
             }
         }, "image/png");
     });
-}
-    
+                    }
