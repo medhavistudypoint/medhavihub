@@ -1,1 +1,152 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Science - Medhavi Study Point</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; padding-bottom: 40px; }
+        
+        .cbt-header { background-color: #0b1e47; color: white; padding: 20px 5%; text-align: center; border-bottom: 4px solid #ffcc00; }
+        .cbt-header h1 { margin: 0; font-size: 26px; color: #ffcc00; }
 
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        .content-panel { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        .panel-title { font-size: 22px; font-weight: 700; color: #0b1e47; margin-top: 0; margin-bottom: 20px; border-bottom: 2px solid #ffcc00; padding-bottom: 8px; }
+        
+        .test-list { display: grid !important; grid-template-columns: 1fr !important; gap: 12px; }
+        .test-card { background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 10px; text-decoration: none; color: #1e293b; font-weight: 600; display: flex !important; justify-content: space-between !important; align-items: center !important; transition: 0.2s; }
+        .test-card:hover { background: #0b1e47; color: white; border-color: #0b1e47; }
+
+        .subject-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; }
+        .subject-card { background: #f8fafc; border: 1px solid #cbd5e1; padding: 18px 10px; border-radius: 10px; font-weight: 600; text-align: center; cursor: pointer; transition: 0.2s; }
+        .subject-card:hover { background: #ffcc00; color: #0b1e47; border-color: #ffcc00; }
+        .subject-card.sub-active { background: #0b1e47; color: white; border-color: #0b1e47; }
+
+        .sub-panel { background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 20px; margin-top: 25px; display: none; }
+        .btn-back { display: inline-block; margin-top: 25px; color: #64748b; text-decoration: none; font-weight: 600; font-size: 14px; }
+        .btn-back:hover { color: #0b1e47; }
+    </style>
+</head>
+<body>
+
+    <div class="cbt-header">
+        <h1>MEDHAVI STUDY POINT</h1>
+    </div>
+
+    <div class="container">
+        <div class="content-panel">
+            <div class="panel-title">📘 Home Science - Select Category</div>
+            
+            <div class="subject-grid">
+                <div class="subject-card" id="subHSDaily" onclick="toggleHSSection('daily')">📅 Daily Mock Test</div>
+                <div class="subject-card" id="subHSTgtPgt" onclick="toggleHSSection('tgtpgt')">🎯 TGT / PGT</div>
+                <div class="subject-card" id="subHSNetPyq" onclick="toggleHSSection('netpyq')">📜 NET / JRF PYQ</div>
+                <div class="subject-card" id="subHSNetMock" onclick="toggleHSSection('netmock')">🏆 NET / JRF Mock Test</div>
+            </div>
+
+            <!-- 1. Daily Mock Test Panel -->
+            <div id="panelHSDaily" class="sub-panel">
+                <div style="font-weight: 700; color: #0b1e47; margin-bottom: 12px;">📅 Daily Mock Test - Available Tests:</div>
+                <div class="test-list">
+                    <a href="javascript:void(0);" class="test-card test-card-timer" data-start="2026-01-01T12:00:00" data-end="2030-01-01T00:00:00" data-link="homescience/daily/test1.html"><span>📝 Mock Test - 1</span><span class="status-msg">Loading...</span></a>
+                    <a href="javascript:void(0);" class="test-card test-card-timer" data-start="2027-12-31T12:00:00" data-end="2030-01-01T00:00:00" data-link="homescience/daily/test2.html"><span>📝 Mock Test - 2</span><span class="status-msg">Loading...</span></a>
+                    <a href="javascript:void(0);" class="test-card test-card-timer" data-start="2027-12-31T12:00:00" data-end="2030-01-01T00:00:00" data-link="homescience/daily/test3.html"><span>📝 Mock Test - 3</span><span class="status-msg">Loading...</span></a>
+                </div>
+            </div>
+
+            <!-- 2. TGT / PGT Panel -->
+            <div id="panelHSTgtPgt" class="sub-panel">
+                <div style="font-weight: 700; color: #0b1e47; margin-bottom: 12px;">🎯 TGT / PGT - Available Tests:</div>
+                <div class="test-list">
+                    <a href="javascript:void(0);" class="test-card test-card-timer" data-start="2026-01-01T12:00:00" data-end="2030-01-01T00:00:00" data-link="homescience/tgtpgt/test1.html"><span>📝 TGT/PGT Test - 1</span><span class="status-msg">Loading...</span></a>
+                    <a href="javascript:void(0);" class="test-card test-card-timer" data-start="2027-12-31T12:00:00" data-end="2030-01-01T00:00:00" data-link="homescience/tgtpgt/test2.html"><span>📝 TGT/PGT Test - 2</span><span class="status-msg">Loading...</span></a>
+                </div>
+            </div>
+
+            <!-- 3. NET PYQ Panel -->
+            <div id="panelHSNetPyq" class="sub-panel">
+                <div style="font-weight: 700; color: #0b1e47; margin-bottom: 12px;">📜 NET / JRF Previous Year Papers:</div>
+                <div class="test-list">
+                    <a href="javascript:void(0);" class="test-card test-card-timer" data-start="2026-01-01T12:00:00" data-end="2030-01-01T00:00:00" data-link="homescience/netpyq/test1.html"><span>📝 NET/JRF Test - 1</span><span class="status-msg">Loading...</span></a>
+                </div>
+            </div>
+
+            <!-- 4. NET Mock Panel -->
+            <div id="panelHSNetMock" class="sub-panel">
+                <div style="font-weight: 700; color: #0b1e47; margin-bottom: 12px;">🏆 NET / JRF Mock Tests:</div>
+                <div class="test-list">
+                    <a href="javascript:void(0);" class="test-card test-card-timer" data-start="2026-01-01T12:00:00" data-end="2030-01-01T00:00:00" data-link="homescience/netmock/test1.html"><span>📝 NET/JRF Mock Test - 1</span><span class="status-msg">Loading...</span></a>
+                </div>
+            </div>
+
+        </div>
+
+        <a href="tests.html" class="btn-back">🔙 सेक्शन्स लिस्ट पर वापस जाएं</a>
+    </div>
+
+    <script>
+        function toggleHSSection(secTarget) {
+            const secMap = {
+                'daily': { panel: 'panelHSDaily', card: 'subHSDaily' },
+                'tgtpgt': { panel: 'panelHSTgtPgt', card: 'subHSTgtPgt' },
+                'netpyq': { panel: 'panelHSNetPyq', card: 'subHSNetPyq' },
+                'netmock': { panel: 'panelHSNetMock', card: 'subHSNetMock' }
+            };
+
+            const target = secMap[secTarget];
+            const targetPanel = document.getElementById(target.panel);
+            const targetCard = document.getElementById(target.card);
+            
+            const isVisible = targetPanel.style.display === 'block';
+            hideAllSubPanels();
+
+            if(!isVisible) {
+                targetPanel.style.display = 'block';
+                targetCard.classList.add('sub-active');
+            }
+        }
+
+        function hideAllSubPanels() {
+            ['HSDaily', 'HSTgtPgt', 'HSNetPyq', 'HSNetMock'].forEach(sec => {
+                const p = document.getElementById('panel' + sec);
+                const c = document.getElementById('sub' + sec);
+                if(p) p.style.display = 'none';
+                if(c) c.classList.remove('sub-active');
+            });
+        }
+
+        function updateStatus() {
+            const now = new Date().getTime();
+            document.querySelectorAll('.test-card-timer').forEach(card => {
+                const startTimeAttr = card.getAttribute('data-start');
+                const endTimeAttr = card.getAttribute('data-end');
+                const link = card.getAttribute('data-link');
+                const msgBox = card.querySelector('.status-msg');
+
+                if (!startTimeAttr || !endTimeAttr) return;
+
+                const startTime = new Date(startTimeAttr).getTime();
+                const endTime = new Date(endTimeAttr).getTime();
+
+                if (now < startTime) {
+                    msgBox.innerHTML = "<span style='color:orange;'>⏳ Coming Soon</span>";
+                    card.style.pointerEvents = "none"; card.style.opacity = "0.7";
+                } else if (now >= startTime && now <= endTime) {
+                    msgBox.innerHTML = "<span style='color:green;'>🟢 Live</span>";
+                    card.style.pointerEvents = "auto"; card.style.opacity = "1"; card.style.cursor = "pointer";
+                    card.onclick = function() { window.location.href = link; };
+                } else {
+                    msgBox.innerHTML = "<span style='color:red;'>🚫 Test Over</span>";
+                    card.style.pointerEvents = "none"; card.style.opacity = "0.5"; card.onclick = null;
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", updateStatus);
+        setInterval(updateStatus, 1000);
+        updateStatus();
+    </script>
+</body>
+</html>
