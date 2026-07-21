@@ -469,3 +469,18 @@ body {
 .status-correct { color: #16a34a; }
 .status-incorrect { color: #dc2626; }
 .status-skipped { color: #64748b; }
+
+/* ==========================================
+   🎯 FLEXIBLE AUTO-WIDTH TEST LIST
+   ========================================== */
+.test-list, .test-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+}
+
+.test-list a, .test-card, .test-item {
+    width: fit-content !important;
+    max-width: 100% !important;
+}
