@@ -470,4 +470,10 @@ body {
 .status-incorrect { color: #dc2626; }
 .status-skipped { color: #64748b; }
 
+/* 🏷️ प्रश्नों पर PYQ या NCERT जैसे टैग दिखाने के लिए */
+.tag-badge { background: #fef3c7; color: #b45309; border: 1px solid #f59e0b; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; margin-left: 8px; display: inline-block; }
+.tag-badge:empty { display: none !important; }
+
+
+
 
