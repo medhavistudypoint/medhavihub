@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ सही किया गया बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 प्रीमियम हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div class="header-left">
+                <h1 style="color: #facc15; font-size: 22px; font-weight: 800; margin: 0; letter-spacing: 0.5px;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: 13px; margin: 3px 0 0 0; opacity: 0.9;">UPSC / UPPSC / Home Science Series</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 16px; border-radius: 8px; font-size: 20px; font-weight: 800; letter-spacing: 1px;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">गृह विज्ञान (Home Science)</span>
+                        <!-- 🌟 यहाँ डायनेमिक टैग दिखेगा -->
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ सही किया गया डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_homescience_test_50q"; 
+
+        // 2. 50 प्रश्नों का संपूर्ण डेटासेट
+        const dataset = [
+            { id: 1, tag: "NCERT", question: "ICMR द्वारा आहार योजना बनाने के लिए मुख्य रूप से कितने खाद्य समूहों (Basic Food Groups) की सिफारिश की गई है?", options: ["(a) 3", "(b) 4", "(c) 5", "(d) 7"], correct: 2 },
+            { id: 2, tag: "NCERT", question: "अनुशंसित आहारीय मात्रा (RDA) निर्धारित करते समय निम्नलिखित में से किस कारक पर ध्यान दिया जाता है?", options: ["(a) आयु और लिंग", "(b) शारीरिक श्रम की प्रकृति", "(c) विशेष शारीरिक अवस्था (जैसे गर्भावस्था/स्तनपान)", "(d) उपरोक्त सभी"], correct: 3 },
+            { id: 3, tag: "NCERT", question: "भोजन पकाने की खमीरीकरण (Fermentation) प्रक्रिया (जैसे इडली, डोसा) से किस पोषण तत्व की वृद्धि होती है?", options: ["(a) विटामिन D", "(b) विटामिन B-कॉम्प्लेक्स", "(c) विटामिन K", "(d) वसा"], correct: 1 },
+            { id: 4, tag: "NCERT", question: "दालों और अनाजों के अंकुरण (Germination) से किस विटामिन की मात्रा और लौह तत्व (Iron) का अवशोषण बढ़ता है?", options: ["(a) विटामिन A", "(b) विटामिन C", "(c) विटामिन D", "(d) विटामिन K"], correct: 1 },
+            { id: 5, tag: "NCERT", question: "'प्रोटीन पूरकता' (Protein Complementation) का सही उदाहरण कौन-सा है?", options: ["(a) केवल दूध पीना", "(b) दाल और चावल को मिलाकर खाना", "(c) केवल हरी सब्जियाँ खाना", "(d) फल और घी साथ खाना"], correct: 1 },
+            { id: 6, tag: "NCERT", question: "नमक में आयोडीन या दूध/तेल में विटामिन A और D मिलाने की प्रक्रिया को क्या कहा जाता है?", options: ["(a) खमीरीकरण", "(b) फोर्टिफिकेशन (प्रबलीकरण)", "(c) अंकुरण", "(d) पाश्चुरीकरण"], correct: 1 },
+            { id: 7, tag: "NCERT", question: "आहार में अनाजों (Cereals) का मुख्य योगदान किस पोषक तत्व की आपूर्ति करना है?", options: ["(a) वसा और जल", "(b) कार्बोहाइड्रेट और ऊर्जा", "(c) केवल विटामिन C", "(d) केवल कैल्शियम"], correct: 1 },
+            { id: 8, tag: "NCERT", question: "दालें और फलियाँ (Pulses and Legumes) संतुलित आहार में मुख्य रूप से किसका स्रोत हैं?", options: ["(a) वसा", "(b) प्रोटीन", "(c) आयोडीन", "(d) विटामिन D"], correct: 1 },
+            { id: 9, tag: "NCERT", question: "हरी पत्तेदार सब्जियाँ किस खनिज और विटामिन की प्रचुरता के लिए जानी जाती हैं?", options: ["(a) वसा और सोडियम", "(b) आयरन (लोहा), कैल्शियम और विटामिन A", "(c) केवल विटामिन D", "(d) केवल शर्करा"], correct: 1 },
+            { id: 10, tag: "NCERT", question: "दूध और दूध से बने पदार्थ संतुलित आहार में मुख्य रूप से क्या प्रदान करते हैं?", options: ["(a) केवल वसा", "(b) कैल्शियम, फास्फोरस और उच्च गुणवत्ता वाला प्रोटीन", "(c) केवल रेशा", "(d) केवल विटामिन C"], correct: 1 },
+            { id: 11, tag: "NCERT", question: "आहार योजना (Meal Planning) का मुख्य उद्देश्य क्या होता है?", options: ["(a) केवल महंगी वस्तुएँ खरीदना", "(b) परिवार के सभी सदस्यों को उनकी पोषणीय आवश्यकताओं के अनुसार संतुलित भोजन प्रदान करना", "(c) भोजन पकाने का समय बढ़ाना", "(d) केवल स्वाद पर ध्यान देना"], correct: 1 },
+            { id: 12, tag: "NCERT", question: "एक भारी शारीरिक श्रम करने वाले व्यक्ति (Heavy Worker) को साधारण कार्य करने वाले व्यक्ति की तुलना में किसकी अधिक आवश्यकता होती है?", options: ["(a) केवल जल", "(b) अधिक कैलोरी/ऊर्जा", "(c) कम भोजन", "(d) केवल नमक"], correct: 1 },
+            { id: 13, tag: "NCERT", question: "किशोरावस्था (Adolescence) में तीव्र विकास के कारण किन पोषक तत्वों की मांग बढ़ जाती है?", options: ["(a) केवल वसा", "(b) प्रोटीन, ऊर्जा, कैल्शियम और आयरन", "(c) केवल नमक", "(d) किसी भी तत्व की नहीं"], correct: 1 },
+            { id: 14, tag: "NCERT", question: "गर्भावस्था और स्तनपान कराने वाली माता के लिए अतिरिक्त पोषण क्यों आवश्यक है?", options: ["(a) केवल मां का वजन बढ़ाने के लिए", "(b) भ्रूण/शिशु के विकास और मां के स्वास्थ्य की सुरक्षा के लिए", "(c) केवल भोजन का स्वाद बदलने के लिए", "(d) इसकी कोई आवश्यकता नहीं होती"], correct: 1 },
+            { id: 15, tag: "NCERT", question: "भोजन पकाने की किस विधि में पोषक तत्वों (विशेषकर जल में घुलनशील विटामिन) का क्षय सबसे कम होता है?", options: ["(a) भाप में पकाना (Steaming)", "(b) अत्यधिक पानी में उबालकर पानी फेंकना", "(c) बार-बार तलना", "(d) बहुत तेज धूप में सुखाना"], correct: 0 },
+            { id: 16, tag: "NCERT", question: "संतुलित आहार में 'रेशा' (Dietary Fibre) मुख्य रूप से किसमें सहायता करता है?", options: ["(a) शरीर में ऊर्जा देने में", "(b) पाचन तंत्र को स्वस्थ रखने और कब्ज रोकने में", "(c) केवल वजन बढ़ाने में", "(d) हीमोग्लोबिन बनाने में"], correct: 1 },
+            { id: 17, tag: "NCERT", question: "सब्जियों को धोते और काटते समय कौन-सी सावधानी बरतनी चाहिए ताकि पोषक तत्व नष्ट न हों?", options: ["(a) काटने के बाद धोना चाहिए", "(b) छीलने और काटने से पहले धोना चाहिए", "(c) बहुत बारीक काटकर तेज धूप में सुखाना चाहिए", "(d) काटने के बाद पानी में उबालकर पानी फेंक देना चाहिए"], correct: 1 },
+            { id: 18, tag: "NCERT", question: "स्थानीय और मौसमी फलों एवं सब्जियों का चयन क्यों बेहतर माना जाता है?", options: ["(a) ये महंगे होते हैं", "(b) ये अधिक ताजा, स्वादिष्ट, पौष्टिक और किफायती होते हैं", "(c) इनमें पोषक तत्व नहीं होते", "(d) इन्हें पकाना असंभव होता है"], correct: 1 },
+            { id: 19, tag: "NCERT", question: "भोजन में उपस्थित लौह तत्व (Iron) के अवशोषण को बढ़ाने के लिए किस विटामिन का होना आवश्यक है?", options: ["(a) विटामिन D", "(b) विटामिन C", "(c) विटामिन K", "(d) विटामिन E"], correct: 1 },
+            { id: 20, tag: "NCERT", question: "ICMR के अनुसार 'RDA' का पूर्ण रूप क्या है?", options: ["(a) Recommended Dietary Allowances", "(b) Required Daily Association", "(c) Regular Diet Assessment", "(d) Recommended Daily Action"], correct: 0 },
+            { id: 21, tag: "NCERT", question: "वृद्ध व्यक्तियों के लिए संतुलित आहार कैसा होना चाहिए?", options: ["(a) अत्यधिक वसायुक्त और भारी", "(b) सुपाच्य, कम वसायुक्त तथा फाइबर एवं खनिजों से भरपूर", "(c) केवल अत्यधिक मीठा", "(d) बिना किसी पोषक तत्व का"], correct: 1 },
+            { id: 22, tag: "NCERT", question: "आयोडीन युक्त नमक का प्रयोग संतुलित आहार में किस रोग से बचाव के लिए किया जाता है?", options: ["(a) रिकेट्स", "(b) घेंघा (Goitre)", "(c) बेरी-बेरी", "(d) स्कर्वी"], correct: 1 },
+            { id: 23, tag: "NCERT", question: "खाद्य समूहों के प्रयोग से आहार योजना (Meal Planning) में क्या लाभ होता है?", options: ["(a) खाद्य पदार्थों के परस्पर प्रतिस्थापन (Substitution) में आसानी होती है", "(b) भोजन का खर्च अत्यधिक बढ़ जाता है", "(c) विकल्पों का चयन असंभव हो जाता है", "(d) भोजन स्वादहीन हो जाता है"], correct: 0 },
+            { id: 24, tag: "NCERT", question: "वसा में घुलनशील विटामिनों (A, D, E, K) के अवशोषण के लिए भोजन में किसकी सीमित मात्रा आवश्यक है?", options: ["(a) केवल जल", "(b) वसा/तेल", "(c) केवल चीनी", "(d) केवल नमक"], correct: 1 },
+            { id: 25, tag: "NCERT", question: "संतुलित आहार में आँवला और अमरूद किस विटामिन के मुख्य स्रोत हैं?", options: ["(a) विटामिन A", "(b) विटामिन C", "(c) विटामिन D", "(d) विटामिन B12"], correct: 1 },
+            { id: 26, tag: "NCERT", question: "स्कूल जाने वाले बच्चों के लिए संतुलित नाश्ता क्यों महत्वपूर्ण है?", options: ["(a) यह केवल समय बिताने के लिए है", "(b) यह दिनभर मानसिक एकाग्रता और शारीरिक ऊर्जा बनाए रखता है", "(c) यह केवल वजन घटाता है", "(d) इससे आलस्य आता है"], correct: 1 },
+            { id: 27, tag: "NCERT", question: "जंक फूड या फास्ट फूड का अत्यधिक सेवन संतुलित आहार को क्यों प्रभावित करता है?", options: ["(a) इनमें बहुत अधिक फाइबर होता है", "(b) इनमें कैलोरी, वसा और सोडियम अधिक तथा सूक्ष्म पोषक तत्व कम होते हैं", "(c) ये बहुत सस्ते होते हैं", "(d) इनसे बीमारियाँ ठीक होती हैं"], correct: 1 },
+            { id: 28, tag: "NCERT", question: "संतुलित आहार में ऊर्जा का सबसे सांद्र (Concentrated) स्रोत कौन-सा है?", options: ["(a) कार्बोहाइड्रेट", "(b) वसा (Fat)", "(c) प्रोटीन", "(d) जल"], correct: 1 },
+            { id: 29, tag: "NCERT", question: "दूध में किस पोषक तत्व की कमी पाई जाती है, जिसके कारण इसे पूर्ण आहार बनाते समय अन्य खाद्य पदार्थों के साथ मिलाया जाता है?", options: ["(a) कैल्शियम", "(b) आयरन (लोहा) और विटामिन C", "(c) प्रोटीन", "(d) वसा"], correct: 1 },
+            { id: 30, tag: "NCERT", question: "बच्चों में प्रोटीन और कैलोरी दोनों की गंभीर कमी से कौन-सा रोग होता है?", options: ["(a) स्कर्वी", "(b) मरास्मस", "(c) घेंघा", "(d) रिकेट्स"], correct: 1 },
+            { id: 31, tag: "NCERT", question: "आहार में विविधता (Dietary Diversity) का मुख्य लाभ क्या है?", options: ["(a) भोजन सुंदर दिखता है", "(b) सभी सूक्ष्म एवं स्थूल पोषक तत्वों की प्राप्ति सुनिश्चित होती है", "(c) भोजन पकाने में अधिक समय लगता है", "(d) यह केवल उत्सवों के लिए होता है"], correct: 1 },
+            { id: 32, tag: "NCERT", question: "राष्ट्रीय पोषण संस्थान (NIN) भारत में कहाँ स्थित है, जो RDA और पोषण संबंधी दिशानिर्देश जारी करता है?", options: ["(a) नई दिल्ली", "(b) हैदराबाद", "(c) कोलकाता", "(d) मुंबई"], correct: 1 },
+            { id: 33, tag: "NCERT", question: "अत्यधिक पानी में उबालकर पानी फेंक देने से भोजन के किस घटक का सबसे अधिक नुकसान होता है?", options: ["(a) केवल वसा", "(b) जल में घुलनशील विटामिन (B एवं C) और खनिज लवण", "(c) स्टार्च", "(d) केवल रेशा"], correct: 1 },
+            { id: 34, tag: "PYQ", question: "आई.सी.एम.आर. - एन.आई.एन. 2020, आर.डी.ए. सारिणी के अनुसार प्रति 2000 k.cal पर फाइबर की प्रतिदिन की कितनी मात्रा निश्चित की गई है?", options: ["(a) 30 gms", "(b) 25 gms", "(c) 35 gms", "(d) 40 gms"], correct: 0 },
+            { id: 35, tag: "PYQ", question: "निम्न में सामान्यतः कौन सा संतुलित आहार के लिए आवश्यक नहीं है?", options: ["(a) फल व सब्जी", "(b) सलाद", "(c) दालें", "(d) चाय"], correct: 3 },
+            { id: 36, tag: "PYQ", question: "सूची- I में दिए गए परिरक्षण- सामग्री का सूची- II में दिए गये भोजन बनाने के उपक्रम के साथ सुमेलित कीजिए:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची- I (परिरक्षण-सामग्री)</b><br>(A) बेनज़ोइक अम्ल<br>(B) सल्फर डाइऑक्साइड<br>(C) निसिन<br>(D) एसिटिक अम्ल<br>(E) सोडियम नाइट्रेट</td><td style='width:50%; vertical-align:top;'><b>सूची- II (भोजन बनाने का उपक्रम)</b><br>(i) चीज़<br>(ii) चटनी<br>(iii) सुखायी गयी सब्जियाँ<br>(iv) संसाधित गोश्त<br>(v) जैम्स व जेली</td></tr></table><br>कूट :", options: ["(a) (A)-(v), (B)-(i), (C)-(ii), (D)-(vi), (E)-(iii)", "(b) (A)-(v), (B)-(iii), (C)-(i), (D)-(ii), (E)-(iv)", "(c) (A)-(vi), (B)-(iv), (C)-(i), (D)-(v), (E)-(ii)", "(d) (A)-(iv), (B)-(iii), (C)-(i), (D)-(ii), (E)-(vi)"], correct: 1 },
+            { id: 37, tag: "PYQ", question: "सायनोजन का सही रासायनिक सूत्र है-", options: ["(a) C₄N₄", "(b) (CN)₂", "(c) (CN)₄", "(d) C₁N₁"], correct: 1 },
+            { id: 38, tag: "PYQ", question: "हमें सन्तुलित आहार लेना चाहिए, क्योंकि", options: ["(a) यह स्वादिष्ट होता है", "(b) इससे स्वास्थ्य ठीक रहता है", "(c) इसमें आहार सम्बन्धी समस्त आवश्यकताएं पूरी हो जाती हैं", "(d) इससे सौन्दर्य में वृद्धि होती है"], correct: 2 },
+            { id: 39, tag: "PYQ", question: "एक ऐसा आहार जिसमें भोजन के सभी आवश्यक घटक सही अनुपात में शामिल होते हैं, उसे क्या कहा जाता है?", options: ["(a) वसा युक्त आहार", "(b) संतुलित आहार", "(c) गरिष्ठ आहार", "(d) प्रोटीन युक्त आहार"], correct: 1 },
+            { id: 40, tag: "PYQ", question: "भोजन का पौष्टिक मूल्य किस विधि से बढ़ाया जा सकता है?", options: ["(a) खमीरीकरण", "(b) अंकुरण", "(c) फोर्टिफिकेशन", "(d) उपरोक्त सभी"], correct: 3 },
+            { id: 41, tag: "PYQ", question: "सूची-I में दिये खाद्य पदार्थों को सूची-II में दिये रंगद्रव्यों के साथ सुमेलित करें।<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I</b><br>A. माँस<br>B. टमाटर<br>C. बैंगन<br>D. शलजम<br>E. मक्का</td><td style='width:50%; vertical-align:top;'><b>सूची-II</b><br>i. जैंथोफिल<br>ii. एन्थोजैन्यिन<br>iii. क्लोरोफिल<br>iv. मायोग्लोबिन<br>v. एन्थ्रोसाइनिन<br>vi. लाइकोपिन</td></tr></table><br>कूट :", options: ["(a) (A)-iv, (B)-iii, (C)-v, (D)-vi, (E)-i", "(b) (A)-ii, (B)-i, (C)-v, (D)-vi, (E)-iii", "(c) (A)-iv, (B)-vi, (C)-v, (D)-ii, (E)-i", "(d) (A)-v, (B)-vi, (C)-iv, (D)-iii, (E)-i"], correct: 2 },
+            { id: 42, tag: "PYQ", question: "0-6 महीने के बच्चे के लिए प्रति दिन लगभग कितना प्रोटीन चाहिए?", options: ["(a) 0.5 ग्राम/किलो", "(b) 1 ग्राम/किलो", "(c) 1.5 ग्राम/किलो", "(d) 2 ग्राम/किलो"], correct: 0 },
+            { id: 43, tag: "PYQ", question: "सूची-I में दी गई वसा (Fat) को सूची-II में दिए गए वसीय एसिड (Fatty Acid) से मिलान कीजिए:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I (वसा)</b><br>(a) घी<br>(b) सरसों<br>(c) करडी (सैफ़्लावर)<br>(d) अलसी (फ्लैक्स)</td><td style='width:50%; vertical-align:top;'><b>सूची-II (वसीय एसिड)</b><br>(i) ए.एल.ए. (A.L.A.)<br>(ii) एल.ए. (L.A.)<br>(iii) एम.यू.एफ.ए. (M.U.F.A.)<br>(iv) एस.एफ.ए. (S.F.A.)<br>(v) टी.एफ.ए. (T.F.A.)</td></tr></table><br>कूट :", options: ["(a) (a)-iv, (b)-iii, (c)-ii, (d)-i", "(b) (a)-v, (b)-iii, (c)-i, (d)-ii", "(c) (a)-iv, (b)-i, (c)-iii, (d)-ii", "(d) (a)-iv, (b)-v, (c)-i, (d)-ii"], correct: 0 },
+            { id: 44, tag: "PYQ", question: "निर्जलित आलुओं, पालक, फूलगोभी और रागी में आर्द्रता की मात्रा होनी चाहिए", options: ["(a) 2 - 8%", "(b) 10 - 16%", "(c) 18 - 24%", "(d) उपर्युक्त में से कोई नहीं"], correct: 2 },
+            { id: 45, tag: "PYQ", question: "निम्न में से कौन से पोषण अभाव रोग नहीं हैं?<br><br>(a) ज़िरोफ्थेल्मिया<br>(b) डिस्लिपिडेमिया<br>(c) ऑस्टियोमैलेशिया<br>(d) केटोमैलेशिया<br>(e) एनोरेक्सिया नर्वोसा<br><br>कूट :", options: ["(a) (a) और (c)", "(b) (a) और (b)", "(c) (b) और (e)", "(d) (d) और (e)"], correct: 2 },
+            { id: 46, tag: "PYQ", question: "सूची-1 में दिए गए सक्रिय पदार्थ को सूची-II में दिए गए उनके आहारीय-स्रोत से मिलान कीजिए:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I (सक्रिय पदार्थ)</b><br>A. ऐल्फा लिपोइक एसिड<br>B. फ्लैबोनॉइड्स<br>C. लाइकोपीन<br>D. ग्लुटाथाइन<br>E. सिलिनियम</td><td style='width:50%; vertical-align:top;'><b>सूची-II (आहारीय-स्रोत)</b><br>(i) बादाम<br>(ii) टमाटर<br>(iii) समुद्री खाद्य-पदार्थ<br>(iv) ब्राउन राइस<br>(v) एवोकाडो<br>(vi) आलू<br>(vii) लहसुन</td></tr></table><br>कूट :", options: ["(a) (A)-(i), (B)-(vi), (C)-(ii), (D)-(iii), (E)-(iv)", "(b) (A)-(vii), (B)-(iv), (C)-(ii), (D)-(vi), (E)-(i)", "(c) (A)-(vi), (B)-(vii), (C)-(ii), (D)-(v), (E)-(iii)", "(d) (A)-(vi), (B)-(vii), (C)-(ii), (D)-(iv), (E)-(v)"], correct: 2 },
+            { id: 47, tag: "PYQ", question: "सूची-I में दिए गए खाद्य-पदार्थों को सूची-II में दिए गए घटकों से मिलान कीजिए:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I (खाद्य-पदार्थ)</b><br>A. ‘वाइन’<br>B. आलूबुखारे का रस<br>C. ग्रीन ‘टी’<br>D. मैयोनीज<br>E. सलामी</td><td style='width:50%; vertical-align:top;'><b>सूची-II (घटक)</b><br>(i) कैटेचिन्स<br>(ii) लैसिशथन<br>(iii) पेक्टिन<br>(iv) रैजिवरैट्रॉल<br>(v) सोडियम बेन्जोएट<br>(vi) मोनो-सोडियम ग्लूटामेट<br>(vii) सोडियम नाइट्रेट</td></tr></table><br>कूट :", options: ["(a) (A)-(i), (B)-(iii), (C)-(iv), (D)-(vi), (E)-(v)", "(b) (A)-(iii), (B)-(ii), (C)-(iv), (D)-(v), (E)-(i)", "(c) (A)-(vi), (B)-(ii), (C)-(iii), (D)-(v), (E)-(vii)", "(d) (A)-(iv), (B)-(v), (C)-(i), (D)-(ii), (E)-(vii)"], correct: 3 },
+            { id: 48, tag: "PYQ", question: "सूची-I में दिए गए पौष्टिक तत्त्व को सूची -II में दिए गए उन्हें अनुमानित करने के तरीके से मिलाएँ:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I</b><br>I. मोनोसैकेराइड्स<br>II. कीटोज-शूगरस्<br>III. अमीनो-एसिड्स<br>IV. प्रोटीन्स<br>V. एस्कॉर्बिक एसिड</td><td style='width:50%; vertical-align:top;'><b>सूची-II</b><br>A. माइक्रो जैलडाल तरीका<br>B. आयोडीन वैल्यू<br>C. फैलिनग्स् टेस्ट<br>D. डाईक्लोरोफिनोल-इन्डोफिनोल टाईट्रेशन<br>E. सैलीवैनाफस टेस्ट<br>F. निनहाइड्रिन टेस्ट</td></tr></table><br>कूट :", options: ["(a) I-C, II-E, III-F, IV-A, V-D", "(b) I-C, II-F, III-B, IV-A, V-E", "(c) I-C, II-B, III-A, IV-F, V-D", "(d) I-C, II-E, III-D, IV-A, V-F"], correct: 0 },
+            { id: 49, tag: "PYQ", question: "एक संतुलित आहार में, ऊर्जा अधिकांशतः प्राप्त होती है, इससे", options: ["(a) शरीर बनाने वाले खाद्यों से", "(b) संरक्षी सब्जियों और फलों से", "(c) अनाजों और बाजराओं से", "(d) तेलों और वसा से"], correct: 2 },
+            { id: 50, tag: "PYQ", question: "संतुलित आहार का अर्थ है:", options: ["(a) ऐसा आहार जिसमें केवल फल और सब्जियाँ हों", "(b) ऐसा आहार जिसमें सभी पौष्टिक तत्व सम्मिलित हों", "(c) ऐसा आहार जिसमें सभी आवश्यक पौष्टिक तत्व सही मात्रा में सम्मिलित हों", "(d) तरल आहार"], correct: 2 }
+        ];
+    </script>
+
+    <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
+
+
+
+             
