@@ -130,6 +130,8 @@ function displayQuestionCard(idx) {
 
     document.getElementById('lblCurrentNum').innerText = idx + 1;
     document.getElementById('boxQuestionText').innerHTML = item.question;
+    /* 🏷️ प्रश्नों के टैग लोड करने के लिए */
+    if(document.getElementById('lblQuestionTag')) document.getElementById('lblQuestionTag').innerText = item.tag || "";
     
     
     const optionsWrapper = document.getElementById('boxOptionsList');
