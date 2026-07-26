@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ सही किया गया बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT PGT Test Series</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">49</span></span>
+                        <span class="subject-badge">गृह विज्ञान (Home Science)</span>
+                        <!-- 🌟 यहाँ डायनेमिक टैग दिखेगा -->
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 49</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ सही किया गया डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_homescience_microbiology_test_49q"; 
+
+        // 2. 49 प्रश्नों का संपूर्ण डेटासेट
+        const dataset = [
+            { id: 1, tag: "NCERT", question: "सूक्ष्मजीवों द्वारा भोजन के दूषित होने और उसमें विषैले पदार्थ उत्पन्न करने की प्रक्रिया को क्या कहा जाता है?", options: ["(a) खाद्य संक्रमण", "(b) खाद्य विषाक्तता (Food Poisoning / Intoxication)", "(c) खाद्य संरक्षण", "(d) खाद्य फोर्टिफिकेशन"], correct: 1 },
+            { id: 2, tag: "NCERT", question: "'खाद्य संक्रमण' (Food Infection) का मुख्य कारण क्या है?", options: ["(a) भोजन में पहले से मौजूद विषैले रसायन", "(b) भोजन के साथ जीवित रोगाणुओं/सूक्ष्मजीवों का शरीर में प्रवेश करना और बढ़ना", "(c) भोजन में अत्यधिक नमक होना", "(d) भोजन को अधिक समय तक पकाना"], correct: 1 },
+            { id: 3, tag: "NCERT", question: "डिब्बाबंद (Canned) खाद्य पदार्थों में अवायवीय (Anaerobic) परिस्थितियों में कौन-सा घातक जीवाणु पनपता है?", options: ["(a) वाइब्रियो कोलेरी", "(b) क्लोस्ट्रिडियम बोटुलिनम (Clostridium botulinum)", "(c) लैक्टोबैसिलस", "(d) राइजोबियम"], correct: 1 },
+            { id: 4, tag: "NCERT", question: "'माइकोटॉक्सिन' (Mycotoxins) विषैले पदार्थ किसके द्वारा उत्पन्न किए जाते हैं?", options: ["(a) जीवाणु (Bacteria)", "(b) कवक/फफूँद (Fungi/Moulds)", "(c) विषाणु (Virus)", "(d) प्रोटोज़ोआ"], correct: 1 },
+            { id: 5, tag: "NCERT", question: "HACCP का पूर्ण रूप क्या है, जो खाद्य सुरक्षा प्रबंधन की एक अंतर्राष्ट्रीय प्रणाली है?", options: ["(a) Hazard Analysis Critical Control Point", "(b) Health Analysis and Control Care Program", "(c) Hygiene Assessment Critical Control Process", "(d) Hazard Assessment Chemical Control Point"], correct: 0 },
+            { id: 6, tag: "NCERT", question: "भारत में खाद्य मानकों को एकीकृत करने के लिए 'खाद्य सुरक्षा और मानक अधिनियम' (FSSAI) किस वर्ष लागू किया गया था?", options: ["(a) 1955", "(b) 1986", "(c) 2006", "(d) 2015"], correct: 2 },
+            { id: 7, tag: "NCERT", question: "भोजन को सुरक्षित रखने के लिए जीवाणुओं की वृद्धि रोकने हेतु 'खतरा क्षेत्र' (Danger Zone) तापमान सीमा क्या मानी जाती है?", options: ["(a) 0°C से 4°C", "(b) 5°C से 60°C", "(c) 65°C से 100°C", "(d) -10°C से 0°C"], correct: 1 },
+            { id: 8, tag: "NCERT", question: "अंतर्राष्ट्रीय स्तर पर खाद्य मानकों और दिशानिर्देशों को निर्धारित करने वाली संस्था 'कोडेक्स एलिमेंटेरियस कमीशन' (CAC) की स्थापना किन संस्थाओं द्वारा की गई थी?", options: ["(a) UNESCO और UNICEF", "(b) FAO और WHO", "(c) WTO और ILO", "(d) UNEP और UNDP"], correct: 1 },
+            { id: 9, tag: "NCERT", question: "'साल्मोनेला' (Salmonella) जीवाणु मुख्य रूप से किन खाद्य पदार्थों के माध्यम से खाद्य विषाक्तता फैलाता है?", options: ["(a) ताजे फल और सूखे मेवे", "(b) कच्चा/अधपका अंडा, पोल्ट्री (मुर्गी का मांस) और बिना उबला दूध", "(c) डिब्बाबंद जूस", "(d) पके हुए चावल"], correct: 1 },
+            { id: 10, tag: "NCERT", question: "कृषि उत्पादों (जैसे अनाज, दालें, मसाले) की गुणवत्ता और ग्रेडिंग प्रमाणित करने वाला भारत का आधिकारिक मानक चिन्ह कौन-सा है?", options: ["(a) ISI मार्क", "(b) एगमार्क (AGMARK)", "(c) एफपीओ (FPO)", "(d) हॉलमार्क"], correct: 1 },
+            { id: 11, tag: "NCERT", question: "भोजन में 'सन्दूषण' (Contamination) और 'अपमिश्रण' (Adulteration) में क्या अंतर है?", options: ["(a) सन्दूषण अनजाने में/सूक्ष्मजीवों द्वारा होता है, जबकि अपमिश्रण लाभ कमाने के लिए जानबूझकर किया जाता है", "(b) दोनों एक ही प्रक्रियाएँ हैं", "(c) अपमिश्रण केवल प्राकृतिक होता है", "(d) सन्दूषण केवल रसायनों से होता है"], correct: 0 },
+            { id: 12, tag: "NCERT", question: "'क्रॉस-कंटामिनेशन' (Cross-Contamination) से बचाव के लिए रसोईघर में क्या करना चाहिए?", options: ["(a) कच्चे और पके हुए भोजन को एक ही बर्तन में रखना चाहिए", "(b) कच्चे मांस और पकाने वाले तैयार भोजन के लिए अलग-अलग चॉपिंग बोर्ड का प्रयोग करना चाहिए", "(c) सब्जियों को बिना धोए पकाना चाहिए", "(d) पके हुए भोजन को खुले में रखना चाहिए"], correct: 1 },
+            { id: 13, tag: "NCERT", question: "दूध को रोगाणुमुक्त करने और उसकी शेल्फ-लाइफ बढ़ाने के लिए 'पाश्चुरीकरण' (Pasteurization) में दूध को कितने तापमान पर गर्म किया जाता है?", options: ["(a) 100°C पर 1 घंटे तक", "(b) 72°C पर 15 सेकंड तक (HTST विधि)", "(c) 50°C पर 30 मिनट तक", "(d) 120°C पर 10 मिनट तक"], correct: 1 },
+            { id: 14, tag: "NCERT", question: "'स्टैफाइलोकोकस ऑरियस' (Staphylococcus aureus) जीवाणु द्वारा उत्पन्न टॉक्सिन भोजन में मुख्य रूप से कैसे पहुँचता है?", options: ["(a) हवा के माध्यम से", "(b) भोजन पकाने वाले व्यक्ति की त्वचा, नाक या संक्रमित घावों के सीधे संपर्क से", "(c) पानी की नमी से", "(d) मिट्टी से"], correct: 1 },
+            { id: 15, tag: "NCERT", question: "खाद्य सुरक्षा के तीन मुख्य जोखिम (Hazards) कौन-कौन से हैं?", options: ["(a) भौतिक, रासायनिक और जैविक जोखिम", "(b) मानसिक, सामाजिक और आर्थिक जोखिम", "(c) तापीय, यांत्रिक और विद्युत जोखिम", "(d) हवा, पानी और प्रकाश जोखिम"], correct: 0 },
+            { id: 16, question: "निम्नलिखित को मिलाइए :<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I</b><br>(A) भोजन संक्रमण<br>(B) विषाक्त रसायन<br>(C) सीसा विषाक्तता<br>(D) कवक<br>(E) संक्रमणीय हेपेटाइटिस</td><td style='width:50%; vertical-align:top;'><b>सूची-II</b><br>(1) माइकोटॉक्सिन<br>(2) सूक्ष्मजीव<br>(3) कीटनाशक<br>(4) भोजन के जरिए विषाणु संक्रमण<br>(5) बर्तन</td></tr></table><br>कूट :", options: ["(a) A-1, B-2, C-3, D-4, E-5", "(b) A-5, B-4, C-3, D-2, E-1", "(c) A-2, B-3, C-5, D-1, E-4", "(d) A-3, B-4, C-5, D-2, E-1"], correct: 2 },
+            { id: 17, question: "एसिटामिनोफेन विषाक्तता जो सबसे आम दवा है इनमें से किस की विफलता का कारण है?", options: ["(a) फेफड़े", "(b) किडनी", "(c) लिवर", "(d) मस्तिष्क"], correct: 2 },
+            { id: 18, question: "जैम और जेली में बढ़ने वाले उस जीव का नाम बताएं, जिसमें कम मुक्त ऑक्सीजन की आवश्यकता होती है?", options: ["(a) प्रोटोज़ोआ", "(b) मोल्ड्स (Moulds/फफूँदी)", "(c) बैक्टीरिया", "(d) वायरस"], correct: 1 },
+            { id: 19, question: "E. coli है–", options: ["(a) ग्राम-पॉजिटिव बैक्टीरिया", "(b) ग्राम-निगेटिव बैक्टीरिया", "(c) न्यूट्रल बैक्टीरिया", "(d) उपर्युक्त सभी"], correct: 1 },
+            { id: 20, question: "निम्न में से कौन-सा बैक्टीरिया क्षारीय pH में वृद्धि करता है?", options: ["(a) लैक्टोबैसिली", "(b) वाइब्रियो कॉलेरा", "(c) सल्मोनेला", "(d) स्टैफाइलोकोकस"], correct: 1 },
+            { id: 21, question: "पाश्चुरीकरण मुख्यतः किया जाता है–", options: ["(a) सभी सूक्ष्म जीवाणुओं को नष्ट करने के लिए", "(b) रोग पैदा करने वाले सूक्ष्म जीवाणुओं को नष्ट करने के लिए", "(c) एनजाइम को निष्क्रिय करने के लिए", "(d) अशुद्धियों को निकालने के लिए"], correct: 1 },
+            { id: 22, question: "निम्नलिखित में से कौन सा सूक्ष्म जीवों खाद्य जनित जहर का कारण है?<br><br>(A) स्टेफलोकाकस<br>(B) ई कोलाई<br>(C) क्लोस्ट्रीडियम बोटुलिनम<br>(D) लिस्टेरिया<br><br>कूट :", options: ["(a) (A) और (B)", "(b) (A) और (C)", "(c) (C) और (D)", "(d) (D) और (A)"], correct: 1 },
+            { id: 23, question: "सूची-I में दिए गए सूक्ष्मजीव को सूची-II में दिए गए खाद्यजन्य रोग की स्थिति से सुमेलित कीजिए:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I</b><br>A. सल्मोनेला<br>B. शिगेला<br>C. क्लोस्ट्रीडियम<br>D. प्रोटोज़ोआ<br>E. वायरस</td><td style='width:50%; vertical-align:top;'><b>सूची-II</b><br>i. संग्रहणी<br>ii. एमोबिक संग्रहणी<br>iii. यक्ष्मा (टी.बी.)<br>iv. हेपेटाइटिस<br>v. आंत्र ज्वर<br>vi. बोटुलिज्म</td></tr></table><br>कूट :", options: ["(a) A-ii, B-v, C-i, D-vi, E-iii", "(b) A-v, B-iii, C-ii, D-vi, E-iv", "(c) A-v, B-i, C-vi, D-ii, E-iv", "(d) A-i, B-v, C-vi, D-ii, E-iii"], correct: 2 },
+            { id: 24, question: "अभिकथन (A) : एंटीऑक्सीडेंट पोषक आहार में विषाक्तता को कम कर सकता है और संभावित स्वास्थ्य लाभों को अधिकतम कर सकता है।<br><br>कारण (R) : फल और सब्जियों के पोषक वाले आहारों से आर.डी.ए. के स्तरों से उच्च स्तरों पर विटामिन ए, विटामिन सी और विटामिन ई आदि मिलता है।<br><br>कूट :", options: ["(a) (A) गलत है और (R) सही है।", "(b) (A) सही है लेकिन (R) गलत है।", "(c) (A) सही है और (R) सही व्याख्या है।", "(d) (A) सही है लेकिन (R) गलत व्याख्या है।"], correct: 3 },
+            { id: 25, question: "सूची -1 में दिए गए खाद्य पदार्थों को दूषित करने वाले जीवों को सूची - II में दिए गए खाद्य पदार्थों से सुमेलित करें :<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I</b><br>I. टेनिया सोलियम<br>II. क्लोस्ट्रीडियम बोटुलिनम<br>III. स्टेफिलोकोकस ऑरियस<br>IV. स्ट्रेप्टोकोकस<br>V. साल्मोनेला</td><td style='width:50%; vertical-align:top;'><b>सूची-II</b><br>A. दूध और दुग्ध पदार्थ<br>B. अण्डा, मांस उत्पाद<br>C. सूअर मांस और इसके उत्पाद<br>D. क्रीमयुक्त खाद्य पदार्थ<br>E. फ्रीज की हुई सब्जियाँ<br>F. अचार<br>G. डिब्बाबन्द प्रोटीन खाद्य पदार्थ</td></tr></table><br>कूट :", options: ["(a) I-C, II-G, III-E, IV-B, V-F", "(b) I-C, II-G, III-D, IV-A, V-B", "(c) I-A, II-F, III-D, IV-A, V-E", "(d) I-E, II-C, III-A, IV-B, V-D"], correct: 1 },
+            { id: 26, question: "सूची -1 में दिए गए मदों को सूची - II में दिए खाद्य पदार्थों से सुमेलित करें :<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I</b><br>I. डी. ओ. पी. ए.<br>II. एक्रोलिन<br>III. ग्लूटिन<br>IV. एफलाटॉक्सिन<br>V. फेरस सल्फाइड</td><td style='width:50%; vertical-align:top;'><b>सूची-II</b><br>A. अण्डा<br>B. मेवे<br>C. सेब<br>D. दूध<br>E. अनाज<br>F. तेल</td></tr></table><br>कूट :", options: ["(a) I-C, II-F, III-E, IV-B, V-A", "(b) I-A, II-B, III-D, IV-E, V-F", "(c) I-B, II-C, III-E, IV-F, V-A", "(d) I-C, II-E, III-F, IV-D, V-B"], correct: 0 },
+            { id: 27, question: "सूची-I में दिए गए जीवाणुओं को सूची - II में दिए गए खाद्य-पदार्थ से मिलाएँ:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I</b><br>A. सालमोनैला<br>B. स्ट्रैप्टोकोकस<br>C. क्लासट्रिडियम बॉट्यूलाइनम्<br>D. टिनिया सोलियम<br>E. शीगेला</td><td style='width:50%; vertical-align:top;'><b>सूची-II</b><br>1. कच्ची सब्जियाँ व सलाद<br>2. कम अम्लीय डिब्बाबन्द खाद्य-पदार्थ<br>3. निर्जलीकृत सब्जियाँ<br>4. अंडा व मांस उत्पाद<br>5. सूअर का मांस व उत्पाद<br>6. क्रीम व डेयरी उत्पाद</td></tr></table><br>कूट :", options: ["(a) A-3, B-4, C-2, D-1, E-5", "(b) A-4, B-6, C-2, D-5, E-1", "(c) A-4, B-1, C-3, D-5, E-2", "(d) A-3, B-5, C-2, D-6, E-1"], correct: 1 },
+            { id: 28, question: "............. भोजनजन्यों रोगों के कारणों में से एक है।", options: ["(a) सूक्ष्मजीवों से दूषित होना", "(b) उष्मायन", "(c) शोध", "(d) पेचिश"], correct: 0 },
+            { id: 29, question: "म्यूकर, एस्परजिलस और इरगॉट जैसे कवक............और............ के सामान्य दूषक हैं।", options: ["(a) सूअर और गाय का माँस", "(b) फीताकृमि और वलयकृमि", "(c) जीवाणु और विषाणु", "(d) डबलरोटी और अनाज"], correct: 3 },
+            { id: 30, tag: "PYQ", question: "भोजन संक्रमण भोजन में उपस्थित रोग जनक जीवाणुओं, रोगाणुओं को खा लेना है।", options: ["(a) असत्य", "(b) सत्य", "(c) संबंधित नहीं", "(d) संदेहास्पद"], correct: 1 },
+            { id: 31, tag: "PYQ", question: "साल्मोनेला भोजन विषाक्तता एक जीवाण्विक भोजन विषाक्तता है।", options: ["(a) सत्य", "(b) असत्य", "(c) संबंधित नहीं", "(d) विवादित"], correct: 0 },
+            { id: 32, tag: "PYQ", question: "अभिकथन (A): जिन खाद्य पदार्थों से, उनमें निहित पोषक तत्वों के सुस्थापित कार्यों से अतिरिक्त स्वास्थ्यवर्धक लाभ प्राप्त होते हैं उन्हें प्रकार्यात्मक खाद्य-पदार्थ (फंक्शनल फूड) कहते हैं।<br><br>कारण (R): प्रोबायोटिक, फ्लेवोनोइड, फाइटोस्टेरोल जैसे बायोएक्टिव घटक तत्वों में स्वास्थ्यवर्धक प्रभाव होता है।<br><br>कूट:", options: ["(a) (A) सही है और (R) गलत है।", "(b) (A) तथा (R) दोनों गलत हैं।", "(c) (A) गलत है और (R) सही है।", "(d) (A) तथा (R) दोनों सही हैं और (R), (A) का सही स्पष्टीकरण है।"], correct: 3 },
+            { id: 33, tag: "PYQ", question: "सूची -I में दिए जीवाणु से सूची - II में दिए उनसे होने वाले विकारों से सुमेलित करें :<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I</b><br>(A) साल्मोनेला<br>(B) शिगेला<br>(C) टैनिया सोलियम<br>(D) प्रोटोजोवा<br>(E) हेलीकोबैक्टर पायलोरी</td><td style='width:50%; vertical-align:top;'><b>सूची-II</b><br>(i) मस्तिष्क में रसौली / सिस्ट<br>(ii) अमीबा से होने वाला पेचिश<br>(iii) मियादी बुखार<br>(iv) पेप्टिक अल्सर<br>(v) हेपेटाइटिस<br>(vi) पेचिश</td></tr></table><br>कूट :", options: ["(a) A-iii, B-vi, C-i, D-ii, E-iv", "(b) A-iii, B-v, C-vi, D-i, E-iv", "(c) A-i, B-ii, C-iii, D-iv, E-v", "(d) A-ii, B-iv, C-i, D-iii, E-v"], correct: 0 },
+            { id: 34, tag: "PYQ", question: "सूची-I में दिए जीवों को सूची-II में दिए गए उसके बीमारी फैलाने के साधन से मिलाएँ:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I</b><br>(A) टीनिया सोलियम<br>(B) एस्केरिस लम्बरिकोयाइड्स<br>(C) थ्रेड-वर्म<br>(D) क्लासट्रिडियम बॉट्यूलाइनम</td><td style='width:50%; vertical-align:top;'><b>सूची-II</b><br>(i) डिब्बाबन्द खाद्य-पदार्थ<br>(ii) मनुष्य के मल से किटाणुग्रस्त खाद्य-पदार्थ<br>(iii) संक्रमित सूअर का माँस<br>(iv) मनुष्य, भोजन व जल<br>(v) दूध व दूध से बने पदार्थ</td></tr></table><br>कूट :", options: ["(a) A-iii, B-iv, C-ii, D-i", "(b) A-v, B-iv, C-ii, D-i", "(c) A-v, B-ii, C-iv, D-iii", "(d) A-iii, B-ii, C-i, D-v"], correct: 0 },
+            { id: 35, tag: "PYQ", question: "सूची-I में दिए गए जीवाणुओं को सूची- II में उनके द्वारा होने वाली बीमारियों से सुमेलित करें :<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I</b><br>I. सालमोनैला<br>II. शिगेला<br>III. क्लॉस्ट्रीडियम<br>IV. टीनिया सोलियम<br>V. ट्रिचिनैला स्पाइरैलिस</td><td style='width:50%; vertical-align:top;'><b>सूची-II</b><br>A. उल्टी व दस्त<br>B. दिमाग में सिस्ट<br>C. गुर्दा में जलन<br>D. स्नायु तंत्र पर प्रभाव<br>E. मियादी बुखार<br>F. पेचिश</td></tr></table><br>कूट :", options: ["(a) I-E, II-F, III-A, IV-B, V-D", "(b) I-E, II-F, III-A, IV-B, V-C", "(c) I-F, II-E, III-A, IV-B, V-D", "(d) I-D, II-A, III-E, IV-F, V-B"], correct: 0 },
+            { id: 36, tag: "PYQ", question: "अतिसूक्ष्म जीवों को निष्क्रिय किया जा सकता है :", options: ["(a) उबाल कर", "(b) बर्फ जमाकर", "(c) निर्जलीकरण द्वारा", "(d) इन सभी के द्वारा"], correct: 3 },
+            { id: 37, tag: "PYQ", question: "सूची-I में दी मदों को सूची-II के साथ सुमेलित कीजिए:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I</b><br>I. क्लोस्ट्रिडियम परफ्रिजेनस<br>II. एंटामीबा हिस्टोलिटिका<br>III. शिगेला बैक्टीरियम<br>IV. कैम्पीलोबैक्टर जैजूनी</td><td style='width:50%; vertical-align:top;'><b>सूची-II</b><br>1. बैसिलेट्री डिसेंट्री<br>2. डायरिया<br>3. अमोबिक डिसेंट्री<br>4. गैस्ट्रोएन्टराइटिस<br>5. हेपेटाइटिस A</td></tr></table><br>कूट :", options: ["(a) I-4, II-3, III-1, IV-2", "(b) I-1, II-2, III-3, IV-4", "(c) I-3, II-4, III-2, IV-1", "(d) I-1, II-3, III-4, IV-2"], correct: 0 },
+            { id: 38, tag: "PYQ", question: "निम्नलिखित सूक्ष्म जीवों में से कौन सा खाद्य पदार्थ जनित उन्मत्तता/नशा (Intoxication) उत्पन्न करता है?<br><br>(A) स्टैफाइलोकोकस ऑरियस<br>(B) इ. कोलाई<br>(C) क्लॉस्ट्रिडियम बॉटुलिनम<br>(D) लिस्टिरिया मोनोसाइटोजीनस<br>(E) सैलमोनेला<br><br>कूट :", options: ["(a) (A) और (B)", "(b) (A) और (C)", "(c) (C) और (D)", "(d) (D) और (E)"], correct: 1 },
+            { id: 39, tag: "PYQ", question: "निम्नलिखित में से कौन-सा आहारीय चिकित्सा का उद्देश्य है?", options: ["(a) पाचन तंत्र के कष्टों को देखते हुए सरल, सौम्य तथा सुपाच्य आहार प्रदान करना", "(b) रुग्णावस्था में भी उच्च पोषक स्तर की निरन्तर आपूर्ति करना", "(c) शरीर के प्रभावित अंगों को पर्याप्त विश्राम प्रदान करना", "(d) इनमें से सभी"], correct: 3 },
+            { id: 40, tag: "PYQ", question: "'बोटुलिज्म' इस मानवी बीमारी के कारणात्मक कारक का वर्गीकरण निम्न प्रकार होता है:", options: ["(a) बैक्टीरियल टॉक्सिन", "(b) वायरल टॉक्सिन", "(c) माइको टॉक्सिन", "(d) रासायनिक टॉक्सिन"], correct: 0 },
+            { id: 41, tag: "PYQ", question: "खाद्य पदार्थ विकृतिकरण किस कारण से होता है?", options: ["(a) सूक्ष्म जीवों का पैदा होना", "(b) उच्च तापमान", "(c) निम्न तापमान", "(d) भण्डारण"], correct: 0 },
+            { id: 42, tag: "PYQ", question: "इनमें से कौन सी प्रक्रिया भोज्य पदार्थ में जीवाणु को जाने से रोकती है?", options: ["(a) इरेडियेशन (Irradiation)", "(b) स्टीरिलाइजेशन", "(c) फोर्टिफिकेशन", "(d) डिहाइड्रेशन"], correct: 0 },
+            { id: 43, tag: "PYQ", question: "बासी ब्रेड में आमतौर पर ...... का असर होता है।", options: ["(a) मोल्ड (Mould / फफूँदी)", "(b) बैक्टीरिया", "(c) कीड़े", "(d) वाइरस"], correct: 0 },
+            { id: 44, tag: "PYQ", question: "pH 7 इंगित करता है कि विलयन या पदार्थ है:", options: ["(a) अम्लीय", "(b) क्षारीय", "(c) उदासीन", "(d) नमकीन"], correct: 2 },
+            { id: 45, tag: "PYQ", question: "फफूँदी किस प्रकार का रोग फैलाता है?", options: ["(a) पेट सम्बन्धी", "(b) नेत्र सम्बन्धी", "(c) त्वचा सम्बन्धी", "(d) कान सम्बन्धी"], correct: 2 },
+            { id: 46, tag: "PYQ", question: "जल तथा भोजन किस जीव के कारण अधिकतर संक्रमित होता है?", options: ["(a) पिस्सू", "(b) मक्खी", "(c) मच्छर", "(d) चूहे"], correct: 1 },
+            { id: 47, tag: "PYQ", question: "दूषित भोजन से फैलने वाला रोग है:", options: ["(a) डिप्थीरिया", "(b) रिकेट्स", "(c) हैजा", "(d) तपेदिक"], correct: 2 },
+            { id: 48, tag: "PYQ", question: "भोज्य पदार्थों को कौन-सा जीवाणु/सूक्ष्मजीव नष्ट करता है?", options: ["(a) ईस्ट", "(b) मोल्ड", "(c) बैक्टीरिया", "(d) इनमें से सभी"], correct: 3 },
+            { id: 49, tag: "PYQ", question: "उच्च ताप के प्रयोग द्वारा सूक्ष्म जीवाणुओं की वृद्धि से बचाव कर भोजन को परिरक्षित करने की विधि है:", options: ["(a) विकिरण", "(b) शुष्कीकरण", "(c) धुएँ द्वारा", "(d) निःसंक्रमीकरण (Sterilization)"], correct: 3 }
+        ];
+    </script>
+
+    <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
