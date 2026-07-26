@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ सही किया गया बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT PGT Test Series</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">गृह विज्ञान (Home Science)</span>
+                        <!-- 🌟 यहाँ डायनेमिक टैग दिखेगा -->
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ सही किया गया डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_homescience_carbohydrates_50q"; 
+
+        // 2. 50 प्रश्नों का पूर्णतः सत्यापित डेटासेट
+        const dataset = [
+            { id: 1, tag: "NCERT", question: "मानव आहार में कार्बोहाइड्रेट मुख्य रूप से किस रूप में संचित ऊर्जा और संरचना प्रदान करते हैं?", options: ["(a) केवल शर्करा (Sugar) के रूप में", "(b) शर्करा (Sugar), स्टार्च (Starch) और आहारीय रेशा (Dietary Fibre)", "(c) केवल वसीय अम्ल (Fatty Acids) के रूप में", "(d) केवल अमीनो अम्ल (Amino Acids) के रूप में"], correct: 1 },
+            { id: 2, tag: "NCERT", question: "पौधों में कार्बोहाइड्रेट का मुख्य भंडारण रूप (Storage Form) कौन-सा होता है?", options: ["(a) ग्लाइकोजन (Glycogen)", "(b) स्टार्च (Starch)", "(c) ग्लूकोज (Glucose)", "(d) सुक्रोज (Sucrose)"], correct: 1 },
+            { id: 3, tag: "NCERT", question: "मानव शरीर में (यकृत एवं मांसपेशियों में) कार्बोहाइड्रेट का भंडारण किस रूप में होता है?", options: ["(a) स्टार्च (Starch)", "(b) ग्लाइकोजन (Glycogen)", "(c) पेक्टिन (Pectin)", "(d) गैलेक्टोज (Galactose)"], correct: 1 },
+            { id: 4, tag: "NCERT", question: "आहार में 'गैर-पाच्य कार्बोहाइड्रेट' (Indigestible Carbohydrates) को क्या कहा जाता है जो पाचन तंत्र (Digestive System) को स्वस्थ रखते हैं?", options: ["(a) सरल शर्करा (Simple Sugars)", "(b) आहारीय रेशा (Dietary Fibre)", "(c) संतृप्त वसा (Saturated Fat)", "(d) प्रोटीन पूरक (Protein Supplement)"], correct: 1 },
+            { id: 5, tag: "NCERT", question: "सामान्य टेबल शुगर (घरेलू शर्करा / Table Sugar) रासायनिक रूप से किस प्रकार की शर्करा है?", options: ["(a) मोनोसैकराइड (Monosaccharide)", "(b) डाइसैकराइड (Disaccharide - सुक्रोज)", "(c) पॉलीसैकराइड (Polysaccharide)", "(d) ट्राइसैकराइड (Trisaccharide)"], correct: 1 },
+            { id: 6, tag: "NCERT", question: "फल एवं सब्जियों में पाया जाने वाला वह घुलनशील रेशा (Soluble Fibre) कौन-सा है जो जैम एवं जेली जमाने में सहायक होता है?", options: ["(a) सेल्यूलोज (Cellulose)", "(b) पेक्टिन (Pectin)", "(c) काइटिन (Chitin)", "(d) लिग्निन (Lignin)"], correct: 1 },
+            { id: 7, tag: "NCERT", question: "ग्लाइसेमिक इंडेक्स (Glycemic Index - GI) भोजन के किस प्रभाव को मापता है?", options: ["(a) भोजन के पाचन (Digestion) का समय", "(b) कार्बोहाइड्रेट युक्त भोजन का रक्त शर्करा (Blood Glucose) के स्तर पर पड़ने वाला प्रभाव", "(c) भोजन में वसा (Fat) की मात्रा", "(d) भोजन में प्रोटीन (Protein) का अवशोषण"], correct: 1 },
+            { id: 8, tag: "NCERT", question: "1 ग्राम शुद्ध कार्बोहाइड्रेट के पूर्ण चयापचय (Metabolism) से शरीर को कितनी ऊर्जा प्राप्त होती है?", options: ["(a) 9 kcal", "(b) 4 kcal", "(c) 7 kcal", "(d) 2 kcal"], correct: 1 },
+            { id: 9, tag: "NCERT", question: "साबुत अनाज (Whole Grains), दालें और ताजे फल/सब्जियाँ आहार में मुख्य रूप से क्या बढ़ाने के लिए अनुशंसित किए जाते हैं?", options: ["(a) संतृप्त वसा (Saturated Fat)", "(b) आहारीय रेशा (Dietary Fibre) और जटिल कार्बोहाइड्रेट (Complex Carbohydrates)", "(c) कोलेस्ट्रॉल (Cholesterol)", "(d) सोडियम (Sodium)"], correct: 1 },
+            { id: 10, tag: "NCERT", question: "कार्बोहाइड्रेट के पाचन के बाद रक्त में अवशोषित होने वाली सबसे सरलतम शर्करा इकाई (Simplest Sugar Unit) कौन-सी है?", options: ["(a) सुक्रोज (Sucrose)", "(b) स्टार्च (Starch)", "(c) ग्लूकोज (Glucose)", "(d) माल्टोज (Maltose)"], correct: 2 },
+            { id: 11, tag: "NCERT", question: "दुग्ध शर्करा (Milk Sugar) के नाम से जानी जाने वाली शर्करा रासायनिक रूप से क्या है?", options: ["(a) सुक्रोज (Sucrose)", "(b) लैक्टोज (Lactose)", "(c) फ्रक्टोज (Fructose)", "(d) माल्टोज (Maltose)"], correct: 1 },
+            { id: 12, tag: "NCERT", question: "प्राकृतिक रूप से पाई जाने वाली सबसे मीठी प्राकृतिक शर्करा कौन-सी है, जो मुख्य रूप से फलों एवं शहद में पाई जाती है?", options: ["(a) ग्लूकोज (Glucose)", "(b) फ्रक्टोज (Fruit Sugar / Fructose)", "(c) लैक्टोज (Lactose)", "(d) गैलेक्टोज (Galactose)"], correct: 1 },
+            { id: 13, tag: "NCERT", question: "पौधों की कोशिका भित्ति (Cell Wall) का निर्माण करने वाला अघुलनशील रेशा (Insoluble Fibre) कौन-सा है?", options: ["(a) स्टार्च (Starch)", "(b) सेल्यूलोज (Cellulose)", "(c) ग्लाइकोजन (Glycogen)", "(d) माल्टोज (Maltose)"], correct: 1 },
+            { id: 14, tag: "NCERT", question: "कार्बोहाइड्रेट में कार्बन, हाइड्रोजन और ऑक्सीजन (C:H:O) का सामान्य अनुपात कितना होता है?", options: ["(a) 1:1:1", "(b) 1:2:1", "(c) 2:1:1", "(d) 1:2:2"], correct: 1 },
+            { id: 15, tag: "NCERT", question: "अंकुरण (Germination) और खमीरीकरण (Fermentation) की प्रक्रिया से खाद्य पदार्थों में किस शर्करा एवं विटामिन की सुपाच्यता बढ़ती है?", options: ["(a) लैक्टोज एवं विटामिन A", "(b) माल्टोज, सरलीकृत स्टार्च एवं B-कॉम्प्लेक्स विटामिन", "(c) सुक्रोज एवं वसा", "(d) केवल खनिज लवण"], correct: 1 },
+            { id: 16, tag: "NCERT", question: "इंसुलिन हार्मोन (Insulin Hormone) की कमी से कार्बोहाइड्रेट उपापचय (Carbohydrate Metabolism) प्रभावित होने पर रक्त में किसकी मात्रा बढ़ जाती है?", options: ["(a) अमीनो एसिड (Amino Acid)", "(b) ग्लूकोज (Glucose)", "(c) फैटी एसिड (Fatty Acid)", "(d) हीमोग्लोबिन (Hemoglobin)"], correct: 1 },
+            { id: 17, tag: "NCERT", question: "माल्टोज शर्करा (Maltose) किन दो सरल शर्करा इकाइयों के संयोजन से बनती है?", options: ["(a) ग्लूकोज + फ्रक्टोज", "(b) ग्लूकोज + ग्लूकोज", "(c) ग्लूकोज + गैलेक्टोज", "(d) फ्रक्टोज + गैलेक्टोज"], correct: 1 },
+            { id: 18, tag: "PYQ", question: "............घरेलू शर्करा (Household / Table Sugar) के लिए वैज्ञानिक नाम है।", options: ["(a) लैक्टोज (Lactose)", "(b) माल्टोज (Maltose)", "(c) सुक्रोज (Sucrose)", "(d) डेक्स्ट्रोज (Dextrose)"], correct: 2 },
+            { id: 19, tag: "PYQ", question: "पौधों का प्रमुख भंडारण पॉलिसैकेराइड (Storage Polysaccharide) है:", options: ["(a) स्टार्च (Starch)", "(b) शक्कर (Sugar)", "(c) कार्बोहाइड्रेट (Carbohydrate)", "(d) वसा (Fat)"], correct: 0 },
+            { id: 20, tag: "PYQ", question: "निम्न प्रतिक्रियाओं को सही क्रम में लगायें जिस तरह से यह साइट्रिक अम्ल चक्र (Citric Acid Cycle / Krebs Cycle) में उत्पन्न होती है :<br><br>(a) ऑक्सोग्लूटरेट (α-Oxoglutarate)<br>(b) सक्सीनाइल कोए (Succinyl-CoA)<br>(c) सिट्रेट (Citrate)<br>(d) आइसो सिट्रेट (Isocitrate)<br><br>कूट :", options: ["(a) (a), (b), (c), (d)", "(b) (c), (d), (a), (b)", "(c) (c), (b), (d), (a)", "(d) (d), (b), (c), (a)"], correct: 1 },
+            { id: 21, tag: "PYQ", question: "'ग्लाइकोजेनेसिस' (Glycogenesis) की क्रियाओं को क्रमबद्ध कीजिए :<br><br>(1) यू.डी.पी. ग्लूकोज (UDP-Glucose)<br>(2) ग्लूकोज सिक्स फॉस्फेट (Glucose-6-Phosphate)<br>(3) ग्लूकोज (Glucose)<br>(4) ग्लूकोज-1-फॉस्फेट (Glucose-1-Phosphate)<br><br>कूट :", options: ["(a) 1, 3, 4, 2", "(b) 3, 2, 4, 1", "(c) 1, 2, 3, 4", "(d) 4, 3, 2, 1"], correct: 1 },
+            { id: 22, tag: "PYQ", question: "Starch is a / स्टार्च निम्न है:", options: ["(a) Monosaccharide/मोनोसैकेराइड", "(b) Disaccharide/डाइसैकेराइड", "(c) Polysaccharide/पोलीसैकेराइड", "(d) Wax/मोम"], correct: 2 },
+            { id: 23, tag: "PYQ", question: "The most concentrated source of energy in food is / भोजन में ऊर्जा का सबसे सान्द्र (Concentrated) स्रोत है:", options: ["(a) Fat/वसा", "(b) Protein/प्रोटीन", "(c) Carbohydrates/कार्बोज", "(d) Mineral salts/खनिज लवण"], correct: 0 },
+            { id: 24, tag: "PYQ", question: "शरीर में दैनिक ऊर्जा का प्रमुख स्रोत (Primary Energy Source) क्या है?", options: ["(a) वसा (Fat)", "(b) कार्बोहाइड्रेट (Carbohydrate)", "(c) प्रोटीन (Protein)", "(d) उपरोक्त सभी"], correct: 1 },
+            { id: 25, tag: "PYQ", question: "एक ग्राम कार्बोहाइड्रेट से पायी जाने वाली ऊर्जा है:", options: ["(a) 4 Cal", "(b) 9 Cal", "(c) 6 Cal", "(d) 20 Cal"], correct: 0 },
+            { id: 26, tag: "PYQ", question: "शरीर को तुरन्त ऊर्जा (Instant Energy) प्रदान करने वाला पोषक-तत्व है:", options: ["(a) प्रोटीन (Protein)", "(b) वसा (Fat)", "(c) कार्बोहाइड्रेट (Carbohydrate)", "(d) खनिज लवण (Minerals)"], correct: 2 },
+            { id: 27, tag: "PYQ", question: "शर्करा (Sugar) को खाद्य संरक्षण में वर्गीकृत किया गया है:", options: ["(a) विकारी खाद्य (Perishable Food)", "(b) अर्ध-विकारी खाद्य (Semi-perishable Food)", "(c) गैर-विकारी खाद्य (Non-perishable Food)", "(d) सुविधाजनक विकारी खाद्य"], correct: 2 },
+            { id: 28, tag: "PYQ", question: "निम्नलिखित में से किसका प्रतिशत दूध (Milk Solids) में अधिक होता है?", options: ["(a) प्रोटीन (Protein)", "(b) वसा (Fat)", "(c) कार्बोहाइड्रेट (Lactose/लैक्टोज)", "(d) खनिज (Minerals)"], correct: 2 },
+            { id: 29, tag: "PYQ", question: "ब्रान (Bran / चोकर) किसका एक अच्छा स्रोत है?", options: ["(a) कार्बोहाइड्रेट और प्रोटीन (तथा आहारीय रेशा/Dietary Fibre)", "(b) कसैलापन और खनिज", "(c) बी-ग्रुप विटामिन और कसैलापन", "(d) बी-ग्रुप विटामिन और प्रोटीन"], correct: 0 },
+            { id: 30, tag: "PYQ", question: "मनुष्य 10 kcal ऊर्जा प्राप्त करता है:", options: ["(a) 1 ग्राम कार्बोहाइड्रेट से", "(b) 2 ग्राम कार्बोहाइड्रेट से", "(c) ढाई ग्राम (2.5 grams) कार्बोहाइड्रेट से", "(d) 5 ग्राम कार्बोहाइड्रेट से"], correct: 2 },
+            { id: 31, tag: "PYQ", question: "सभी प्रकार की शर्करा का सरलतम रूप (Simplest Monosaccharide) है:", options: ["(a) फ्रक्टोज (Fructose)", "(b) गैलेक्टोज (Galactose)", "(c) ग्लूकोज (Glucose)", "(d) लैक्टोज (Lactose)"], correct: 2 },
+            { id: 32, tag: "PYQ", question: "कार्बोहाइड्रेट का प्रत्येक ग्राम देता है:", options: ["(a) चार कैलोरीज (4 Calories)", "(b) पाँच कैलोरीज (5 Calories)", "(c) सात कैलोरीज (7 Calories)", "(d) नौ कैलोरीज (9 Calories)"], correct: 0 },
+            { id: 33, tag: "PYQ", question: "खमीरीकरण (Fermentation) बढ़ाती है:", options: ["(a) पाचनशीलता (Digestibility)", "(b) विटामिन A", "(c) कैल्शियम", "(d) कुल प्रोटीन"], correct: 0 },
+            { id: 34, tag: "PYQ", question: "सूची-I में दिए गए परीक्षणों को सूची-II में दिए गए उसके रासायनिक यौगिक से मिलाएँ:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I (Test)</b><br>(A) निनहाइड्रिन परीक्षण<br>(B) 2,6 डाइक्लोरोफिनोल इन्डोफिनोल परीक्षण<br>(C) ओसाजोन परीक्षण<br>(D) एसिड वैल्यू<br>(E) आयोडीन वैल्यू</td><td style='width:50%; vertical-align:top;'><b>सूची-II (Chemical Compound)</b><br>(i) गाजर (विटामिन C)<br>(ii) रिड्यूसिंग शुगर<br>(iii) कोलेस्ट्रॉल<br>(iv) अमीनो एसिड<br>(v) वसा की असंतृप्तता<br>(vi) मुक्त वसा-अम्ल</td></tr></table><br>कूट :", options: ["(a) (A)-(iv), (B)-(i), (C)-(ii), (D)-(vi), (E)-(v)", "(b) (A)-(iv), (B)-(i), (C)-(iii), (D)-(vi), (E)-(v)", "(c) (A)-(iv), (B)-(i), (C)-(ii), (D)-(v), (E)-(vi)", "(d) (A)-(iii), (B)-(iv), (C)-(ii), (D)-(i), (E)-(v)"], correct: 0 },
+            { id: 35, tag: "PYQ", question: "निम्न में से आहारीय रेशा (Dietary Fibre) का सर्वोत्तम साधन है:", options: ["(a) हरे मटर (Green Peas)", "(b) अनार (Pomegranate)", "(c) ताजे खजूर (Fresh Dates)", "(d) भिण्डी (Lady Finger)"], correct: 0 },
+            { id: 36, tag: "PYQ", question: "निम्नलिखित भोज्य पदार्थों को उनके तंतुओं (Fibre Content) के अनुसार अवरोही क्रम (Descending Order) में लगाइए :<br><br>I. गेहूं (Wheat)<br>II. साबुत चना (Whole Bengal Gram)<br>III. केला (Banana)<br>IV. चीकू (Sapodilla)<br>V. मेथी (Fenugreek)<br><br>कूट :", options: ["(a) II, I, IV, III, V", "(b) II, I, V, III, IV", "(c) I, II, IV, V, III", "(d) II, I, IV, V, III"], correct: 3 },
+            { id: 37, tag: "PYQ", question: "निम्नलिखित खाद्य पदार्थ के ग्लाइसेमिक इंडेक्स (Glycemic Index - GI) 50 प्रतिशत से कम हैं:<br><br>(i) सोयाबीन (Soybean)<br>(ii) मेदे की ब्रेड (Refined Wheat Bread)<br>(iii) सेब (Apple)<br>(iv) उबले चावल (Boiled Rice)<br>(v) मेथी (Fenugreek)<br><br>कूट :", options: ["(a) (i), (ii) और (v)", "(b) (ii), (iii) और (iv)", "(c) (i), (iii) और (iv)", "(d) (i), (iii) और (v)"], correct: 3 },
+            { id: 38, tag: "PYQ", question: "इनमें से कौन सा उच्च ग्लाइसेमिक सूचकांक (High Glycemic Index) वाला आहार है?", options: ["(a) कॉर्न फ्लेक्स (Corn Flakes)", "(b) राजमा (Kidney Beans)", "(c) सेब (Apple)", "(d) ओट्स (Oats)"], correct: 0 },
+            { id: 39, tag: "PYQ", question: "निम्न खाद्य पदार्थों को उनके ग्लाइसेमिक इन्डेक्स (Glycemic Index) के आधार पर बढ़ते हुए क्रम (Ascending Order) में लगाएँ :<br><br>(a) पॉपकॉर्न (Popcorn)<br>(b) संतरा (Orange)<br>(c) जौ (Barley)<br>(d) सम्पूर्ण गेहूं के आटे से बनी डबल रोटी (Whole Wheat Bread)<br>(e) दूध - वसा युक्त (Full Cream Milk)<br><br>कूट :", options: ["(a) (d), (a), (c), (b), (e)", "(b) (b), (d), (e), (c), (a)", "(c) (c), (e), (b), (a), (d)", "(d) (b), (a), (d), (e), (c)"], correct: 2 },
+            { id: 40, tag: "PYQ", question: "पॉलिसैकेराइड्स (Polysaccharides) में निम्न शर्करा आती है-", options: ["(a) स्टार्च (Starch)", "(b) पेक्टिन (Pectin)", "(c) ग्लाइकोजन (Glycogen)", "(d) उपरोक्त सभी"], correct: 3 },
+            { id: 41, tag: "NCERT", question: "मानव शरीर में अतिरिक्त ग्लूकोज को ग्लाइकोजन में बदलने की प्रक्रिया (Process of Glycogen Synthesis) कहलाती है:", options: ["(a) ग्लाइकोलाइसिस (Glycolysis)", "(b) ग्लाइकोजेनेसिस (Glycogenesis)", "(c) ग्लाइकोजिनोलाइसिस (Glycogenolysis)", "(d) ग्लूकोनियोजेनेसिस (Gluconeogenesis)"], correct: 1 },
+            { id: 42, tag: "NCERT", question: "यकृत (Liver) में संचित ग्लाइकोजन का वापस ग्लूकोज में टूटना (Breakdown of Glycogen) क्या कहलाता है?", options: ["(a) ग्लाइकोलाइसिस (Glycolysis)", "(b) ग्लाइकोजेनेसिस (Glycogenesis)", "(c) ग्लाइकोजिनोलाइसिस (Glycogenolysis)", "(d) लाइपोलाइसिस (Lipolysis)"], correct: 2 },
+            { id: 43, tag: "NCERT", question: "अ-कार्बोहाइड्रेट स्रोतों (जैसे एमिनो एसिड या ग्लिसरॉल) से नए ग्लूकोज का निर्माण (Synthesis of Glucose from non-carbohydrate sources) कहलाता है:", options: ["(a) ग्लूकोनियोजेनेसिस (Gluconeogenesis)", "(b) ग्लाइकोलाइसिस (Glycolysis)", "(c) किण्वन (Fermentation)", "(d) पाश्चुरीकरण (Pasteurization)"], correct: 0 },
+            { id: 44, tag: "NCERT", question: "निम्नलिखित में से कौन-सी अपचायक शर्करा (Reducing Sugar) नहीं है?", options: ["(a) ग्लूकोज (Glucose)", "(b) फ्रक्टोज (Fructose)", "(c) लैक्टोज (Lactose)", "(d) सुक्रोज (Sucrose)"], correct: 3 },
+            { id: 45, tag: "NCERT", question: "कार्बोहाइड्रेट के आंशिक रूप से जलअपघटन (Hydrolysis) से बनने वाली मध्यवर्ती शर्करा (Intermediate Sugar) कौन-सी है?", options: ["(a) डेक्सट्रिन (Dextrin)", "(b) पेक्टिन (Pectin)", "(c) सेल्यूलोज (Cellulose)", "(d) इनुलिन (Inulin)"], correct: 0 },
+            { id: 46, tag: "NCERT", question: "इंसुलिन की अनुपस्थिति या प्रतिरोध के कारण रक्त में ग्लूकोज का स्तर अत्यधिक बढ़ना (High Blood Sugar Level) कहलाता है:", options: ["(a) हाइपोग्लाइसीमिया (Hypoglycemia)", "(b) हाइपरग्लाइसीमिया (Hyperglycemia)", "(c) ग्लाइकोसुरिया (Glycosuria)", "(d) केटोनुरिया (Ketonuria)"], correct: 1 },
+            { id: 47, tag: "NCERT", question: "मूत्र के माध्यम से ग्लूकोज का निष्कासन होना (Excretion of Glucose in Urine) क्या कहलाता है?", options: ["(a) हाइपरग्लाइसीमिया (Hyperglycemia)", "(b) ग्लाइकोसुरिया (Glycosuria)", "(c) प्रोटीनुरिया (Proteinuria)", "(d) यूरीमिया (Uremia)"], correct: 1 },
+            { id: 48, tag: "NCERT", question: "पेक्टिन (Pectin) मुख्य रूप से कहां पाया जाता है?", options: ["(a) अनाज के छिलकों में", "(b) कच्चे एवं पके रसीले फलों के छिलकों व गुदे (Pulp) में", "(c) दूध में", "(d) मांस एवं अंडे में"], correct: 1 },
+            { id: 49, tag: "NCERT", question: "कार्बोहाइड्रेट के पूर्ण ऑक्सीकरण (Complete Oxidation) का अंतिम उप-उत्पाद (End Products) क्या होता है?", options: ["(a) कार्बन डाइऑक्साइड (CO₂), जल (H₂O) एवं ATP ऊर्जा", "(b) केवल यूरिया", "(c) केवल लैक्टिक एसिड", "(d) अमीनो एसिड एवं जल"], correct: 0 },
+            { id: 50, tag: "NCERT", question: "मधुमेह (Diabetes Mellitus) से पीड़ित रोगी के लिए किस प्रकार के कार्बोहाइड्रेट का सेवन अनुशंसित किया जाता है?", options: ["(a) उच्च ग्लाइसेमिक इंडेक्स वाली सरल शर्करा (Simple Sugars)", "(b) निम्न ग्लाइसेमिक इंडेक्स वाले जटिल कार्बोहाइड्रेट एवं उच्च आहारीय रेशा (Complex Carbohydrates & High Fibre)", "(c) केवल शुद्ध ग्लूकोज", "(d) केवल मक्खन एवं वसा"], correct: 1 }
+        ];
+    </script>
+
+    <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
+
+
+          
