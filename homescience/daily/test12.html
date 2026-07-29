@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ सही किया गया बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">गृह विज्ञान (Home Science)</span>
+                        <!-- 🌟 यहाँ डायनेमिक टैग दिखेगा -->
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ सही किया गया डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_homescience_fats_lipids_50q"; 
+
+        // 2. 50 प्रश्नों का पूर्णतः सत्यापित डेटासेट
+        const dataset = [
+            { id: 1, tag: "NCERT", question: "वसा (Fat) रासायनिक रूप से ग्लिसरॉल (Glycerol) तथा वसीय अम्लों (Fatty Acids) के संयोजित रूप होते हैं, इन्हें क्या कहा जाता है?", options: ["(a) ट्राइग्लिसराइड्स (Triglycerides)", "(b) पॉलीसैकराइड्स", "(c) पेप्टाइड्स", "(d) न्यूक्लियोटाइड्स"], correct: 0 },
+            { id: 2, tag: "NCERT", question: "वसा में वसीय अम्ल और ग्लिसरॉल के बीच कौन-सा रासायनिक बंध (Chemical Bond) पाया जाता है?", options: ["(a) पेप्टाइड बंध", "(b) एस्टर बंध (Ester Bond)", "(c) ग्लाइकोसिडिक बंध", "(d) हाइड्रोजन बंध"], correct: 1 },
+            { id: 3, tag: "NCERT", question: "वह वसीय अम्ल (Fatty Acid) जिसमें कार्बन श्रृंखला में कोई भी दोहरा बंध (Double Bond) नहीं पाया जाता, कहलाता है:", options: ["(a) संतृप्त वसीय अम्ल (Saturated Fatty Acid)", "(b) असंतृप्त वसीय अम्ल", "(c) पॉली-असंतृप्त वसीय अम्ल", "(d) ट्रांस वसीय अम्ल"], correct: 0 },
+            { id: 4, tag: "NCERT", question: "कमरे के तापमान (20°C-25°C) पर द्रव (Liquid) अवस्था में रहने वाले वसा क्या कहलाते हैं?", options: ["(a) मक्खन", "(b) मोम", "(c) तेल (Oils)", "(d) कोलेस्ट्रॉल"], correct: 2 },
+            { id: 5, tag: "NCERT", question: "मानव शरीर स्वयं किन वसीय अम्लों (Fatty Acids) का निर्माण नहीं कर सकता और जिन्हें भोजन के माध्यम से लेना अनिवार्य होता है?", options: ["(a) आवश्यक वसीय अम्ल (Essential Fatty Acids)", "(b) संतृप्त वसीय अम्ल", "(c) गैर-आवश्यक वसीय अम्ल", "(d) ट्रांस फैटी एसिड"], correct: 0 },
+            { id: 6, tag: "NCERT", question: "निम्नलिखित में से कौन-सा मुख्य आवश्यक वसीय अम्ल (Essential Fatty Acid) है?", options: ["(a) ओलिक अम्ल (Oleic Acid)", "(b) लिनोलिक अम्ल (Linoleic Acid)", "(c) स्टैयरिक अम्ल (Stearic Acid)", "(d) पाल्मिटिक अम्ल (Palmitic Acid)"], correct: 1 },
+            { id: 7, tag: "NCERT", question: "वसा में घुलनशील विटामिन (Fat-Soluble Vitamins) के अवशोषण एवं परिवहन के लिए भोजन में किसकी उपस्थिति आवश्यक है?", options: ["(a) केवल जल", "(b) वसा (Fat)", "(c) रेशा (Fibre)", "(d) केवल नमक"], correct: 1 },
+            { id: 8, tag: "NCERT", question: "1 ग्राम वसा के शरीर में पूर्ण ऑक्सीकरण (Oxidation) से कितनी ऊर्जा प्राप्त होती है?", options: ["(a) 4 kcal", "(b) 9 kcal", "(c) 6 kcal", "(d) 2 kcal"], correct: 1 },
+            { id: 9, tag: "NCERT", question: "कोशिकाओं की बाहरी झिल्ली (Cell Membrane) का मुख्य संरचनात्मक लिपिड घटक कौन-सा है?", options: ["(a) फास्फोलिपिड (Phospholipid)", "(b) केवल ट्राइग्लिसराइड", "(c) केरोटीन", "(d) ग्लाइकोजन"], correct: 0 },
+            { id: 10, tag: "NCERT", question: "वनस्पति तेलों (Vegetable Oils) में हाइड्रोजन गैस प्रवाहित करके उन्हें ठोस वसा/वनस्पति घी में बदलने की प्रक्रिया क्या कहलाती है?", options: ["(a) पाश्चुरीकरण", "(b) हाइड्रोजनीकरण (Hydrogenation)", "(c) किण्वन", "(d) ऑक्सीकरण"], correct: 1 },
+            { id: 11, tag: "NCERT", question: "कृत्रिम हाइड्रोजनीकरण के दौरान उत्पन्न होने वाला वह वसीय अम्ल कौन-सा है जो हृदय स्वास्थ्य के लिए अत्यधिक हानिकारक है?", options: ["(a) ओमेगा-3 वसीय अम्ल", "(b) ट्रांस फैटी एसिड (Trans Fatty Acid)", "(c) सिस फैटी एसिड", "(d) लिनोलेनिक अम्ल"], correct: 1 },
+            { id: 12, tag: "NCERT", question: "कोलेस्ट्रॉल (Cholesterol) किस श्रेणी का लिपिड यौगिक है?", options: ["(a) स्टेरॉल / व्युत्पन्न लिपिड (Sterol / Derived Lipid)", "(b) सरल वसा", "(c) फास्फोलिपिड", "(d) मोम"], correct: 0 },
+            { id: 13, tag: "NCERT", question: "त्वचा के नीचे संचित वसा ऊतक (Adipose Tissue) का मुख्य कार्य क्या होता है?", options: ["(a) शरीर के तापमान को नियंत्रित रखना (Thermal Insulation) और अंगों को आघात से बचाना", "(b) केवल वजन बढ़ाना", "(c) रक्त की मात्रा बढ़ाना", "(d) पाचन क्रिया तेज करना"], correct: 0 },
+            { id: 14, tag: "NCERT", question: "जिस वसीय अम्ल में केवल एक द्वि-बंध (Single Double Bond) पाया जाता है, उसे क्या कहते हैं?", options: ["(a) PUFA (पॉली-असंतृप्त वसीय अम्ल)", "(b) MUFA (मोनो-असंतृप्त वसीय अम्ल)", "(c) संतृप्त वसीय अम्ल", "(d) ग्लिसरॉल"], correct: 1 },
+            { id: 15, tag: "NCERT", question: "ओलिक एसिड (Oleic Acid) किस श्रेणी का वसीय अम्ल है जो जैतून के तेल में प्रचुरता में पाया जाता है?", options: ["(a) MUFA (मोनो-असंतृप्त वसीय अम्ल)", "(b) PUFA", "(c) संतृप्त वसीय अम्ल", "(d) ट्रांस वसा"], correct: 0 },
+            { id: 16, tag: "NCERT", question: "अलसी के बीज (Flaxseeds), अखरोट और मछली के तेल में पाया जाने वाला स्वास्थ्यवर्धक वसीय अम्ल कौन-सा है?", options: ["(a) ओमेगा-3 वसीय अम्ल (α-Linolenic Acid)", "(b) संतृप्त वसा", "(c) ट्रांस वसा", "(d) पैल्मिटिक अम्ल"], correct: 0 },
+            { id: 17, tag: "NCERT", question: "वसा का पाचन मुख्य रूप से छोटी आंत (Small Intestine) में किस एंजाइम और पाचक रस के इमल्सीकरण (Emulsification) से होता है?", options: ["(a) पेप्सिन एवं जठर रस", "(b) लाइपेज एंजाइम एवं पित्त रस (Bile Juice)", "(c) एमाइलेज एवं लार", "(d) ट्रिप्सिन एवं इंसुलिन"], correct: 1 },
+            { id: 18, tag: "NCERT", question: "लंबे समय तक रखे रहने पर हवा, नमी और प्रकाश के कारण वसा के स्वाद और गंध का खराब होना (Spoil of Fat) क्या कहलाता है?", options: ["(a) विकृतगंधिता / दुर्गंधता (Rancidity)", "(b) किण्वन", "(c) कोएगुलेशन", "(d) पाश्चुरीकरण"], correct: 0 },
+            { id: 19, tag: "NCERT", question: "जंतु वसा (Animal Fats) जैसे देशी घी और मक्खन में मुख्य रूप से कौन-सा फैट पाया जाता है?", options: ["(a) संतृप्त वसा (Saturated Fat) और कोलेस्ट्रॉल", "(b) केवल ओमेगा-3", "(c) केवल सेल्यूलोज", "(d) केवल स्टार्च"], correct: 0 },
+            { id: 20, tag: "NCERT", question: "आहार में अत्यधिक संतृप्त वसा और ट्रांस फैट के सेवन से रक्त में एल.डी.एल. (LDL - Bad Cholesterol) बढ़ने के कारण कौन-सा रोग हो सकता है?", options: ["(a) हृदय रोग (Cardiovascular Disease / Atherosclerosis)", "(b) रिकेट्स", "(c) स्कर्वी", "(d) एनीमिया"], correct: 0 },
+            { id: 21, tag: "NCERT", question: "अभिकथन (A): संतृप्त वसीय अम्लों (Saturated Fatty Acids) का गलनांक (Melting Point) समान कार्बन श्रृंखला वाले असंतृप्त वसीय अम्लों की तुलना में अधिक होता है।<br><br>कारण (R): संतृप्त वसीय अम्लों में द्वि-बंध (Double Bonds) की अनुपस्थिति के कारण उनकी हाइड्रोकार्बन श्रृंखलाएँ सीधी होती हैं और आपस में कसकर (Tight Packing) व्यवस्थित हो जाती हैं।<br><br>कूट :", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) का सही स्पष्टीकरण है।", "(b) (A) और (R) दोनों सही हैं, लेकिन (R), (A) का सही स्पष्टीकरण नहीं है।", "(c) (A) सही है, लेकिन (R) गलत है।", "(d) (A) गलत है, लेकिन (R) सही है।"], correct: 0 },
+            { id: 22, tag: "NCERT", question: "सूची-I में दिए गए लिपिड के प्रकार को सूची-II की विशेषता/पहचान से सुमेलित कीजिए:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I (लिपिड का प्रकार)</b><br>(A) लेसिथिन (Lecithin)<br>(B) कोलेस्ट्रॉल (Cholesterol)<br>(C) α-लिनोलेनिक एसिड (ALA)<br>(D) एरोकिडोनिक एसिड (Arachidonic Acid)</td><td style='width:50%; vertical-align:top;'><b>सूची-II (विशेषता / पहचान)</b><br>1. 20-कार्बन युक्त 4 द्वि-बंध वाला पॉली-असंतृप्त वसीय अम्ल (ω6)<br>2. 18-कार्बन युक्त 3 द्वि-बंध वाला आवश्यक ओमेगा-3 वसीय अम्ल<br>3. कोशिका झिल्ली में पाया जाने वाला प्रमुख फास्फोलिपिड<br>4. 27-कार्बन युक्त स्टेरॉयड/स्टेरॉल यौगिक</td></tr></table><br>कूट :", options: ["(a) A-3, B-4, C-2, D-1", "(b) A-4, B-3, C-1, D-2", "(c) A-3, B-1, C-2, D-4", "(d) A-2, B-4, C-3, D-1"], correct: 0 },
+            { id: 23, tag: "NCERT", question: "यकृत (Liver) में वसा के अति-ऑक्सीकरण (Excessive Beta-Oxidation) के दौरान जब कार्बोहाइड्रेट की उपलब्धता कम होती है (जैसे भुखमरी या अनियंत्रित मधुमेह में), तो एसिटाइल-CoA (Acetyl-CoA) मुख्य रूप से किसमें परिवर्तित हो जाता है?", options: ["(a) पाइरूवेट (Pyruvate)", "(b) कीटोन बॉडीज (Ketone Bodies)", "(c) लैक्टिक एसिड", "(d) ग्लाइकोजन"], correct: 1 },
+            { id: 24, tag: "NCERT", question: "लाइपोप्रोटीन (Lipoproteins) के संदर्भ में निम्नलिखित कथनों पर विचार कीजिए:<br><br>1. chylomicrons (काइलोमाइक्रोन): आंतों से अवशोषित आहारीय वसा का परिवहन करते हैं।<br>2. LDL (Low-Density Lipoprotein): यकृत से ऊतकों तक कोलेस्ट्रॉल ले जाता है, इसे 'खराब कोलेस्ट्रॉल' कहा जाता है।<br>3. HDL (High-Density Lipoprotein): अतिरिक्त कोलेस्ट्रॉल को परिधीय ऊतकों से वापस यकृत में लाता है।<br><br>ऊपर दिए गए कथनों में से कौन-से सत्य हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) 1, 2 और 3 तीनों"], correct: 3 },
+            { id: 25, tag: "NCERT", question: "वनस्पति तेलों के आंशिक हाइड्रोजनीकरण के दौरान निर्मित होने वाले 'ट्रांस-फैटी एसिड' (Trans-Fatty Acids) प्राकृतिक 'सिस-फैटी एसिड' से किस प्रकार भिन्न होते हैं?", options: ["(a) ट्रांस रूप में द्वि-बंध के दोनों ओर हाइड्रोजन परमाणु एक ही दिशा में होते हैं।", "(b) ट्रांस रूप में द्वि-बंध के विपरीत पक्षों (Opposite Sides) पर हाइड्रोजन परमाणु व्यवस्थित होते हैं, जिससे वसीय अम्ल की श्रृंखला सीधी (Linear) हो जाती है।", "(c) ट्रांस वसीय अम्ल में कोई कार्बन-कार्बन द्वि-बंध नहीं होता।", "(d) ट्रांस वसीय अम्ल केवल जल में घुलनशील होते हैं।"], correct: 1 },
+            { id: 26, tag: "NCERT", question: "वसा के पूर्ण पाचन के बाद अवशोषित होने वाले वसीय अम्ल और ग्लिसरॉल आंत्र कोशिकाओं (Enterocytes) में पुनः ट्राइग्लिसराइड्स में बदलकर प्रोटीन के साथ मिलकर छोटे कण बनाते हैं। इन कणों को क्या कहते हैं जो लसीका वाहिकाओं (Lacteals) में प्रवेश करते हैं?", options: ["(a) मिसेल्स (Micelles)", "(b) काइलोमाइक्रोन (Chylomicrons)", "(c) फैटी एसिड-एल्ब्यूमिन कॉम्प्लेक्स", "(d) एथेरोमा (Atheroma)"], correct: 1 },
+            { id: 27, tag: "NCERT", question: "असंतृप्त वसीय अम्लों (Unsaturated Fatty Acids) की विकृतगंधिता (Rancidity / Lipid Peroxidation) के संबंध में कौन-सा कथन सही है?", options: ["(a) यह प्रक्रिया मुख्य रूप से संतृप्त वसीय अम्लों की संतृप्त कार्बन श्रृंखला में होती है।", "(b) वायुमंडल की ऑक्सीजन द्वि-बंध (Double Bond) वाले कार्बन स्थानों पर क्रिया करके परॉक्साइड और मुक्त मूलक बनाती है, जिससे दुर्गंधयुक्त एल्डिहाइड एवं कीटोन बनते हैं।", "(c) एंटीऑक्सीडेंट (जैसे विटामिन E) इस प्रक्रिया की गति को बढ़ा देते हैं।", "(d) जल मिलाने से वसा का ऑक्सीकरण पूरी तरह रुक जाता है।"], correct: 1 },
+            { id: 28, tag: "NCERT", question: "पित्त लवण (Bile Salts) वसा के पाचन में मुख्य रूप से किस भौतिक-रासायनिक प्रक्रिया द्वारा सहायता करते हैं?", options: ["(a) वसा का रासायनिक अपघटन करके उन्हें सीधे ग्लूकोज में बदलना", "(b) वसा की बड़ी बूँदों का पृष्ठ तनाव (Surface Tension) घटाकर उन्हें छोटी-छोटी बूंदों (Emulsion) में तोड़ना ताकि लाइपेज एंजाइम का कार्य-क्षेत्र बढ़ सके", "(c) लाइपेज एंजाइम को नष्ट करना", "(d) आमाशय के अम्लीय pH को उदासीन करना"], correct: 1 },
+            { id: 29, tag: "NCERT", question: "ओमेगा फैटी एसिड (e.g., ω3 या ω6) के नामकरण में 'ओमेगा' (ω) संख्या क्या दर्शाती है?", options: ["(a) कारबोक्सिल समूह (-COOH) के सिरे से पहले द्वि-बंध की स्थिति", "(b) मिथाइल समूह (-CH₃) यानी ओमेगा-सिरे से गणना करने पर पहले द्वि-बंध (Double Bond) की स्थिति", "(c) अणु में उपस्थित कुल डबल बॉन्ड की संख्या", "(d) अणु में उपस्थित कुल कार्बन परमाणुओं की संख्या"], correct: 1 },
+            { id: 30, tag: "NCERT", question: "1 ग्राम वसा से मिलने वाली ऊर्जा (9 kcal) 1 ग्राम कार्बोहाइड्रेट से मिलने वाली ऊर्जा (4 kcal) से दोगुनी से भी अधिक क्यों होती है?", options: ["(a) क्योंकि वसा के अणु आकार में बहुत बड़े होते हैं।", "(b) क्योंकि वसा में कार्बोहाइड्रेट की तुलना में ऑक्सीजन का अनुपात बहुत कम होता है और कार्बन-हाइड्रोजन (C-H) बंध अधिक अपचयित (More Reduced) अवस्था में होते हैं, जिससे ऑक्सीकरण पर अधिक ऊर्जा निकलती है।", "(c) क्योंकि वसा में नाइट्रोजन प्रचुर मात्रा में पाया जाता है।", "(d) क्योंकि वसा आमाशय में बहुत तेजी से पच जाती है।"], correct: 1 },
+            { id: 31, tag: "PYQ", question: "वसा के पाचन (Fat Digestion) के लिए कौन-सा एंजाइम आवश्यक है?", options: ["(a) रेनिन (Rennin)", "(b) लाइपेज (Lipase)", "(c) एमाइलेज (Amylase)", "(d) पेप्सिन (Pepsin)"], correct: 1 },
+            { id: 32, tag: "PYQ", question: "निम्न में से एम.यू.एफ.ए. (MUFA - Mono Unsaturated Fatty Acid) का सर्वोत्तम साधन कौन-सा है?", options: ["(a) सूर्यमुखी का तेल", "(b) सोयाबीन का तेल", "(c) नारियल का तेल", "(d) जैतून का तेल (Olive Oil)"], correct: 3 },
+            { id: 33, tag: "PYQ", question: "वसा के असंतृप्त होने के स्तर (Degree of Unsaturation) का अनुमान किस विधि द्वारा लगाया जाता है?", options: ["(a) एसिड वैल्यू (Acid Value)", "(b) सैपोनिफिकेशन (Saponification)", "(c) बेनेडिक्ट्स (Benedict's)", "(d) आयोडीन वैल्यू (Iodine Value)"], correct: 3 },
+            { id: 34, tag: "PYQ", question: "निम्नलिखित में से कौन-सा ω3 (ओमेगा-3 / Omega-3) वसा अम्ल का उदाहरण है?", options: ["(a) α-लिनोलेनिक अम्ल (Linolenic Acid)", "(b) लिनोलिक अम्ल (Linoleic Acid)", "(c) ओलिक अम्ल (Oleic Acid)", "(d) स्टीयरिक अम्ल (Stearic Acid)"], correct: 0 },
+            { id: 35, tag: "PYQ", question: "भोजन में वसा के इस्तेमाल के विषय में आधुनिक आहार विशेषज्ञों की क्या धारणा है?", options: ["(a) केवल संतृप्त वसा का उपयोग करना चाहिए", "(b) वसा का उपयोग बिल्कुल बंद कर देना चाहिए", "(c) वसा का उपयोग मुख्य रूप से असंतृप्त वसा (Unsaturated Fat) के रूप में करना चाहिए", "(d) उच्च कोलेस्ट्रॉल वाला भोजन ग्रहण करना चाहिए"], correct: 2 },
+            { id: 36, tag: "PYQ", question: "वसा या तेल को बहुत अधिक देर तक गर्म करने से कौन-सा हानिकारक विषैला पदार्थ (Toxic Compound) बनता है?", options: ["(a) कोलेस्टेरॉल", "(b) एक्रोलिन (Acrolein)", "(c) लिनोलिक अम्ल", "(d) लेसिथिन"], correct: 1 },
+            { id: 37, tag: "PYQ", question: "निम्नलिखित में से किसके प्रति ग्राम ऑक्सीकरण से सर्वाधिक ऊर्जा (9 kcal/g) प्राप्त होती है?", options: ["(a) वसा (Fat / Lipids)", "(b) प्रोटीन (Protein)", "(c) ग्लूकोज (Glucose)", "(d) ग्लाइकोजन (Glycogen)"], correct: 0 },
+            { id: 38, tag: "PYQ", question: "निम्नलिखित में से कौन-सा पूफा (PUFA - Poly Unsaturated Fatty Acid) का उदाहरण नहीं है?", options: ["(a) ओलिक अम्ल (Oleic Acid)", "(b) लिनोलिक अम्ल (Linoleic Acid)", "(c) लिनोलेनिक अम्ल (Linolenic Acid)", "(d) एरेकिडोनिक अम्ल (Arachidonic Acid)"], correct: 0 },
+            { id: 39, tag: "PYQ", question: "कैरोटीन (Pro-Vitamin A) के अवशोषण (Absorption) के लिए भोजन में किस घटक का होना आवश्यक है?", options: ["(a) वसा (Fat)", "(b) प्रोटीन (Protein)", "(c) कार्बोहाइड्रेट (Carbohydrate)", "(d) जल (Water)"], correct: 0 },
+            { id: 40, tag: "PYQ", question: "अग्न्याशयी लाइपेज (Pancreatic Lipase) एंजाइम किस पाचक रस में पाया जाता है?", options: ["(a) लार (Saliva)", "(b) जठर रस (Gastric Juice)", "(c) अग्न्याशयी रस (Pancreatic Juice)", "(d) पित्त रस (Bile Juice)"], correct: 2 },
+            { id: 41, tag: "PYQ", question: "वसा (Fat) रासायनिक रूप से जल में होती है:", options: ["(a) पूरी तरह घुलनशील", "(b) अघुलनशील (Insoluble)", "(c) आंशिक घुलनशील", "(d) पारदर्शी"], correct: 1 },
+            { id: 42, tag: "PYQ", question: "निम्नलिखित में से कौन-से विटामिन वसा में घुलनशील (Fat Soluble Vitamins) हैं?", options: ["(a) विटामिन B और C", "(b) विटामिन A, D, E और K", "(c) केवल विटामिन B-कॉम्प्लेक्स", "(d) केवल विटामिन C"], correct: 1 },
+            { id: 43, tag: "PYQ", question: "भोजन का कौन-सा घटक अमाशय में अधिक समय तक रहकर सबसे अधिक तृप्ति मूल्य (Satiety Value) प्रदान करता है?", options: ["(a) वसा (Fat)", "(b) जल (Water)", "(c) शर्करा (Sugar)", "(d) स्टार्च (Starch)"], correct: 0 },
+            { id: 44, tag: "PYQ", question: "सरसों का तेल (Mustard Oil) नारियल तेल की तुलना में किसका बेहतर स्रोत है?", options: ["(a) संतृप्त वसीय अम्लों (Saturated Fats) का", "(b) असंतृप्त वसीय अम्लों (Unsaturated Fats) का", "(c) ट्रांस वसा का", "(d) केवल कोलेस्ट्रॉल का"], correct: 1 },
+            { id: 45, tag: "PYQ", question: "कोलेस्ट्रॉल (Cholesterol) प्राकृतिक रूप से मुख्य रूप से किस प्रकार के स्रोतों में पाया जाता है?", options: ["(a) केवल वनस्पति तेलों में", "(b) केवल प्राणिज/जंतु स्रोतों (Animal Sources) में", "(c) केवल फलों एवं सब्जियों में", "(d) केवल साबुत अनाजों में"], correct: 1 },
+            { id: 46, tag: "PYQ", question: "एक मोटे व्यक्ति (Obese Person) को अपने आहार में सबसे पहले किस घटक की मात्रा नियंत्रित/कम करनी चाहिए?", options: ["(a) वसा (Fat)", "(b) फाइबर (Fibre)", "(c) जल (Water)", "(d) विटामिन (Vitamins)"], correct: 0 },
+            { id: 47, tag: "PYQ", question: "बेकरी उत्पादों (जैसे बिस्किट, पेस्ट्री) में अत्यधिक मात्रा में इस्तेमाल होने वाली हाइड्रोजिनेटेड वसा में कौन-सा हानिकारक फैट पाया जाता है?", options: ["(a) ओमेगा-3 वसा", "(b) ट्रांस वसा (Trans Fat)", "(c) प्राकृतिक वसा", "(d) केवल फास्फोलिपिड"], correct: 1 },
+            { id: 48, tag: "PYQ", question: "शिशु के विकास के लिए निम्नलिखित में से किसे एक महत्वपूर्ण आवश्यक वसीय अम्ल (Essential Fatty Acid) माना जाता है?", options: ["(a) आर्किडोनिक अम्ल (Arachidonic Acid)", "(b) ओलिक अम्ल (Oleic Acid)", "(c) पैल्मिटिक अम्ल (Palmitic Acid)", "(d) ब्यूटारिक अम्ल (Butyric Acid)"], correct: 0 },
+            { id: 49, tag: "PYQ", question: "वनस्पति तेलों (Vegetable Oils) को ठोस घी में बदलने के लिए किस प्रक्रिया का प्रयोग किया जाता है?", options: ["(a) पाश्चुरीकरण (Pasteurization)", "(b) हाइड्रोजनीकरण (Hydrogenation)", "(c) किण्वन (Fermentation)", "(d) पायरोलिसिस (Pyrolysis)"], correct: 1 },
+            { id: 50, tag: "PYQ", question: "सीलिएक बीमारी (Celiac Disease) से पीड़ित रोगी को किस घटक से युक्त आहार नहीं देना चाहिए?", options: ["(a) वसा (Fat)", "(b) लैक्टोज (Lactose)", "(c) ग्लूटेन (Gluten)", "(d) फ्रक्टोज (Fructose)"], correct: 2 }
+        ];
+    </script>
+
+    <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html> 
