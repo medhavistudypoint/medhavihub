@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ सही किया गया बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">गृह विज्ञान (Home Science)</span>
+                        <!-- 🌟 यहाँ डायनेमिक टैग दिखेगा -->
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ सही किया गया डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_homescience_d13"; 
+
+        // 2. 50 प्रश्नों का पूर्णतः सुधारा गया डेटासेट
+        const dataset = [
+            { id: 1, tag: "NCERT", question: "निम्नलिखित में से कौन-सा युग्म सही सुमेलित (Correctly Matched) है?", options: ["थायमिन (Thiamine) — स्कर्वी (Scurvy)", "नियासिन (Niacin) — पेलाग्रा (Pellagra)", "राइबोफ्लेविन (Riboflavin) — रिकेट्स (Rickets)", "विटामिन C — बेरी-बेरी (Beri-beri)"], correct: 1 },
+            { id: 2, tag: "NCERT", question: "विटामिन A का सक्रिय रूप (Active Form) कौन-सा है?", options: ["β-कैरोटीन (β-Carotene)", "रेटिनॉल (Retinol)", "लाइकोपीन (Lycopene)", "ज़ैंथोफिल (Xanthophyll)"], correct: 1 },
+            { id: 3, tag: "NCERT", question: "निम्नलिखित में से कौन-सा विटामिन सह-एंजाइम (Coenzyme) के रूप में कार्य नहीं करता?", options: ["थायमिन (Thiamine)", "राइबोफ्लेविन (Riboflavin)", "नियासिन (Niacin)", "विटामिन D"], correct: 3 },
+            { id: 4, tag: "NCERT", question: "FMN तथा FAD किस विटामिन से बनते हैं?", options: ["B₁ (Thiamine)", "B₂ (Riboflavin)", "B₃ (Niacin)", "B₆ (Pyridoxine)"], correct: 1 },
+            { id: 5, tag: "NCERT", question: "किस विटामिन की कमी से मेगालोब्लास्टिक एनीमिया (Megaloblastic Anemia) होता है?", options: ["विटामिन A", "फोलिक अम्ल (Folic Acid)", "विटामिन C", "विटामिन D"], correct: 1 },
+            { id: 6, tag: "NCERT", question: "विटामिन K का प्रमुख कार्य क्या है?", options: ["हड्डियों का निर्माण (Bone Formation)", "रक्त का थक्का जमाना (Blood Clotting)", "दृष्टि बनाए रखना (Vision)", "ऊर्जा उत्पादन (Energy Production)"], correct: 1 },
+            { id: 7, tag: "NCERT", question: "निम्नलिखित में से कौन-सा विटामिन शक्तिशाली एंटीऑक्सीडेंट (Powerful Antioxidant) माना जाता है?", options: ["विटामिन E", "विटामिन D", "विटामिन K", "विटामिन B₁₂"], correct: 0 },
+            { id: 8, tag: "NCERT", question: "विटामिन D का जैविक रूप से सक्रिय हार्मोन (Biologically Active Form) कौन-सा है?", options: ["एर्गोकैल्सीफेरॉल (Ergocalciferol)", "कोलेकैल्सीफेरॉल (Cholecalciferol)", "कैल्सिट्रिऑल (Calcitriol)", "कैल्सिटोनिन (Calcitonin)"], correct: 2 },
+            { id: 9, tag: "NCERT", question: "निम्नलिखित में से कौन-सा विटामिन केवल सूक्ष्मजीवों (Microorganisms) द्वारा संश्लेषित होता है?", options: ["विटामिन A", "विटामिन C", "विटामिन B₁₂ (Cyanocobalamin)", "विटामिन D"], correct: 2 },
+            { id: 10, tag: "NCERT", question: "आयरन के अवशोषण (Iron Absorption) में कौन-सा विटामिन सर्वाधिक सहायक है?", options: ["विटामिन C (Ascorbic Acid)", "विटामिन D", "विटामिन A", "विटामिन E"], correct: 0 },
+            { id: 11, tag: "NCERT", question: "विटामिन A के अवशोषण (Absorption) के लिए निम्नलिखित में से क्या आवश्यक है?", options: ["पित्त लवण एवं वसा (Bile Salts & Fat)", "केवल जल", "केवल प्रोटीन", "केवल कार्बोहाइड्रेट"], correct: 0 },
+            { id: 12, tag: "NCERT", question: "निम्नलिखित में से किस विटामिन की कमी से होमोसिस्टीन का स्तर (Homocysteine Level) बढ़ सकता है?", options: ["फोलिक अम्ल (Folic Acid)", "विटामिन B₁₂", "विटामिन B₆", "उपर्युक्त सभी"], correct: 3 },
+            { id: 13, tag: "NCERT", question: "β-कैरोटीन (β-Carotene) शरीर में मुख्यतः किस अंग में रेटिनॉल में परिवर्तित होता है?", options: ["यकृत (Liver)", "गुर्दा (Kidney)", "अग्न्याशय (Pancreas)", "प्लीहा (Spleen)"], correct: 0 },
+            { id: 14, tag: "NCERT", question: "निम्नलिखित में से कौन-सा कथन सही है?", options: ["सभी वसा-घुलनशील विटामिन सह-एंजाइम के रूप में कार्य करते हैं।", "अधिकांश B-विटामिन सह-एंजाइम (Coenzymes) के रूप में कार्य करते हैं।", "विटामिन C एक हार्मोन है।", "विटामिन D जल में घुलनशील (Water Soluble) है।"], correct: 1 },
+            { id: 15, tag: "NCERT", question: "कौन-सा विटामिन γ-Carboxylation प्रक्रिया के लिए आवश्यक है?", options: ["विटामिन A", "विटामिन K", "विटामिन D", "विटामिन C"], correct: 1 },
+            { id: 16, tag: "NCERT", question: "निम्नलिखित में से कौन-सा युग्म गलत (Incorrect Pair) है?", options: ["थायमिन — TPP (Thiamine Pyrophosphate)", "राइबोफ्लेविन — FAD (Flavin Adenine Dinucleotide)", "नियासिन — NAD (Nicotinamide Adenine Dinucleotide)", "विटामिन C — FMN"], correct: 3 },
+            { id: 17, tag: "NCERT", question: "कौन-सा विटामिन आंत में कैल्शियम-बाइंडिंग प्रोटीन (Calbindin) के निर्माण को प्रेरित करता है?", options: ["विटामिन A", "विटामिन D", "विटामिन K", "विटामिन E"], correct: 1 },
+            { id: 18, tag: "NCERT", question: "निम्नलिखित में से कौन-सा कथन असत्य (False Statement) है?", options: ["विटामिन E लिपिड पेरॉक्सिडेशन (Lipid Peroxidation) को कम करता है।", "विटामिन C आयरन के अवशोषण को बढ़ाता है।", "विटामिन K रतौंधी (Night Blindness) से बचाता है।", "विटामिन D कैल्शियम के अवशोषण में सहायक है।"], correct: 2 },
+            { id: 19, tag: "NCERT", question: "विटामिन B₁₂ के अवशोषण (Absorption) के लिए कौन-सा कारक आवश्यक है?", options: ["Intrinsic Factor (कैसल का आंतरिक कारक)", "Bile Salt (पित्त लवण)", "Secretin (सिक्रेटिन)", "Trypsin (ट्रिप्सिन)"], correct: 0 },
+            { id: 20, tag: "NCERT", question: "निम्नलिखित में से कौन-सा कथन सही है?", options: ["विटामिन D वास्तव में शरीर में हार्मोन (Hormone) की तरह कार्य करता है।", "विटामिन A जल में घुलनशील है।", "विटामिन C शरीर में अत्यधिक मात्रा में संग्रहित रहता है।", "विटामिन K ऊर्जा प्रदान करता है।"], correct: 0 },
+            { id: 21, tag: "PYQ", question: "बेरी-बेरी (Beri-beri) रोग किसकी कमी से होता है?", options: ["राइबोफ्लेविन (Riboflavin)", "नियासिन (Niacin)", "थायमिन (Thiamine)", "बायोटिन (Biotin)"], correct: 2 },
+            { id: 22, tag: "PYQ", question: "रिकेट्स (Rickets) किसकी कमी के परिणामस्वरूप होता है?", options: ["कैल्शियम", "विटामिन D", "कैल्शियम एवं विटामिन D", "हार्मोन"], correct: 2 },
+            { id: 23, tag: "PYQ", question: "फोलिक अम्ल (Folic Acid) को निम्न में वर्गीकृत किया गया है—", options: ["वसा में घुलनशील विटामिन (Fat Soluble Vitamin)", "खनिज लवण (Minerals)", "विटामिन B कॉम्प्लेक्स (Vitamin B-Complex)", "प्रीसिपिटेट प्रिंसिपल्स"], correct: 2 },
+            { id: 24, tag: "PYQ", question: "दिए गए पदार्थों में से यह एंटीऑक्सीडेंट (Antioxidant) की तरह भी कार्य करता है—", options: ["विटामिन E (Tocopherol)", "फॉस्फोरस", "लौह तत्व (Iron)", "सभी विकल्प सही हैं"], correct: 0 },
+            { id: 25, tag: "PYQ", question: "वेट बेरी-बेरी (Wet Beri-beri) की मुख्य विशेषता है—", options: ["टांगों तथा चेहरे में सूजन होना (Edema)", "सिस्टोलिक रक्तचाप बढ़ना तथा डायस्टोलिक रक्तचाप घटना", "नाड़ी गति बढ़ना (Tachycardia)", "सभी विकल्प सही हैं"], correct: 3 },
+            { id: 26, tag: "PYQ", question: "मानव शरीर में कैल्शियम एवं फॉस्फोरस के उचित अवशोषण (Absorption) हेतु निम्न में से कौन-सा विटामिन आवश्यक है?", options: ["विटामिन A", "विटामिन C", "विटामिन D", "विटामिन K"], correct: 2 },
+            { id: 27, tag: "PYQ", question: "डुओडेनम (Duodenum) में कैल्शियम के अवशोषण का प्रोत्साहन किसके द्वारा होता है?", options: ["विटामिन A", "विटामिन B", "विटामिन C", "विटामिन D"], correct: 3 },
+            { id: 28, tag: "PYQ", question: "निम्नलिखित में से किस भोजन में प्रो-विटामिन A (β-Carotene) प्रचुर मात्रा में पाया जाता है?", options: ["गाजर (Carrot)", "अमरूद", "करौंदा", "इनमें से कोई नहीं"], correct: 0 },
+            { id: 29, tag: "PYQ", question: "पेलाग्रा (Pellagra) नामक रोग निम्न में से किसकी कमी से होता है?", options: ["राइबोफ्लेविन", "फोलिक एसिड", "नियासिन (Niacin)", "कैल्शियम"], correct: 2 },
+            { id: 30, tag: "PYQ", question: "FMN एवं FAD ऐसे को-एंजाइम (Coenzymes) हैं, जो प्राप्त होते हैं—", options: ["राइबोफ्लेविन (Riboflavin) से", "थायमिन से", "पाइरिडॉक्सिन से", "नियासिन से"], correct: 0 },
+            { id: 31, tag: "PYQ", question: "वह विटामिन जो पकाने एवं ताप (Heat & Cooking) से सबसे आसानी से नष्ट हो जाता है—", options: ["विटामिन C (Ascorbic Acid)", "विटामिन A", "विटामिन E", "विटामिन K"], correct: 0 },
+            { id: 32, tag: "PYQ", question: "निम्नलिखित में से कौन-सा पोषक तत्व लौह (Iron) के अवशोषण में सहायता करता है?", options: ["विटामिन A", "विटामिन C", "फोलिक अम्ल", "प्रोटीन अंश"], correct: 1 },
+            { id: 33, tag: "PYQ", question: "विटामिन 'A' की कमी में प्रकट होने वाला सबसे पहला कार्यात्मक लक्षण (First Clinical Symptom) निम्नलिखित में से कौन-सा है?", options: ["जेरोफ्थैल्मिया (Xerophthalmia)", "केरोटोमलेशिया (Keratomalacia)", "रतौंधी (Night Blindness)", "ऑस्टियोमलेशिया"], correct: 2 },
+            { id: 34, tag: "PYQ", question: "मानव शरीर में (सूर्य के प्रकाश की उपस्थिति में त्वचा द्वारा) किस विटामिन का संश्लेषण (Synthesis) होता है?", options: ["विटामिन A", "विटामिन B", "विटामिन C", "विटामिन D"], correct: 3 },
+            { id: 35, tag: "PYQ", question: "'विटामिन' (Vitamin) शब्द का आविष्कार किसने किया?", options: ["मैककोलम (McCollum)", "कोलिंग", "कैसिमिर फंक (Casimir Funk)", "फिशर"], correct: 2 },
+            { id: 36, tag: "PYQ", question: "कौन-सा विटामिन बाँझपन रोकने वाले विटामिन (Anti-sterility Vitamin) के रूप में जाना जाता है?", options: ["विटामिन A", "विटामिन E (Tocopherol)", "विटामिन D", "विटामिन K"], correct: 1 },
+            { id: 37, tag: "PYQ", question: "शरीर में रेटिनॉल (विटामिन A) का मुख्य संचय स्थल (Storage Organ) कौन-सा अंग है?", options: ["यकृत (Liver)", "अग्न्याशय (Pancreas)", "गुर्दा (Kidney)", "हृदय (Heart)"], correct: 0 },
+            { id: 38, tag: "PYQ", question: "विटामिन A के अभाव के परिणामों (Ocular Manifestations) को सही नैदानिक क्रमानुसार (Clinical Sequence) सुमेलित करें:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I (लक्षण)</b><br>(A) नाइट ब्लाइंडनेस<br>(B) बायोट्स स्पॉट<br>(C) जीरोसिस ऑफ कंजंक्टिवा<br>(D) जीरोसिस ऑफ कॉर्निया</td><td style='width:50%; vertical-align:top;'><b>सूची-II (क्रम/अवस्था)</b><br>(1) प्रथम लक्षण<br>(2) द्वितीय लक्षण<br>(3) तृतीय लक्षण<br>(4) चतुर्थ लक्षण</td></tr></table><br><b>कूट :</b><br><table style='width:100%; max-width:240px; border-collapse:collapse; margin-top:5px;' border='1' cellpadding='4'><tr><th>A</th><th>B</th><th>C</th><th>D</th></tr></table>", options: ["1 &nbsp;&nbsp;&nbsp;&nbsp; 2 &nbsp;&nbsp;&nbsp;&nbsp; 3 &nbsp;&nbsp;&nbsp;&nbsp; 4", "4 &nbsp;&nbsp;&nbsp;&nbsp; 3 &nbsp;&nbsp;&nbsp;&nbsp; 2 &nbsp;&nbsp;&nbsp;&nbsp; 1", "2 &nbsp;&nbsp;&nbsp;&nbsp; 1 &nbsp;&nbsp;&nbsp;&nbsp; 4 &nbsp;&nbsp;&nbsp;&nbsp; 3", "3 &nbsp;&nbsp;&nbsp;&nbsp; 4 &nbsp;&nbsp;&nbsp;&nbsp; 1 &nbsp;&nbsp;&nbsp;&nbsp; 2"], correct: 0 },
+            { id: 39, tag: "PYQ", question: "निम्नलिखित खाद्य पदार्थों को कैरोटीन (β-Carotene) मात्रा के घटते क्रम (Descending Order) में व्यवस्थित कीजिए:<br><br>(1) करी पत्ते<br>(2) कद्दू<br>(3) मक्का<br>(4) गुड़<br><br><b>सही क्रम :</b>", options: ["1, 2, 3, 4", "2, 1, 4, 3", "3, 4, 1, 2", "4, 3, 2, 1"], correct: 0 },
+            { id: 40, tag: "PYQ", question: "टोकोफेरॉल (Tocopherol) के संदर्भ में सही कथनों का चयन कीजिए:<br><br>(1) यह एक शक्तिशाली प्रति-ऑक्सीकारक / एंटीऑक्सीडेंट है।<br>(2) इसे विटामिन E के नाम से जाना जाता है।<br>(3) यह वसा में घुलनशील विटामिन है।<br><br><b>कूट :</b>", options: ["1, 2 और 3 तीनों सही हैं", "केवल 1 और 2 सही हैं", "केवल 2 और 3 सही हैं", "केवल 1 सही है"], correct: 0 },
+            { id: 41, tag: "PYQ", question: "विटामिन D का शरीर में कार्यात्मक रूप से सक्रिय रूप (Functionally Active Form / Calcitriol) कौन-सा है?", options: ["कोलेकैल्सीफेरॉल (Cholecalciferol)", "एर्गोकैल्सीफेरॉल (Ergocalciferol)", "डिहाइड्रोकोलेस्टेरॉल (Dehydrocholesterol)", "1,25-डाइहाइड्रॉक्सीकोलेकैल्सीफेरॉल [1,25-(OH)₂D₃]"], correct: 3 },
+            { id: 42, tag: "PYQ", question: "खाद्य पदार्थों को उनमें उपस्थित विटामिन A (Retinol / Carotenoid) की मात्रा के अनुसार वैज्ञानिक रूप से सही घटते क्रम में रखिए:", options: ["लीवर (Liver) → मक्खन (Butter) → दूध (Milk) → टमाटर (Tomato)", "लीवर → दूध → टमाटर → मक्खन", "टमाटर → दूध → लीवर → मक्खन", "दूध → टमाटर → मक्खन → लीवर"], correct: 0 },
+            { id: 43, tag: "PYQ", question: "बायोट्स स्पॉट (Bitot's Spot) आँखों में किस पोषक तत्व की कमी का प्रमुख लक्षण है?", options: ["एस्कॉर्बिक अम्ल (Ascorbic Acid)", "आयोडीन (Iodine)", "विटामिन A", "लौह तत्व (Iron)"], correct: 2 },
+            { id: 44, tag: "PYQ", question: "किण्वन (Fermentation) के दौरान निम्नलिखित में से किस विटामिन समूह की मात्रा में सर्वाधिक वृद्धि होती है?", options: ["विटामिन C", "विटामिन A", "विटामिन B-कॉम्प्लेक्स (Vitamin B-Complex)", "विटामिन D"], correct: 2 },
+            { id: 45, tag: "PYQ", question: "जब आहार में कार्बोहाइड्रेट की मात्रा अधिक ली जाती है, तो चयापचय (Metabolism) हेतु किस विटामिन की आवश्यकता बढ़ जाती है?", options: ["थायमिन (Thiamine / Vitamin B₁)", "विटामिन C", "विटामिन D", "विटामिन E"], correct: 0 },
+            { id: 46, tag: "PYQ", question: "कथन (A) एवं कारण (R) पर विचार कीजिए:<br><br><b>कथन (A):</b> विटामिन A के अवशोषण (Absorption) के लिए भोजन में कुछ मात्रा में वसा (Fat) का होना आवश्यक है।<br><br><b>कारण (R):</b> विटामिन A एक वसा में घुलनशील (Fat-soluble Vitamin) विटामिन है, इसलिए इसके परिवहन और अवशोषण के लिए लिपिड्स की उपस्थिति अनिवार्य है।<br><br><b>कूट :</b>", options: ["(A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या करता है।", "(A) सही है लेकिन (R) गलत है।", "(A) और (R) दोनों गलत हैं।", "(A) गलत है लेकिन (R) सही है।"], correct: 0 },
+            { id: 47, tag: "PYQ", question: "पपीता (Papaya) मुख्य रूप से निम्नलिखित में से किसका एक समृद्ध स्रोत है?", options: ["प्रोटीन", "एस्कॉर्बिक अम्ल (Ascorbic Acid)", "बीटा-कैरोटीन (β-Carotene / Pro-Vitamin A)", "विटामिन D"], correct: 2 },
+            { id: 48, tag: "PYQ", question: "पेलाग्रा (Pellagra) रोग के लक्षणों को '3D' रोग के रूप में जाना जाता है, जिनमें शामिल हैं:", options: ["डिमेंशिया (Dementia), डर्मेटाइटिस (Dermatitis), और डायरिया (Diarrhea)", "डिमेंशिया, डिस्पेप्सिया, और डिस्निया", "डर्मेटाइटिस, डिप्रेशन, और डायबिटीज", "डायरिया, ड्रॉपसी, और डिहाइड्रेशन"], correct: 0 },
+            { id: 49, tag: "PYQ", question: "शरीर में सेरोटोनिन एवं ट्रिप्टोफैन (Tryptophan Amino Acid) से किस विटामिन का आंतरिक रूप से निर्माण संभव होता है?", options: ["राइबोफ्लेविन (B₂)", "नियासिन (B₃ / Niacin)", "पाइरिडॉक्सिन (B₆)", "बायोटिन (B₇)"], correct: 1 },
+            { id: 50, tag: "PYQ", question: "स्कर्वी (Scurvy) रोग में हड्डियों व रक्त वाहिकाओं की दीवारों का कमजोर होना मुख्य रूप से किसके संश्लेषण (Synthesis) में बाधा के कारण होता है?", options: ["केसीन (Casein)", "कोलेजन प्रोटीन (Collagen Protein)", "हीमोग्लोबिन (Hemoglobin)", "कैल्सीटोनिन (Calcitonin)"], correct: 1 }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
