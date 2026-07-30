@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ सही किया गया बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">गृह विज्ञान (Home Science)</span>
+                        <!-- 🌟 यहाँ डायनेमिक टैग दिखेगा -->
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ सही किया गया डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_homescience_minerals_50q"; 
+
+        // 2. 50 प्रश्नों का पूर्णतः सुधारा गया डेटासेट
+        const dataset = [
+            { id: 1, tag: "PYQ", question: "स्वविनियोजक (Sequestrants) क्या हैं?", options: ["इन्हें रंग के लिए जोड़ा जाता है।", "ये तांबा, लोहा आदि धातुओं के साथ एक जटिल आयन (Chelates Complex Ion) का निर्माण करते हैं।", "उन्हें भोजन को स्थिर रखने के लिए जोड़ा जाता है।", "ये भोजन को ऑक्सीकृत रखते हैं।"], correct: 1 },
+            { id: 2, tag: "PYQ", question: "<b>अभिकथन (A) :</b> आयोडीन का अत्यधिक अन्तर्ग्रहण (Excess Intake of Iodine) या सेवन नुकसान कर सकता है।<br><br><b>कारण (R) :</b> अतिरिक्त आयोडीन थायरॉइड हार्मोन के संश्लेषण में अवरोध करता है।<br><br><b>कूट :</b>", options: ["(A) तथा (R) दोनों सही हैं तथा (R), (A) का सही स्पष्टीकरण है।", "दोनों (A) तथा (R) गलत हैं।", "(A) सही है तथा (R) गलत है।", "(A) गलत है तथा (R) सही है।"], correct: 0 },
+            { id: 3, tag: "PYQ", question: "निम्नलिखित खाद्य पदार्थों को उनके लोहे की मात्रा (Iron Content) के अनुसार बढ़ते क्रम (Ascending Order) में व्यवस्थित करें–<br><br>(1) अण्डा (1.82 mg)<br>(2) पत्तेदार सब्जियाँ<br>(3) यकृत / लीवर (9.92 mg)<br>(4) दूध (0.15 mg)<br><br><b>सही क्रम :</b>", options: ["4, 2, 1, 3", "3, 1, 2, 4", "3, 2, 4, 1", "1, 3, 4, 2"], correct: 0 },
+            { id: 4, tag: "PYQ", question: "निम्न में से कौन-सा अमीनो अम्ल (Amino Acid) मनुष्य के लिए आवश्यक (Essential) है?", options: ["मिथियोनिन (Methionine)", "सेरीन (Serine)", "टाइरोसिन (Tyrosine)", "सिस्टीन (Cysteine)"], correct: 0 },
+            { id: 5, tag: "PYQ", question: "मिक्सोडिमा (Myxedema) निम्न में से किसकी कमी से होता है?", options: ["लौह तत्व", "राइबोफ्लेविन", "पाइरिडॉक्सिन", "आयोडीन (Iodine)"], correct: 3 },
+            { id: 6, tag: "PYQ", question: "आयोडीन युक्त नमक में.............प्रबलीकरण (Fortificant) के रूप में प्रयोग होता है:", options: ["सोडियम आयोडाइड", "पोटैशियम आयोडेट (Potassium Iodate - KIO₃)", "सोडियम आयोडेट", "पोटैशियम आयोडाइड"], correct: 1 },
+            { id: 7, tag: "PYQ", question: "शरीर में लोहे के अवशोषण (Iron Absorption) में बाधा डालने वाले कारक (Inhibitors) निम्न हैं :<br><br>I. आमाशय में अम्ल तत्व की कमी (Achlorhydria)<br>II. एस्कॉर्बिक एसिड (Ascorbic Acid)<br>III. पशुजन्य प्रोटीन<br>IV. फाइटिक एसिड (Phytic Acid)<br>V. टैनिन्स (Tannins)<br><br><b>कूट :</b>", options: ["I, IV और V", "I, II और IV", "I, III और V", "I, II और III"], correct: 0 },
+            { id: 8, tag: "PYQ", question: "आयोडीन की कमी से होने वाले विकार (Iodine Deficiency Disorders - IDD) निम्नलिखित हैं :<br><br>I. मानसिक दुर्बलता (Mental Retardation)<br>II. क्रेटिनिज्म (Cretinism)<br>III. टैटनी (Tetany)<br>IV. हाइपोथायरॉइडिज्म (Hypothyroidism)<br>V. डर्मेटाइटिस (Dermatitis)<br><br><b>कूट :</b>", options: ["I, II और V", "I, II और IV", "II, III और IV", "II, IV और V"], correct: 1 },
+            { id: 9, tag: "PYQ", question: "सूची-I में दिए गए पोषक तत्वों को सूची-II में दिए गए उनकी कमी से होने वाले लक्षणों (Deficiency Symptoms) से मिलाएँ :<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I (Nutrients)</b><br>(A) फोलिक एसिड<br>(B) ज़िंक<br>(C) कैल्शियम<br>(D) आयोडीन<br>(E) राइबोफ्लेविन</td><td style='width:50%; vertical-align:top;'><b>सूची-II (Symptoms)</b><br>(1) मैग्रोब्लास्टिक एनीमिया<br>(2) हाइपोज्यूसिया (स्वाद कमी)<br>(3) टैटनी<br>(4) मानसिक क्षमता में कमी<br>(5) चिलोसिस्</td></tr></table><br><b>कूट :</b><br><table style='width:100%; max-width:280px; border-collapse:collapse; margin-top:5px;' border='1' cellpadding='4'><tr><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr></table>", options: ["1 &nbsp;&nbsp;&nbsp; 2 &nbsp;&nbsp;&nbsp; 3 &nbsp;&nbsp;&nbsp; 4 &nbsp;&nbsp;&nbsp; 5", "5 &nbsp;&nbsp;&nbsp; 2 &nbsp;&nbsp;&nbsp; 6 &nbsp;&nbsp;&nbsp; 1 &nbsp;&nbsp;&nbsp; 7", "5 &nbsp;&nbsp;&nbsp; 7 &nbsp;&nbsp;&nbsp; 4 &nbsp;&nbsp;&nbsp; 6 &nbsp;&nbsp;&nbsp; 3", "2 &nbsp;&nbsp;&nbsp; 6 &nbsp;&nbsp;&nbsp; 1 &nbsp;&nbsp;&nbsp; 4 &nbsp;&nbsp;&nbsp; 3"], correct: 0 },
+            { id: 10, tag: "PYQ", question: "सूची-I में दिए गए खाद्य-पदार्थ के सक्रिय बायोएक्टिव घटक को सूची-II में दिए गए उसके स्रोत से मिलाएँ :<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I (Active Component)</b><br>(A) लाइकोपीन<br>(B) अल्फा लिपोइक एसिड<br>(C) फ्लैवोनायड्स<br>(D) ग्लुटाथायॉन<br>(E) सिलिनियम</td><td style='width:50%; vertical-align:top;'><b>सूची-II (Source)</b><br>(1) टमाटर<br>(2) आलू<br>(3) ग्रीन चाय<br>(4) एस्पैरेगस<br>(5) ब्रॉकोली<br>(6) समुद्री खाद्य-पदार्थ</td></tr></table><br><b>कूट :</b><br><table style='width:100%; max-width:280px; border-collapse:collapse; margin-top:5px;' border='1' cellpadding='4'><tr><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr></table>", options: ["1 &nbsp;&nbsp;&nbsp; 2 &nbsp;&nbsp;&nbsp; 3 &nbsp;&nbsp;&nbsp; 4 &nbsp;&nbsp;&nbsp; 6", "5 &nbsp;&nbsp;&nbsp; 1 &nbsp;&nbsp;&nbsp; 4 &nbsp;&nbsp;&nbsp; 7 &nbsp;&nbsp;&nbsp; 2", "1 &nbsp;&nbsp;&nbsp; 3 &nbsp;&nbsp;&nbsp; 7 &nbsp;&nbsp;&nbsp; 6 &nbsp;&nbsp;&nbsp; 4", "5 &nbsp;&nbsp;&nbsp; 3 &nbsp;&nbsp;&nbsp; 2 &nbsp;&nbsp;&nbsp; 7 &nbsp;&nbsp;&nbsp; 6"], correct: 0 },
+            { id: 11, tag: "PYQ", question: "शरीर में निम्नलिखित कार्यों को बनाए रखने के लिए जिंक (Zinc) अनिवार्य है:<br><br>(1) स्वाद की तीक्ष्णता (Taste Acuity)<br>(2) हीमोग्लोबिन संश्लेषण<br>(3) हड्डियों का विकास<br>(4) घाव भरना<br>(5) रक्त का जमना<br><br><b>कूट :</b>", options: ["(1), (2) और (3)", "(1), (3) और (4)", "(2), (3) और (4)", "(3), (4) और (5)"], correct: 1 },
+            { id: 12, tag: "PYQ", question: "नमक सामान्यतः............के साथ सुदृढ़ (Fortified) किया जाता है:<br><br>(1) विटामिन A<br>(2) लौह (Iron)<br>(3) विटामिन B<br>(4) फोलिक अम्ल (Folic Acid)<br><br><b>कूट :</b>", options: ["1 और 2 सही हैं", "2 और 4 सही हैं (Double Fortified Salt)", "2 और 3 सही हैं", "3 और 4 सही हैं"], correct: 1 },
+            { id: 13, tag: "PYQ", question: "हीमोग्लोबिन (Hemoglobin) बनने के लिए............की आवश्यकता है:", options: ["कैल्शियम", "प्रोटीन", "वसा", "लोहा (Iron)"], correct: 3 },
+            { id: 14, tag: "PYQ", question: "लोहे की कमी (Iron Deficiency) विकसित होने में आने वाले चरणों को सही क्रम में लगाइए:<br><br>(A) लोहे की कमी से एरिथ्रोपायसिस<br>(B) लोहे की कमी से एनीमिया<br>(C) लोहे की संगृहीत मात्रा कम होना<br><br><b>सही क्रम :</b>", options: ["(C), (A), (B)", "(A), (B), (C)", "(B), (A), (C)", "(B), (C), (A)"], correct: 0 },
+            { id: 15, tag: "PYQ", question: "किस प्रकार के भोज्य पदार्थ को रक्षात्मक भोज्य पदार्थ (Protective Foods) कहते हैं?", options: ["जिसमें अधिक प्रोटीन हो", "जिसमें कार्बोज अधिक हो", "जिसमें विटामिन और खनिज अधिक हों (Vitamins & Minerals)", "उपर्युक्त में से कोई नहीं"], correct: 2 },
+            { id: 16, tag: "PYQ", question: "किस खनिज की कमी शिशु मृत्युदर, क्रिटिनिज्म (Cretinism) एवं घेंघा (Goitre) से संबंधित है?", options: ["जिंक", "ताँबा", "आयोडीन (Iodine)", "मैग्निशियम"], correct: 2 },
+            { id: 17, tag: "PYQ", question: "निम्नलिखित में से कौन-सा सूक्ष्म पदार्थ (Trace Element) हमारे शरीर के लिए अति-आवश्यक नहीं है?", options: ["आयोडीन", "फ्लोरीन (Fluorine)", "पोटैशियम", "आयरन"], correct: 1 },
+            { id: 18, tag: "PYQ", question: "शरीर में खनिज लवणों (Minerals) के प्रमुख दो कार्य होते हैं:", options: ["ऊर्जा देना तथा सुरक्षा प्रदान करना", "सुरक्षात्मक तथा नियामक कार्य (Protective & Regulatory Functions)", "निर्माणात्मक कार्य तथा ऊर्जा प्रदान करना", "उपरोक्त में से कोई नहीं"], correct: 1 },
+            { id: 19, tag: "PYQ", question: "बच्चों में आई.डी.डी. (I.D.D. - Iodine Deficiency Disorders) की स्थिति का कारण है–", options: ["आयोडीन (Iodine Deficiency)", "कैल्शियम", "लोहा", "विटामिन डी"], correct: 0 },
+            { id: 20, tag: "PYQ", question: "'माल्टा आटा' (Malta Flour) रागी (Ragi) से बनाया जाता है, जो कि अच्छा साधन है–", options: ["कैल्शियम का (Calcium Rich Source)", "फॉस्फोरस का", "कॉपर का", "विटामिन A का"], correct: 0 },
+            { id: 21, tag: "PYQ", question: "प्रजनन (Reproductive Function) एवं दुग्ध स्रवण (Lactation) हेतु कौन-सा खनिज आवश्यक है?", options: ["लोहा", "मैग्नीशियम (Magnesium)", "ताँबा", "कैल्शियम"], correct: 1 },
+            { id: 22, tag: "PYQ", question: "शरीर के बाह्य कोशिकीय तरल (Extracellular Fluid - ECF) में मुख्य धनायन (Principal Cation) कौन-सा होता है?", options: ["मैग्निशियम (Mg²⁺)", "पोटैशियम (K⁺)", "सोडियम (Na⁺)", "आयरन"], correct: 2 },
+            { id: 23, tag: "PYQ", question: "हृदय की धड़कन (Heart Beat / Cardiac Rhythm) नियंत्रित करने के लिए कौन-सा खनिज आवश्यक है?", options: ["सोडियम", "सल्फर", "पोटैशियम (Potassium - K⁺)", "लोहा"], correct: 2 },
+            { id: 24, tag: "NCERT", question: "मानव शरीर में आवश्यक खनिजों को उनके दैनिक आवश्यकता परिमाण के आधार पर मुख्यतः किन दो श्रेणियों में विभाजित किया गया है?", options: ["मैक्रो खनिजों (Macro Minerals) एवं ट्रेस खनिजों (Trace Elements)", "अम्लीय एवं क्षारीय खनिजों", "जैविक एवं अजैविक खनिजों", "घुलनशील एवं अघुलनशील खनिजों"], correct: 0 },
+            { id: 25, tag: "NCERT", question: "निम्नलिखित में से कौन-सा खनिज तत्व मुख्य खनिज (Macro Mineral) की श्रेणी में आता है जिसकी दैनिक आवश्यकता 100 mg से अधिक होती है?", options: ["आयोडीन", "जिंक", "कैल्शियम (Calcium)", "कॉपर"], correct: 2 },
+            { id: 26, tag: "NCERT", question: "मानव शरीर की अस्थियों एवं दाँतों की संरचनात्मक मजबूती के लिए कैल्शियम के साथ मुख्य रूप से कौन-सा खनिज आवश्यक है?", options: ["सोडियम", "फास्फोरस (Phosphorus)", "आयोडीन", "पोटैशियम"], correct: 1 },
+            { id: 27, tag: "NCERT", question: "हीमोग्लोबिन (Hemoglobin) तथा मायोग्लोबिन (Myoglobin) की संरचना में पाया जाने वाला प्रमुख खनिज घटक कौन-सा है?", options: ["ताँबा (Copper)", "जस्ता (Zinc)", "लोहा (Iron)", "मैग्नीशियम"], correct: 2 },
+            { id: 28, tag: "NCERT", question: "आहारीय नॉन-हीम आयरन (Non-Heme Iron) का अवशोषण बढ़ाने के लिए भोजन में किस विटामिन की उपस्थिति आवश्यक है?", options: ["विटामिन A", "विटामिन C (Ascorbic Acid)", "विटामिन D", "विटामिन K"], correct: 1 },
+            { id: 29, tag: "NCERT", question: "थायरॉइड ग्रंथि द्वारा स्रावित थायरॉक्सिन (T₄) तथा ट्राई-आयोडीनथायरोनिन (T₃) हार्मोन के निर्माण के लिए कौन-सा तत्व अनिवार्य है?", options: ["आयोडीन (Iodine)", "कैल्शियम", "फ्लोरीन", "सल्फर"], correct: 0 },
+            { id: 30, tag: "NCERT", question: "गर्भवती महिलाओं में आयोडीन की गंभीर कमी से भ्रूण के मस्तिष्क विकास पर असर पड़ने के कारण होने वाला रोग है:", options: ["ऑस्टियोमलेशिया", "क्रेटिनिज्म (Cretinism)", "मिक्सेडेमा", "पेलाग्रा"], correct: 1 },
+            { id: 31, tag: "NCERT", question: "कोशिका के अंदर (Intracellular Fluid - ICF) पाया जाने वाला प्राथमिक एवं मुख्य धनायन (Principal Cation) कौन-सा है?", options: ["सोडियम (Na⁺)", "पोटैशियम (K⁺)", "कैल्शियम (Ca²⁺)", "क्लोराइड (Cl⁻)"], correct: 1 },
+            { id: 32, tag: "NCERT", question: "तंत्रिका आवेगों के संचरण (Nerve Impulse Transmission) तथा मांसपेशियों के संकुचन के लिए कौन-से आयन परस्पर कार्य करते हैं?", options: ["सोडियम एवं पोटैशियम", "आयोडीन एवं लोहा", "जिंक एवं कॉपर", "सल्फर एवं फास्फोरस"], correct: 0 },
+            { id: 33, tag: "NCERT", question: "पेयजल में फ्लोराइड (Fluoride) की मात्रा कम या अधिक होने से क्रमशः कौन-सी समस्याएँ उत्पन्न होती हैं?", options: ["दंत क्षय (Dental Caries) तथा फ्लोरोसिस (Fluorosis)", "रिकेट्स तथा पेलाग्रा", "घेंघा तथा एनीमिया", "बेरी-बेरी तथा स्कर्वी"], correct: 0 },
+            { id: 34, tag: "NCERT", question: "इंसुलिन हार्मोन के भंडारण एवं कार्यक्षमता तथा स्वाद कलिकाओं (Taste Buds) के सुचारू संचालन के लिए कौन-सा खनिज आवश्यक है?", options: ["लोहा", "जिंक (Zinc)", "आयोडीन", "सोडियम"], correct: 1 },
+            { id: 35, tag: "NCERT", question: "कौन-सा खनिज वसा-अम्ल तथा सल्फर-युक्त अमीनो अम्ल (जैसे मेथिओनिन व सिस्टीन) का अभिन्न अंग होता है?", options: ["गंधक (Sulfur)", "कैल्शियम", "पोटैशियम", "जस्ता"], correct: 0 },
+            { id: 36, tag: "NCERT", question: "एटीपी (ATP) ऊर्जा अणुओं की संरचना तथा प्रकाश-संश्लेषण और चयापचय में एंजाइमों के एक्टिवेटर के रूप में कौन-सा तत्व कार्य करता है?", options: ["मैग्नीशियम (Mg²⁺)", "सोडियम", "क्लोरीन", "आयोडीन"], correct: 0 },
+            { id: 37, tag: "NCERT", question: "पौधों में पाए जाने वाले फाइटेट्स (Phytates) और ऑक्सालेट्स (Oxalates) भोजन में किस खनिज के अवशोषण को बाधित करते हैं?", options: ["केवल सोडियम", "कैल्शियम एवं आयरन", "केवल पोटैशियम", "केवल आयोडीन"], correct: 1 },
+            { id: 38, tag: "NCERT", question: "रक्त में कैल्शियम के स्तर (Blood Calcium Homeostasis) को नियंत्रित करने वाले दो प्रमुख हार्मोन कौन-से हैं?", options: ["पैराथायरॉइड हार्मोन (PTH) एवं कैल्सिटोनिन", "इंसुलिन एवं ग्लुकागॉन", "थायरॉक्सिन एवं एड्रेनालिन", "एस्ट्रोजन एवं प्रोजेस्टेरोन"], correct: 0 },
+            { id: 39, tag: "NCERT", question: "आमाशय (Stomach) में बनने वाले हाइड्रोक्लोरिक एसिड (HCl) के संश्लेषण हेतु कौन-सा खनिज आयन आवश्यक है?", options: ["क्लोराइड (Cl⁻)", "सोडियम", "फास्फोरस", "कैल्शियम"], correct: 0 },
+            { id: 40, tag: "NCERT", question: "वयस्कों में हड्डियों के घनत्व में कमी आने तथा उनके भुरभुरे/कमजोर होने की स्थिति को क्या कहते हैं?", options: ["ऑस्टियोपोरोसिस (Osteoporosis)", "रिकेट्स", "टैटनी", "एनीमिया"], correct: 0 },
+            { id: 41, tag: "NCERT", question: "<b>अभिकथन (A):</b> उच्च सोडियम युक्त आहार का अत्यधिक सेवन उच्च रक्तचाप (Hypertension) का मुख्य कारण बनता है।<br><br><b>कारण (R):</b> सोडियम बाह्य-कोशिकीय द्रव (ECF) में परासरणी दाब (Osmotic Pressure) को बढ़ाता है, जिससे शरीर में जल का प्रतिधारण (Water Retention) बढ़ जाता है।<br><br><b>कूट :</b>", options: ["(A) और (R) दोनों सही हैं तथा (R), (A) की सही व्याख्या करता है।", "(A) और (R) दोनों सही हैं, लेकिन (R), (A) की सही व्याख्या नहीं करता।", "(A) सही है, लेकिन (R) गलत है।", "(A) गलत है, लेकिन (R) सही है।"], correct: 0 },
+            { id: 42, tag: "NCERT", question: "सूची-I में दिए गए खनिज तत्व को सूची-II में दिए गए उसकी जैव-रासायनिक भूमिका से सुमेलित कीजिए:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I (खनिज तत्व)</b><br>(A) ताँबा<br>(B) सेलेनियम<br>(C) क्रोमियम<br>(D) कोबाल्ट</td><td style='width:50%; vertical-align:top;'><b>सूची-II (भूमिका)</b><br>(1) ग्लूकोज टॉलरेंस फैक्टर (GTF)<br>(2) सेरुलोप्लास्मिन का घटक<br>(3) विटामिन B₁₂ का केंद्रीय आयन<br>(4) ग्लुटाथायॉन परऑक्सीडेज का घटक</td></tr></table><br><b>कूट :</b><br><table style='width:100%; max-width:240px; border-collapse:collapse; margin-top:5px;' border='1' cellpadding='4'><tr><th>A</th><th>B</th><th>C</th><th>D</th></tr></table>", options: ["2 &nbsp;&nbsp;&nbsp;&nbsp; 4 &nbsp;&nbsp;&nbsp;&nbsp; 1 &nbsp;&nbsp;&nbsp;&nbsp; 3", "1 &nbsp;&nbsp;&nbsp;&nbsp; 2 &nbsp;&nbsp;&nbsp;&nbsp; 3 &nbsp;&nbsp;&nbsp;&nbsp; 4", "3 &nbsp;&nbsp;&nbsp;&nbsp; 1 &nbsp;&nbsp;&nbsp;&nbsp; 4 &nbsp;&nbsp;&nbsp;&nbsp; 2", "4 &nbsp;&nbsp;&nbsp;&nbsp; 3 &nbsp;&nbsp;&nbsp;&nbsp; 2 &nbsp;&nbsp;&nbsp;&nbsp; 1"], correct: 0 },
+            { id: 43, tag: "NCERT", question: "आंतों से हीम-आयरन (Heme Iron) और नॉन-हीम आयरन (Non-Heme Iron) में से किसका अवशोषण अधिक सुगमता एवं उच्च दर (15%-35%) से होता है?", options: ["हीम-आयरन (जो प्राणिज स्रोतों जैसे मांस/लीवर में पाया जाता है)", "नॉन-हीम आयरन (जो वनस्पति स्रोतों जैसे पालक में पाया जाता है)", "दोनों का अवशोषण समान होता है", "किसी का भी अवशोषण नहीं होता"], correct: 0 },
+            { id: 44, tag: "NCERT", question: "रक्त में कैल्शियम का स्तर अचानक बहुत कम हो जाने पर (Hypocalcemia) न्यूरो-मस्कुलर उत्तेजनशीलता बढ़ने के कारण मांसपेशियों में ऐंठन/झटके आने लगते हैं, इस स्थिति को क्या कहा जाता है?", options: ["ऑस्टियोमलेशिया", "टैटनी (Tetany)", "मिक्सेडेमा", "फ्लेविओसिस"], correct: 1 },
+            { id: 45, tag: "NCERT", question: "<b>अभिकथन (A):</b> चाय और कॉफी का भोजन के तुरंत बाद सेवन करने से शरीर में लोहे (Iron) का अवशोषण घट जाता है।<br><br><b>कारण (R):</b> चाय और कॉफी में उपस्थित पोलिफेनोल्स एवं टैनिन्स (Tannins) लोहे के साथ अघुलनशील जटिल यौगिक (Insoluble Complexes) बना लेते हैं।<br><br><b>कूट :</b>", options: ["(A) और (R) दोनों सही हैं तथा (R), (A) की सही व्याख्या करता है।", "(A) और (R) दोनों सही हैं, लेकिन (R), (A) की सही व्याख्या नहीं करता।", "(A) सही है, लेकिन (R) गलत है।", "(A) गलत है, लेकिन (R) सही है।"], correct: 0 },
+            { id: 46, tag: "NCERT", question: "पोटैशियम (Potassium) के जैविक कार्यों के संदर्भ में निम्नलिखित कथनों पर विचार कीजिए:<br><br>(1) यह हृदय की मांसपेशियों के संकुचन एवं धड़कन की लय को नियंत्रित करता है।<br>(2) यह शरीर में अम्ल-क्षार संतुलन (Acid-Base Balance) बनाए रखने में मदद करता है।<br>(3) इसकी अत्यधिक कमी से हाइपोकैलेमिया (Hypokalemia) होता है।<br><br><b>कूट :</b>", options: ["केवल 1 और 2", "केवल 2 और 3", "केवल 1 और 3", "1, 2 और 3 तीनों"], correct: 3 },
+            { id: 47, tag: "NCERT", question: "विलसन का रोग (Wilson's Disease) शरीर में किस खनिज के अत्यधिक संचय (Abnormal Accumulation) और यकृत/मस्तिष्क में जमाव के कारण होने वाला आनुवंशिक विकार है?", options: ["कॉपर / ताँबा (Copper)", "जस्ता / जिंक", "लोहा / आयरन", "सोडियम"], correct: 0 },
+            { id: 48, tag: "NCERT", question: "शरीर में कार्बोनिक एनहाइड्रेज़ (Carbonic Anhydrase) एवं ऐल्कोहॉल डिहाइड्रोजिनेज एंजाइम के उचित कार्यकरण के लिए सह-घटक (Cofactor) के रूप में कौन-सा खनिज आयन आवश्यक है?", options: ["Zn²⁺ (जिंक)", "Fe²⁺ (आयरन)", "I⁻ (आयोडीन)", "Na⁺ (सोडियम)"], correct: 0 },
+            { id: 49, tag: "NCERT", question: "शरीर में रक्त प्लाज्मा का परासरणी दाब (Osmotic Pressure) तथा जल संतुलन मुख्य रूप से किस खनिज आयन द्वारा बनाए रखा जाता है?", options: ["सोडियम (Na⁺)", "मैग्नीशियम", "ताँबा", "आयोडीन"], correct: 0 },
+            { id: 50, tag: "NCERT", question: "आयरन की कमी से होने वाले एनीमिया (Iron Deficiency Anemia) में लाल रक्त कोशिकाओं (RBCs) का आकार और रंग कैसा हो जाता है?", options: ["माइक्रोसिटिक एवं हाइपोक्रोमिक (Microcytic & Hypochromic)", "मैक्रोसिटिक एवं हाइपरक्रोमिक", "नॉर्मोसिटिक", "सिकल-शेप्ड"], correct: 0 }
+        ];
+    </script>
+
+    <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
+
+
+
+          
