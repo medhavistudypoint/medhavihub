@@ -300,7 +300,16 @@ function processFinalCalculation() {
     const secStr = (timeConsumedSec % 60).toString().padStart(2, '0');
     const timeStr = `${minStr}:${secStr}`;
     
-    if(document.getElementById('valNetScore')) document.getElementById('valNetScore').innerText = `${correct} / ${dataset.length}`;
+        // 🎯 नेगेटिव मार्किंग लॉजिक
+    const negativePerWrong = (typeof NEGATIVE_MARKING !== 'undefined') ? NEGATIVE_MARKING : 0;
+    const grossMarks = correct;
+    const negativeMarks = incorrect * negativePerWrong;
+    let netScore = parseFloat((grossMarks - negativeMarks).toFixed(2));
+
+    if(document.getElementById('valNetScore')) {
+        document.getElementById('valNetScore').innerText = `${netScore} / ${dataset.length}`;
+    }
+    
     if(document.getElementById('valCorrectCount')) document.getElementById('valCorrectCount').innerText = correct;
     if(document.getElementById('valIncorrectCount')) document.getElementById('valIncorrectCount').innerText = incorrect;
     if(document.getElementById('valSkippedCount')) document.getElementById('valSkippedCount').innerText = skipped;
@@ -337,7 +346,7 @@ function processFinalCalculation() {
         
         studentName: studentName,
         studentMobile: isReattemptMode ? "Re-attempt" : "Not Provided",
-        score: correct, 
+        score: typeof netScore !== 'undefined' ? netScore : correct,
         correct: correct,
         incorrect: incorrect,
         timeUsed: `${minStr} मिनट ${secStr} सेकंड`
