@@ -1,1 +1,827 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science TGT Test</title>
+    <!-- ✅ CSS फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science TGT Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 प्रीमियम हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT PGT Test Series</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">05:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">5</span></span>
+                        <span class="subject-badge">गृह विज्ञान (Home Science)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 5</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_homescience_tgt_test_1"; 
+
+        // 🎯 2. 1/3rd (एक तिहाई) नेगेटिव मार्किंग सेट की गई
+        const NEGATIVE_MARKING = 0.33; 
+
+        // 3. 5 प्रश्नों का डेटासेट
+        const dataset = [
+             const dataset = [
+    {
+        id: 1,
+        question: "मानव शरीर में प्रोटीन का मुख्य पाचन स्थल कहाँ होता है?",
+        options: ["(a) मुख", "(b) आमाशय और छोटी आंत", "(c) बड़ी आंत", "(d) यकृत"],
+        correct: 1
+    },
+    {
+        id: 2,
+        question: "टाइफाइड ज्वर में रोगी को किस प्रकार का आहार देना चाहिए?",
+        options: ["(a) उच्च रेशेदार एवं उच्च वसायुक्त", "(b) उच्च कैलोरी, उच्च प्रोटीन एवं कम रेशा युक्त", "(c) कम कैलोरी एवं उच्च वसा", "(d) केवल तरल वसा"],
+        correct: 1
+    },
+    {
+        id: 3,
+        question: "<b>कथन (A):</b> मधुमेह के रोगी को जटिल कार्बोहाइड्रेट (Complex Carbohydrates) देने की सलाह दी जाती है।<br><br><b>कारण (R):</b> जटिल कार्बोहाइड्रेट का पाचन धीमा होता है, जिससे रक्त में शर्करा का स्तर अचानक नहीं बढ़ता।<br><br><b>कूट :</b>",
+        options: ["(a) (A) और (R) दोनों सही हैं तथा (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परन्तु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परन्तु (R) गलत है।", "(d) (A) गलत है, परन्तु (R) सही है।"],
+        correct: 0
+    },
+    {
+        id: 4,
+        question: "वसा में घुलनशील विटामिनों का सही समूह कौन-सा है?",
+        options: ["(a) विटामिन B एवं C", "(b) विटामिन A, D, E, K", "(c) विटामिन A, B, C, D", "(d) केवल विटामिन C एवं K"],
+        correct: 1
+    },
+    {
+        id: 5,
+        question: "बेरी-बेरी रोग किस विटामिन की कमी के कारण होता है?",
+        options: ["(a) थायमिन (B1)", "(b) राइबोफ्लेविन (B2)", "(c) नियासिन (B3)", "(d) पायरीडॉक्सिन (B6)"],
+        correct: 0
+    },
+    {
+        id: 6,
+        question: "सूची-I को सूची-II से सुमेलित कीजिए:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I (मिलावट पदार्थ)</b><br>A. मेतानिल येलो<br>B. अर्जिमोन तेल<br>C. चाक पाउडर<br>D. यूरिया</td><td style='width:50%; vertical-align:top;'><b>सूची-II (खाद्य पदार्थ)</b><br>1. सरसों का तेल<br>2. अरहर/तूर दाल<br>3. दूध<br>4. गेहूं का आटा</td></tr></table><br><b>कूट :</b>",
+        options: ["(a) A-2, B-1, C-4, D-3", "(b) A-1, B-2, C-3, D-4", "(c) A-2, B-3, C-1, D-4", "(d) A-4, B-1, C-2, D-3"],
+        correct: 0
+    },
+    {
+        id: 7,
+        question: "वृक्क (Kidney) के गंभीर रोगों में आहार में किसकी मात्रा को नियंत्रित/सीमित करना सबसे महत्वपूर्ण होता है?",
+        options: ["(a) कार्बोहाइड्रेट", "(b) सोडियम एवं प्रोटीन", "(c) वसा एवं रेशा", "(d) केवल विटामिन C"],
+        correct: 1
+    },
+    {
+        id: 8,
+        question: "दूध के पाश्चुरीकरण (Pasteurization) की HTST (High Temperature Short Time) विधि का तापमान और समय क्या है?",
+        options: ["(a) 63°C पर 30 मिनट", "(b) 72°C पर 15 सेकंड", "(c) 100°C पर 5 मिनट", "(d) 121°C पर 2 सेकंड"],
+        correct: 1
+    },
+    {
+        id: 9,
+        question: "क्वाशियोरकोर (Kwashiorkor) रोग मुख्य रूप से किसकी कमी से होता है?",
+        options: ["(a) केवल ऊर्जा", "(b) केवल प्रोटीन", "(c) वसा एवं लोहा", "(d) कैल्शियम"],
+        correct: 1
+    },
+    {
+        id: 10,
+        question: "ग्लाइसेमिक इंडेक्स (GI) का संबंध मुख्य रूप से किस पोषक तत्व के पाचन से है?",
+        options: ["(a) प्रोटीन", "(b) कार्बोहाइड्रेट", "(c) वसा", "(d) खनिज लवण"],
+        correct: 1
+    },
+    {
+        id: 11,
+        question: "एथेरोस्क्लेरोसिस (Atherosclerosis) या हृदय रोग के रोगियों के आहार में किसका सेवन वर्जित/सीमित होना चाहिए?",
+        options: ["(a) PUFA (Polyunsaturated Fatty Acids)", "(b) संतृप्त वसा एवं ट्रांस फैट", "(c) घुलनशील रेशा", "(d) जल"],
+        correct: 1
+    },
+    {
+        id: 12,
+        question: "पेप्टिक अल्सर (Peptic Ulcer) के रोगी के लिए कौन-सा भोजन हानिकारक है?",
+        options: ["(a) उबला हुआ दूध", "(b) अत्यधिक मिर्च-मसालेदार एवं तली हुई चीजें", "(c) दलिया", "(d) नरम उबली सब्जियां"],
+        correct: 1
+    },
+    {
+        id: 13,
+        question: "लोहे (Iron) के अवशोषण को बढ़ाने में कौन-सा विटामिन सहायक होता है?",
+        options: ["(a) विटामिन D", "(b) विटामिन C", "(c) विटामिन K", "(d) विटामिन A"],
+        correct: 1
+    },
+    {
+        id: 14,
+        question: "मानव शरीर में बेसल मेटाबॉलिक रेट (BMR) को प्रभावित करने वाला मुख्य हार्मोन कौन-सा है?",
+        options: ["(a) इंसुलिन", "(b) थायरोक्सिन", "(c) एस्ट्रोजन", "(d) एड्रेनालिन"],
+        correct: 1
+    },
+    {
+        id: 15,
+        question: "खाद्य पदार्थों को डिब्बाबंदी (Canning) के दौरान नष्ट किया जाने वाला सबसे ऊष्मा-रोधी जीवाणु कौन-सा है?",
+        options: ["(a) साल्मोनेला", "(b) क्लॉस्ट्रिडियम बॉटुलिनम", "(c) ई. कोलाई", "(d) स्टैफिलोकोकस"],
+        correct: 1
+    },
+    {
+        id: 16,
+        question: "गृह प्रबंध प्रक्रिया का सही चरणबद्ध क्रम क्या है?",
+        options: ["(a) आयोजन → नियंत्रण → मूल्यांकन → नियोजन", "(b) नियोजन (Planning) → आयोजन (Organizing) → नियंत्रण (Controlling) → मूल्यांकन (Evaluating)", "(c) मूल्यांकन → नियोजन → नियंत्रण → आयोजन", "(d) नियंत्रण → नियोजन → आयोजन → मूल्यांकन"],
+        correct: 1
+    },
+    {
+        id: 17,
+        question: "<b>कथन (A):</b> समय और ऊर्जा दोनों मानव संसाधन (Human Resources) हैं।<br><br><b>कारण (R):</b> समय को स्टोर करके नहीं रखा जा सकता, जबकि ऊर्जा को उचित प्रबंधन से बचाया जा सकता है।<br><br><b>कूट :</b>",
+        options: ["(a) (A) और (R) दोनों सही हैं तथा (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परन्तु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परन्तु (R) गलत है।", "(d) (A) गलत है, परन्तु (R) सही है।"],
+        correct: 0
+    },
+    {
+        id: 18,
+        question: "पारिवारिक बजट बनाने का मुख्य उद्देश्य क्या होता है?",
+        options: ["(a) केवल बचत को छिपाना", "(b) आय और व्यय में संतुलन स्थापित करना", "(c) गैर-जरूरी खर्चों को बढ़ाना", "(d) केवल कर (Tax) बचाना"],
+        correct: 1
+    },
+    {
+        id: 19,
+        question: "निकिल एवं डॉर्सी के अनुसार \"मूल्य, लक्ष्य और स्तर\" में क्या संबंध है?",
+        options: ["(a) लक्ष्य से मूल्यों का निर्माण होता है", "(b) मूल्य (Values) केंद्र में होते हैं जो लक्ष्य (Goals) और स्तर (Standards) को निर्धारित करते हैं", "(c) स्तर से मूल्यों का कोई संबंध नहीं है", "(d) तीनों एक-दूसरे से पूर्णतः स्वतंत्र हैं"],
+        correct: 1
+    },
+    {
+        id: 20,
+        question: "कार्य सरलीकरण (Work Simplification) की 'पाथ-वे चार्ट' (Path-way Chart) तकनीक का विकास किसने किया था?",
+        options: ["(a) गिल्बर्थ", "(b) मोंटगोमरी", "(c) मैरी लाकिन", "(d) ग्रास एवं क्रैंडल"],
+        correct: 0
+    },
+    {
+        id: 21,
+        question: "मुंडेल के परिवर्तन के नियम (Mundel's Classes of Change) के कितने स्तर हैं?",
+        options: ["(a) 3", "(b) 5", "(c) 7", "(d) 4"],
+        correct: 1
+    },
+    {
+        id: 22,
+        question: "रंग चक्र (Color Wheel) में एक-दूसरे के ठीक सामने स्थित रंगों को क्या कहा जाता है?",
+        options: ["(a) सादृश्य रंग (Analogous Colors)", "(b) पूरक रंग (Complementary Colors)", "(c) एकांकी रंग (Monochromatic Colors)", "(d) त्रिध्रुवीय रंग (Triad Colors)"],
+        correct: 1
+    },
+    {
+        id: 23,
+        question: "पारिवारिक आय के अंतर्गत 'अप्रत्यक्ष आय' (Indirect Income) का उदाहरण कौन-सा है?",
+        options: ["(a) नकद वेतन", "(b) बैंक का ब्याज", "(c) निःशुल्क आवास या मुफ्त चिकित्सा सुविधा", "(d) शेयर बाजार से लाभ"],
+        correct: 2
+    },
+    {
+        id: 24,
+        question: "निर्णय लेने की प्रक्रिया (Decision Making Process) का पहला चरण कौन-सा है?",
+        options: ["(a) विकल्पों की खोज करना", "(b) समस्या की पहचान करना", "(c) सर्वश्रेष्ठ विकल्प का चयन", "(d) निर्णय के परिणाम का मूल्यांकन"],
+        correct: 1
+    },
+    {
+        id: 25,
+        question: "एंजेल के उपभोग के नियम (Engel's Law of Consumption) के अनुसार आय बढ़ने पर किस मद पर होने वाला व्यय का प्रतिशत घट जाता है?",
+        options: ["(a) मकान का किराया", "(b) भोजन (Food)", "(c) शिक्षा एवं मनोरंजन", "(d) वस्त्र"],
+        correct: 1
+    },
+    {
+        id: 26,
+        question: "सूची-I को सूची-II से सुमेलित कीजिए:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I (उपकरण)</b><br>A. रेफ्रिजरेटर<br>B. वाशिंग मशीन<br>C. प्रेशर कुकर<br>D. माइक्रोवेव ओवन</td><td style='width:50%; vertical-align:top;'><b>सूची-II (सिद्धान्त/कार्य)</b><br>1. सेन्ट्रीफ्यूगल बल<br>2. लेटेंट हीट / संपीड़न<br>3. सूक्ष्मतरंग विकीर्णन<br>4. वाष्प दाब एवं क्वथनांक वृद्धि</td></tr></table><br><b>कूट :</b>",
+        options: ["(a) A-2, B-1, C-4, D-3", "(b) A-1, B-2, C-3, D-4", "(c) A-3, B-4, C-1, D-2", "(d) A-2, B-4, C-1, D-3"],
+        correct: 0
+    },
+    {
+        id: 27,
+        question: "प्रकाश व्यवस्था में \"डैज़ल\" (Dazzle) या चकाचौंध से बचने के लिए किस प्रकार की प्रकाश व्यवस्था सबसे उपयुक्त मानी जाती है?",
+        options: ["(a) प्रत्यक्ष प्रकाश (Direct Lighting)", "(b) अप्रत्यक्ष प्रकाश (Indirect Lighting)", "(c) अर्द्ध-प्रत्यक्ष प्रकाश", "(d) स्थानीय प्रकाश"],
+        correct: 1
+    },
+    {
+        id: 28,
+        question: "आंतरिक सज्जा में \"संतुलन\" (Balance) का कौन-सा प्रकार औपचारिक और शांत वातावरण पैदा करता है?",
+        options: ["(a) अनौपचारिक संतुलन (Informal Balance)", "(b) औपचारिक या सममित संतुलन (Symmetrical Balance)", "(c) रेडियल संतुलन (Radial Balance)", "(d) असमित संतुलन"],
+        correct: 1
+    },
+    {
+        id: 29,
+        question: "पीक लोड (Peak Load) का क्या अर्थ है?",
+        options: ["(a) पूरे दिन का औसत कार्य", "(b) एक ही समय में अनेक कार्यों का दबाव होना", "(c) विश्राम का समय", "(d) रात्रि के समय किया जाने वाला कार्य"],
+        correct: 1
+    },
+    {
+        id: 30,
+        question: "ऊर्जा मापन की अंतर्राष्ट्रीय इकाई क्या है?",
+        options: ["(a) कैलोरी", "(b) जूल (Joule)", "(c) वाट", "(d) ग्राम"],
+        correct: 1
+    },
+    {
+        id: 31,
+        question: "जल जनित रोग (Water-borne Diseases) का सही युग्म कौन-सा है?",
+        options: ["(a) हैजा (Cholera) और टाइफाइड", "(b) क्षयरोग (TB) और खसरा", "(c) चेचक और मलेरिया", "(d) टिटनेस और रेबीज"],
+        correct: 0
+    },
+    {
+        id: 32,
+        question: "प्राथमिक स्वास्थ्य केंद्र (PHC) की स्थापना मैदानी क्षेत्रों में कितनी जनसंख्या पर की जाती है?",
+        options: ["(a) 10,000", "(b) 30,000", "(c) 50,000", "(d) 1,00,000"],
+        correct: 1
+    },
+    {
+        id: 33,
+        question: "<b>कथन (A):</b> प्राथमिक चिकित्सा (First Aid) का मुख्य उद्देश्य रोगी के जीवन की रक्षा करना और स्थिति को बिगड़ने से रोकना है।<br><br><b>कारण (R):</b> प्राथमिक चिकित्सक, डॉक्टर का पूर्ण विकल्प होता है।<br><br><b>कूट :</b>",
+        options: ["(a) (A) और (R) दोनों सही हैं।", "(b) (A) सही है, परन्तु (R) गलत है।", "(c) (A) गलत है, परन्तु (R) सही है।", "(d) (A) और (R) दोनों गलत हैं।"],
+        correct: 1
+    },
+    {
+        id: 34,
+        question: "हड्डी टूटने (Fracture) पर खपच्ची (Splint) का प्रयोग किस उद्देश्य से किया जाता है?",
+        options: ["(a) टूटे हुए स्थान को गतिहीन (Immobilize) करने के लिए", "(b) रक्तस्राव बढ़ाने के लिए", "(c) दर्द निवारक दवा देने के लिए", "(d) घाव को खुला रखने के लिए"],
+        correct: 0
+    },
+    {
+        id: 35,
+        question: "वायु प्रदूषण का कौन-सा सूचक (Indicator) वातावरण में सल्फर डाइऑक्साइड (SO2) की उपस्थिति को दर्शाता है?",
+        options: ["(a) शैवाल (Algae)", "(b) लाइकेन (Lichen)", "(c) कवक (Fungi)", "(d) नीम का पेड़"],
+        correct: 1
+    },
+    {
+        id: 36,
+        question: "विश्व स्वास्थ्य संगठन (WHO) का मुख्यालय कहाँ स्थित है?",
+        options: ["(a) न्यूयॉर्क", "(b) जेनेवा (Geneva)", "(c) पेरिस", "(d) नई दिल्ली"],
+        correct: 1
+    },
+    {
+        id: 37,
+        question: "कोहनी या घुटने के जोड़ पर बांधी जाने वाली पट्टी का प्रकार कौन-सा है?",
+        options: ["(a) स्पाइका पट्टी (Spica Bandage)", "(b) 8 के आकार की पट्टी (Figure of 8 Bandage)", "(c) त्रिकोणी पट्टी (Triangular Bandage)", "(d) गोल पट्टी"],
+        correct: 1
+    },
+    {
+        id: 38,
+        question: "विषैले सर्प के काटने पर प्राथमिक उपचार में क्या नहीं करना चाहिए?",
+        options: ["(a) पीड़ित को शांत रखना", "(b) काटे गए स्थान के ऊपर कसकर बंधन लगाना और चीरा लगाना", "(c) घाव को साफ पानी से धोना", "(d) पीड़ित को तुरंत अस्पताल ले जाना"],
+        correct: 1
+    },
+    {
+        id: 39,
+        question: "वायु द्वारा फैलने वाली बीमारी कौन-सी है?",
+        options: ["(a) मलेरिया", "(b) चेचक / खसरा (Measles)", "(c) पोलियो", "(d) फाइलेरिया"],
+        correct: 1
+    },
+    {
+        id: 40,
+        question: "जल के शुद्धिकरण के लिए प्रयुक्त 'ब्लिचिंग पाउडर' का रासायनिक नाम क्या है?",
+        options: ["(a) सोडियम क्लोराइड", "(b) कैल्शियम हाइपोक्लोराइट", "(c) कॉपर सल्फेट", "(d) पोटेशियम परमैग्नेट"],
+        correct: 1
+    },
+    {
+        id: 41,
+        question: "रेड क्रॉस सोसाइटी (Red Cross Society) की स्थापना किसने की थी?",
+        options: ["(a) हेनरी ड्यूनेंट (Henry Dunant)", "(b) फ्लोरा नाइटिंगेल", "(c) रॉबर्ट कोच", "(d) लुई पाश्चर"],
+        correct: 0
+    },
+    {
+        id: 42,
+        question: "कृत्रिम श्वसन की 'हॉल्गर नेल्सन विधि' (Holger Nielsen Method) में रोगी को किस स्थिति में लिटाया जाता है?",
+        options: ["(a) पीठ के बल (Supine Position)", "(b) पेट के बल (Prone Position)", "(c) करवट लेकर", "(d) बैठाकर"],
+        correct: 1
+    },
+    {
+        id: 43,
+        question: "पर्यावरण संरक्षण अधिनियम भारत में किस वर्ष लागू किया गया था?",
+        options: ["(a) 1972", "(b) 1986", "(c) 1992", "(d) 2005"],
+        correct: 1
+    },
+    {
+        id: 44,
+        question: "'डेंगी' (Dengue) बुखार का संचरण किस मच्छर के काटने से होता है?",
+        options: ["(a) एनोफिलीज (Anopheles)", "(b) एडीज एजिप्टी (Aedes aegypti)", "(c) क्यूलेक्स (Culex)", "(d) मंसोनिया"],
+        correct: 1
+    },
+    {
+        id: 45,
+        question: "यूनिसेफ (UNICEF) का मुख्य कार्य क्या है?",
+        options: ["(a) केवल औद्योगिक विकास", "(b) बच्चों एवं माताओं के स्वास्थ्य व कल्याण की देखरेख", "(c) कृषि उत्पादन बढ़ाना", "(d) विश्व शांति बनाए रखना"],
+        correct: 1
+    },
+    {
+        id: 46,
+        question: "विकास का 'मस्तकाधोमुखी' (Cephalocaudal) नियम क्या दर्शाता है?",
+        options: ["(a) विकास पैर से सिर की ओर होता है", "(b) विकास सिर से पैर की ओर होता है", "(c) विकास केंद्र से बाहर की ओर होता है", "(d) विकास सामान्य से विशिष्ट की ओर होता है"],
+        correct: 1
+    },
+    {
+        id: 47,
+        question: "शिशु मृत्यु दर (IMR) की गणना प्रति कितनी जीवित जन्मों पर की जाती है?",
+        options: ["(a) 100", "(b) 1,000", "(c) 10,000", "(d) 1,00,000"],
+        correct: 1
+    },
+    {
+        id: 48,
+        question: "<b>कथन (A):</b> जीन पियाजे के अनुसार पूर्व-संक्रियात्मक अवस्था (Pre-operational Stage) 2 से 7 वर्ष तक होती है।<br><br><b>कारण (R):</b> इस अवस्था में बच्चा अमूर्त चिंतन (Abstract Thinking) करने में पूरी तरह सक्षम हो जाता है।<br><br><b>कूट :</b>",
+        options: ["(a) (A) और (R) दोनों सही हैं।", "(b) (A) सही है, परन्तु (R) गलत है।", "(c) (A) गलत है, परन्तु (R) सही है।", "(d) (A) और (R) दोनों गलत हैं।"],
+        correct: 1
+    },
+    {
+        id: 49,
+        question: "गर्भकालीन विकास की पहली अवस्था (0-2 सप्ताह) को क्या कहा जाता है?",
+        options: ["(a) भ्रूणावस्था (Embryonic Stage)", "(b) डिंभावस्था / बीजावस्था (Germinal/Zygotic Stage)", "(c) गर्भावस्था (Fetal Stage)", "(d) शैशवावस्था"],
+        correct: 1
+    },
+    {
+        id: 50,
+        question: "बाल विवाह निरोधक अधिनियम (Sharada Act) सर्वप्रथम किस वर्ष पारित किया गया था?",
+        options: ["(a) 1929", "(b) 1955", "(c) 1978", "(d) 2006"],
+        correct: 0
+    },
+    {
+        id: 51,
+        question: "एप्गर स्कोर (Apgar Score) का प्रयोग नवजात शिशु में किसकी जांच के लिए किया जाता है?",
+        options: ["(a) बौद्धिक क्षमता", "(b) शारीरिक स्थिति (धड़कन, श्वसन, रंग, टोन)", "(c) सामाजिक समायोजन", "(d) भाषा विकास"],
+        correct: 1
+    },
+    {
+        id: 52,
+        question: "'मातृ मृत्यु दर' (MMR) का मुख्य कारण भारत में क्या माना जाता है?",
+        options: ["(a) एनीमिया और गर्भावस्था सम्बंधी जटिलताएँ (रक्तस्राव)", "(b) मोटापा", "(c) मधुमेह", "(d) अत्यधिक विश्राम"],
+        correct: 0
+    },
+    {
+        id: 53,
+        question: "विशेष रूप से प्राथमिक/विद्यालयी बालकों के स्वास्थ्य परीक्षण हेतु 'विद्यालयी स्वास्थ्य सेवा' का मुख्य घटक क्या है?",
+        options: ["(a) केवल वार्षिक परीक्षा", "(b) नियमित शारीरिक जांच, टीकाकरण एवं पोषण आहार योजना", "(c) केवल खेलकूद", "(d) कंप्यूटर शिक्षा"],
+        correct: 1
+    },
+    {
+        id: 54,
+        question: "नवजात शिशु का पहला गाढ़ा पीला दूध क्या कहलाता है जो प्रतिरक्षा प्रदान करता है?",
+        options: ["(a) फोरमिल्क", "(b) कोलोस्ट्रम (Colostrum)", "(c) हिंडमिल्क", "(d) केसीन"],
+        correct: 1
+    },
+    {
+        id: 55,
+        question: "हिंदू विवाह अधिनियम (Hindu Marriage Act) किस वर्ष लागू हुआ?",
+        options: ["(a) 1950", "(b) 1955", "(c) 1961", "(d) 1986"],
+        correct: 1
+    },
+    {
+        id: 56,
+        question: "सुमेलित कीजिए:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I (अवस्था)</b><br>A. शैशवावस्था<br>B. बाल्यावस्था<br>C. किशोरावस्था<br>D. प्रौढ़ावस्था</td><td style='width:50%; vertical-align:top;'><b>सूची-II (विशेषता)</b><br>1. गंदी उम्र / समूह निर्माण<br>2. तीव्र शारीरिक वृद्धि व निर्भरता<br>3. पहचान का संकट / आँधी-तूफान की अवस्था<br>4. उत्पादकता बनाम स्थिरता</td></tr></table><br><b>कूट :</b>",
+        options: ["(a) A-2, B-1, C-3, D-4", "(b) A-1, B-2, C-3, D-4", "(c) A-2, B-3, C-1, D-4", "(d) A-3, B-1, C-2, D-4"],
+        correct: 0
+    },
+    {
+        id: 57,
+        question: "नवजात शिशु में जन्म के समय कौन-सी सहज क्रिया (Reflex) गाल छूने पर मुंह मोड़ने से सम्बंधित है?",
+        options: ["(a) मोरो (Moro)", "(b) रूटिंग (Rooting)", "(c) बाबिन्स्की (Babinski)", "(d) ग्रास्पिंग (Grasping)"],
+        correct: 1
+    },
+    {
+        id: 58,
+        question: "एकाकी परिवार (Nuclear Family) की मुख्य विशेषता क्या है?",
+        options: ["(a) तीन-चार पीढ़ियों के सदस्य एक साथ रहना", "(b) पति, पत्नी और उनके अविवाहित बच्चे", "(c) केवल वृद्ध माता-पिता", "(d) समुदाय आधारित निवास"],
+        correct: 1
+    },
+    {
+        id: 59,
+        question: "'बाल रूगणता' (Child Morbidity) का क्या अर्थ है?",
+        options: ["(a) बच्चों की मृत्यु दर", "(b) बच्चों में बीमारी या अस्वस्थता की दर", "(c) बच्चों की जन्म दर", "(d) बच्चों का वजन"],
+        correct: 1
+    },
+    {
+        id: 60,
+        question: "एरिक्सन के मनोसामाजिक विकास सिद्धांत के अनुसार बाल्यावस्था में कौन-सा द्वंद्व होता है?",
+        options: ["(a) विश्वास बनाम अविश्वास", "(b) उद्योग बनाम हीनता (Industry vs. Inferiority)", "(c) स्वायत्तता बनाम शर्म", "(d) पहचान बनाम भूमिका भ्रांति"],
+        correct: 1
+    },
+    {
+        id: 61,
+        question: "वस्त्र विज्ञान में \"रेशों का राजा\" (King of Fibers) किसे कहा जाता है?",
+        options: ["(a) रेशम (Silk)", "(b) कपास (Cotton)", "(c) ऊन (Wool)", "(d) नायलॉन"],
+        correct: 1
+    },
+    {
+        id: 62,
+        question: "<b>कथन (A):</b> नायलॉन को 'वॉश एंड वियर' या ताप-सुघट्य (Thermoplastic) रेशा कहा जाता है।<br><br><b>कारण (R):</b> नायलॉन एक मानव निर्मित सिंथेटिक पॉलीमाइड रेशा है जो गर्मी से पिघल सकता है।<br><br><b>कूट :</b>",
+        options: ["(a) (A) और (R) दोनों सही हैं तथा (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परन्तु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परन्तु (R) गलत है।", "(d) (A) गलत है, परन्तु (R) सही है।"],
+        correct: 0
+    },
+    {
+        id: 63,
+        question: "रेयान (Rayon) के निर्माण में मुख्य कच्चा माल (Raw Material) क्या प्रयोग होता है?",
+        options: ["(a) पेट्रोकेमिकल्स", "(b) कॉटन लिनटर्स/लकड़ी की लुगदी (Cellulose)", "(c) कोयला एवं जल", "(d) प्रोटीन"],
+        correct: 1
+    },
+    {
+        id: 64,
+        question: "वस्त्रों की बुनाई (Weaving) में ताने (Warp) और बाने (Weft) के धागों का एक-दूसरे को समकोण पर काटना क्या कहलाता है?",
+        options: ["(a) इंटरलूपिंग", "(b) इंटरलैसिंग (Interlacing)", "(c) फेल्टिंग", "(d) बॉन्डिंग"],
+        correct: 1
+    },
+    {
+        id: 65,
+        question: "सूती वस्त्रों पर चमक और मजबूती बढ़ाने के लिए कौन-सी परिसज्जा (Finishing) की जाती है?",
+        options: ["(a) मर्सराइजिंग (Mercerization)", "(b) सैनफराइजिंग (Sanforization)", "(c) साइजिंग", "(d) कैलेंडरिंग"],
+        correct: 0
+    },
+       {
+        id: 66,
+        question: "सूची-I (पारंपरिक वस्त्र) को सूची-II (राज्य) से सुमेलित कीजिए:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I</b><br>A. बांथनी/बांधेज<br>B. चिकनकारी<br>C. कांता<br>D. फूलकारी</td><td style='width:50%; vertical-align:top;'><b>सूची-II</b><br>1. उत्तर प्रदेश (लखनऊ)<br>2. राजस्थान/गुजरात<br>3. पंजाब<br>4. पश्चिम बंगाल</td></tr></table><br><b>कूट :</b>",
+        options: ["(a) A-2, B-1, C-4, D-3", "(b) A-1, B-2, C-3, D-4", "(c) A-2, B-4, C-1, D-3", "(d) A-3, B-1, C-2, D-4"],
+        correct: 0
+    },
+    {
+        id: 67,
+        question: "रेशम के कीड़े (Silkworm) का जीवन चक्र का सही क्रम क्या है?",
+        options: ["(a) अंडा → प्यूपा → लावा → कीड़ा", "(b) अंडा (Egg) → लार्वा (Larva) → प्यूपा (Pupa) → वयस्क/कीड़ा (Moth)", "(c) लार्वा → प्यूपा → अंडा → कीड़ा", "(d) प्यूपा → लार्वा → अंडा → कीड़ा"],
+        correct: 1
+    },
+    {
+        id: 68,
+        question: "'सैनफराइजिंग' (Sanforization) परिसज्जा का मुख्य उद्देश्य क्या है?",
+        options: ["(a) कपड़े में चमक लाना", "(b) कपड़े को सिकुड़न से बचाना (Shrink Resistance)", "(c) जल-भेदक बनाना", "(d) कीड़ों से बचाना"],
+        correct: 1
+    },
+    {
+        id: 69,
+        question: "कपड़े पर लगे चाय या कॉफ़ी के धब्बे को हटाने के लिए किसका प्रयोग किया जाता है?",
+        options: ["(a) उबलता पानी एवं बोरेक्स/साबुन", "(b) ऑक्जेलिक एसिड", "(c) पेट्रोल", "(d) ब्लीचिंग पाउडर"],
+        correct: 0
+    },
+    {
+        id: 70,
+        question: "मोटे और नाटे (Short & Stout) व्यक्ति के लिए किस प्रकार के प्रिंट और रेखाओं वाले वस्त्र उपयुक्त रहते हैं?",
+        options: ["(a) बड़ी-बड़ी आकृतियों वाले एवं आड़ी रेखाओं (Horizontal Lines) वाले", "(b) लंबवत/खड़ी रेखाओं (Vertical Lines) और छोटे प्रिंट वाले", "(c) चौड़े बार्डर वाले", "(d) तिरछी रेखाओं वाले भारी वस्त्र"],
+        correct: 1
+    },
+    {
+        id: 71,
+        question: "ऊनी वस्त्रों की धुलाई में किस प्रकार के डिटर्जेंट या साबुन का प्रयोग करना चाहिए?",
+        options: ["(a) तीव्र क्षारीय साबुन", "(b) मृदु या उदासीन (Neutral) रीठा/रीठा युक्त घोल", "(c) ब्लीच युक्त पाउडर", "(d) कॉस्टिक सोड़ा"],
+        correct: 1
+    },
+    {
+        id: 72,
+        question: "कपड़े की बुनाई की बुनियादी इकाई क्या है?",
+        options: ["(a) सादा बुनाई (Plain Weave)", "(b) टवील बुनाई (Twill Weave)", "(c) साटन बुनाई (Satin Weave)", "(d) बास्केट बुनाई"],
+        correct: 0
+    },
+    {
+        id: 73,
+        question: "जापानी पुष्प सज्जा 'इकेबाना' (Ikebana) में 'शिन' (Shin) टहनी किसका प्रतीक है?",
+        options: ["(a) मनुष्य", "(b) पृथ्वी", "(c) स्वर्ग (Heaven)", "(d) वायु"],
+        correct: 2
+    },
+    {
+        id: 74,
+        question: "'प्रोटीन रेशा' (Protein Fiber) की श्रेणी में कौन-कौन से रेशे आते हैं?",
+        options: ["(a) कपास और लिनन", "(b) रेशम और ऊन", "(c) रेयान और नायलॉन", "(d) जूट और हेम्प"],
+        correct: 1
+    },
+    {
+        id: 75,
+        question: "वस्त्र निर्माण में 'ड्राफ्टिंग' (Drafting) का क्या अर्थ है?",
+        options: ["(a) कपड़े की कटाई करना", "(b) शरीर के नाप के अनुसार कागज पर पैटर्न/खाका बनाना", "(c) कपड़े पर सिलाई करना", "(d) कपड़े की धुलाई करना"],
+        correct: 1
+    },
+    {
+        id: 76,
+        question: "'प्रसार शिक्षा' (Extension Education) शब्द का प्रयोग सर्वप्रथम किस विश्वविद्यालय में हुआ था?",
+        options: ["(a) कैम्ब्रिज विश्वविद्यालय (1873)", "(b) ऑक्सफोर्ड विश्वविद्यालय", "(c) हार्वर्ड विश्वविद्यालय", "(d) दिल्ली विश्वविद्यालय"],
+        correct: 0
+    },
+    {
+        id: 77,
+        question: "प्रसार शिक्षा का मूल दर्शन (Basic Philosophy) क्या है?",
+        options: ["(a) दूसरों पर निर्भर बनाना", "(b) \"स्वयं की सहायता करना\" (Helping people to help themselves)", "(c) केवल आर्थिक अनुदान देना", "(d) किताबी ज्ञान देना"],
+        correct: 1
+    },
+    {
+        id: 78,
+        question: "<b>कथन (A):</b> प्रसार शिक्षा एक अनौपचारिक और लचीली (Informal and Flexible) शिक्षा प्रणाली है।<br><br><b>कारण (R):</b> इसका कोई निश्चित पाठ्यक्रम या परीक्षा प्रणाली नहीं होती और यह ग्रामीणों की आवश्यकताओं पर आधारित होती है।<br><br><b>कूट :</b>",
+        options: ["(a) (A) और (R) दोनों सही हैं तथा (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परन्तु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परन्तु (R) गलत है।", "(d) (A) गलत है, परन्तु (R) सही है।"],
+        correct: 0
+    },
+    {
+        id: 79,
+        question: "प्रसार शिक्षण की 'अडॉपशन प्रोसेस' (Adoption Process - AIETA) का सही क्रम क्या है?",
+        options: ["(a) ध्यानाकर्षण (Awareness) → रुचि (Interest) → मूल्यांकन (Evaluation) → परीक्षण (Trial) → स्वीकार्यता (Adoption)", "(b) रुचि → ध्यान → परीक्षण → मूल्यांकन → स्वीकार्यता", "(c) स्वीकार्यता → परीक्षण → मूल्यांकन → रुचि → ध्यान", "(d) मूल्यांकन → ध्यान → रुचि → परीक्षण → स्वीकार्यता"],
+        correct: 0
+    },
+    {
+        id: 80,
+        question: "भारत में 'सामुदायिक विकास कार्यक्रम' (CDP) की शुरुआत किस वर्ष हुई थी?",
+        options: ["(a) 15 अगस्त 1947", "(b) 2 अक्टूबर 1952", "(c) 26 जनवरी 1950", "(d) 2 अक्टूबर 1959"],
+        correct: 1
+    },
+    {
+        id: 81,
+        question: "प्रसार शिक्षण विधियों में 'कठपुतली' (Puppet) और 'नाटक' किस प्रकार के साधन हैं?",
+        options: ["(a) केवल दृश्य साधन (Visual)", "(b) केवल श्रव्य साधन (Audio)", "(c) श्रव्य-दृश्य साधन (Audio-Visual)", "(d) प्रक्षेपित साधन (Projected)"],
+        correct: 2
+    },
+    {
+        id: 82,
+        question: "सूची-I (कार्यक्रम) को सूची-II (शुरुआत का वर्ष/व्यक्ति) से सुमेलित कीजिए:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I</b><br>A. श्रीनिकेतन योजना<br>B. गुड़गांव प्रोजेक्ट<br>C. मारथेंडम प्रयास<br>D. सेवाग्राम</td><td style='width:50%; vertical-align:top;'><b>सूची-II</b><br>1. एफ. एल. ब्रायन<br>2. रवीन्द्रनाथ टैगोर<br>3. स्पेंसर हैच<br>4. महात्मा गांधी</td></tr></table><br><b>कूट :</b>",
+        options: ["(a) A-2, B-1, C-3, D-4", "(b) A-1, B-2, C-3, D-4", "(c) A-2, B-3, C-4, D-1", "(d) A-4, B-1, C-2, D-3"],
+        correct: 0
+    },
+    {
+        id: 83,
+        question: "'गृह विज्ञान' (Home Science) विषय का प्राथमिक उद्देश्य क्या है?",
+        options: ["(a) केवल खाना बनाना सिखाना", "(b) पारिवारिक जीवन को अधिक सुखी, कुशल एवं वैज्ञानिक बनाना", "(c) केवल सिलाई-कढ़ाई सिखाना", "(d) केवल नौकरियों के अवसर प्रदान करना"],
+        correct: 1
+    },
+    {
+        id: 84,
+        question: "फ्लैनल ग्राफ (Flannel Graph) और फ्लैश कार्ड (Flash Cards) किस प्रकार की शिक्षण सामग्री हैं?",
+        options: ["(a) प्रक्षेपित दृश्य सामग्री (Projected Visual)", "(b) अप्रक्षेपित दृश्य सामग्री (Non-Projected Visual)", "(c) श्रव्य सामग्री", "(d) त्रि-आयामी (3D) सामग्री"],
+        correct: 1
+    },
+    {
+        id: 85,
+        question: "प्रसार कार्यकर्ता (Extension Worker) का सबसे महत्वपूर्ण गुण क्या होना चाहिए?",
+        options: ["(a) उच्च प्रशासनिक पद", "(b) ग्रामीणों के प्रति सहानुभूति, विषय ज्ञान एवं संचार कुशलता", "(c) केवल भाषण देने की कला", "(d) कठोर अनुशासन"],
+        correct: 1
+    },
+    {
+        id: 86,
+        question: "जनसंपर्क (Mass Contact) की प्रसार विधि कौन-सी है?",
+        options: ["(a) फॉर्म व घर पर भेंट (Farm & Home Visit)", "(b) रेडियो, समाचार पत्र एवं टेलीविजन", "(c) परिणाम प्रदर्शन (Result Demonstration)", "(d) समूह चर्चा (Group Discussion)"],
+        correct: 1
+    },
+    {
+        id: 87,
+        question: "'विधि प्रदर्शन' (Method Demonstration) का मुख्य उद्देश्य क्या सिखाना होता है?",
+        options: ["(a) किसी नई तकनीक को 'करके दिखाना' (How to do)", "(b) किसी नई तकनीक का अंतिम परिणाम दिखाना", "(c) केवल सैद्धांतिक जानकारी देना", "(d) कानून की जानकारी देना"],
+        correct: 0
+    },
+    {
+        id: 88,
+        question: "भारत में गृह विज्ञान विषय की शुरुआत सबसे पहले किस कॉलेज में हुई थी?",
+        options: ["(a) लेडी इरविन कॉलेज, नई दिल्ली (1932)", "(b) वूमेन्स क्रिश्चियन कॉलेज, चेन्नई", "(c) एस.एन.डी.टी. विश्वविद्यालय, मुंबई", "(d) कृषि विश्वविद्यालय, पंतनगर"],
+        correct: 0
+    },
+    {
+        id: 89,
+        question: "प्रसार शिक्षा का मुख्य क्षेत्र (Scope) कौन-सा है?",
+        options: ["(a) मानव संसाधनों का विकास एवं ग्रामीण उत्थान", "(b) केवल शहरी क्षेत्रों का विकास", "(c) केवल भारी उद्योगों की स्थापना", "(d) केवल सैन्य प्रशिक्षण"],
+        correct: 0
+    },
+    {
+        id: 90,
+        question: "'समेकित बाल विकास सेवा' (ICDS) योजना किस वर्ष शुरू की गई थी?",
+        options: ["(a) 1975", "(b) 1982", "(c) 1990", "(d) 2001"],
+        correct: 0
+    },
+    {
+        id: 91,
+        question: "निम्नलिखित घटनाओं को उनके कालानुक्रम (Chronological Order) के अनुसार व्यवस्थित कीजिए:<br><br>1. जलियांवाला बाग हत्याकांड<br>2. असहयोग आंदोलन की शुरुआत<br>3. चौरी-चौरा कांड<br>4. रोलेट एक्ट का पारित होना<br><br><b>कूट :</b>",
+        options: ["(a) 4, 1, 2, 3", "(b) 1, 4, 2, 3", "(c) 4, 2, 1, 3", "(d) 1, 2, 4, 3"],
+        correct: 0
+    },
+    {
+        id: 92,
+        question: "मौर्य काल में 'समाहर्ता' (Samaharta) नामक अधिकारी का मुख्य कार्य क्या था?",
+        options: ["(a) सैन्य विभाग का प्रमुख", "(b) राजस्व संग्रह (Revenue Collection)", "(c) न्याय व्यवस्था की देखरेख", "(d) गुप्तचर विभाग का संचालन"],
+        correct: 1
+    },
+    {
+        id: 93,
+        question: "'सत्यशोधक समाज' की स्थापना निम्नलिखित में से किसने की थी?",
+        options: ["(a) स्वामी दयानंद सरस्वती", "(b) ज्योतिबा फुले", "(c) राजा राममोहन राय", "(d) ईश्वरचंद्र विद्यासागर"],
+        correct: 1
+    },
+    {
+        id: 94,
+        question: "दिल्ली सल्तनत के किस शासक ने 'दीवान-ए-अमीर कोही' (कृषि विभाग) की स्थापना की थी?",
+        options: ["(a) अलाउद्दीन खिलजी", "(b) मोहम्मद बिन तुगलक", "(c) फिरोज शाह तुगलक", "(d) बलबन"],
+        correct: 1
+    },
+    {
+        id: 95,
+        question: "बुद्ध के जीवन की किस घटना को 'महाभिनिष्क्रमण' कहा जाता है?",
+        options: ["(a) उनका प्रथम उपदेश", "(b) उनका गृहत्याग", "(c) उन्हें ज्ञान प्राप्ति", "(d) उनका देहावसान"],
+        correct: 1
+    },
+    {
+        id: 96,
+        question: "निम्नलिखित में से कौन-सी नदी पश्चिमी घाट से निकलकर 'अरब सागर' में गिरती है?",
+        options: ["(a) गोदावरी", "(b) कावेरी", "(c) पेरियार", "(d) कृष्णा"],
+        correct: 2
+    },
+    {
+        id: 97,
+        question: "भारत में निम्नलिखित में से किस मिट्टी को 'रेगुर मिट्टी' (Regur Soil) भी कहा जाता है?",
+        options: ["(a) जलोढ़ मिट्टी", "(b) लाल मिट्टी", "(c) काली मिट्टी", "(d) लैटेराइट मिट्टी"],
+        correct: 2
+    },
+    {
+        id: 98,
+        question: "सूची-I (राष्ट्रीय उद्यान) को सूची-II (राज्य) से सुमेलित कीजिए:<br><br><table style='width:100%; border:none; border-collapse:collapse;' cellpadding='4'><tr><td style='width:50%; vertical-align:top;'><b>सूची-I</b><br>A. काजीरंगा<br>B. जिम कॉर्बेट<br>C. गिर<br>D. रणथंभौर</td><td style='width:50%; vertical-align:top;'><b>सूची-II</b><br>1. उत्तराखंड<br>2. असम<br>3. राजस्थान<br>4. गुजरात</td></tr></table><br><b>कूट :</b>",
+        options: ["(a) A-2, B-1, C-4, D-3", "(b) A-1, B-2, C-3, D-4", "(c) A-2, B-4, C-1, D-3", "(d) A-4, B-1, C-2, D-3"],
+        correct: 0
+    },
+    {
+        id: 99,
+        question: "'जोजी ला' (Zoji La) दर्रा भारत के किस राज्य/केंद्र शासित प्रदेश में स्थित है?",
+        options: ["(a) हिमाचल प्रदेश", "(b) लद्दाख", "(c) सिक्किम", "(d) उत्तराखंड"],
+        correct: 1
+    },
+    {
+        id: 100,
+        question: "भारत में 'दक्षिण-पश्चिम मानसून' के आगमन का सामान्य क्रम क्या है?",
+        options: ["(a) सबसे पहले केरल तट, फिर उत्तर भारत", "(b) सबसे पहले गुजरात, फिर दक्षिण भारत", "(c) सबसे पहले ओडिशा, फिर पश्चिमी घाट", "(d) पूरे भारत में एक साथ"],
+        correct: 0
+    },
+    {
+        id: 101,
+        question: "भारतीय संविधान का 'अनुच्छेद 51A' मूल कर्तव्यों (Fundamental Duties) से संबंधित है। इसे किस संविधान संशोधन द्वारा जोड़ा गया था?",
+        options: ["(a) 44वें संशोधन अधिनियम", "(b) 42वें संशोधन अधिनियम", "(c) 86वें संशोधन अधिनियम", "(d) 73वें संशोधन अधिनियम"],
+        correct: 1
+    },
+    {
+        id: 102,
+        question: "राज्य के नीति निदेशक तत्वों (DPSP) के अंतर्गत 'समान नागरिक संहिता' (Uniform Civil Code) का प्रावधान किस अनुच्छेद में है?",
+        options: ["(a) अनुच्छेद 40", "(b) अनुच्छेद 44", "(c) अनुच्छेद 48", "(d) अनुच्छेद 50"],
+        correct: 1
+    },
+    {
+        id: 103,
+        question: "<b>कथन (A):</b> भारत का राष्ट्रपति संसद का एक अभिन्न अंग होता है।<br><br><b>कारण (R):</b> संसद द्वारा पारित कोई भी विधेयक राष्ट्रपति की सहमति के बिना कानून नहीं बन सकता।<br><br><b>कूट :</b>",
+        options: ["(a) (A) और (R) दोनों सही हैं तथा (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परन्तु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परन्तु (R) गलत है।", "(d) (A) गलत है, परन्तु (R) सही है।"],
+        correct: 0
+    },
+    {
+        id: 104,
+        question: "किसी राज्य में 'राष्ट्रपति शासन' (अनुच्छेद 356) की अधिकतम अवधि (संसद द्वारा बार-बार अनुमोदन के साथ) कितनी हो सकती है?",
+        options: ["(a) 1 वर्ष", "(b) 2 वर्ष", "(c) 3 वर्ष", "(d) 6 महीने"],
+        correct: 2
+    },
+    {
+        id: 105,
+        question: "लोकसभा का अध्यक्ष (Speaker) अपना त्यागपत्र किसे सौंपता है?",
+        options: ["(a) भारत के राष्ट्रपति को", "(b) प्रधानमंत्री को", "(c) लोकसभा के उपाध्यक्ष (Deputy Speaker) को", "(d) भारत के मुख्य न्यायाधीश को"],
+        correct: 2
+    },
+    {
+        id: 106,
+        question: "भारत में 'रेपो दर' (Repo Rate) और 'रिवर्स रेपो दर' का निर्धारण किसके द्वारा किया जाता है?",
+        options: ["(a) भारतीय स्टेट बैंक (SBI)", "(b) भारतीय रिज़र्व बैंक (RBI)", "(c) वित्त मंत्रालय", "(d) नीति आयोग"],
+        correct: 1
+    },
+    {
+        id: 107,
+        question: "प्रच्छन्न बेरोजगारी (Disguised Unemployment) का मुख्य लक्षण क्या है?",
+        options: ["(a) श्रमिकों की सीमांत उत्पादकता (Marginal Productivity) शून्य होती है", "(b) केवल शहरी क्षेत्रों में पाई जाती है", "(c) श्रमिकों की कमी होना", "(d) वेतन बहुत अधिक होना"],
+        correct: 0
+    },
+    {
+        id: 108,
+        question: "नीति आयोग (NITI Aayog) के संदर्भ में 'NITI' का सही पूर्ण रूप (Full Form) क्या है?",
+        options: ["(a) National Institute for Transforming India", "(b) National Institution for Transforming India", "(c) New Initiative for Transforming India", "(d) National Industry Training Institute"],
+        correct: 1
+    },
+    {
+        id: 109,
+        question: "'जीएसटी' (GST - माल एवं सेवा कर) भारत में किस प्रकार का कर है?",
+        options: ["(a) प्रत्यक्ष कर (Direct Tax)", "(b) अप्रत्यक्ष कर (Indirect Tax)", "(c) केवल प्रगतिशील कर", "(d) आयकर का हिस्सा"],
+        correct: 1
+    },
+    {
+        id: 110,
+        question: "'सकल घरेलू उत्पाद' (GDP) से क्या तात्पर्य है?",
+        options: ["(a) किसी देश में एक वर्ष में उत्पादित सभी अंतिम वस्तुओं और सेवाओं का कुल मौद्रिक मूल्य", "(b) केवल विदेशों से प्राप्त आय", "(c) देश के निवासियों द्वारा विदेशों में किया गया व्यय", "(d) केवल कृषि क्षेत्र का कुल उत्पादन"],
+        correct: 0
+    },
+    {
+        id: 111,
+        question: "समतल दर्पण (Plane Mirror) द्वारा बना प्रतिबिंब कैसा होता है?",
+        options: ["(a) वास्तविक और उल्टा", "(b) आभासी, सीधा और वस्तु के बराबर आकार का", "(c) वास्तविक और बड़ा", "(d) आभासी और उल्टा"],
+        correct: 1
+    },
+    {
+        id: 112,
+        question: "मानव शरीर की सबसे बड़ी ग्रंथि (Largest Gland) कौन-सी है?",
+        options: ["(a) अग्न्याशय (Pancreas)", "(b) यकृत (Liver)", "(c) थायराइड", "(d) पीयूष ग्रंथि"],
+        correct: 1
+    },
+    {
+        id: 113,
+        question: "'ध्वनि की तीव्रता' (Intensity of Sound) मापने की मानक इकाई क्या है?",
+        options: ["(a) हर्ट्ज (Hz)", "(b) डेसिबल (dB)", "(c) वाट", "(d) एम्पीयर"],
+        correct: 1
+    },
+    {
+        id: 114,
+        question: "रसोई गैस सिलेंडरों (LPG) में गैस के रिसाव (Leakage) का पता लगाने के लिए उसमें कौन-सा गंधयुक्त पदार्थ मिलाया जाता है?",
+        options: ["(a) एथिल मरकैप्टन (Ethyl Mercaptan)", "(b) मीथेन", "(c) कार्बन मोनोऑक्साइड", "(d) एथेन"],
+        correct: 0
+    },
+    {
+        id: 115,
+        question: "पौधों में जड़ों द्वारा अवशोषित जल और खनिजों को पत्तियों तक पहुँचाने का कार्य कौन-सा ऊतक (Tissue) करता है?",
+        options: ["(a) फ्लोएम (Phloem)", "(b) जाइलम (Xylem)", "(c) कैम्बियम", "(d) स्टोमेटा"],
+        correct: 1
+    },
+    {
+        id: 116,
+        question: "'ओजोन परत' (Ozone Layer) वायुमंडल की किस परत में पाई जाती है?",
+        options: ["(a) क्षोभमंडल (Troposphere)", "(b) समतापमंडल (Stratosphere)", "(c) मध्यमंडल (Mesosphere)", "(d) बाह्यमंडल (Exosphere)"],
+        correct: 1
+    },
+    {
+        id: 117,
+        question: "निम्नलिखित में से कौन-सी गैस मुख्य 'ग्रीनहाउस गैस' (Greenhouse Gas) नहीं है?",
+        options: ["(a) कार्बन डाइऑक्साइड (CO2)", "(b) मीथेन (CH4)", "(c) नाइट्रोजन (N2)", "(d) जलवाष्प"],
+        correct: 2
+    },
+    {
+        id: 118,
+        question: "'चिपको आंदोलन' (Chipko Movement) का संबंध मुख्य रूप से किससे था?",
+        options: ["(a) जल संरक्षण", "(b) वृक्षों/वनों की कटाई रोकने से", "(c) वन्यजीव शिकार रोकने से", "(d) मृदा अपरदन से"],
+        correct: 1
+    },
+    {
+        id: 119,
+        question: "किसी पारिस्थितिकी तंत्र (Ecosystem) में ऊर्जा का प्रवाह हमेशा कैसा होता है?",
+        options: ["(a) एकदिशीय (Unidirectional)", "(b) द्विदिशीय", "(c) बहुदिशीय", "(d) चक्रीय"],
+        correct: 0
+    },
+    {
+        id: 120,
+        question: "'बायोलॉजिकल ऑक्सीजन डिमांड' (BOD) परीक्षण का प्रयोग किसके मापन के लिए किया जाता है?",
+        options: ["(a) वायु प्रदूषण", "(b) जल में जैविक प्रदूषण (Water Pollution)", "(c) मृदा क्षरण", "(d) ध्वनि प्रदूषण"],
+        correct: 1
+          }       
+        ];
+    </script>
+
+    <!-- ✅ JS लॉजिक फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+                  </html>
+
+
+
 
