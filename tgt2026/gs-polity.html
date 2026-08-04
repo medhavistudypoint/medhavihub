@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>राजव्यवस्था - GS पोर्टल</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
+        .hero { background: linear-gradient(135deg, #0b1e47, #1e3a8a); color: white; padding: 30px 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+        .hero h1 { font-size: 24px; margin: 0; color: #ffcc00; }
+        .container { max-width: 800px; margin: 20px auto 40px; padding: 0 15px; }
+        .back-btn { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 14px; }
+        .section-title { font-size: 18px; color: #0b1e47; border-bottom: 2px solid #0b1e47; padding-bottom: 5px; margin: 25px 0 15px; }
+        .grid { display: flex; flex-direction: column; gap: 12px; }
+        .card { background: white; padding: 15px 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; gap: 10px; }
+        @media (min-width: 600px) { .card { flex-direction: row; align-items: center; } }
+        .card-info { flex: 1; }
+        .card h3 { font-size: 15px; margin: 0 0 4px 0; color: #0b1e47; }
+        .btn-action { display: inline-block; text-align: center; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: bold; min-width: 140px; cursor: pointer; border: none; color: white; }
+        .btn-class { background-color: #2563eb; } .btn-test { background-color: #16a34a; } .btn-pdf { background-color: #d97706; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
+        .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+        .modal-box h3 { margin-top: 0; color: #0b1e47; font-size: 18px; }
+        .modal-box p { font-size: 13px; color: #64748b; margin-bottom: 15px; }
+        .modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; text-align: center; box-sizing: border-box; outline: none; }
+        .modal-box button { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        .btn-submit { background: #16a34a; color: white; margin-bottom: 8px; } .btn-close { background: #e2e8f0; color: #1e293b; margin-top: 6px; }
+    </style>
+</head>
+<body>
+    <div class="hero"><h1>🏛️ भारतीय संविधान व राजव्यवस्था</h1></div>
+    <div class="container">
+        <a href="gs.html" class="back-btn">⬅️ GS मुख्य पेज पर जाएँ</a>
+        
+        <div class="section-title">📚 संपूर्ण संविधान व राजव्यवस्था नोट्स (PDF)</div>
+        <div class="grid">
+            <div class="card"><div class="card-info"><h3>भारतीय संविधान व राजव्यवस्था - संपूर्ण नोट्स PDF</h3></div><button onclick="checkAccess('gspdf/polity-full.html')" class="btn-action btn-pdf">📖 PDF खोलें</button></div>
+        </div>
+
+        <div class="section-title">🎥 वीडियो क्लासेस (10 Classes)</div>
+        <div class="grid">
+            <div class="card"><div class="card-info"><h3>Polity Class - 01</h3></div><button onclick="checkAccess('gsclass/p1.html')" class="btn-action btn-class">▶️ क्लास देखें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Class - 02</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class">▶️ क्लास देखें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Class - 03</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class">▶️ क्लास देखें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Class - 04</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class">▶️ क्लास देखें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Class - 05</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class">▶️ क्लास देखें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Class - 06</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class">▶️ क्लास देखें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Class - 07</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class">▶️ क्लास देखें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Class - 08</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class">▶️ क्लास देखें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Class - 09</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class">▶️ क्लास देखें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Class - 10</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class">▶️ क्लास देखें</button></div>
+        </div>
+
+        <div class="section-title">📝 ऑनलाइन मॉक टेस्ट (20 Tests)</div>
+        <div class="grid">
+            <div class="card"><div class="card-info"><h3>Polity Test - 01</h3></div><button onclick="checkAccess('gstest/pt1.html')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 02</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 03</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 04</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 05</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 06</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 07</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 08</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 09</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 10</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 11</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 12</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 13</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 14</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 15</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 16</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 17</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 18</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 19</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Polity Test - 20</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test">📝 टेस्ट दें</button></div>
+        </div>
+    </div>
+
+    <!-- ऑथेंटिकेशन / लॉगिन पॉप-अप -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3>🔒 GS पेड स्टूडेंट एक्सेस</h3>
+            <p>सामग्री अनलॉक करने के लिए अपना पंजीकृत मोबाइल नंबर दर्ज करें:</p>
+            <input type="tel" id="userMobileInput" placeholder="10 अंकों का मोबाइल नंबर दर्ज करें" maxlength="10">
+            <button onclick="verifyStudent()" class="btn-submit">अनलॉक करें</button>
+            <div id="paymentSection" style="display:none; margin-top:10px; border-top:1px solid #e2e8f0; padding-top:10px;">
+                <p style="color:#d97706; font-weight:bold; font-size:12px; margin-bottom:6px;">फीस जमा करने के लिए नीचे दिए गए QR को स्कैन करें:</p>
+                <img src="qr.png" alt="Payment QR Code" style="width: 150px; height: 150px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 6px;">
+                <div style="font-size:11px; color:#334155; line-height: 1.4;">
+                    <b>पेमेंट के बाद क्या करें?</b><br>स्क्रीनशॉट और अपना मोबाइल नंबर नीचे दिए बटन पर क्लिक करके व्हाट्सएप करें:
+                </div>
+                <a href="https://wa.me/91XXXXXXXXXX?text=नमस्ते%20सर,%20मैंने%20GS%20राजव्यवस्था%20का%20पेमेंट%20कर%20दिया%20है।%20मेरा%20रजिस्टर्ड%20नंबर%20यह%20है:%20" target="_blank" style="display: block; background: #25d366; color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; margin-top: 8px;">💬 WhatsApp पर स्क्रीनशॉट भेजें</a>
+            </div>
+            <p id="authMessage" style="margin: 8px 0; font-size:13px; font-weight:bold;"></p>
+            <button onclick="closeModal()" class="btn-close">बंद करें</button>
+        </div>
+    </div>
+
+<script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec"; 
+    let pendingUrl = null;
+    function checkAccess(url) {
+        if (url === '#' || !url) { alert('⏳ यह जल्द ही उपलब्ध होगा!'); return; }
+        pendingUrl = url;
+        if (localStorage.getItem('tgt_user_verified') === 'true') { window.location.href = url; } 
+        else { document.getElementById('paymentSection').style.display = 'none'; document.getElementById('userMobileInput').value = ''; document.getElementById('authMessage').innerText = ''; document.getElementById('loginModal').style.display = 'flex'; }
+    }
+    function verifyStudent() {
+        const mobile = document.getElementById('userMobileInput').value.trim();
+        const msgBox = document.getElementById('authMessage');
+        const paySec = document.getElementById('paymentSection');
+        paySec.style.display = "none";
+        if (mobile.length !== 10) { msgBox.style.color = "#e11d48"; msgBox.innerText = "कृपया सही 10 अंकों का मोबाइल नंबर डालें!"; return; }
+        let deviceId = localStorage.getItem('user_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 11) + Date.now());
+        localStorage.setItem('user_device_id', deviceId);
+        msgBox.style.color = "#2563eb"; msgBox.innerText = "जाँच हो रही है...";
+        fetch(`${SCRIPT_URL}?mobile=${mobile}&deviceId=${deviceId}`).then(res => res.json()).then(data => {
+            if (data.allowed) {
+                localStorage.setItem('tgt_user_verified', 'true'); localStorage.setItem('tgt_user_mobile', mobile);
+                msgBox.style.color = "#16a34a"; msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
+                setTimeout(() => { closeModal(); if (pendingUrl) window.location.href = pendingUrl; }, 800);
+            } else { msgBox.style.color = "#e11d48"; msgBox.innerText = data.message; if (data.reason === "NOT_FOUND") paySec.style.display = "block"; }
+        }).catch(err => { msgBox.style.color = "#e11d48"; msgBox.innerText = "नेटवर्क खराबी! पुनः प्रयास करें।"; });
+    }
+    function closeModal() { document.getElementById('loginModal').style.display = 'none'; document.getElementById('authMessage').innerText = ''; document.getElementById('paymentSection').style.display = 'none'; }
+</script>
+</body>
+  </html>
+
