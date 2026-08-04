@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GS (सामान्य अध्ययन) पोर्टल</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
+        .hero { background: linear-gradient(135deg, #0b1e47, #1e3a8a); color: white; padding: 35px 20px; text-align: center; border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; box-shadow: 0 4px 12px rgba(11,30,71,0.15); }
+        .hero h1 { font-size: 26px; margin: 0; color: #ffcc00; }
+        .hero p { font-size: 14px; margin-top: 8px; opacity: 0.9; }
+        .container { max-width: 900px; margin: 30px auto 40px; padding: 0 15px; }
+        .back-btn { display: inline-block; margin-bottom: 25px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 14px; }
+        
+        .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .main-card { background: white; padding: 25px 20px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; text-decoration: none; color: inherit; transition: all 0.25s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .main-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-color: #ffcc00; }
+        .main-card i { font-size: 40px; display: block; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <h1>📖 GS (सामान्य अध्ययन) पोर्टल</h1>
+        <p>विषय चुनें और अपनी तैयारी शुरू करें</p>
+    </div>
+
+    <div class="container">
+        <a href="tgt2026.html" class="back-btn">⬅️ TGT मुख्य पेज पर जाएँ</a>
+
+        <div class="main-grid">
+            <!-- 1. भारतीय इतिहास -->
+            <a href="gs-history.html" class="main-card">
+                <i>📜</i>
+                <b style="font-size:18px;">भारतीय इतिहास</b><br>
+                <span style="font-size:13px; color:#64748b;">टेस्ट सीरीज़ एवं PDFs</span>
+            </a>
+
+            <!-- 2. भूगोल -->
+            <a href="gs-geography.html" class="main-card">
+                <i>🌍</i>
+                <b style="font-size:18px;">भारत एवं विश्व का भूगोल</b><br>
+                <span style="font-size:13px; color:#64748b;">टेस्ट सीरीज़ एवं PDFs</span>
+            </a>
+
+            <!-- 3. भारतीय संविधान व राजव्यवस्था -->
+            <a href="gs-polity.html" class="main-card">
+                <i>🏛️</i>
+                <b style="font-size:18px;">भारतीय संविधान व राजव्यवस्था</b><br>
+                <span style="font-size:13px; color:#64748b;">टेस्ट सीरीज़ एवं PDFs</span>
+            </a>
+
+            <!-- 4. सामान्य विज्ञान -->
+            <a href="gs-science.html" class="main-card">
+                <i>🔬</i>
+                <b style="font-size:18px;">सामान्य विज्ञान</b><br>
+                <span style="font-size:13px; color:#64748b;">भौतिक, रसायन व जीव विज्ञान</span>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
+
