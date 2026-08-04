@@ -20,7 +20,17 @@
         }
         .card-info { flex: 1; }
         .card h3 { font-size: 15px; margin: 0 0 4px 0; color: #0b1e47; }
-        .btn-test { background-color: #16a34a; color: white; display: inline-block; text-align: center; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: bold; min-width: 140px; }
+        .btn-test { background-color: #16a34a; color: white; display: inline-block; text-align: center; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: bold; min-width: 140px; cursor: pointer; border: none; }
+
+        /* Modal Popup Styling */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
+        .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .modal-box h3 { margin-top: 0; color: #0b1e47; font-size: 18px; }
+        .modal-box p { font-size: 13px; color: #64748b; margin-bottom: 15px; }
+        .modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; text-align: center; box-sizing: border-box; outline: none; }
+        .modal-box button { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        .btn-submit { background: #16a34a; color: white; margin-bottom: 8px; }
+        .btn-close { background: #e2e8f0; color: #1e293b; }
     </style>
 </head>
 <body>
@@ -30,27 +40,108 @@
     <div class="container">
         <a href="tgt2026.html" class="back-btn">⬅️ TGT मुख्य पेज पर जाएँ</a>
         <div class="grid">
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 01</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 02</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 03</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 04</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 05</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 06</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 07</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 08</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 09</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 10</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 11</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 12</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 13</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 14</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 15</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 16</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 17</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 18</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 19</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
-            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 20</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><a href="#" target="_blank" class="btn-test">अटेंप्ट करें टेस्ट 📝</a></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 01</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 02</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 03</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 04</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 05</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 06</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 07</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 08</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 09</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 10</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 11</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 12</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 13</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 14</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 15</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 16</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 17</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 18</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 19</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>TGT 2026 Full Test - 20</h3><p style="font-size:12px; color:#64748b; margin:0;">125 प्रश्न | 120 मिनट</p></div><button onclick="checkAccess('#')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
         </div>
     </div>
+
+    <!-- ऑथेंटिकेशन / लॉगिन पॉप-अप -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3>🔒 TGT पेड स्टूडेंट एक्सेस</h3>
+            <p>सामग्री अनलॉक करने के लिए अपना पंजीकृत मोबाइल नंबर दर्ज करें:</p>
+            <input type="tel" id="userMobileInput" placeholder="10 अंकों का मोबाइल नंबर दर्ज करें" maxlength="10">
+            <button onclick="verifyStudent()" class="btn-submit">अनलॉक करें</button>
+            <p id="authMessage" style="margin: 8px 0; font-size:13px; font-weight:bold;"></p>
+            <button onclick="closeModal()" class="btn-close">बंद करें</button>
+        </div>
+    </div>
+
+<script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1Rg1CjzNnB9bqXSyF552kFhG87JFk8D_NIRN07gtE7Yft70mQiZfzyeH2P/exec"; 
+
+    let pendingUrl = null;
+
+    function checkAccess(url) {
+        if (url === '#' || !url) {
+            alert('⏳ यह टेस्ट जल्द ही उपलब्ध होगा!');
+            return;
+        }
+
+        pendingUrl = url;
+        const isVerified = localStorage.getItem('tgt_user_verified');
+        
+        if (isVerified === 'true') {
+            window.location.href = url;
+        } else {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+    }
+
+    function verifyStudent() {
+        const mobile = document.getElementById('userMobileInput').value.trim();
+        const msgBox = document.getElementById('authMessage');
+
+        if (mobile.length !== 10) {
+            msgBox.style.color = "#e11d48";
+            msgBox.innerText = "कृपया सही 10 अंकों का मोबाइल नंबर डालें!";
+            return;
+        }
+
+        let deviceId = localStorage.getItem('user_device_id');
+        if (!deviceId) {
+            deviceId = 'DEV-' + Math.random().toString(36).substring(2, 11) + Date.now();
+            localStorage.setItem('user_device_id', deviceId);
+        }
+
+        msgBox.style.color = "#2563eb";
+        msgBox.innerText = "जाँच हो रही है...";
+
+        fetch(`${SCRIPT_URL}?mobile=${mobile}&deviceId=${deviceId}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.allowed) {
+                    localStorage.setItem('tgt_user_verified', 'true');
+                    localStorage.setItem('tgt_user_mobile', mobile);
+                    msgBox.style.color = "#16a34a";
+                    msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
+                    setTimeout(() => {
+                        closeModal();
+                        if (pendingUrl) window.location.href = pendingUrl;
+                    }, 800);
+                } else {
+                    msgBox.style.color = "#e11d48";
+                    msgBox.innerText = data.message;
+                }
+            })
+            .catch(err => {
+                msgBox.style.color = "#e11d48";
+                msgBox.innerText = "नेटवर्क खराबी! पुनः प्रयास करें।";
+            });
+    }
+
+    function closeModal() {
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('authMessage').innerText = '';
+    }
+</script>
 </body>
 </html>
