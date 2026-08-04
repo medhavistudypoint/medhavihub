@@ -24,13 +24,13 @@
 
         /* Modal Popup Styling */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
-        .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .modal-box h3 { margin-top: 0; color: #0b1e47; font-size: 18px; }
         .modal-box p { font-size: 13px; color: #64748b; margin-bottom: 15px; }
         .modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; text-align: center; box-sizing: border-box; outline: none; }
         .modal-box button { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
         .btn-submit { background: #16a34a; color: white; margin-bottom: 8px; }
-        .btn-close { background: #e2e8f0; color: #1e293b; }
+        .btn-close { background: #e2e8f0; color: #1e293b; margin-top: 6px; }
     </style>
 </head>
 <body>
@@ -70,13 +70,26 @@
             <p>सामग्री अनलॉक करने के लिए अपना पंजीकृत मोबाइल नंबर दर्ज करें:</p>
             <input type="tel" id="userMobileInput" placeholder="10 अंकों का मोबाइल नंबर दर्ज करें" maxlength="10">
             <button onclick="verifyStudent()" class="btn-submit">अनलॉक करें</button>
+            
+            <!-- QR कोड सेक्शन (नंबर न मिलने पर दिखेगा) -->
+            <div id="paymentSection" style="display:none; margin-top:10px; border-top:1px solid #e2e8f0; padding-top:10px;">
+                <p style="color:#d97706; font-weight:bold; font-size:12px; margin-bottom:6px;">फीस जमा करने के लिए नीचे दिए गए QR को स्कैन करें:</p>
+                
+                <!-- सीधा qr.png जो आपने सबसे ऊपर अपलोड किया है -->
+                <img src="qr.png" alt="Payment QR Code" style="width: 150px; height: 150px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 6px;">
+                
+                <div style="font-size:11px; color:#64748b;">
+                    (पेमेंट के बाद स्क्रीनशॉट और अपना मोबाइल नंबर व्हाट्सएप पर भेजें)
+                </div>
+            </div>
+
             <p id="authMessage" style="margin: 8px 0; font-size:13px; font-weight:bold;"></p>
             <button onclick="closeModal()" class="btn-close">बंद करें</button>
         </div>
     </div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1Rg1CjzNnB9bqXSyF552kFhG87JFk8D_NIRN07gtE7Yft70mQiZfzyeH2P/exec"; 
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec"; 
 
     let pendingUrl = null;
 
@@ -92,6 +105,9 @@
         if (isVerified === 'true') {
             window.location.href = url;
         } else {
+            document.getElementById('paymentSection').style.display = 'none';
+            document.getElementById('userMobileInput').value = '';
+            document.getElementById('authMessage').innerText = '';
             document.getElementById('loginModal').style.display = 'flex';
         }
     }
@@ -99,6 +115,12 @@
     function verifyStudent() {
         const mobile = document.getElementById('userMobileInput').value.trim();
         const msgBox = document.getElementById('authMessage');
+        const paySec = document.getElementById('paymentSection');
+
+        paySec.style.display = "none";
+
+    // ---BYPASS FOR TESTING (Optional, remove if strict)---
+    // if(mobile === "9999999999") { paySec.style.display = "none"; window.location.href = pendingUrl; return; }
 
         if (mobile.length !== 10) {
             msgBox.style.color = "#e11d48";
@@ -130,6 +152,9 @@
                 } else {
                     msgBox.style.color = "#e11d48";
                     msgBox.innerText = data.message;
+                    if (data.reason === "NOT_FOUND") {
+                        paySec.style.display = "block"; // नंबर न मिलने पर QR कोड दिखाएगा
+                    }
                 }
             })
             .catch(err => {
@@ -141,6 +166,7 @@
     function closeModal() {
         document.getElementById('loginModal').style.display = 'none';
         document.getElementById('authMessage').innerText = '';
+        document.getElementById('paymentSection').style.display = 'none';
     }
 </script>
 </body>
