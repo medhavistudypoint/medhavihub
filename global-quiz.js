@@ -1,4 +1,4 @@
-Const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1Rg1CjzNnB9bqXSyF552kFhG87JFk8D_NlRN07gtE7Yft70mQiZfzyeH2PevcFyo_/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1Rg1CjzNnB9bqXSyF552kFhG87JFk8D_NlRN07gtE7Yft70mQiZfzyeH2PevcFyo_/exec";
 
 let activeIndex = 0;
 // HTML के countdownTimer डिब्बे से समय (उदा. 55:00) पढ़कर टाइमर सेट करें
