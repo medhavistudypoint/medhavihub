@@ -51,16 +51,67 @@
             border: 1px solid #86efac;
             white-space: nowrap;
         }
+
+        /* 🔒 ऑथेंटिकेशन पॉप-अप (Modal) स्टाइल्स */
+        .modal-overlay { 
+            display: flex; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(11, 30, 71, 0.85); 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 10000; 
+            padding: 15px; 
+            backdrop-filter: blur(5px);
+        }
+        .modal-box { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 16px; 
+            width: 100%; 
+            max-width: 380px; 
+            text-align: center; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid #cbd5e1;
+        }
+        .modal-box h3 { color: #0b1e47; margin-top: 0; font-size: 20px; }
+        .modal-box p { font-size: 14px; color: #64748b; }
+        .modal-box input { 
+            width: 100%; 
+            padding: 12px; 
+            margin-bottom: 12px; 
+            border: 2px solid #cbd5e1; 
+            border-radius: 8px; 
+            text-align: center; 
+            font-size: 16px;
+            outline: none;
+        }
+        .modal-box input:focus { border-color: #1e3a8a; }
+        .modal-box button { 
+            width: 100%; 
+            padding: 12px; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 15px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            background: #16a34a; 
+            color: white; 
+        }
+        .modal-box button:hover { background: #15803d; }
     </style>
 </head>
 <body>
 
     <div class="hero">
         <h1>🎯 Home Science Daily Practice Tests</h1>
-        <p>अपने पसंदीदा टॉपिक का चयन करें और ऑनलाइन मॉक टेस्ट दें</p>
+        <p>TGT 2026 पेड बैच - ऑनलाइन मॉक टेस्ट सीरीज</p>
     </div>
 
-    <div class="container">
+    <div class="container" id="mainContainer" style="display: none;">
         <a href="tgt2026.html" class="back-btn">⬅️ पोर्टल पर वापस जाएं</a>
 
         <div class="test-list">
@@ -102,5 +153,66 @@
         </div>
     </div>
 
+    <!-- 🔒 TGT पेड स्टूडेंट ऑथेंटिकेशन पॉप-अप -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3>🔒 TGT 2026 Paid Batch Access</h3>
+            <p>यह सेक्शन केवल TGT 2026 पेड छात्रों के लिए है। अपना रजिस्टर्ड मोबाइल नंबर दर्ज करें:</p>
+            <input type="tel" id="userMobileInput" placeholder="10 अंकों का मोबाइल नंबर" maxlength="10">
+            <button onclick="verifyStudent()">अनलॉक करें 🚀</button>
+            <p id="authMessage" style="margin: 8px 0; font-size:13px; font-weight:bold;"></p>
+        </div>
+    </div>
+
+    <script>
+        const AUTH_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec";
+
+        // पेज लोड होने पर अपने आप वेरिफाई करें
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('tgt_user_verified') === 'true') {
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
+            } else {
+                document.getElementById('loginModal').style.display = 'flex';
+                document.getElementById('mainContainer').style.display = 'none';
+            }
+        });
+
+        function verifyStudent() {
+            const mobile = document.getElementById('userMobileInput').value.trim();
+            const msgBox = document.getElementById('authMessage');
+            if (mobile.length !== 10) { 
+                msgBox.style.color = "#e11d48"; 
+                msgBox.innerText = "सही 10 अंकों का मोबाइल नंबर डालें!"; 
+                return; 
+            }
+            
+            let deviceId = localStorage.getItem('user_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 11));
+            localStorage.setItem('user_device_id', deviceId);
+            msgBox.style.color = "#2563eb"; 
+            msgBox.innerText = "जाँच हो रही है...";
+            
+            fetch(`${AUTH_SCRIPT_URL}?mobile=${mobile}&deviceId=${deviceId}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.allowed) {
+                        localStorage.setItem('tgt_user_verified', 'true');
+                        msgBox.style.color = "#16a34a"; 
+                        msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
+                        setTimeout(() => {
+                            document.getElementById('loginModal').style.display = 'none';
+                            document.getElementById('mainContainer').style.display = 'block';
+                        }, 800);
+                    } else {
+                        msgBox.style.color = "#e11d48"; 
+                        msgBox.innerText = data.message || "पहुंच की अनुमति नहीं है!";
+                    }
+                })
+                .catch(() => { 
+                    msgBox.style.color = "#e11d48"; 
+                    msgBox.innerText = "नेटवर्क खराबी! पुनः प्रयास करें।"; 
+                });
+        }
+    </script>
 </body>
 </html>
