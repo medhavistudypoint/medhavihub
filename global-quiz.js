@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1Rg1CjzNnB9bqXSyF552kFhG87JFk8D_NlRN07gtE7Yft70mQiZfzyeH2PevcFyo_/exec";
+Const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1Rg1CjzNnB9bqXSyF552kFhG87JFk8D_NlRN07gtE7Yft70mQiZfzyeH2PevcFyo_/exec";
 
 let activeIndex = 0;
 // HTML के countdownTimer डिब्बे से समय (उदा. 55:00) पढ़कर टाइमर सेट करें
@@ -107,15 +107,12 @@ function renderTimerString() {
 }
 
 function checkAndMarkPreviousVisited(prevIdx) {
-    // जब हम किसी प्रश्न को छोड़कर आगे या दूसरे प्रश्न पर जाते हैं,
-    // अगर उसका उत्तर नहीं दिया गया है (null या -2), तो उसे Skipped (-1 यानी लाल) कर देंगे।
     if (userResponses[prevIdx] === null || userResponses[prevIdx] === -2) {
         userResponses[prevIdx] = -1;
     }
 }
 
 function displayQuestionCard(idx) {
-    // पुराने वाले प्रश्न की स्थिति जांचें कि क्या वह स्किप हुआ है
     if (activeIndex !== idx) {
         checkAndMarkPreviousVisited(activeIndex);
     }
@@ -123,16 +120,13 @@ function displayQuestionCard(idx) {
     activeIndex = idx;
     const item = dataset[idx];
     
-    // वर्तमान प्रश्न अगर बिल्कुल नया है, तो उसे अभी लाल नहीं करेंगे, वह सफेद ही रहेगा (जब तक इससे आगे न जाएं)
     if (userResponses[idx] === null) {
-        userResponses[idx] = -2; // -2 मतलब अभी खुला है (Visited but current)
+        userResponses[idx] = -2;
     }
 
     document.getElementById('lblCurrentNum').innerText = idx + 1;
     document.getElementById('boxQuestionText').innerHTML = item.question;
-    /* 🏷️ प्रश्नों के टैग लोड करने के लिए */
     if(document.getElementById('lblQuestionTag')) document.getElementById('lblQuestionTag').innerText = item.tag || "";
-    
     
     const optionsWrapper = document.getElementById('boxOptionsList');
     optionsWrapper.innerHTML = '';
@@ -170,7 +164,7 @@ function assignSelection(oIdx) {
 }
 
 function doClearAnswer() {
-    userResponses[activeIndex] = -2; // वापस वर्तमान खुले हुए स्टेट में लाएं
+    userResponses[activeIndex] = -2;
     markedMatrix[activeIndex] = false;
     displayQuestionCard(activeIndex);
 }
@@ -202,23 +196,21 @@ function buildPaletteGrid() {
     const container = document.getElementById('boxPaletteGrid');
     if(!container) return;
     container.innerHTML = '';
-    
+
     for (let i = 0; i < dataset.length; i++) {
         const cell = document.createElement('div');
         cell.className = 'palette-cell';
         
-        // ग्रिड रंग लॉजिक
         if (markedMatrix[i]) {
-            cell.classList.add('pal-marked'); // बैंगनी
+            cell.classList.add('pal-marked');
         } else if (userResponses[i] !== null && userResponses[i] >= 0) {
-            cell.classList.add('pal-answered'); // हरा
+            cell.classList.add('pal-answered');
         } else if (userResponses[i] === -1) {
-            cell.classList.add('pal-visited'); // लाल (Skipped)
+            cell.classList.add('pal-visited');
         } else {
-            cell.classList.add('pal-unvisited'); // सफेद (Unvisited या वर्तमान खुला हुआ)
+            cell.classList.add('pal-unvisited');
         }
 
-        // वर्तमान एक्टिव प्रश्न पर लाल बॉर्डर (यह हमेशा सफेद बैकग्राउंड के साथ दिखेगा जब तक उत्तर न दें)
         if (i === activeIndex) {
             cell.classList.add('active-current-q');
         }
@@ -228,7 +220,6 @@ function buildPaletteGrid() {
         container.appendChild(cell);
     }
 }
-
 function forceAutomaticSubmission() {
     checkAndMarkPreviousVisited(activeIndex);
     alert("समय समाप्त! आपका टेस्ट अपने आप सबमिट हो रहा है।");
@@ -300,11 +291,12 @@ function processFinalCalculation() {
     const secStr = (timeConsumedSec % 60).toString().padStart(2, '0');
     const timeStr = `${minStr}:${secStr}`;
     
-        // 🎯 नेगेटिव मार्किंग लॉजिक
+    // 🎯 सटीक नेगेटिव मार्किंग कैलकुलेशन
     const negativePerWrong = (typeof NEGATIVE_MARKING !== 'undefined') ? NEGATIVE_MARKING : 0;
     const grossMarks = correct;
     const negativeMarks = incorrect * negativePerWrong;
     let netScore = parseFloat((grossMarks - negativeMarks).toFixed(2));
+    if (netScore < 0) netScore = 0;
 
     if(document.getElementById('valNetScore')) {
         document.getElementById('valNetScore').innerText = `${netScore} / ${dataset.length}`;
@@ -315,8 +307,10 @@ function processFinalCalculation() {
     if(document.getElementById('valSkippedCount')) document.getElementById('valSkippedCount').innerText = skipped;
     if(document.getElementById('valTimeConsumed')) document.getElementById('valTimeConsumed').innerText = timeStr;
     
+    // 🎯 netScore को भी Result Object में स्टोर कर लिया गया है
     const resultObj = {
         studentName: studentName,
+        netScore: netScore,
         correct: correct,
         total: dataset.length,
         incorrect: incorrect,
@@ -342,11 +336,10 @@ function processFinalCalculation() {
     }, 1000);
 
     let postData = {
-            quizKey: typeof QUIZ_KEY !== 'undefined' ? QUIZ_KEY : 'General_Results',
-        
+        quizKey: typeof QUIZ_KEY !== 'undefined' ? QUIZ_KEY : 'General_Results',
         studentName: studentName,
         studentMobile: isReattemptMode ? "Re-attempt" : "Not Provided",
-        score: typeof netScore !== 'undefined' ? netScore : correct,
+        score: netScore,
         correct: correct,
         incorrect: incorrect,
         timeUsed: `${minStr} मिनट ${secStr} सेकंड`
@@ -361,6 +354,7 @@ function processFinalCalculation() {
       .catch(err => console.error("शीट एरर:", err));
 }
 
+// 🎯 री-ओपन/पुराना रिजल्ट देखने पर अब नेट स्कोर ही दिखेगा
 function viewSavedResult() {
     const rawData = localStorage.getItem(QUIZ_KEY + "_result");
     if(!rawData) {
@@ -377,7 +371,15 @@ function viewSavedResult() {
     const studentNameLbl = document.getElementById('lblReportStudentName');
     if(studentNameLbl) studentNameLbl.innerHTML = "परीक्षार्थी: " + res.studentName + tagText;
     
-    if(document.getElementById('valNetScore')) document.getElementById('valNetScore').innerText = `${res.correct} / ${res.total}`;
+    // पुराने सेव्ड स्कोर में अगर netScore उपलब्ध न हो, तो ऑन-द-फ़्लाई कैलकुलेट करें
+    let displayScore = res.netScore;
+    if (displayScore === undefined || displayScore === null) {
+        const negativePerWrong = (typeof NEGATIVE_MARKING !== 'undefined') ? NEGATIVE_MARKING : 0.33;
+        displayScore = parseFloat((res.correct - (res.incorrect * negativePerWrong)).toFixed(2));
+        if (displayScore < 0) displayScore = 0;
+    }
+
+    if(document.getElementById('valNetScore')) document.getElementById('valNetScore').innerText = `${displayScore} / ${res.total}`;
     if(document.getElementById('valCorrectCount')) document.getElementById('valCorrectCount').innerText = res.correct;
     if(document.getElementById('valIncorrectCount')) document.getElementById('valIncorrectCount').innerText = res.incorrect;
     if(document.getElementById('valSkippedCount')) document.getElementById('valSkippedCount').innerText = res.skipped;
@@ -403,4 +405,7 @@ function captureCardAndOpenGroup() {
             }
         }, "image/png");
     });
-}
+        }
+
+
+
