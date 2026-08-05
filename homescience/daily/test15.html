@@ -1,1 +1,152 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science TGT Test</title>
+    <!-- ✅ CSS फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
 
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science TGT Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 प्रीमियम हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT PGT Test Series</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">गृह विज्ञान (Home Science)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_homescience_tgt_water_50q"; 
+
+        // 🎯 2. 1/3rd (एक तिहाई) नेगेटिव मार्किंग सेट की गई
+        const NEGATIVE_MARKING = 0.33; 
+
+        // 3. प्रश्नों का पूरा 50 डेटासेट (प्रत्येक प्रश्न एकल पंक्ति में)
+        const dataset = [
+            { id: 1, tag: "TGT", question: "[NCERT] मानव शरीर के कुल भार का लगभग कितने प्रतिशत भाग जल से निर्मित होता है?", options: ["(a) 30-40%", "(b) 60-70%", "(c) 85-90%", "(d) 15-20%"], correct: 1 },
+            { id: 2, tag: "TGT", question: "[NCERT] जल की अस्थायी कठोरता (Temporary Hardness) मुख्य रूप से जल में किन लवणों के घुले होने के कारण होती है?", options: ["(a) कैल्शियम एवं मैग्नीशियम के बाइकार्बोनेट्स", "(b) कैल्शियम एवं मैग्नीशियम के क्लोराइड्स", "(c) सोडियम एवं पोटैशियम के सल्फेट्स", "(d) आयरन एवं मैंगनीज के नाइट्रेट्स"], correct: 0 },
+            { id: 3, tag: "TGT", question: "[NCERT] जल की स्थायी कठोरता (Permanent Hardness) मुख्य रूप से किन घुलनशील लवणों की उपस्थिति के कारण होती है?", options: ["(a) कैल्शियम एवं मैग्नीशियम के क्लोराइड्स तथा सल्फेट्स", "(b) सोडियम एवं पोटैशियम के कार्बोनेट्स", "(c) कैल्शियम एवं मैग्नीशियम के बाइकार्बोनेट्स", "(d) आयरन एवं जिंक के हाइड्रॉक्साइड्स"], correct: 0 },
+            { id: 4, tag: "TGT", question: "[NCERT] डब्ल्यू.एच.ओ. (WHO) द्वारा स्वीकृत संशोधित कम परासरणी (Low-Osmolality ORS) घोल में निर्जल ग्लूकोज (Anhydrous Glucose) की कितनी मात्रा प्रति लीटर जल में होती है?", options: ["(a) 13.5 g/L", "(b) 20.0 g/L", "(c) 5.0 g/L", "(d) 35.0 g/L"], correct: 0 },
+            { id: 5, tag: "TGT", question: "[NCERT] नए कम परासरणी ओ.आर.एस. (Low-Osmolality ORS) फॉर्मूले में सोडियम बाइकार्बोनेट के स्थान पर किस अधिक स्थिर घटक का प्रयोग किया जाता है?", options: ["(a) ट्राइसोडियम साइट्रेट (Trisodium Citrate)", "(b) पोटैशियम नाइट्रेट (Potassium Nitrate)", "(c) सोडियम क्लोराइड (Sodium Chloride)", "(d) कैल्शियम सल्फेट (Calcium Sulfate)"], correct: 0 },
+            { id: 6, tag: "TGT", question: "[NCERT] जल के व्यावसायिक शुद्धिकरण में अवसादन (Sedimentation) की प्रक्रिया को तेज करने के लिए किस स्कंदक (Coagulant) का प्रयोग किया जाता है?", options: ["(a) फिटकरी (Alum)", "(b) कॉस्टिक सोडा (Caustic Soda)", "(c) साधारण नमक (Common Salt)", "(d) सुहागा (Borax)"], correct: 0 },
+            { id: 7, tag: "TGT", question: "[NCERT] जल को उबालने (Boiling) पर उसकी अस्थायी कठोरता किस अघुलनशील अवक्षेप के रूप में नीचे बैठ जाती है?", options: ["(a) कैल्शियम कार्बोनेट", "(b) सोडियम सल्फेट", "(c) पोटैशियम क्लोराइड", "(d) मैग्नीशियम नाइट्रेट"], correct: 0 },
+            { id: 8, tag: "TGT", question: "[NCERT] जल शोधन उपकरणों में जल को भौतिक रूप से रोगाणुरहित (Disinfected) करने के लिए किस विकिरण का उपयोग किया जाता है?", options: ["(a) पराबैंगनी किरणें (Ultraviolet Rays)", "(b) एक्स-किरणें (X-Rays)", "(c) अवरक्त किरणें (Infrared Rays)", "(d) गामा किरणें (Gamma Rays)"], correct: 0 },
+            { id: 9, tag: "TGT", question: "[NCERT] रिवर्स ऑस्मोसिस (RO System) विधि द्वारा जल शुद्धिकरण के संदर्भ में सही कथन चुनिए:", options: ["(a) उच्च बाह्य दाब द्वारा सांद्र जल से शुद्ध जल को अर्धपारगम्य झिल्ली के पार भेजना", "(b) निम्न बाह्य दाब द्वारा शुद्ध जल को सांद्र जल की ओर आकर्षित करना", "(c) गुरुत्वाकर्षण बल द्वारा अशुद्धियों को फ़िल्टर पेपर से नीचे छानना", "(d) तापीय ऊर्जा द्वारा जल को वाष्प में बदलकर पुनः सघनित करना"], correct: 0 },
+            { id: 10, tag: "TGT", question: "[NCERT] शरीर में जल संतुलन और परासरणी संतुलन (Osmotic Balance) को नियंत्रित करने में मुख्य रूप से कौन-सा अंग कार्य करता है?", options: ["(a) वृक्क (Kidney)", "(b) यकृत (Liver)", "(c) हृदय (Heart)", "(d) फेफड़े (Lungs)"], correct: 0 },
+            { id: 11, tag: "TGT", question: "[NCERT] गुर्दे में जल के पुनरावशोषण (Water Reabsorption) को बढ़ाकर मूत्र निर्माण को कम करने वाला हार्मोन कौन-सा है?", options: ["(a) वेसोप्रेसिन (Vasopressin / ADH)", "(b) इंसुलिन (Insulin)", "(c) थायरॉक्सिन (Thyroxine)", "(d) ऑक्सिटोसिन (Oxytocin)"], correct: 0 },
+            { id: 12, tag: "TGT", question: "[NCERT] कठोर जल में कपड़े धोते समय साबुन जल में मौजूद लवणों से क्रिया करके कौन-सा अघुलनशील चिपचिपा पदार्थ (Scum) बनाता है?", options: ["(a) कैल्शियम तथा मैग्नीशियम स्टीअरेट", "(b) सोडियम एवं पोटैशियम ओलिएट", "(c) ग्लिसरॉल तथा फैटी एसिड", "(d) सोडियम तथा पोटैशियम पामिटेट"], correct: 0 },
+            { id: 13, tag: "TGT", question: "[NCERT] अभिकथन (A): समुद्री जल (Sea Water) पीने योग्य नहीं होता और इसका सेवन करने से शरीर में निर्जलीकरण (Dehydration) बढ़ जाता है।\nकारण (R): समुद्री जल में लवणों की सांद्रता शरीर के द्रवों से अधिक होती है, जिससे अतिपरासरी (Hypertonic) प्रभाव के कारण कोशिकाएँ जल खो देती हैं।", options: ["(a) (A) और (R) दोनों सही हैं तथा (R), (A) की सही व्याख्या करता है।", "(b) (A) और (R) दोनों सही हैं, लेकिन (R), (A) की सही व्याख्या नहीं करता।", "(c) (A) सही है, लेकिन (R) गलत है।", "(d) (A) गलत है, लेकिन (R) सही है।"], correct: 0 },
+            { id: 14, tag: "TGT", question: "[NCERT] जल में घुली हुई ऑक्सीजन (Dissolved Oxygen) का स्तर अचानक कम होना किस स्थिति को दर्शाता है?", options: ["(a) जैविक प्रदूषण और BOD में वृद्धि", "(b) जल की शुद्धता में अत्यधिक वृद्धि", "(c) जल की कठोरता में अत्यधिक कमी", "(d) जल में खनिजों की अत्यधिक प्रचुरता"], correct: 0 },
+            { id: 15, tag: "TGT", question: "[NCERT] दूषित एवं अशुद्ध जल के सेवन से फैलने वाले रोगों का सही युग्म कौन-सा है?", options: ["(a) हैजा एवं टाइफाइड (Cholera & Typhoid)", "(b) मलेरिया एवं डेंगू (Malaria & Dengue)", "(c) रिकेट्स एवं पेलाग्रा (Rickets & Pellagra)", "(d) स्कर्वी एवं एनीमिया (Scurvy & Anemia)"], correct: 0 },
+            { id: 16, tag: "TGT", question: "[NCERT] सूची-I (जल शुद्धिकरण विधि) को सूची-II (प्रयुक्त रसायन/सिद्धान्त) से सुमेलित कीजिए:\n(A) क्लार्क विधि - 2. बुझा चूना मिला कर कठोरता हटाना\n(B) कैलगन विधि - 3. सोडियम हेक्सामेटाफॉस्फेट का उपयोग\n(C) परम्युटिट विधि - 1. सोडियम एल्युमिनियम सिलिकेट द्वारा आयन विनिमय\n(D) ओजोनिकरण - 4. प्रबल ऑक्सीकारक द्वारा रोगाणुनाशन", options: ["(a) A-2, B-3, C-1, D-4", "(b) A-1, B-2, C-3, D-4", "(c) A-3, B-1, C-4, D-2", "(d) A-4, B-3, C-2, D-1"], correct: 0 },
+            { id: 17, tag: "TGT", question: "[NCERT] जल में स्थायी कठोरता दूर करने की परम्युटिट (Permutit Method) विधि किस सिद्धान्त पर कार्य करती है?", options: ["(a) कैटायन विनिमय द्वारा Ca²⁺ और Mg²⁺ आयनों को Na⁺ से बदलना", "(b) एनायन विनिमय द्वारा Cl⁻ और SO₄²⁻ आयनों को OH⁻ से बदलना", "(c) ताप देकर लवणों को वाष्प के रूप में अलग करना", "(d) वायु प्रवाहित करके अशुद्धियों को अवक्षेपित करना"], correct: 0 },
+            { id: 18, tag: "TGT", question: "[NCERT] गंभीर निर्जलीकरण (Severe Dehydration) की स्थिति में यदि मरीज मुँह से ORS लेने में असमर्थ हो, तो क्या दिया जाता है?", options: ["(a) अंतःशिरा द्रव (IV Fluids / Saline)", "(b) सादा उबला पानी (Boiled Water)", "(c) ताजे फलों का रस (Fresh Fruit Juice)", "(d) गाय का हल्का दूध (Cow Milk)"], correct: 0 },
+            { id: 19, tag: "TGT", question: "[NCERT] जल के क्लोरीनीकरण (Chlorination) में जीवाणुनाशन की माँग पूरी होने के बाद बची क्लोरीन को क्या कहते हैं?", options: ["(a) अवशेषी क्लोरीन (Residual Chlorine)", "(b) मुक्त अमोनिया (Free Ammonia)", "(c) संयुक्त क्लोरीन (Combined Chlorine)", "(d) अक्रिय क्लोरीन (Inactive Chlorine)"], correct: 0 },
+            { id: 20, tag: "TGT", question: "[NCERT] अभिकथन (A): वर्षा का जल (Rain Water) प्राकृतिक रूप से जल का सबसे शुद्ध रूप माना जाता है।\nकारण (R): यह प्रकृति में प्राकृतिक आसवन (Natural Distillation) की प्रक्रिया द्वारा निर्मित होता है।", options: ["(a) (A) और (R) दोनों सही हैं तथा (R), (A) की सही व्याख्या करता है।", "(b) (A) और (R) दोनों सही हैं, लेकिन (R), (A) की सही व्याख्या नहीं करता।", "(c) (A) सही है, लेकिन (R) गलत है।", "(d) (A) गलत है, लेकिन (R) सही है।"], correct: 0 },
+            { id: 21, tag: "TGT", question: "[NCERT] पीने के जल में कैडमियम (Cadmium) धातु के प्रदूषण से कौन-सा रोग होता है?", options: ["(a) इटाई-इटाई रोग (Itai-Itai)", "(b) मिनामाटा रोग (Minamata)", "(c) ब्लू बेबी सिंड्रोम (Blue Baby)", "(d) ब्लैक फूट रोग (Black Foot)"], correct: 0 },
+            { id: 22, tag: "TGT", question: "[NCERT] पीने के पानी में अत्यधिक नाइट्रेट (Nitrate) प्रदूषण के कारण शिशुओं में होने वाला रोग कौन-सा है?", options: ["(a) ब्लू बेबी सिंड्रोम (Blue Baby Syndrome)", "(b) इटाई-इटाई रोग (Itai-Itai Disease)", "(c) मिनामाटा रोग (Minamata Disease)", "(d) ब्लैक फूट रोग (Black Foot Disease)"], correct: 0 },
+            { id: 23, tag: "TGT", question: "[NCERT] आंतों में जल के अवशोषण (Intestinal Water Absorption) की दर बढ़ाने के लिए ORS में सोडियम के साथ क्या होना अनिवार्य है?", options: ["(a) ग्लूकोज (Glucose)", "(b) सुक्रोज (Sucrose)", "(c) स्टार्च (Starch)", "(d) फ्रक्टोज (Fructose)"], correct: 0 },
+            { id: 24, tag: "TGT", question: "[NCERT] पेयजल में आर्सेनिक (Arsenic) की दीर्घकालिक विषाक्तता से मुख्य रूप से कौन-सा रोग होता है?", options: ["(a) ब्लैक फूट रोग (Black Foot Disease)", "(b) इटाई-इटाई रोग (Itai-Itai Disease)", "(c) मिनामाटा रोग (Minamata Disease)", "(d) मिक्सेडेमा रोग (Myxedema Disease)"], correct: 0 },
+            { id: 25, tag: "TGT", question: "[PYQ] जल की स्थायी कठोरता दूर करने का सर्वोत्तम उपाय है:", options: ["(a) उबाल कर", "(b) क्लार्क विधि द्वारा", "(c) कॉस्टिक सोडा द्वारा", "(d) कैलगन विधि द्वारा"], correct: 3 },
+            { id: 26, tag: "TGT", question: "[PYQ] मृदु जल का वास्तविक अर्थ होता है:", options: ["(a) साबुन के साथ आसानी से झाग बनाने वाला", "(b) साबुन के साथ झाग न बनाने वाला", "(c) केवल वर्षा से प्राप्त जल", "(d) उपर्युक्त में से कोई नहीं"], correct: 0 },
+            { id: 27, tag: "TGT", question: "[PYQ] जल शुद्धिकरण की रासायनिक विधियों में क्लोरीन के किस रूप को सर्वश्रेष्ठ माना गया है?", options: ["(a) क्लोरामाइन", "(b) क्लोरीन गैस", "(c) ब्लीचिंग पाउडर", "(d) इनमें से कोई नहीं"], correct: 2 },
+            { id: 28, tag: "TGT", question: "[PYQ] जीवन रक्षक घोल (ORS) मुख्य रूप से किस स्थिति में दिया जाता है?", options: ["(a) निर्जलीकरण", "(b) तीव्र बुखार", "(c) खाँसी", "(d) सिरदर्द"], correct: 0 },
+            { id: 29, tag: "TGT", question: "[PYQ] 'डोमेस्टिक सीवेज' (Domestic Sewage) में अशुद्धता का औसत प्रतिशत कितना होता है?", options: ["(a) 1.0%", "(b) 0.1%", "(c) 0.01%", "(d) 1.1%"], correct: 1 },
+            { id: 30, tag: "TGT", question: "[PYQ] जल की स्थायी कठोरता दूर करने के लिए रासायनिक रूप से क्या मिलाया जाता है?", options: ["(a) सोडियम कार्बोनेट", "(b) चूना", "(c) साधारण नमक", "(d) पोटैशियम परमैंगनेट"], correct: 0 },
+            { id: 31, tag: "TGT", question: "[PYQ] मानव शरीर में निर्जलीकरण (Dehydration) का मुख्य कारण होता है:", options: ["(a) शरीर से जल तथा लवणों का निकलना", "(b) मानसिक डर तथा तनाव", "(c) रक्त की क्षारकता बढ़ना", "(d) भोजन का ठीक से न पचना"], correct: 0 },
+            { id: 32, tag: "TGT", question: "[PYQ] जल के शुद्धिकरण एवं रोगाणुनाशन के लिए किस रासायनिक पदार्थ का प्रयोग किया जाता है?", options: ["(a) नाइट्रिक अम्ल", "(b) पोटैशियम सल्फेट", "(c) पोटैशियम परमैंगनेट", "(d) सल्फ्यूरिक अम्ल"], correct: 2 },
+            { id: 33, tag: "TGT", question: "[PYQ] वे अपमार्जक और रासायनिक यौगिक जो जल को मुख्य रूप से प्रदूषित करते हैं:", options: ["(a) अमोनिया तथा सायनाइड्स", "(b) फिटकरी तथा सोडियम", "(c) क्लोरीन तथा ओजोन", "(d) कैल्शियम तथा मैग्नीशियम"], correct: 0 },
+            { id: 34, tag: "TGT", question: "[PYQ] फ्रांस के 'आर्टोइथ' नामक स्थान के नाम पर बनाए जाने वाले कुओं को क्या कहते हैं?", options: ["(a) उथले कुएँ", "(b) आर्टीजन कुएँ", "(c) गहरे कुएँ", "(d) ट्यूबवैल"], correct: 1 },
+            { id: 35, tag: "TGT", question: "[PYQ] मानव निर्मित कृत्रिम झील का दूसरा नाम क्या है?", options: ["(a) परिबद्ध जलाशय", "(b) ट्यूबवैल", "(c) जलधाराएं", "(d) नहर"], correct: 0 },
+            { id: 36, tag: "TGT", question: "[PYQ] सामान्यतः स्वस्थ व्यक्ति के लिए थकान मिटाने हेतु किस प्रकार के पानी से स्नान करना लाभदायक होता है?", options: ["(a) बहुत गर्म पानी से", "(b) अत्यधिक बर्फ़ीले पानी से", "(c) ठंडे पानी से", "(d) उबलते पानी से"], correct: 2 },
+            { id: 37, tag: "TGT", question: "[PYQ] जल की कठोरता (Hardness of Water) मुख्य रूप से कितने प्रकार की होती है?", options: ["(a) चार प्रकार", "(b) दो प्रकार", "(c) तीन प्रकार", "(d) पाँच प्रकार"], correct: 1 },
+            { id: 38, tag: "TGT", question: "[PYQ] पारंपरिक WHO-ORS घोल में प्रति लीटर जल में साधारण नमक, सोडियम बाइकार्बोनेट और पोटैशियम क्लोराइड की क्रमशः कितनी मात्राएँ होती हैं?", options: ["(a) 3.5 g, 2.5 g, 1.5 g", "(b) 3.2 g, 2.0 g, 1.0 g", "(c) 3.4 g, 1.5 g, 2.0 g", "(d) 4.3 g, 2.5 g, 2.0 g"], correct: 0 },
+            { id: 39, tag: "TGT", question: "[PYQ] जल एक अकार्बनिक यौगिक है जो किन तत्वों से मिलकर बनता है?", options: ["(a) कार्बन तथा हाइड्रोजन", "(b) कार्बन तथा सल्फर", "(c) हाइड्रोजन तथा ऑक्सीजन", "(d) नाइट्रोजन तथा ऑक्सीजन"], correct: 2 },
+            { id: 40, tag: "TGT", question: "[PYQ] शुद्ध जल का रासायनिक सूत्र (Chemical Formula) क्या है?", options: ["(a) OH", "(b) HO₂", "(c) H₂O", "(d) H₂O₂"], correct: 2 },
+            { id: 41, tag: "TGT", question: "[PYQ] भौतिक रूप से शुद्ध जल की मुख्य विशेषता क्या है?", options: ["(a) मीठा, गंधहीन तथा रंगहीन", "(b) खारा, गंधहीन तथा पारदर्शी", "(c) स्वादरहित, गंधहीन तथा रंगहीन", "(d) मीठा, सुगंधित तथा पारदर्शी"], correct: 2 },
+            { id: 42, tag: "TGT", question: "[PYQ] घरेलू स्तर पर जल को रोगाणुरहित करने की सबसे सरल एवं सर्वोत्तम भौतिक विधि है:", options: ["(a) उबालना", "(b) आसवन", "(c) अवक्षेपण", "(d) फ़िल्टर करना"], correct: 0 },
+            { id: 43, tag: "TGT", question: "[PYQ] जल की स्थायी कठोरता दूर करने के लिए जल में क्या मिलाया जाता है?", options: ["(a) सोडियम कार्बोनेट", "(b) साधारण नमक", "(c) केवल चूना", "(d) सिरका"], correct: 0 },
+            { id: 44, tag: "TGT", question: "[PYQ] जल की अस्थायी कठोरता को आसानी से किस प्रकार दूर किया जा सकता है?", options: ["(a) केवल उबालकर या चूने का पानी मिलाकर", "(b) केवल ब्लीचिंग पाउडर मिलाकर", "(c) केवल साधारण नमक मिलाकर", "(d) केवल फिटकरी मिलाकर"], correct: 0 },
+            { id: 45, tag: "TGT", question: "[PYQ] कपड़े धोते समय कठोर जल (Hard Water) का मुख्य दुष्प्रभाव क्या होता है?", options: ["(a) साबुन झाग नहीं बनाता और अधिक साबुन व्यर्थ होता है", "(b) कपड़ों का रंग उड़ जाता है", "(c) कपड़े फटने लगते हैं", "(d) जल अत्यधिक गर्म हो जाता है"], correct: 0 },
+            { id: 46, tag: "TGT", question: "[PYQ] जल में पाई जाने वाली अशुद्धियों को मुख्यतः किन श्रेणियों में विभाजित किया जाता है?", options: ["(a) घुलित अशुद्धियाँ", "(b) अघुलित एवं निलंबित अशुद्धियाँ", "(c) जैविक एवं सूक्ष्मजीवाणु अशुद्धियाँ", "(d) उपर्युक्त सभी"], correct: 3 },
+            { id: 47, tag: "TGT", question: "[PYQ] भारतीय मानक ब्यूरो (BIS IS 10500) के अनुसार पीने के पानी के लिए कुल घुलनशील ठोस (TDS) की स्वीकार्य सीमा कितनी है?", options: ["(a) 500 mg/L तक", "(b) 2000 mg/L तक", "(c) 100 mg/L तक", "(d) 50 mg/L तक"], correct: 0 },
+            { id: 48, tag: "TGT", question: "[PYQ] निम्नलिखित में से कौन-सी इकाई जल के गंदेपन (Turbidity) को मापने के लिए प्रयुक्त नहीं होती?", options: ["(a) NTU", "(b) JTU", "(c) FTU", "(d) ATU"], correct: 3 },
+            { id: 49, tag: "TGT", question: "[PYQ] पीने के पानी में फ्लोराइड की अत्यधिक सांद्रता (>1.5 mg/L) से कौन-सा रोग होता है?", options: ["(a) फ्लोरोसिस", "(b) कुपोषण", "(c) लेथिरिज्म", "(d) एनीमिया"], correct: 0 },
+            { id: 50, tag: "TGT", question: "[PYQ] एक बड़े संस्थान या कॉलेज के कैफे में त्वरित आहार वितरण की कौन-सी प्रणाली अपनाई जाती है?", options: ["(a) अकेंद्रीकृत सेवा", "(b) टेबल सेवा", "(c) स्वयं सेवा (Self-Service)", "(d) मिश्रित सेवा"], correct: 2 }
+        ];
+    </script>
+
+    <!-- ✅ JS लॉजिक फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
