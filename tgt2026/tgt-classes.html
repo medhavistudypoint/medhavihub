@@ -3,27 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TGT 2026 क्लासेस एवं PDFs</title>
+    <title>TGT Home Science - क्लासेस एवं नोट्स</title>
     <style>
         * { box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
         .hero { background: linear-gradient(135deg, #0b1e47, #1e3a8a); color: white; padding: 30px 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
-        .hero h1 { font-size: 24px; margin: 0; color: #ffcc00; }
-        .container { max-width: 800px; margin: 20px auto 40px; padding: 0 15px; }
+        .hero h1 { font-size: 22px; margin: 0; color: #ffcc00; }
+        .container { max-width: 850px; margin: 20px auto 40px; padding: 0 15px; }
         .back-btn { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 14px; }
         
         .grid { display: flex; flex-direction: column; gap: 12px; }
-        .card { background: white; padding: 15px 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; gap: 10px; }
-        @media (min-width: 600px) {
+        .card { background: white; padding: 15px 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; gap: 12px; }
+        @media (min-width: 650px) {
             .card { flex-direction: row; align-items: center; }
         }
-        .card h3 { font-size: 15px; margin: 0; color: #0b1e47; line-height: 1.4; flex: 1; }
-        .btn-group { display: flex; gap: 8px; min-width: 240px; }
-        .btn { text-decoration: none; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; text-align: center; flex: 1; white-space: nowrap; cursor: pointer; border: none; }
-        .btn-video { background-color: #ffcc00; color: #0b1e47; }
-        .btn-pdf { background-color: #1e3a8a; color: white; }
+        .card h3 { font-size: 15px; margin: 0; color: #0b1e47; flex: 1; line-height: 1.4; }
+        .btn-group { display: flex; gap: 8px; }
+        .btn { text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; border: none; color: white; text-align: center; white-space: nowrap; }
+        .btn-video { background-color: #2563eb; }
+        .btn-pdf { background-color: #d97706; }
 
-        /* Modal Popup Styling */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
         .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .modal-box h3 { margin-top: 0; color: #0b1e47; font-size: 18px; }
@@ -35,12 +34,14 @@
     </style>
 </head>
 <body>
+
     <div class="hero">
-        <h1>📚 TGT 2026 संपूर्ण 78 वीडियो क्लासेस एवं PDFs</h1>
+        <h1>🍳 TGT Home Science - वीडियो क्लासेस एवं नोट्स</h1>
     </div>
+
     <div class="container">
         <a href="tgt2026.html" class="back-btn">⬅️ TGT मुख्य पेज पर जाएँ</a>
-        
+
         <div class="grid">
             <div class="card"><h3>Class 01: पौष्टिकता की संकल्पना एवं आहार की परिभाषा</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('tgtpdf/p1.html', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
             <div class="card"><h3>Class 02: आहार की संरचना और भोजन के मुख्य कार्य</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('tgtpdf/p2.html', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
@@ -136,16 +137,33 @@
             <input type="tel" id="userMobileInput" placeholder="10 अंकों का मोबाइल नंबर दर्ज करें" maxlength="10">
             <button onclick="verifyStudent()" class="btn-submit">अनलॉक करें</button>
             
-            <!-- QR कोड सेक्शन (नंबर न मिलने पर दिखेगा) -->
             <div id="paymentSection" style="display:none; margin-top:10px; border-top:1px solid #e2e8f0; padding-top:10px;">
-                <p style="color:#d97706; font-weight:bold; font-size:12px; margin-bottom:6px;">फीस जमा करने के लिए नीचे दिए गए QR को स्कैन करें:</p>
+                <p style="color:#d97706; font-weight:bold; font-size:13px; margin-bottom:10px;">
+                    🔒 संपूर्ण TGT कोर्स फीस: <b>₹299</b>
+                </p>
+
+                <!-- 1️⃣ डायरेक्ट UPI ऐप पे बटन -->
+                <a href="upi://pay?pa=medhavistudypoint@okaxis&pn=MedhaviStudyPoint&am=299&cu=INR" 
+                   style="display: block; background: #1a73e8; color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: bold; margin-bottom: 10px;">
+                   📲 Pay ₹299 via Google Pay / PhonePe / UPI
+                </a>
+
+                <p style="font-size:11px; color:#64748b; margin: 4px 0;">— या QR Code स्कैन करके पे करें —</p>
+
+                <!-- 2️⃣ QR Code Image -->
+                <img src="qr.png" alt="Payment QR Code" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #cbd5e1; margin: 4px 0;">
                 
-                <!-- मुख्य फ़ोल्डर में अपलोड किया गया qr.png -->
-                <img src="qr.png" alt="Payment QR Code" style="width: 150px; height: 150px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 6px;">
-                
-                <div style="font-size:11px; color:#64748b;">
-                    (पेमेंट के बाद स्क्रीनशॉट और अपना मोबाइल नंबर व्हाट्सएप पर भेजें)
+                <div style="font-size:11px; color:#334155; line-height: 1.4; margin-top:4px;">
+                    <b>पेमेंट के बाद क्या करें?</b><br>
+                    स्क्रीनशॉट और अपना मोबाइल नंबर नीचे बटन पर क्लिक करके व्हाट्सएप करें:
                 </div>
+
+                <!-- 3️⃣ व्हाट्सएप बटन -->
+                <a href="https://wa.me/919415597889?text=नमस्ते%20सर,%20मैंने%20TGT%20कोर्स%20का%20299%20का%20पेमेंट%20कर%20दिया%20है।%20मेरा%20रजिस्टर्ड%20नंबर%20यह%20है:%20" 
+                   target="_blank" 
+                   style="display: block; background: #25d366; color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; margin-top: 8px;">
+                    💬 WhatsApp पर स्क्रीनशॉट भेजें
+                </a>
             </div>
 
             <p id="authMessage" style="margin: 8px 0; font-size:13px; font-weight:bold;"></p>
@@ -154,14 +172,13 @@
     </div>
 
 <script>
-    // ✅ आपकी नई अपडेटेड Web App URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec"; 
 
     let pendingUrl = null;
 
-    function checkAccess(url, typeName) {
+    function checkAccess(url, type) {
         if (url === '#' || !url) {
-            alert('⏳ यह ' + typeName + ' जल्द ही उपलब्ध होगी!');
+            alert(`⏳ यह ${type || 'सामग्री'} जल्द ही उपलब्ध होगी!`);
             return;
         }
 
@@ -169,7 +186,7 @@
         const isVerified = localStorage.getItem('tgt_user_verified');
         
         if (isVerified === 'true') {
-            window.open(url, '_blank');
+            window.location.href = url;
         } else {
             document.getElementById('paymentSection').style.display = 'none';
             document.getElementById('userMobileInput').value = '';
@@ -210,13 +227,13 @@
                     msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
                     setTimeout(() => {
                         closeModal();
-                        if (pendingUrl) window.open(pendingUrl, '_blank');
+                        if (pendingUrl) window.location.href = pendingUrl;
                     }, 800);
                 } else {
                     msgBox.style.color = "#e11d48";
                     msgBox.innerText = data.message;
                     if (data.reason === "NOT_FOUND") {
-                        paySec.style.display = "block"; // नंबर न मिलने पर QR दिखाएगा
+                        paySec.style.display = "block";
                     }
                 }
             })
@@ -233,10 +250,7 @@
     }
 </script>
 </body>
-</html>
-
-
-
+        </html>
 
 
     
