@@ -291,8 +291,9 @@ function processFinalCalculation() {
     const secStr = (timeConsumedSec % 60).toString().padStart(2, '0');
     const timeStr = `${minStr}:${secStr}`;
     
-    // 🎯 सटीक नेगेटिव मार्किंग कैलकुलेशन
-    const negativePerWrong = (typeof NEGATIVE_MARKING !== 'undefined') ? NEGATIVE_MARKING : 0;
+    // 🎯 .33 की जगह 1/3 (सटीक एक-तिहाई)
+    const negativePerWrong = (typeof NEGATIVE_MARKING !== 'undefined') ? NEGATIVE_MARKING : (1 / 3);
+    
     const grossMarks = correct;
     const negativeMarks = incorrect * negativePerWrong;
     let netScore = parseFloat((grossMarks - negativeMarks).toFixed(2));
