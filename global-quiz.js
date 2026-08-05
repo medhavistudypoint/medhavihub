@@ -1,7 +1,6 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1Rg1CjzNnB9bqXSyF552kFhG87JFk8D_NlRN07gtE7Yft70mQiZfzyeH2PevcFyo_/exec";
 
 let activeIndex = 0;
-// HTML के countdownTimer डिब्बे से समय (उदा. 55:00) पढ़कर टाइमर सेट करें
 const timerElem = document.getElementById('countdownTimer');
 const timeParts = timerElem ? timerElem.innerText.trim().split(':') : ["05", "00"];
 const parsedMins = parseInt(timeParts[0], 10) || 5;
@@ -14,7 +13,6 @@ let countdownTimerId = null;
 let studentName = "";
 let isReattemptMode = false;
 
-// null = Not Visited (White), -1 = Skipped (Red), -2 = Visited but not answered yet, >=0 = Answered (Green)
 let userResponses = [];
 let markedMatrix = [];
 
@@ -26,7 +24,7 @@ document.onkeydown = function(e) {
 };
 
 window.onload = function() {
-    if (localStorage.getItem(QUIZ_KEY) === "true") {
+    if (typeof QUIZ_KEY !== 'undefined' && localStorage.getItem(QUIZ_KEY) === "true") {
         const savedName = localStorage.getItem(QUIZ_KEY + "_name") || "छात्र";
         const gate = document.getElementById("boxLoginGate");
         if(gate) {
@@ -46,7 +44,7 @@ window.onload = function() {
 
 function startReattemptQuiz() {
     isReattemptMode = true;
-    const savedName = localStorage.getItem(QUIZ_KEY + "_name") || "";
+    const savedName = (typeof QUIZ_KEY !== 'undefined' ? localStorage.getItem(QUIZ_KEY + "_name") : "") || "";
     document.getElementById("boxLoginGate").innerHTML = `
         <h2>Medhavi Re-Attempt Gate</h2>
         <p>पुनः परीक्षा देने के लिए आपका नाम (Locked):</p>
@@ -220,6 +218,7 @@ function buildPaletteGrid() {
         container.appendChild(cell);
     }
 }
+
 function forceAutomaticSubmission() {
     checkAndMarkPreviousVisited(activeIndex);
     alert("समय समाप्त! आपका टेस्ट अपने आप सबमिट हो रहा है।");
@@ -291,9 +290,7 @@ function processFinalCalculation() {
     const secStr = (timeConsumedSec % 60).toString().padStart(2, '0');
     const timeStr = `${minStr}:${secStr}`;
     
-    // 🎯 .33 की जगह 1/3 (सटीक एक-तिहाई)
     const negativePerWrong = (typeof NEGATIVE_MARKING !== 'undefined') ? NEGATIVE_MARKING : (1 / 3);
-    
     const grossMarks = correct;
     const negativeMarks = incorrect * negativePerWrong;
     let netScore = parseFloat((grossMarks - negativeMarks).toFixed(2));
@@ -308,7 +305,6 @@ function processFinalCalculation() {
     if(document.getElementById('valSkippedCount')) document.getElementById('valSkippedCount').innerText = skipped;
     if(document.getElementById('valTimeConsumed')) document.getElementById('valTimeConsumed').innerText = timeStr;
     
-    // 🎯 netScore को भी Result Object में स्टोर कर लिया गया है
     const resultObj = {
         studentName: studentName,
         netScore: netScore,
@@ -320,13 +316,15 @@ function processFinalCalculation() {
         isReattempt: isReattemptMode,
         reviewHTML: savedReviewHTML
     };
-    localStorage.setItem(QUIZ_KEY, "true");
-    localStorage.setItem(QUIZ_KEY + "_name", studentName);
-    localStorage.setItem(QUIZ_KEY + "_result", JSON.stringify(resultObj));
+    if (typeof QUIZ_KEY !== 'undefined') {
+        localStorage.setItem(QUIZ_KEY, "true");
+        localStorage.setItem(QUIZ_KEY + "_name", studentName);
+        localStorage.setItem(QUIZ_KEY + "_result", JSON.stringify(resultObj));
+    }
 
     setTimeout(() => {
         const target = document.getElementById('captureTarget');
-        if(target) {
+        if(target && typeof html2canvas !== 'undefined') {
             html2canvas(target, { scale: 2 }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = studentName + '_Result_Card.png';
@@ -355,8 +353,8 @@ function processFinalCalculation() {
       .catch(err => console.error("शीट एरर:", err));
 }
 
-// 🎯 री-ओपन/पुराना रिजल्ट देखने पर अब नेट स्कोर ही दिखेगा
 function viewSavedResult() {
+    if (typeof QUIZ_KEY === 'undefined') return;
     const rawData = localStorage.getItem(QUIZ_KEY + "_result");
     if(!rawData) {
         alert("कोई पुराना परिणाम नहीं मिला!");
@@ -372,10 +370,9 @@ function viewSavedResult() {
     const studentNameLbl = document.getElementById('lblReportStudentName');
     if(studentNameLbl) studentNameLbl.innerHTML = "परीक्षार्थी: " + res.studentName + tagText;
     
-    // पुराने सेव्ड स्कोर में अगर netScore उपलब्ध न हो, तो ऑन-द-फ़्लाई कैलकुलेट करें
     let displayScore = res.netScore;
     if (displayScore === undefined || displayScore === null) {
-        const negativePerWrong = (typeof NEGATIVE_MARKING !== 'undefined') ? NEGATIVE_MARKING : 0.33;
+        const negativePerWrong = (typeof NEGATIVE_MARKING !== 'undefined') ? NEGATIVE_MARKING : (1 / 3);
         displayScore = parseFloat((res.correct - (res.incorrect * negativePerWrong)).toFixed(2));
         if (displayScore < 0) displayScore = 0;
     }
@@ -393,20 +390,20 @@ function viewSavedResult() {
 function captureCardAndOpenGroup() {
     const target = document.getElementById('captureTarget');
     if(!target) return;
-    html2canvas(target, { scale: 2 }).then(canvas => {
-        canvas.toBlob(blob => {
-            if (navigator.clipboard && navigator.clipboard.write) {
-                const item = new ClipboardItem({ "image/png": blob });
-                navigator.clipboard.write([item]).then(() => {
-                    alert("रिजल्ट कार्ड इमेज कॉपी हो गई है! टेलीग्राम पर पेस्ट करें।");
-                    window.open("https://t.me/Medhavi_Study_Point");
-                }).catch(err => alert("कॉपी विफल: " + err));
-            } else {
-                alert("ब्राउज़र सपोर्ट नहीं करता।");
-            }
-        }, "image/png");
-    });
-        }
-
-
-
+    if (typeof html2canvas !== 'undefined') {
+        html2canvas(target, { scale: 2 }).then(canvas => {
+            canvas.toBlob(blob => {
+                if (navigator.clipboard && navigator.clipboard.write) {
+                    const item = new ClipboardItem({ "image/png": blob });
+                    navigator.clipboard.write([item]).then(() => {
+                        alert("रिजल्ट कार्ड इमेज कॉपी हो गई है! टेलीग्राम पर पेस्ट करें।");
+                        window.open("https://t.me/Medhavi_Study_Point");
+                    }).catch(err => alert("कॉपी विफल: " + err));
+                } else {
+                    alert("ब्राउज़र सपोर्ट नहीं करता।");
+                }
+            }, "image/png");
+        });
+    }
+}
+    
