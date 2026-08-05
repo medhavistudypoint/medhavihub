@@ -8,70 +8,102 @@
         * { box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
         .hero { background: linear-gradient(135deg, #0b1e47, #1e3a8a); color: white; padding: 35px 20px; text-align: center; border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; box-shadow: 0 4px 12px rgba(11,30,71,0.15); }
-        .hero h1 { font-size: 26px; margin: 0; color: #ffcc00; }
-        .hero p { font-size: 14px; margin-top: 8px; opacity: 0.9; }
-        .container { max-width: 900px; margin: 30px auto 40px; padding: 0 15px; }
-        .back-btn { display: inline-block; margin-bottom: 25px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 14px; }
+        .hero h1 { font-size: 24px; margin: 0; color: #ffcc00; }
+        .hero p { font-size: 13px; margin-top: 8px; opacity: 0.9; }
+        .container { max-width: 900px; margin: 25px auto 40px; padding: 0 15px; }
+        .back-btn { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 14px; }
         
-        .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .main-card { background: white; padding: 25px 20px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; text-decoration: none; color: inherit; transition: all 0.25s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .main-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-color: #ffcc00; }
-        .main-card i { font-size: 40px; display: block; margin-bottom: 10px; }
+        .unit-heading { font-size: 18px; color: #0b1e47; border-bottom: 2px solid #0b1e47; padding-bottom: 5px; margin: 25px 0 15px; font-weight: bold; }
+        .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; }
+        .main-card { background: white; padding: 20px 15px; border-radius: 14px; border: 1px solid #e2e8f0; box-shadow: 0 3px 10px rgba(0,0,0,0.04); text-align: left; text-decoration: none; color: inherit; transition: all 0.2s ease; display: flex; align-items: center; gap: 15px; }
+        .main-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); border-color: #2563eb; }
+        .main-card i { font-size: 32px; display: flex; align-items: center; justify-content: center; min-width: 45px; }
+        .card-text { flex: 1; }
+        .card-text b { font-size: 15px; color: #0b1e47; display: block; margin-bottom: 2px; }
+        .card-text span { font-size: 12px; color: #64748b; }
     </style>
 </head>
 <body>
 
     <div class="hero">
-        <h1>📖 GS (सामान्य अध्ययन) पोर्टल</h1>
-        <p>विषय चुनें और अपनी तैयारी शुरू करें</p>
+        <h1>📖 सामान्य ज्ञान (TGT / PGT)</h1>
+        <p>उत्तर प्रदेश शिक्षा सेवा चयन आयोग पाठ्यक्रम (30 प्रश्न)</p>
     </div>
 
     <div class="container">
         <a href="tgt2026.html" class="back-btn">⬅️ TGT मुख्य पेज पर जाएँ</a>
 
+        <!-- इकाई 1 -->
+        <div class="unit-heading">📌 इकाई 1 : समसामयिकी (Current Affairs)</div>
         <div class="main-grid">
-            <!-- 1. भारतीय इतिहास -->
-            <a href="gs-history.html" class="main-card">
-                <i>📜</i>
-                <b style="font-size:18px;">भारतीय इतिहास</b><br>
-                <span style="font-size:13px; color:#64748b;">टेस्ट सीरीज़ एवं PDFs</span>
-            </a>
-
-            <!-- 2. भूगोल -->
-            <a href="gs-geography.html" class="main-card">
-                <i>🌍</i>
-                <b style="font-size:18px;">भारत एवं विश्व का भूगोल</b><br>
-                <span style="font-size:13px; color:#64748b;">टेस्ट सीरीज़ एवं PDFs</span>
-            </a>
-
-            <!-- 3. भारतीय संविधान व राजव्यवस्था -->
-            <a href="gs-polity.html" class="main-card">
-                <i>🏛️</i>
-                <b style="font-size:18px;">भारतीय संविधान व राजव्यवस्था</b><br>
-                <span style="font-size:13px; color:#64748b;">टेस्ट सीरीज़ एवं PDFs</span>
-            </a>
-
-            <!-- 4. सामान्य विज्ञान -->
-            <a href="gs-science.html" class="main-card">
-                <i>🔬</i>
-                <b style="font-size:18px;">सामान्य विज्ञान</b><br>
-                <span style="font-size:13px; color:#64748b;">भौतिक, रसायन व जीव विज्ञान</span>
-            </a>
-
-            <!-- 5. पर्यावरण एवं पारिस्थितिकी -->
-            <a href="gs-environment.html" class="main-card">
-                <i>🌿</i>
-                <b style="font-size:18px;">पर्यावरण एवं पारिस्थितिकी</b><br>
-                <span style="font-size:13px; color:#64748b;">जैव विविधता व पर्यावरण टेस्ट</span>
-            </a>
-
-            <!-- 6. समसामयिकी / करेंट अफेयर्स -->
             <a href="gs-current.html" class="main-card">
                 <i>📰</i>
-                <b style="font-size:18px;">करेंट अफेयर्स (Current Affairs)</b><br>
-                <span style="font-size:13px; color:#64748b;">मासिक एवं वार्षिकी नोट्स व टेस्ट</span>
+                <div class="card-text">
+                    <b>समसामयिकी (Current Affairs)</b>
+                    <span>राष्ट्रीय/राज्य घटनाएँ, चर्चित व्यक्ति व खेल</span>
+                </div>
             </a>
         </div>
+
+        <!-- इकाई 2 -->
+        <div class="unit-heading">📌 इकाई 2 : इतिहास, राजव्यवस्था, अर्थव्यवस्था व भूगोल</div>
+        <div class="main-grid">
+            <a href="gs-history.html" class="main-card">
+                <i>📜</i>
+                <div class="card-text">
+                    <b>भारतीय इतिहास व स्वतंत्रता आन्दोलन</b>
+                    <span>प्राचीन, मध्यकालीन व आधुनिक इतिहास</span>
+                </div>
+            </a>
+            <a href="gs-polity.html" class="main-card">
+                <i>🏛️</i>
+                <div class="card-text">
+                    <b>संविधान एवं राजव्यवस्था</b>
+                    <span>भारतीय संविधान, धाराएँ व शैक्षिक विधिक विकास</span>
+                </div>
+            </a>
+            <a href="gs-history.html" class="main-card">
+                <i>📈</i>
+                <div class="card-text">
+                    <b>भारतीय अर्थव्यवस्था</b>
+                    <span>आर्थिक व्यवस्था, बजट व योजनाएँ</span>
+                </div>
+            </a>
+            <a href="gs-geography.html" class="main-card">
+                <i>🌍</i>
+                <div class="card-text">
+                    <b>भूगोल</b>
+                    <span>भौगोलिक स्थिति, नदियाँ व जनगणना</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- इकाई 3 -->
+        <div class="unit-heading">📌 इकाई 3 : सामान्य विज्ञान, ICT एवं शैक्षिक प्रौद्योगिकी</div>
+        <div class="main-grid">
+            <a href="gs-science.html" class="main-card">
+                <i>🔬</i>
+                <div class="card-text">
+                    <b>सामान्य विज्ञान, प्रौद्योगिकी व पर्यावरण</b>
+                    <span>दैनिक विज्ञान, तकनीक एवं पर्यावरण</span>
+                </div>
+            </a>
+            <a href="gs-science.html" class="main-card">
+                <i>🩺</i>
+                <div class="card-text">
+                    <b>मानव स्वास्थ्य, पोषण एवं रोग</b>
+                    <span>विटामिन, खनिज, रोग, हार्मोन व एंजाइम</span>
+                </div>
+            </a>
+            <a href="gs-science.html" class="main-card">
+                <i>💻</i>
+                <div class="card-text">
+                    <b>कंप्यूटर, ICT एवं शैक्षिक प्रौद्योगिकी</b>
+                    <span>कंप्यूटर शब्दावली, ICT प्रयोग व डिजिटल शिक्षा</span>
+                </div>
+            </a>
+        </div>
+
     </div>
 
 </body>
