@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GS (सामान्य अध्ययन) पोर्टल</title>
+    <title>GS (सामान्य ज्ञान) - TGT/PGT आयोग पोर्टल</title>
     <style>
         * { box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
@@ -13,14 +13,15 @@
         .container { max-width: 900px; margin: 25px auto 40px; padding: 0 15px; }
         .back-btn { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 14px; }
         
-        .unit-heading { font-size: 18px; color: #0b1e47; border-bottom: 2px solid #0b1e47; padding-bottom: 5px; margin: 25px 0 15px; font-weight: bold; }
-        .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; }
-        .main-card { background: white; padding: 20px 15px; border-radius: 14px; border: 1px solid #e2e8f0; box-shadow: 0 3px 10px rgba(0,0,0,0.04); text-align: left; text-decoration: none; color: inherit; transition: all 0.2s ease; display: flex; align-items: center; gap: 15px; }
-        .main-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); border-color: #2563eb; }
-        .main-card i { font-size: 32px; display: flex; align-items: center; justify-content: center; min-width: 45px; }
-        .card-text { flex: 1; }
-        .card-text b { font-size: 15px; color: #0b1e47; display: block; margin-bottom: 2px; }
-        .card-text span { font-size: 12px; color: #64748b; }
+        .unit-heading { font-size: 18px; color: #0b1e47; border-bottom: 2px solid #0b1e47; padding-bottom: 5px; margin: 30px 0 18px; font-weight: bold; }
+        
+        /* चौकोर और बड़ा वर्टिकल कार्ड डिज़ाइन */
+        .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .main-card { background: white; padding: 25px 20px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; text-decoration: none; color: inherit; transition: all 0.25s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .main-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-color: #ffcc00; }
+        .main-card i { font-size: 42px; display: block; margin-bottom: 12px; }
+        .main-card b { font-size: 17px; color: #0b1e47; display: block; margin-bottom: 4px; }
+        .main-card span { font-size: 13px; color: #64748b; }
     </style>
 </head>
 <body>
@@ -38,10 +39,8 @@
         <div class="main-grid">
             <a href="gs-current.html" class="main-card">
                 <i>📰</i>
-                <div class="card-text">
-                    <b>समसामयिकी (Current Affairs)</b>
-                    <span>राष्ट्रीय/राज्य घटनाएँ, चर्चित व्यक्ति व खेल</span>
-                </div>
+                <b>समसामयिकी (Current Affairs)</b>
+                <span>राष्ट्रीय/राज्य घटनाएँ, चर्चित व्यक्ति व खेल</span>
             </a>
         </div>
 
@@ -50,31 +49,23 @@
         <div class="main-grid">
             <a href="gs-history.html" class="main-card">
                 <i>📜</i>
-                <div class="card-text">
-                    <b>भारतीय इतिहास व स्वतंत्रता आन्दोलन</b>
-                    <span>प्राचीन, मध्यकालीन व आधुनिक इतिहास</span>
-                </div>
+                <b>भारतीय इतिहास व स्वतंत्रता आन्दोलन</b>
+                <span>प्राचीन, मध्यकालीन व आधुनिक इतिहास</span>
             </a>
             <a href="gs-polity.html" class="main-card">
                 <i>🏛️</i>
-                <div class="card-text">
-                    <b>संविधान एवं राजव्यवस्था</b>
-                    <span>भारतीय संविधान, धाराएँ व शैक्षिक विधिक विकास</span>
-                </div>
+                <b>संविधान एवं राजव्यवस्था</b>
+                <span>भारतीय संविधान, धाराएँ व शैक्षिक विधिक विकास</span>
             </a>
             <a href="gs-history.html" class="main-card">
                 <i>📈</i>
-                <div class="card-text">
-                    <b>भारतीय अर्थव्यवस्था</b>
-                    <span>आर्थिक व्यवस्था, बजट व योजनाएँ</span>
-                </div>
+                <b>भारतीय अर्थव्यवस्था</b>
+                <span>आर्थिक व्यवस्था, बजट व योजनाएँ</span>
             </a>
             <a href="gs-geography.html" class="main-card">
                 <i>🌍</i>
-                <div class="card-text">
-                    <b>भूगोल</b>
-                    <span>भौगोलिक स्थिति, नदियाँ व जनगणना</span>
-                </div>
+                <b>भूगोल</b>
+                <span>भौगोलिक स्थिति, नदियाँ व जनगणना</span>
             </a>
         </div>
 
@@ -83,24 +74,18 @@
         <div class="main-grid">
             <a href="gs-science.html" class="main-card">
                 <i>🔬</i>
-                <div class="card-text">
-                    <b>सामान्य विज्ञान, प्रौद्योगिकी व पर्यावरण</b>
-                    <span>दैनिक विज्ञान, तकनीक एवं पर्यावरण</span>
-                </div>
+                <b>सामान्य विज्ञान व पर्यावरण</b>
+                <span>दैनिक विज्ञान, तकनीक एवं पर्यावरण</span>
             </a>
             <a href="gs-science.html" class="main-card">
                 <i>🩺</i>
-                <div class="card-text">
-                    <b>मानव स्वास्थ्य, पोषण एवं रोग</b>
-                    <span>विटामिन, खनिज, रोग, हार्मोन व एंजाइम</span>
-                </div>
+                <b>मानव स्वास्थ्य, पोषण एवं रोग</b>
+                <span>विटामिन, खनिज, रोग, हार्मोन व एंजाइम</span>
             </a>
             <a href="gs-science.html" class="main-card">
                 <i>💻</i>
-                <div class="card-text">
-                    <b>कंप्यूटर, ICT एवं शैक्षिक प्रौद्योगिकी</b>
-                    <span>कंप्यूटर शब्दावली, ICT प्रयोग व डिजिटल शिक्षा</span>
-                </div>
+                <b>कंप्यूटर, ICT एवं शैक्षिक प्रौद्योगिकी</b>
+                <span>कंप्यूटर शब्दावली, ICT प्रयोग व डिजिटल शिक्षा</span>
             </a>
         </div>
 
