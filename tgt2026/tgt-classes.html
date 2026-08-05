@@ -12,6 +12,13 @@
         .container { max-width: 850px; margin: 20px auto 40px; padding: 0 15px; }
         .back-btn { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 14px; }
         
+        .section-title { font-size: 18px; color: #0b1e47; border-bottom: 2px solid #0b1e47; padding-bottom: 5px; margin: 25px 0 15px; }
+        
+        /* Unit PDF Section Layout */
+        .unit-pdf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 25px; }
+        .unit-card { background: #fff8f0; border: 1px solid #fed7aa; padding: 12px 15px; border-radius: 10px; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; }
+        .unit-card h4 { margin: 0; font-size: 14px; color: #9a3412; }
+        
         .grid { display: flex; flex-direction: column; gap: 12px; }
         .card { background: white; padding: 15px 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; gap: 12px; }
         @media (min-width: 650px) {
@@ -42,6 +49,37 @@
     <div class="container">
         <a href="tgt2026.html" class="back-btn">⬅️ TGT मुख्य पेज पर जाएँ</a>
 
+        <!-- 📚 गृह विज्ञान 6 यूनिट PDF सेक्शन -->
+        <div class="section-title">📚 संपूर्ण गृह विज्ञान (Unit Wise PDF Notes)</div>
+        <div class="unit-pdf-grid">
+            <div class="unit-card">
+                <h4>Unit 1: आहार एवं पोषण (Food & Nutrition)</h4>
+                <button onclick="checkAccess('tgtpdf/unit1.html', 'पीडीएफ')" class="btn btn-pdf">📖 PDF डाउनलोड करें</button>
+            </div>
+            <div class="unit-card">
+                <h4>Unit 2: गृह प्रबंधन (Home Management)</h4>
+                <button onclick="checkAccess('tgtpdf/unit2.html', 'पीडीएफ')" class="btn btn-pdf">📖 PDF डाउनलोड करें</button>
+            </div>
+            <div class="unit-card">
+                <h4>Unit 3: स्वास्थ्य एवं प्राथमिक चिकित्सा (Health)</h4>
+                <button onclick="checkAccess('tgtpdf/unit3.html', 'पीडीएफ')" class="btn btn-pdf">📖 PDF डाउनलोड करें</button>
+            </div>
+            <div class="unit-card">
+                <h4>Unit 4: बाल विकास एवं परिवार (Child Dev)</h4>
+                <button onclick="checkAccess('tgtpdf/unit4.html', 'पीडीएफ')" class="btn btn-pdf">📖 PDF डाउनलोड करें</button>
+            </div>
+            <div class="unit-card">
+                <h4>Unit 5: वस्त्र एवं परिधान (Textiles)</h4>
+                <button onclick="checkAccess('tgtpdf/unit5.html', 'पीडीएफ')" class="btn btn-pdf">📖 PDF डाउनलोड करें</button>
+            </div>
+            <div class="unit-card">
+                <h4>Unit 6: प्रसार शिक्षा (Extension Education)</h4>
+                <button onclick="checkAccess('tgtpdf/unit6.html', 'पीडीएफ')" class="btn btn-pdf">📖 PDF डाउनलोड करें</button>
+            </div>
+        </div>
+
+        <!-- 🎥 क्लास वाइज वीडियो एवं नोट्स -->
+        <div class="section-title">🎥 चैप्टर-वाइज़ वीडियो क्लासेस</div>
         <div class="grid">
             <div class="card"><h3>Class 01: पौष्टिकता की संकल्पना एवं आहार की परिभाषा</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('tgtpdf/p1.html', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
             <div class="card"><h3>Class 02: आहार की संरचना और भोजन के मुख्य कार्य</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('tgtpdf/p2.html', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
@@ -250,7 +288,11 @@
     }
 </script>
 </body>
-        </html>
-
-
-    
+</html>
+                                                                                                      
+                                                                                                      
+                                                                                                      
+                                                                                                      
+                                                                                                      
+                                                                                                      
+                                                                                                      
