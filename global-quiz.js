@@ -1,6 +1,7 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1Rg1CjzNnB9bqXSyF552kFhG87JFk8D_NlRN07gtE7Yft70mQiZfzyeH2PevcFyo_/exec";
 
 let activeIndex = 0;
+// HTML के countdownTimer डिब्बे से समय (उदा. 55:00) पढ़कर टाइमर सेट करें
 const timerElem = document.getElementById('countdownTimer');
 const timeParts = timerElem ? timerElem.innerText.trim().split(':') : ["05", "00"];
 const parsedMins = parseInt(timeParts[0], 10) || 5;
@@ -13,6 +14,7 @@ let countdownTimerId = null;
 let studentName = "";
 let isReattemptMode = false;
 
+// null = Not Visited (White), -1 = Skipped (Red), -2 = Visited but not answered yet, >=0 = Answered (Green)
 let userResponses = [];
 let markedMatrix = [];
 
@@ -290,6 +292,7 @@ function processFinalCalculation() {
     const secStr = (timeConsumedSec % 60).toString().padStart(2, '0');
     const timeStr = `${minStr}:${secStr}`;
     
+    // 🎯 1/3 नेगेटिव मार्किंग कैलकुलेशन
     const negativePerWrong = (typeof NEGATIVE_MARKING !== 'undefined') ? NEGATIVE_MARKING : (1 / 3);
     const grossMarks = correct;
     const negativeMarks = incorrect * negativePerWrong;
@@ -316,6 +319,7 @@ function processFinalCalculation() {
         isReattempt: isReattemptMode,
         reviewHTML: savedReviewHTML
     };
+
     if (typeof QUIZ_KEY !== 'undefined') {
         localStorage.setItem(QUIZ_KEY, "true");
         localStorage.setItem(QUIZ_KEY + "_name", studentName);
