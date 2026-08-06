@@ -17,7 +17,6 @@
 
         .test-list { display: flex; flex-direction: column; gap: 10px; }
 
-        /* Screen Shot Matching Card Style */
         .test-card {
             background: #ffffff;
             border: 1px solid #e2e8f0;
@@ -47,7 +46,6 @@
             gap: 8px;
         }
 
-        /* Status Badge Styles */
         .status-badge {
             font-size: 12px;
             font-weight: 700;
@@ -98,7 +96,7 @@
             <div class="test-card" onclick="checkAccess('../homescience/daily/test15.html')"><span class="test-title">📝 Test - 15 : जल</span><span class="status-badge"></span></div>
             <div class="test-card" onclick="checkAccess('../homescience/daily/test16.html')"><span class="test-title">📝 Test - 16 : वानस्पतिक भोज्य पदार्थ</span><span class="status-badge"></span></div>
 
-            <!-- ⏳ लिंक '#' होने पर खुद कमिंग सून बैज बन जाएगा -->
+            <!-- ⏳ Coming Soon वाले टेस्ट्स -->
             <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 17 : अनाज एवं दालें</span><span class="status-badge"></span></div>
             <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 18 : फल, मेवे व मसाले</span><span class="status-badge"></span></div>
             <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 19 : पेय पदार्थ व दुग्ध उत्पाद</span><span class="status-badge"></span></div>
@@ -109,7 +107,7 @@
             <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 24 : वृद्धावस्था व मेनू</span><span class="status-badge"></span></div>
             <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 25 : पोषण मूल्यांकन</span><span class="status-badge"></span></div>
             <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 26 : उपचारात्मक पोषण</span><span class="status-badge"></span></div>
-            <div class="test-card" onclick="checkAccess('#')"><span class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 27 : मधुमेह में आहार</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 27 : मधुमेह में आहार</span><span class="status-badge"></span></div>
             <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 28 : पीलिया</span><span class="status-badge"></span></div>
             <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 29 : जठरांत्र संबंधी रोग</span><span class="status-badge"></span></div>
             <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 30 : ज्वर व मोटापा</span><span class="status-badge"></span></div>
@@ -182,18 +180,20 @@
         });
     });
 
+    // 🔒 अब हर बटन पर पहले पेमेंट/ऑथेंटिकेशन चेक होगा!
     function checkAccess(url) {
-        if (url === '#' || !url) {
-            alert('⏳ यह टेस्ट जल्द ही उपलब्ध होगा!');
-            return;
-        }
-
         pendingUrl = url;
         const isVerified = localStorage.getItem('tgt_user_verified');
         
         if (isVerified === 'true') {
-            window.location.href = url;
+            // अगर छात्र पहले से पेड/वेरिफाइड है
+            if (url === '#' || !url) {
+                alert('⏳ यह टेस्ट जल्द ही उपलब्ध होगा!');
+            } else {
+                window.location.href = url;
+            }
         } else {
+            // अगर छात्र वेरिफाइड नहीं है, तो पहले पेमेंट पॉप-अप दिखेगा
             document.getElementById('paymentSection').style.display = 'none';
             document.getElementById('userMobileInput').value = '';
             document.getElementById('authMessage').innerText = '';
@@ -233,7 +233,11 @@
                     msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
                     setTimeout(() => {
                         closeModal();
-                        if (pendingUrl) window.location.href = pendingUrl;
+                        if (pendingUrl === '#' || !pendingUrl) {
+                            alert('⏳ यह टेस्ट जल्द ही उपलब्ध होगा!');
+                        } else if (pendingUrl) {
+                            window.location.href = pendingUrl;
+                        }
                     }, 800);
                 } else {
                     msgBox.style.color = "#e11d48";
