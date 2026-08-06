@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ सही किया गया बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">गृह विज्ञान (Home Science)</span>
+                        <!-- 🌟 यहाँ डायनेमिक टैग दिखेगा -->
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ सही किया गया डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_homescience_test16d"; 
+
+        // 2. 50 प्रश्नों का पूर्णतः सुधारा गया 1-लाइन फ़ॉर्मेटेड डेटासेट
+        const dataset = [
+            { id: 1, tag: "NCERT", question: "अनाजों के दाने (Cereal Grains) का सबसे बड़ा भाग (लगभग 83%) कौन-सा होता है जिसमें मुख्य रूप से स्टार्च उपस्थित होता है?", options: ["पेरीकार्प (Pericarp)", "एंडोस्पर्म (Endosperm)", "जर्म / भ्रूण (Germ/Embryo)", "एल्यूरॉन परत (Aleurone Layer)"], correct: 1 },
+            { id: 2, tag: "NCERT", question: "गेहूँ के आटे में पानी मिलाकर गूँथने पर कौन-से दो प्रोटीन आपस में जुड़कर लोचदार 'ग्लूटेन' (Gluten) का निर्माण करते हैं?", options: ["ग्लाइडिन और ग्लूटेलिन (Gliadin & Glutenin)", "एलब्यूमिन और ग्लोबुलिन", "केसीन और वे प्रोटीन", "ज़ीन और एवेनिन"], correct: 0 },
+            { id: 3, tag: "NCERT", question: "अनाजों में पाए जाने वाला मुख्य सीमित अमीनो अम्ल (Limiting Amino Acid) कौन-सा है जिसकी कमी होती है?", options: ["लाइसिन (Lysine)", "मेथिओनिन", "ट्रिप्टोफैन", "ल्यूसीन"], correct: 0 },
+            { id: 4, tag: "NCERT", question: "दालों एवं फलियों (Legumes) में किस आवश्यक अमीनो अम्ल की कमी पाई जाती है?", options: ["मेथिओनिन (Methionine) एवं सिस्टीन", "लाइसिन", "वैलीन", "फिनाइलएलानिन"], correct: 0 },
+            { id: 5, tag: "NCERT", question: "अनाज और दालों को एक साथ (3:1 या 4:1 अनुपात) मिलाकर खाने से उनके पोषक मान में सुधार होता है, इस प्रक्रिया को क्या कहते हैं?", options: ["पारस्परिक पूरकता (Amino Acid Mutual Supplementation)", "प्रबलीकरण (Fortification)", "अंकुरण (Sprouting)", "किण्वन (Fermentation)"], correct: 0 },
+            { id: 6, tag: "NCERT", question: "धान की 'पारबॉयलिंग' (Parboiling / उसलना) प्रक्रिया से चावल में किस विटामिन की मात्रा एंडोस्पर्म में समाहित हो जाने के कारण सुरक्षित रहती है?", options: ["थियामिन / विटामिन B1 (Thiamine)", "विटामिन C", "विटामिन A", "विटामिन D"], correct: 0 },
+            { id: 7, tag: "NCERT", question: "सीलिएक रोग (Celiac Disease) से पीड़ित रोगियों में गेहूं के किस घटक के प्रति असहिष्णुता (Intolerance) पाई जाती है?", options: ["ग्लूटेन प्रोटीन (Gluten Protein)", "एमाइलोज़ स्टार्च", "फाइटिक एसिड", "पेक्टिन"], correct: 0 },
+            { id: 8, tag: "NCERT", question: "अंकुरण (Malt/Sprouting) के दौरान अनाजों में किस निष्क्रिय एंजाइम के सक्रिय होने से स्टार्च का शर्करा (माल्टोज़) में अपघटन होता है?", options: ["α एवं β एमाइलेज (α & β-Amylase)", "पेप्सिन", "ट्रिप्सिन", "लाइपेज"], correct: 0 },
+            { id: 9, tag: "NCERT", question: "दालों को पकाने से पूर्व पानी में भिगोने तथा पकाने पर कौन-सा एंटी-पोषक तत्व (Anti-nutritional Factor) आंशिक रूप से नष्ट हो जाता है?", options: ["फाइटेट्स एवं ट्रिप्सिन इनहिबिटर (Phytates & Trypsin Inhibitor)", "केवल कैरोटीन", "केवल ग्लूटेन", "केवल पेक्टिन"], correct: 0 },
+            { id: 10, tag: "NCERT", question: "सोयाबीन को किण्वित (Ferment) करके बनाए जाने वाले पारंपरिक इंडोनेशियाई खाद्य पदार्थ को क्या कहते हैं?", options: ["टेम्पे (Tempeh)", "टोफू (Tofu)", "मिस्सो (Miso)", "किम्ची (Kimchi)"], correct: 0 },
+            { id: 11, tag: "NCERT", question: "मक्के (Maize/Corn) का मुख्य प्रोटीन जो अपूर्ण श्रेणी में आता है, किस नाम से जाना जाता है?", options: ["ज़ीन (Zein)", "एवेनिन", "ओरिज़ेनिन", "हॉर्डिन"], correct: 0 },
+            { id: 12, tag: "NCERT", question: "चावल की पॉलिशिंग (Polishing) करने पर उसकी बाह्य परत हटने से किस विटामिन का सबसे अधिक ह्रास होता है?", options: ["विटामिन B1 (थियामिन)", "विटामिन K", "विटामिन E", "विटामिन C"], correct: 0 },
+            { id: 13, tag: "NCERT", question: "साबुत दालों एवं अनाजों के बाह्य चोकर (Bran) में कौन-सा खनिज अवशोषण-विरोधी घटक पाया जाता है?", options: ["फाइटिक एसिड (Phytic Acid)", "ऑक्जेलिक एसिड", "टैनिन्स", "गॉसिपॉल"], correct: 0 },
+            { id: 14, tag: "NCERT", question: "खेसारी दाल (Lathyrus sativus) के अत्यधिक सेवन से तंत्रिका तंत्र से जुड़ा कौन-सा गंभीर पक्षाघात/रोग हो जाता है?", options: ["लेथिरिज़्म (Lathyrism / β-BOAA विषाक्तता)", "पेलाग्रा", "बेरी-बेरी", "स्कर्वी"], correct: 0 },
+            { id: 15, tag: "NCERT", question: "मक्के में नियासिन (विटामिन B3) बाध्य रूप में होने तथा ट्रिप्टोफैन की कमी से कौन-सा रोग उत्पन्न होता है?", options: ["पेलाग्रा (Pellagra)", "रिकेट्स", "एनीमीया", "घेंघा"], correct: 0 },
+            { id: 16, tag: "NCERT", question: "दलहन में सोयाबीन (Soybean) को अद्भुत तिलहन-दलहन माना जाता है, क्योंकि इसमें प्रोटीन और वसा का क्रमशः प्रतिशत होता है:", options: ["लगभग 40-42% प्रोटीन तथा 20% वसा", "10% प्रोटीन तथा 50% वसा", "20% प्रोटीन तथा 5% वसा", "60% प्रोटीन तथा 2% वसा"], correct: 0 },
+            { id: 17, tag: "NCERT", question: "अनाजों में उपस्थित स्टार्च का शुष्क ताप (Dry Heat) के प्रभाव से भूरे रंग के विलेय dextrin में बदलना क्या कहलाता है?", options: ["डेक्सट्रीनाइजेशन (Dextrinization)", "जिलेटिनाइजेशन", "कैरामेललाइजेशन", "कोएगुलेशन"], correct: 0 },
+            { id: 18, tag: "NCERT", question: "आद्र ताप (Moist Heat) की उपस्थिति में स्टार्च कणों का फूलकर फटना और गाढ़ा घोल बनाना क्या कहलाता है?", options: ["जिलेटिनाइजेशन (Gelatinization)", "डेक्सट्रीनाइजेशन", "किण्वन", "साबुनीकरण"], correct: 0 },
+            { id: 19, tag: "NCERT", question: "दालों में पाई जाने वाली शर्कराएँ (जैसे स्टैचियोज़ और रैफिनोज़) मानव पाचन तंत्र में न पचने के कारण कौन-सी समस्या उत्पन्न करती हैं?", options: ["पेट में गैस/आध्मान (Flatulence)", "दंत क्षय", "रक्त शर्करा में वृद्धि", "पथरी"], correct: 0 },
+            { id: 20, tag: "NCERT", question: "गेहूँ के भ्रूण (Wheat Germ) में कौन-सा वसा-घुलनशील विटामिन तथा प्राकृतिक एंटीऑक्सीडेंट प्रचुर मात्रा में पाया जाता है?", options: ["विटामिन E (Tocopherol)", "विटामिन D", "विटामिन K", "विटामिन C"], correct: 0 },
+            { id: 21, tag: "NCERT", question: "अंकुरण (Sprouting) प्रक्रिया द्वारा अनाज और दालों में मुख्य रूप से किस विटामिन का नया संश्लेषण होता है?", options: ["विटामिन C (एस्कॉर्बिक एसिड)", "विटामिन D", "विटामिन B12", "विटामिन K"], correct: 0 },
+            { id: 22, tag: "NCERT", question: "दालों में प्रोटीन की औसत मात्रा शुष्क भार के आधार पर सामान्यतः कितनी होती है?", options: ["20-25%", "5-10%", "45-50%", "60-70%"], correct: 0 },
+            { id: 23, tag: "NCERT", question: "ओट्स (Oats) और जौ (Barley) में पाया जाने वाला कौन-सा घुलनशील रेशा (Soluble Fiber) कोलेस्ट्रॉल को कम करने में सहायक है?", options: ["बीटा-ग्लूकॉन (Beta-Glucan)", "पेक्टिन", "लिग्निन", "हेमीसेलुलोज"], correct: 0 },
+            { id: 24, tag: "NCERT", question: "दूध पनीर के विकल्प के रूप में सोयाबीन के दूध से जमाए गए थक्के (Coagulated Protein) को क्या कहते हैं?", options: ["टोफू (Tofu)", "सेइतान", "टेम्पे", "मट्ठा"], correct: 0 },
+            { id: 25, tag: "NCERT", question: "चावल का मुख्य प्रोटीन कौन-सा है जो आसानी से पच जाता है?", options: ["ओरिज़ेनिन (Oryzenin)", "ज़ीन", "हॉर्डिन", "ग्लूटेलिन"], correct: 0 },
+            { id: 26, tag: "PYQ", question: "गेहूँ का चोकर (Bran) उसकी किस परत/स्तर में होता है?", options: ["एपिडर्मिस", "इन्डोस्पर्म", "इम्ब्रियो", "पेरीकार्प (Pericarp)"], correct: 3 },
+            { id: 27, tag: "PYQ", question: "निम्नलिखित खाद्य पदार्थों में से किसका सेवन सीलिएक रोग (Celiac Disease) में नहीं करना चाहिए?<br><br>I. सब्जी का पुलाव<br>II. सूजी उपमा<br>III. पीज़ा<br>IV. माल्टेड पेय<br>V. सब्जी के पकौड़े<br><br><b>कूट :</b>", options: ["I, II और IV", "II, III और IV", "I, II और III", "I, III और V"], correct: 1 },
+            { id: 28, tag: "PYQ", question: "अनाजों में अंकुरण (Sprouting) के समय कौन-सा एंजाइम अत्यधिक सक्रिय हो जाता है?", options: ["पेपेन", "ब्रोमीलीन", "एमाइलेज", "रेनिन"], correct: 2 },
+            { id: 29, tag: "PYQ", question: "निम्नलिखित में से किन खाद्य पदार्थों में ग्लूटेन नहीं होता है और सीलिएक रोग से पीड़ित मरीजों को इसका उपभोग करने की छूट है?<br><br>(a) गेहूँ का आटा<br>(b) चावल का आटा<br>(c) चने का आटा<br>(d) मक्का का आटा<br><br><b>कूट :</b>", options: ["(b), (c) और (d) सही हैं", "(a), (b) और (c) सही हैं", "(c), (d) और (a) सही हैं", "(d), (a) और (b) सही हैं"], correct: 0 },
+            { id: 30, tag: "PYQ", question: "गेहूँ के प्रसंस्करण (Wheat Processing) से संबंधित कदमों को सही क्रम में व्यवस्थित करें:<br><br>I. खींचना (Conditioning)<br>II. धोना (Washing)<br>III. नर्म करना (Tempering)<br>IV. पीसना (Milling)<br>V. शुद्धिकरण (Purification)<br>VI. ब्लीचिंग (Bleaching)<br><br><b>कूट :</b>", options: ["I, II, V, III, IV, VI", "II, I, IV, III, V, VI", "III, II, VI, V, I, IV", "I, III, VI, II, IV, V"], correct: 2 },
+            { id: 31, tag: "PYQ", question: "............ में स्टार्च कणों के रूप में अनाज भोजन का मुख्य भंडार होता है:", options: ["भ्रूण", "भ्रूणपोष (Endosperm)", "एलवुरॉन", "स्क्यूटेलम"], correct: 1 },
+            { id: 32, tag: "PYQ", question: "वनस्पतिज अन्न पदार्थ में पाए जाने वाले प्रति-पोषक घटक (Anti-nutritional Factors) कौन-से हैं?<br><br>(i) फाइटोकेमिकल<br>(ii) ट्रिप्सिन इनहिबिटर<br>(iii) टैनिन<br>(iv) एंटी-ऑक्सीडेंट<br>(v) फायटेट्स<br><br><b>कूट :</b>", options: ["(ii), (iii) और (v)", "(ii), (iii) और (iv)", "(iii), (iv) और (v)", "(i), (ii) और (iv)"], correct: 0 },
+            { id: 33, tag: "PYQ", question: "अन्न (अनाज) मुख्य रूप से क्या प्रदान करता है?<br><br>I. ऊर्जा<br>II. आयोडीन<br>III. विटामिन A<br>IV. प्रोटीन<br><br><b>कूट :</b>", options: ["I, II, III सही हैं", "I और IV सही हैं", "II और III सही हैं", "I और III सही हैं"], correct: 1 },
+            { id: 34, tag: "PYQ", question: "एकमात्र अनाज जिसमें कैरोटीन (Carotene / विटामिन A का पूर्वगामी) पाया जाता है:", options: ["पीली मक्का", "गेहूँ", "बाजरा", "चावल"], correct: 0 },
+            { id: 35, tag: "PYQ", question: "गेहूँ के प्रोटीन में सबसे कम मात्रा में पाया जाने वाला आवश्यक अमीनो एसिड कौन-सा है?", options: ["मेथिओनिन", "ट्रिप्टोफैन", "लाइसिन (Lysine)", "ल्यूसीन"], correct: 2 },
+            { id: 36, tag: "PYQ", question: "निम्नलिखित में से किस अनाज के प्रति 100 ग्राम में सबसे अधिक प्रोटीन पाया जाता है?", options: ["गेहूँ (लगभग 11.8 g)", "बाजरा (11.6 g)", "ज्वार (10.4 g)", "चावल (6.8 g)"], correct: 0 },
+            { id: 37, tag: "PYQ", question: "आहार नियोजन में 'अनाज का एक एक्सचेंज' (One Cereal Exchange) कितनी कैलोरी प्रदान करता है?", options: ["100 कैलोरी", "70 कैलोरी", "50 कैलोरी", "40 कैलोरी"], correct: 2 },
+            { id: 38, tag: "PYQ", question: "गेहूँ में कौन-सा मुख्य लोचदार प्रोटीन पाया जाता है?", options: ["हिस्टोन", "एल्ब्युमिन", "ग्लूटेन (Gluten)", "इनमें से कोई नहीं"], correct: 2 },
+            { id: 39, tag: "PYQ", question: "अनाज की पिसाई, चमकाने (Polishing) और परिष्करण (Refining) करने से मुख्यतः कौन-सा विटामिन नष्ट हो जाता है?", options: ["विटामिन A", "विटामिन B कॉम्प्लेक्स (विटामिन B1)", "विटामिन C", "विटामिन D"], correct: 1 },
+            { id: 40, tag: "PYQ", question: "अनाज में जिस आवश्यक अमीनो अम्ल की कमी होती है, वह है:", options: ["मेथिओनिन", "लाइसिन (Lysine)", "वैलीन", "टाइरोसिन"], correct: 1 },
+            { id: 41, tag: "PYQ", question: "राजमा में उपस्थित ऑक्जेलेट एवं फाइटेट किसकी उपलब्धता को अवरोधित करते हैं?", options: ["कार्बोहाइड्रेट", "लौह तत्व एवं कैल्शियम", "केवल वसा", "केवल सोडियम"], correct: 1 },
+            { id: 42, tag: "PYQ", question: "दालों में मुख्य रूप से किस आवश्यक अमीनो अम्ल का अभाव (कमी) होता है?", options: ["लाइसिन", "मेथिओनिन (Methionine)", "ल्यूसीन", "आइसोल्यूसीन"], correct: 1 },
+            { id: 43, tag: "PYQ", question: "सामान्यतः सूखी दालों में प्रोटीन की मात्रा कितनी होती है?", options: ["10 से 15%", "20 से 25%", "25 से 40%", "5 से 10%"], correct: 1 },
+            { id: 44, tag: "PYQ", question: "आहार में दालें किसका एक उत्तम स्रोत मानी जाती हैं?", options: ["रेशों का", "प्रोटीनों का (Proteins)", "कार्बोहाइड्रेट्स का", "वसा का"], correct: 1 },
+            { id: 45, tag: "PYQ", question: "दालों का अंकुरण (Sprouting) पोषणात्मक दृष्टि से महत्वपूर्ण है, क्योंकि:", options: ["यह पाचकता में वृद्धि करता है", "यह विटामिन C की मात्रा बढ़ाता है", "लौह तत्व की जैव-उपलब्धता बढ़ाता है", "उपर्युक्त सभी"], correct: 3 },
+            { id: 46, tag: "PYQ", question: "अनिवार्य अमीनो अम्ल लाइसिन (Lysine) प्रचुर मात्रा में पाया जाता है:", options: ["दूध एवं दालों में", "केवल मक्के में", "केवल दलिया में", "केवल चावल में"], correct: 0 },
+            { id: 47, tag: "PYQ", question: "दालें तथा फलियाँ किस पोषक तत्व का मुख्य एवं सस्ता स्रोत हैं?", options: ["वसा", "प्रोटीन (Protein)", "कार्बोहाइड्रेट", "खनिज लवण"], correct: 1 },
+            { id: 48, tag: "PYQ", question: "सोयाबीन को किण्वित (Ferment) करके बनाया जाने वाला पारंपरिक उत्पाद 'टेम्पे' (Tempeh) किससे बनता है?", options: ["चने से", "सोयाबीन से", "राजमा से", "लोबिया से"], correct: 1 },
+            { id: 49, tag: "PYQ", question: "शाकाहारी आहार में उच्च जैविक मूल्य (High Biological Value) का प्रोटीन किससे प्राप्त होता है?", options: ["दालों और अनाज के संयोजन से (Combination of Cereals & Pulses)", "केवल हरी सब्जियों से", "केवल फलों से", "केवल जड़ों वाली सब्जियों से"], correct: 0 },
+            { id: 50, tag: "PYQ", question: "गेहूं के आटे में जब पानी मिलाकर गूँथा जाता है, तब कौन-सा प्रोटीन संरचनात्मक जाल (Network) बनाता है?", options: ["ग्लूटेन (Gluten)", "एल्ब्युमिन", "ग्लोबुलिन", "केसीन"], correct: 0 }
+        ];
+    </script>
+
+    <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+                                                                                                                                                                                       </html>
+
