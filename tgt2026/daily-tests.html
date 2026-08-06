@@ -8,28 +8,72 @@
         * { box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
         
-        .hero { background: linear-gradient(135deg, #0b1e47, #1e3a8a); color: white; padding: 25px 20px; text-align: center; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; }
-        .hero h1 { font-size: 22px; margin: 0; color: #facc15; font-weight: 800; }
-        .hero p { font-size: 13px; opacity: 0.95; margin-top: 5px; }
+        /* 🌟 होम पेज वाला सेम ब्रांडिंग हेडर */
+        .brand-hero { 
+            background: linear-gradient(135deg, #0b1e47, #1e3a8a); 
+            color: white; 
+            padding: 30px 20px 25px; 
+            text-align: center; 
+            border-bottom-left-radius: 20px; 
+            border-bottom-right-radius: 20px; 
+        }
+        
+        .brand-logo {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            border: 3px solid #facc15;
+            object-fit: cover;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .brand-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #facc15;
+            margin: 0;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .brand-tagline {
+            font-size: 13px;
+            color: #ffffff;
+            opacity: 0.95;
+            margin: 6px 0 15px 0;
+            font-weight: 500;
+        }
+
+        .page-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(250, 204, 21, 0.4);
+            color: #ffffff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+        }
 
         .container { max-width: 800px; margin: 20px auto 40px; padding: 0 12px; }
         .back-btn { display: inline-block; margin-bottom: 16px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 13px; }
 
         .test-list { display: flex; flex-direction: column; gap: 12px; }
 
-        /* 🎯 मोटा और एलीवेटेड कार्ड बटन डिज़ाइन */
+        /* 🎯 पेज 3 वाला क्लीन व बोल्ड कार्ड डिज़ाइन */
         .test-card {
             background: #ffffff;
-            border: 2px solid #cbd5e1; /* बॉर्डर थोड़ी मोटी की गई */
+            border: 2px solid #cbd5e1;
             border-radius: 12px;
-            padding: 16px 20px; /* पैडिंग बढ़ाई गई */
+            padding: 16px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             text-decoration: none;
             color: #0b1e47;
-            font-size: 15px; /* फॉन्ट साइज़ बड़ा किया गया */
-            font-weight: 700; /* फॉन्ट बोल्ड किया गया */
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease-in-out;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
@@ -47,7 +91,7 @@
             gap: 10px;
         }
 
-        /* 🟢 बड़ा और स्पष्ट लाइव गोला (Big Live Dot & Status) */
+        /* 🟢 बड़ा स्पष्ट गोला व लाइव स्टेटस बैज */
         .status-badge {
             font-size: 13px;
             font-weight: 800;
@@ -59,7 +103,6 @@
         .status-live { color: #15803d; }
         .status-coming { color: #d97706; }
 
-        /* बड़ा हरा गोला (Dot) */
         .live-dot {
             width: 12px;
             height: 12px;
@@ -82,9 +125,12 @@
 </head>
 <body>
 
-    <div class="hero">
-        <h1>📝 Home Science Daily Practice Tests</h1>
-        <p>TGT 2026 - ऑनलाइन टॉपिक-वाइज टेस्ट सीरीज</p>
+    <!-- 🌟 ब्रांडेड हेडर (Home Page Style) -->
+    <div class="brand-hero">
+        <img src="../logo.png" alt="Medhavi Logo" class="brand-logo" onerror="this.src='logo.png'">
+        <h1 class="brand-title">MEDHAVI STUDY POINT</h1>
+        <p class="brand-tagline">ज्ञान, अनुशासन और सफलता का डिजिटल सारथी</p>
+        <div class="page-badge">📝 Home Science Daily Practice Tests</div>
     </div>
 
     <div class="container">
@@ -175,7 +221,7 @@
 
     let pendingUrl = null;
 
-    // 🤖 बड़ा गोला और नया स्टेटस बैज सेट करने वाली स्क्रिप्ट
+    // 🤖 ऑटोमैटिक बैज अपडेट
     window.addEventListener('DOMContentLoaded', () => {
         const cards = document.querySelectorAll('.test-card');
         cards.forEach(card => {
