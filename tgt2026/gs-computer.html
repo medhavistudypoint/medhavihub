@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
+    <script>
+  const userPlan = localStorage.getItem("user_plan");
+
+  // अगर छात्र के पास FULL या GS में से कोई भी प्लान नहीं है तो रोकें
+  if (userPlan !== "FULL" && userPlan !== "GS") {
+    alert("इस कंटेंट को देखने के लिए कृपया लॉगिन करें या GS बैच जॉइन करें!");
+    window.location.href = "gs.html"; // लॉगिन/पेमेंट वाले पेज पर भेज देगा
+  }
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>कंप्यूटर व ICT - TGT/PGT GS</title>
