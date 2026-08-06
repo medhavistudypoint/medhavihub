@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
+    <script>
+  const userPlan = localStorage.getItem("user_plan");
+  if (userPlan !== "FULL" && userPlan !== "GS") {
+    alert("इस कंटेंट को देखने के लिए कृपया लॉगिन करें या GS बैच जॉइन करें!");
+    window.location.href = "../gs.html";
+  }
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TGT 2026 - Mock Test 01</title>
