@@ -84,5 +84,25 @@
             </a>
         </div>
     </div>
+    <script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxbKZhT7xKM0xEX4SSLubS5oVkWuKFLIinWFbWO9S6eGdlQJXJ_guG_TnjdeqD4H270/exec";
+
+  function verifyUser(mobileNumber) {
+    fetch(SCRIPT_URL + "?mobile=" + mobileNumber)
+      .then(res => res.json())
+      .then(data => {
+        if (data.allowed) {
+          localStorage.setItem("user_plan", data.plan); // 'FULL' या 'GS' सेव होगा
+          localStorage.setItem("verified_mobile", mobileNumber);
+          alert(data.message);
+          location.reload();
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(err => console.error("Error:", err));
+  }
+    </script>
+    
 </body>
 </html>
