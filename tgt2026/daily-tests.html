@@ -3,248 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Science Daily Tests - Medhavi Study Point</title>
+    <title>Home Science Daily Practice Tests - Medhavi Study Point</title>
     <style>
         * { box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
-        
-        .hero { background: linear-gradient(135deg, #0b1e47, #1e3a8a); color: white; padding: 25px 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
-        .hero h1 { font-size: 22px; margin: 0; color: #facc15; font-weight: 800; }
-        .hero p { font-size: 13px; opacity: 0.9; margin-top: 5px; }
-
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
+        .hero { background: linear-gradient(135deg, #0b1e47, #1e3a8a); color: white; padding: 30px 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+        .hero h1 { font-size: 24px; margin: 0; color: #ffcc00; }
         .container { max-width: 800px; margin: 20px auto 40px; padding: 0 15px; }
-        
         .back-btn { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 14px; }
-        .back-btn:hover { background: #cbd5e1; }
-
-        .test-list { display: flex; flex-direction: column; gap: 12px; }
-
-        .test-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: white;
-            padding: 16px 20px;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            text-decoration: none;
-            color: #0b1e47;
-            font-size: 15px;
-            font-weight: 700;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-            transition: all 0.2s ease-in-out;
-        }
-
-        .test-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-            border-color: #3b82f6;
-        }
-
-        .status-msg {
-            background: #dcfce7;
-            color: #15803d;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-            border: 1px solid #86efac;
-            white-space: nowrap;
-        }
-
-        /* 🔒 ₹299 पेड ऑथेंटिकेशन/पेमेंट पॉप-अप स्टाइल्स */
-        .modal-overlay { 
-            display: flex; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: rgba(11, 30, 71, 0.88); 
-            justify-content: center; 
-            align-items: center; 
-            z-index: 10000; 
-            padding: 15px; 
-            backdrop-filter: blur(5px);
-        }
-        .modal-box { 
-            background: white; 
-            padding: 22px; 
-            border-radius: 16px; 
-            width: 100%; 
-            max-width: 390px; 
-            text-align: center; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            border: 1px solid #cbd5e1;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .modal-box h3 { color: #0b1e47; margin: 0 0 5px 0; font-size: 20px; }
-        .modal-box p { font-size: 13px; color: #64748b; margin-bottom: 12px; }
         
-        .price-badge {
-            background: #fef3c7;
-            color: #b45309;
-            font-size: 18px;
-            font-weight: 800;
-            padding: 6px 16px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-bottom: 10px;
-            border: 1px solid #fde68a;
+        .grid { display: flex; flex-direction: column; gap: 12px; }
+        .card { background: white; padding: 15px 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; gap: 10px; }
+        @media (min-width: 600px) {
+            .card { flex-direction: row; align-items: center; }
         }
+        .card-info { flex: 1; }
+        .card h3 { font-size: 15px; margin: 0 0 4px 0; color: #0b1e47; }
+        .btn-test { background-color: #16a34a; color: white; display: inline-block; text-align: center; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: bold; min-width: 140px; cursor: pointer; border: none; }
 
-        .qr-img {
-            width: 170px;
-            height: 170px;
-            border-radius: 10px;
-            border: 2px solid #cbd5e1;
-            margin: 8px 0;
-        }
-
-        .modal-box input { 
-            width: 100%; 
-            padding: 11px; 
-            margin-bottom: 10px; 
-            border: 2px solid #cbd5e1; 
-            border-radius: 8px; 
-            text-align: center; 
-            font-size: 15px;
-            outline: none;
-        }
-        .modal-box input:focus { border-color: #1e3a8a; }
-        .btn-unlock { 
-            width: 100%; 
-            padding: 12px; 
-            border: none; 
-            border-radius: 8px; 
-            font-size: 15px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            background: #16a34a; 
-            color: white; 
-            transition: 0.2s;
-        }
-        .btn-unlock:hover { background: #15803d; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
+        .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+        .modal-box h3 { margin-top: 0; color: #0b1e47; font-size: 18px; }
+        .modal-box p { font-size: 13px; color: #64748b; margin-bottom: 15px; }
+        .modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; text-align: center; box-sizing: border-box; outline: none; }
+        .modal-box button { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        .btn-submit { background: #16a34a; color: white; margin-bottom: 8px; }
+        .btn-close { background: #e2e8f0; color: #1e293b; margin-top: 6px; }
     </style>
 </head>
 <body>
-
     <div class="hero">
-        <h1>🎯 Home Science Daily Practice Tests</h1>
-        <p>TGT 2026 पेड बैच - ऑनलाइन मॉक टेस्ट सीरीज</p>
+        <h1>📝 Home Science Daily Practice Tests</h1>
     </div>
-
-    <!-- मुख्य 35 टेस्ट की सूची (अनलॉक होने तक छिपी रहेगी) -->
-    <div class="container" id="mainContainer" style="display: none;">
-        <a href="tgt2026.html" class="back-btn">⬅️ पोर्टल पर वापस जाएं</a>
-
-        <div class="test-list">
-            <a href="../homescience/daily/test1.html" class="test-card"><span>📝 Daily Mock Test - 1</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test2.html" class="test-card"><span>📝 Daily Mock Test - 2</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test3.html" class="test-card"><span>📝 Daily Mock Test - 3</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test4.html" class="test-card"><span>📝 Daily Mock Test - 4</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test5.html" class="test-card"><span>📝 Test - 5 : भोजन एवं पोषण</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test6.html" class="test-card"><span>📝 Test - 6 : भोज्य समूह एवं पोषण</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test7.html" class="test-card"><span>📝 Test - 7 : संतुलित आहार</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test8.html" class="test-card"><span>📝 Test - 8 : ऊर्जा उपापचयन</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test9.html" class="test-card"><span>📝 Test - 9 : भोजन जनित रोग</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test10.html" class="test-card"><span>📝 Test - 10 : कार्बोहाइड्रेट</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test11.html" class="test-card"><span>📝 Test - 11 : प्रोटीन</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test12.html" class="test-card"><span>📝 Test - 12 : वसा (लिपिड)</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test13.html" class="test-card"><span>📝 Test - 13 : विटामिन</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test14.html" class="test-card"><span>📝 Test - 14 : खनिज लवण</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test15.html" class="test-card"><span>📝 Test - 15 : जल</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test16.html" class="test-card"><span>📝 Test - 16 : वानस्पतिक भोज्य पदार्थ</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test17.html" class="test-card"><span>📝 Test - 17 : अनाज एवं दालें</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test18.html" class="test-card"><span>📝 Test - 18 : फल, मेवे व मसाले</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test19.html" class="test-card"><span>📝 Test - 19 : पेय पदार्थ व दुग्ध उत्पाद</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test20.html" class="test-card"><span>📝 Test - 20 : माँस, मछली एवं अंडा</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test21.html" class="test-card"><span>📝 Test - 21 : आहार नियोजन</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test22.html" class="test-card"><span>📝 Test - 22 : शिशु व बाल आहार</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test23.html" class="test-card"><span>📝 Test - 23 : गर्भावस्था में आहार</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test24.html" class="test-card"><span>📝 Test - 24 : वृद्धावस्था व मेनू</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test25.html" class="test-card"><span>📝 Test - 25 : पोषण मूल्यांकन</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test26.html" class="test-card"><span>📝 Test - 26 : उपचारात्मक पोषण</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test27.html" class="test-card"><span>📝 Test - 27 : मधुमेह में आहार</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test28.html" class="test-card"><span>📝 Test - 28 : पीलिया</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test29.html" class="test-card"><span>📝 Test - 29 : जठरांत्र संबंधी रोग</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test30.html" class="test-card"><span>📝 Test - 30 : ज्वर व मोटापा</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test31.html" class="test-card"><span>📝 Test - 31 : हृदय रोग</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test32.html" class="test-card"><span>📝 Test - 32 : गुर्दे की बीमारी</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test33.html" class="test-card"><span>📝 Test - 33 : खाद्य संरक्षण व संग्रह</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test34.html" class="test-card"><span>📝 Test - 34 : खाद्य मिलावट</span><span class="status-msg">🟢 Active</span></a>
-            <a href="../homescience/daily/test35.html" class="test-card"><span>📝 Test - 35 : भोजन पकाने की विधियाँ</span><span class="status-msg">🟢 Active</span></a>
+    <div class="container">
+        <a href="tgt2026.html" class="back-btn">⬅️ TGT मुख्य पेज पर जाएँ</a>
+        <div class="grid">
+            <div class="card"><div class="card-info"><h3>📝 Daily Mock Test - 1</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test1.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Daily Mock Test - 2</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test2.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Daily Mock Test - 3</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test3.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Daily Mock Test - 4</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test4.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 5 : भोजन एवं पोषण</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test5.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 6 : भोज्य समूह एवं पोषण</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test6.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 7 : संतुलित आहार</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test7.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 8 : ऊर्जा उपापचयन</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test8.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 9 : भोजन जनित रोग</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test9.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 10 : कार्बोहाइड्रेट</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test10.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 11 : प्रोटीन</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test11.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 12 : वसा (लिपिड)</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test12.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 13 : विटामिन</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test13.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 14 : खनिज लवण</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test14.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 15 : जल</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test15.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 16 : वानस्पतिक भोज्य पदार्थ</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test16.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 17 : अनाज एवं दालें</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test17.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 18 : फल, मेवे व मसाले</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test18.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 19 : पेय पदार्थ व दुग्ध उत्पाद</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test19.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 20 : माँस, मछली एवं अंडा</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test20.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 21 : आहार नियोजन</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test21.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 22 : शिशु व बाल आहार</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test22.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 23 : गर्भावस्था में आहार</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test23.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 24 : वृद्धावस्था व मेनू</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test24.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 25 : पोषण मूल्यांकन</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test25.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 26 : उपचारात्मक पोषण</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test26.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 27 : मधुमेह में आहार</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test27.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 28 : पीलिया</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test28.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 29 : जठरांत्र संबंधी रोग</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test29.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 30 : ज्वर व मोटापा</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test30.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 31 : हृदय रोग</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test31.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 32 : गुर्दे की बीमारी</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test32.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 33 : खाद्य संरक्षण व संग्रह</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test33.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 34 : खाद्य मिलावट</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test34.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
+            <div class="card"><div class="card-info"><h3>📝 Test - 35 : भोजन पकाने की विधियाँ</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test35.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
         </div>
     </div>
 
-    <!-- 🔒 ₹299 TGT 2026 ऑथेंटिकेशन / QR कोड पेमेंट पॉप-अप -->
+    <!-- ऑथेंटिकेशन / लॉगिन पॉप-अप -->
     <div id="loginModal" class="modal-overlay">
         <div class="modal-box">
-            <h3>🔒 TGT 2026 Paid Batch Access</h3>
-            <div class="price-badge">बैच फ़ीस: ₹299/-</div>
-            <p>QR कोड स्कैन करके ₹299 का भुगतान करें या अपना रजिस्टर्ड नंबर दर्ज करें:</p>
+            <h3>🔒 TGT पेड स्टूडेंट एक्सेस</h3>
+            <p>सामग्री अनलॉक करने के लिए अपना पंजीकृत मोबाइल नंबर दर्ज करें:</p>
+            <input type="tel" id="userMobileInput" placeholder="10 अंकों का मोबाइल नंबर दर्ज करें" maxlength="10">
+            <button onclick="verifyStudent()" class="btn-submit">अनलॉक करें</button>
             
-            <!-- QR कोड इमेज -->
-            <img src="qr.png" alt="Payment QR Code" class="qr-img" onerror="this.src='../qr.png'">
-            
-            <p style="font-size: 11px; color: #475569; margin: 2px 0 10px 0;">UPI ID: <b>medhavistudypoint@upi</b></p>
+            <div id="paymentSection" style="display:none; margin-top:10px; border-top:1px solid #e2e8f0; padding-top:10px;">
+                <p style="color:#d97706; font-weight:bold; font-size:13px; margin-bottom:10px;">
+                    🔒 संपूर्ण TGT कोर्स फीस: <b>₹299</b>
+                </p>
 
-            <input type="tel" id="userMobileInput" placeholder="10 अंकों का रजिस्टर्ड मोबाइल नंबर" maxlength="10">
-            <button onclick="verifyStudent()" class="btn-unlock">सत्यापित करें एवं अनलॉक करें 🚀</button>
-            <p id="authMessage" style="margin: 8px 0 0 0; font-size:13px; font-weight:bold;"></p>
+                <!-- 1️⃣ डायरेक्ट UPI ऐप पे बटन -->
+                <a href="upi://pay?pa=medhavistudypoint@okaxis&pn=MedhaviStudyPoint&am=299&cu=INR" 
+                   style="display: block; background: #1a73e8; color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: bold; margin-bottom: 10px;">
+                   📲 Pay ₹299 via Google Pay / PhonePe / UPI
+                </a>
+
+                <p style="font-size:11px; color:#64748b; margin: 4px 0;">— या QR Code स्कैन करके पे करें —</p>
+
+                <!-- 2️⃣ QR Code Image -->
+                <img src="qr.png" alt="Payment QR Code" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #cbd5e1; margin: 4px 0;">
+                
+                <div style="font-size:11px; color:#334155; line-height: 1.4; margin-top:4px;">
+                    <b>पेमेंट के बाद क्या करें?</b><br>
+                    स्क्रीनशॉट और अपना मोबाइल नंबर नीचे बटन पर क्लिक करके व्हाट्सएप करें:
+                </div>
+
+                <!-- 3️⃣ व्हाट्सएप बटन -->
+                <a href="https://wa.me/919415597889?text=नमस्ते%20सर,%20मैंने%20TGT%20कोर्स/टेस्ट%20का%20299%20का%20पेमेंट%20कर%20दिया%20है।%20मेरा%20रजिस्टर्ड%20नंबर%20यह%20है:%20" 
+                   target="_blank" 
+                   style="display: block; background: #25d366; color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; margin-top: 8px;">
+                    💬 WhatsApp पर स्क्रीनशॉट भेजें
+                </a>
+            </div>
+
+            <p id="authMessage" style="margin: 8px 0; font-size:13px; font-weight:bold;"></p>
+            <button onclick="closeModal()" class="btn-close">बंद करें</button>
         </div>
     </div>
 
-    <script>
-        const AUTH_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec";
+<script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec"; 
 
-        // पेज लोड होने पर ऑटो वेरिफिकेशन
-        window.addEventListener('DOMContentLoaded', () => {
-            if (localStorage.getItem('tgt_user_verified') === 'true') {
-                document.getElementById('loginModal').style.display = 'none';
-                document.getElementById('mainContainer').style.display = 'block';
-            } else {
-                document.getElementById('loginModal').style.display = 'flex';
-                document.getElementById('mainContainer').style.display = 'none';
-            }
-        });
+    let pendingUrl = null;
 
-        function verifyStudent() {
-            const mobile = document.getElementById('userMobileInput').value.trim();
-            const msgBox = document.getElementById('authMessage');
-            if (mobile.length !== 10) { 
-                msgBox.style.color = "#e11d48"; 
-                msgBox.innerText = "सही 10 अंकों का मोबाइल नंबर डालें!"; 
-                return; 
-            }
-            
-            let deviceId = localStorage.getItem('user_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 11));
-            localStorage.setItem('user_device_id', deviceId);
-            msgBox.style.color = "#2563eb"; 
-            msgBox.innerText = "जाँच हो रही है...";
-            
-            fetch(`${AUTH_SCRIPT_URL}?mobile=${mobile}&deviceId=${deviceId}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.allowed) {
-                        localStorage.setItem('tgt_user_verified', 'true');
-                        msgBox.style.color = "#16a34a"; 
-                        msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
-                        setTimeout(() => {
-                            document.getElementById('loginModal').style.display = 'none';
-                            document.getElementById('mainContainer').style.display = 'block';
-                        }, 800);
-                    } else {
-                        msgBox.style.color = "#e11d48"; 
-                        msgBox.innerText = data.message || "पहुंच की अनुमति नहीं है!";
-                    }
-                })
-                .catch(() => { 
-                    msgBox.style.color = "#e11d48"; 
-                    msgBox.innerText = "नेटवर्क खराबी! पुनः प्रयास करें।"; 
-                });
+    function checkAccess(url) {
+        if (url === '#' || !url) {
+            alert('⏳ यह टेस्ट जल्द ही उपलब्ध होगा!');
+            return;
         }
-    </script>
+
+        pendingUrl = url;
+        const isVerified = localStorage.getItem('tgt_user_verified');
+        
+        if (isVerified === 'true') {
+            window.location.href = url;
+        } else {
+            document.getElementById('paymentSection').style.display = 'none';
+            document.getElementById('userMobileInput').value = '';
+            document.getElementById('authMessage').innerText = '';
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+    }
+
+    function verifyStudent() {
+        const mobile = document.getElementById('userMobileInput').value.trim();
+        const msgBox = document.getElementById('authMessage');
+        const paySec = document.getElementById('paymentSection');
+
+        paySec.style.display = "none";
+
+        if (mobile.length !== 10) {
+            msgBox.style.color = "#e11d48";
+            msgBox.innerText = "कृपया सही 10 अंकों का मोबाइल नंबर डालें!";
+            return;
+        }
+
+        let deviceId = localStorage.getItem('user_device_id');
+        if (!deviceId) {
+            deviceId = 'DEV-' + Math.random().toString(36).substring(2, 11) + Date.now();
+            localStorage.setItem('user_device_id', deviceId);
+        }
+
+        msgBox.style.color = "#2563eb";
+        msgBox.innerText = "जाँच हो रही है...";
+
+        fetch(`${SCRIPT_URL}?mobile=${mobile}&deviceId=${deviceId}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.allowed) {
+                    localStorage.setItem('tgt_user_verified', 'true');
+                    localStorage.setItem('tgt_user_mobile', mobile);
+                    msgBox.style.color = "#16a34a";
+                    msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
+                    setTimeout(() => {
+                        closeModal();
+                        if (pendingUrl) window.location.href = pendingUrl;
+                    }, 800);
+                } else {
+                    msgBox.style.color = "#e11d48";
+                    msgBox.innerText = data.message;
+                    if (data.reason === "NOT_FOUND") {
+                        paySec.style.display = "block";
+                    }
+                }
+            })
+            .catch(err => {
+                msgBox.style.color = "#e11d48";
+                msgBox.innerText = "नेटवर्क खराबी! पुनः प्रयास करें।";
+            });
+    }
+
+    function closeModal() {
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('authMessage').innerText = '';
+        document.getElementById('paymentSection').style.display = 'none';
+    }
+</script>
 </body>
 </html>
