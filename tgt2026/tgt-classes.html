@@ -27,8 +27,12 @@
         .card h3 { font-size: 15px; margin: 0; color: #0b1e47; flex: 1; line-height: 1.4; }
         .btn-group { display: flex; gap: 8px; }
         .btn { text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; border: none; color: white; text-align: center; white-space: nowrap; }
+        
         .btn-video { background-color: #2563eb; }
         .btn-pdf { background-color: #d97706; }
+        
+        /* ⏳ कमिंग सून बटन स्टाइल */
+        .btn-disabled { background-color: #64748b !important; }
 
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
         .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
@@ -54,118 +58,118 @@
         <div class="unit-pdf-grid">
             <div class="unit-card">
                 <h4>Unit 1: आहार एवं पोषण (Food & Nutrition)</h4>
-                <button onclick="checkAccess('tgtpdf/unit1.html', 'पीडीएफ')" class="btn btn-pdf">📖 PDF डाउनलोड करें</button>
+                <button onclick="checkAccess('tgtpdf/unit1.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📖 PDF डाउनलोड करें</button>
             </div>
             <div class="unit-card">
                 <h4>Unit 2: गृह प्रबंधन (Home Management)</h4>
-                <button onclick="checkAccess('tgtpdf/unit2.html', 'पीडीएफ')" class="btn btn-pdf">📖 PDF डाउनलोड करें</button>
+                <button onclick="checkAccess('tgtpdf/unit2.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📖 PDF डाउनलोड करें</button>
             </div>
             <div class="unit-card">
                 <h4>Unit 3: स्वास्थ्य एवं प्राथमिक चिकित्सा (Health)</h4>
-                <button onclick="checkAccess('tgtpdf/unit3.html', 'पीडीएफ')" class="btn btn-pdf">📖 PDF डाउनलोड करें</button>
+                <button onclick="checkAccess('tgtpdf/unit3.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📖 PDF डाउनलोड करें</button>
             </div>
             <div class="unit-card">
                 <h4>Unit 4: बाल विकास एवं परिवार (Child Dev)</h4>
-                <button onclick="checkAccess('tgtpdf/unit4.html', 'पीडीएफ')" class="btn btn-pdf">📖 PDF डाउनलोड करें</button>
+                <button onclick="checkAccess('tgtpdf/unit4.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📖 PDF डाउनलोड करें</button>
             </div>
             <div class="unit-card">
                 <h4>Unit 5: वस्त्र एवं परिधान (Textiles)</h4>
-                <button onclick="checkAccess('tgtpdf/unit5.html', 'पीडीएफ')" class="btn btn-pdf">📖 PDF डाउनलोड करें</button>
+                <button onclick="checkAccess('tgtpdf/unit5.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📖 PDF डाउनलोड करें</button>
             </div>
             <div class="unit-card">
                 <h4>Unit 6: प्रसार शिक्षा (Extension Education)</h4>
-                <button onclick="checkAccess('tgtpdf/unit6.html', 'पीडीएफ')" class="btn btn-pdf">📖 PDF डाउनलोड करें</button>
+                <button onclick="checkAccess('tgtpdf/unit6.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📖 PDF डाउनलोड करें</button>
             </div>
         </div>
 
         <!-- 🎥 क्लास वाइज वीडियो एवं नोट्स -->
         <div class="section-title">🎥 चैप्टर-वाइज़ वीडियो क्लासेस</div>
         <div class="grid">
-            <div class="card"><h3>Class 01: पौष्टिकता की संकल्पना एवं आहार की परिभाषा</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('tgtpdf/p1.html', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 02: आहार की संरचना और भोजन के मुख्य कार्य</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('tgtpdf/p2.html', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 03: संतुलित आहार एवं इसे प्रभावित करने वाले कारक</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 04: खाद्य समूहों का वर्गीकरण एवं उनके स्रोत</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 05: कार्बोहाइड्रेट एवं वसा: कार्य, स्रोत और कमी से प्रभाव</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 06: प्रोटीन एवं अमीनो अम्ल: कार्य, स्रोत और कमी से होने वाले रोग</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 07: विटामिन्स (जल व वसा में घुलनशील) एवं अल्पता के रोग</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 08: खनिज लवण (कैल्शियम, आयरन, आयोडीन आदि) एवं अल्पता के रोग</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 09: भोजन पकाने की सामान्य विधियाँ (उबालना, भाप, भूनना, तलना आदि)</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 10: भोजन के पोषक तत्वों को संरक्षित करने के तरीके</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 11: खाद्य अपमिश्रण और मिलावट की पहचान</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 12: खाद्य संरक्षण के सिद्धांत एवं विधियाँ</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 13: मानव शरीर की संरचना एवं पाचन तंत्र</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 14: भोजन का अवशोषण एवं चयापचय</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 15: चिकित्सीय आहार: ज्वर एवं टाइफाइड के रोगियों का आहार</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 16: चिकित्सीय आहार: अल्सर एवं पेप्टिक रोगों में आहार</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 17: चिकित्सीय आहार: मधुमेह एवं मोटापा में आहार</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 18: चिकित्सीय आहार: गुर्दा एवं दिल के रोगियों का आहार</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 19: आहार नियोजन MCQ अभ्यास</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 01: पौष्टिकता की संकल्पना एवं आहार की परिभाषा</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('tgtpdf/p1.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 02: आहार की संरचना और भोजन के मुख्य कार्य</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('tgtpdf/p2.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 03: संतुलित आहार एवं इसे प्रभावित करने वाले कारक</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 04: खाद्य समूहों का वर्गीकरण एवं उनके स्रोत</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 05: कार्बोहाइड्रेट एवं वसा: कार्य, स्रोत और कमी से प्रभाव</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 06: प्रोटीन एवं अमीनो अम्ल: कार्य, स्रोत और कमी से होने वाले रोग</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 07: विटामिन्स (जल व वसा में घुलनशील) एवं अल्पता के रोग</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 08: खनिज लवण (कैल्शियम, आयरन, आयोडीन आदि) एवं अल्पता के रोग</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 09: भोजन पकाने की सामान्य विधियाँ (उबालना, भाप, भूनना, तलना आदि)</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 10: भोजन के पोषक तत्वों को संरक्षित करने के तरीके</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 11: खाद्य अपमिश्रण और मिलावट की पहचान</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 12: खाद्य संरक्षण के सिद्धांत एवं विधियाँ</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 13: मानव शरीर की संरचना एवं पाचन तंत्र</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 14: भोजन का अवशोषण एवं चयापचय</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 15: चिकित्सीय आहार: ज्वर एवं टाइफाइड के रोगियों का आहार</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 16: चिकित्सीय आहार: अल्सर एवं पेप्टिक रोगों में आहार</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 17: चिकित्सीय आहार: मधुमेह एवं मोटापा में आहार</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 18: चिकित्सीय आहार: गुर्दा एवं दिल के रोगियों का आहार</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 19: आहार नियोजन MCQ अभ्यास</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
 
-            <div class="card"><h3>Class 20: गृह प्रबंधन का अर्थ, परिभाषा एवं प्रक्रिया</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 21: गृह प्रबंधन के उत्प्रेरक कारक: मूल्य, लक्ष्य एवं प्रतिमान</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 22: पारिवारिक आवश्यकताएँ और निर्णय लेने की प्रक्रिया</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 23: पारिवारिक संसाधन का वर्गीकरण एवं महत्व</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 24: समय एवं ऊर्जा का प्रबंधन</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 25: कार्य सरलीकरण के सिद्धांत एवं तकनीकें</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 26: धन का प्रबंधन एवं पारिवारिक बजट</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 27: पारिवारिक आय, व्यय एवं बचत के माध्यम</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 28: गृह एवं पारिवारिक स्वच्छता</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 29: आंतरिक सज्जा: रंग, प्रकाश एवं फर्नीचर</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 30: बाह्य सज्जा एवं पुष्प सज्जा</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 31: गृह एवं पारिवारिक यंत्र और उनका रखरखाव</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 32: गृह प्रबंधन: टीजीटी विगत वर्षों के प्रश्न एवं MCQ अभ्यास</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 20: गृह प्रबंधन का अर्थ, परिभाषा एवं प्रक्रिया</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 21: गृह प्रबंधन के उत्प्रेरक कारक: मूल्य, लक्ष्य एवं प्रतिमान</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 22: पारिवारिक आवश्यकताएँ और निर्णय लेने की प्रक्रिया</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 23: पारिवारिक संसाधन का वर्गीकरण एवं महत्व</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 24: समय एवं ऊर्जा का प्रबंधन</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 25: कार्य सरलीकरण के सिद्धांत एवं तकनीकें</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 26: धन का प्रबंधन एवं पारिवारिक बजट</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 27: पारिवारिक आय, व्यय एवं बचत के माध्यम</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 28: गृह एवं पारिवारिक स्वच्छता</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 29: आंतरिक सज्जा: रंग, प्रकाश एवं फर्नीचर</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 30: बाह्य सज्जा एवं पुष्प सज्जा</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 31: गृह एवं पारिवारिक यंत्र और उनका रखरखाव</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 32: गृह प्रबंधन: टीजीटी विगत वर्षों के प्रश्न एवं MCQ अभ्यास</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
 
-            <div class="card"><h3>Class 33: स्वास्थ्य का अर्थ, परिभाषा एवं आयाम</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 34: व्यक्तिगत स्वास्थ्य एवं स्वच्छता</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 35: पर्यावरण का महत्व एवं पर्यावरण प्रदूषण</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 36: जल जनित रोग: कारण, लक्षण व बचाव</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 37: वायु जनित रोग: कारण, लक्षण व बचाव</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 38: स्वास्थ्य क्षेत्र में कार्यरत सरकारी संगठन (विश्व स्वास्थ्य संगठन, यूनिसेफ आदि)</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 39: स्वास्थ्य क्षेत्र में कार्यरत गैर-सरकारी संगठन</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 40: प्राथमिक स्वास्थ्य रक्षा के सिद्धांत</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 41: पारिवारिक सामान्य दुर्घटनाएँ एवं उनका निदान</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 42: विभिन्न प्रकार की पट्टियों का उपयोग एवं ड्रेसिंग</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 43: स्वास्थ्य एवं प्राथमिक चिकित्सा: महत्वपूर्ण अभ्यास प्रश्न</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 33: स्वास्थ्य का अर्थ, परिभाषा एवं आयाम</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 34: व्यक्तिगत स्वास्थ्य एवं स्वच्छता</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 35: पर्यावरण का महत्व एवं पर्यावरण प्रदूषण</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 36: जल जनित रोग: कारण, लक्षण व बचाव</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 37: वायु जनित रोग: कारण, लक्षण व बचाव</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 38: स्वास्थ्य क्षेत्र में कार्यरत सरकारी संगठन (विश्व स्वास्थ्य संगठन, यूनिसेफ आदि)</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 39: स्वास्थ्य क्षेत्र में कार्यरत गैर-सरकारी संगठन</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 40: प्राथमिक स्वास्थ्य रक्षा के सिद्धांत</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 41: पारिवारिक सामान्य दुर्घटनाएँ एवं उनका निदान</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 42: विभिन्न प्रकार की पट्टियों का उपयोग एवं ड्रेसिंग</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 43: स्वास्थ्य एवं प्राथमिक चिकित्सा: महत्वपूर्ण अभ्यास प्रश्न</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
 
-            <div class="card"><h3>Class 44: मानव विकास के सिद्धांत</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 45: बच्चों की वृद्धि एवं विकास</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 46: गर्भावस्था एवं प्रसव पूर्व विकास की अवस्थाएँ</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 47: शैशवावस्था एवं बाल्यावस्था में विकास</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 48: बच्चों की मृत्यु दर एवं इसके कारण</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 49: बच्चों में रुग्णता एवं निवारण</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 50: विद्यालयीय स्वास्थ्य कार्यक्रम</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 51: मानसिक स्वास्थ्य का अर्थ व महत्व</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 52: विवाह: अर्थ, उद्देश्य एवं प्रकार</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 53: परिवार: अर्थ, प्रकार एवं पारिवारिक कार्य</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 54: पारिवारिक समायोजन एवं समस्याएँ</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 55: बाल विकास: महत्वपूर्ण शब्दावली व सिद्धांत अभ्यास</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 56: बाल विकास: टीजीटी विगत वर्षों के MCQ प्रश्न</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 44: मानव विकास के सिद्धांत</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 45: बच्चों की वृद्धि एवं विकास</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 46: गर्भावस्था एवं प्रसव पूर्व विकास की अवस्थाएँ</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 47: शैशवावस्था एवं बाल्यावस्था में विकास</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 48: बच्चों की मृत्यु दर एवं इसके कारण</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 49: बच्चों में रुग्णता एवं निवारण</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 50: विद्यालयीय स्वास्थ्य कार्यक्रम</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 51: मानसिक स्वास्थ्य का अर्थ व महत्व</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 52: विवाह: अर्थ, उद्देश्य एवं प्रकार</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 53: परिवार: अर्थ, प्रकार एवं पारिवारिक कार्य</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 54: पारिवारिक समायोजन एवं समस्याएँ</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 55: बाल विकास: महत्वपूर्ण शब्दावली व सिद्धांत अभ्यास</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 56: बाल विकास: टीजीटी विगत वर्षों के MCQ प्रश्न</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
 
-            <div class="card"><h3>Class 57: वस्त्र एवं रेशे का वर्गीकरण</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 58: रेशों का रसायन एवं भौतिक गुण</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 59: रेयान: निर्माण, रसायन एवं उपयोग</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 60: धागा निर्माण एवं सूत के प्रकार</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 61: वस्त्र निर्माण: बुनाई एवं इसके प्रकार</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 62: परिधान की बनावट एवं सजावट</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 63: कपड़ों की रंगाई एवं छपाई</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 64: कपड़ों की धुलाई एवं देखभाल</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 65: विभिन्न अवसरों एवं मौसमों के अनुसार लिबास का चुनाव</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 66: वस्त्रों की सिलाई एवं कढ़ाई</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 67: वस्त्र एवं परिधान: टीजीटी अभ्यास प्रश्न</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 68: वस्त्र एवं परिधान: विगत वर्षों के प्रश्नों का MCQ अभ्यास</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 57: वस्त्र एवं रेशे का वर्गीकरण</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 58: रेशों का रसायन एवं भौतिक गुण</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 59: रेयान: निर्माण, रसायन एवं उपयोग</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 60: धागा निर्माण एवं सूत के प्रकार</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 61: वस्त्र निर्माण: बुनाई एवं इसके प्रकार</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 62: परिधान की बनावट एवं सजावट</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 63: कपड़ों की रंगाई एवं छपाई</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 64: कपड़ों की धुलाई एवं देखभाल</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 65: विभिन्न अवसरों एवं मौसमों के अनुसार लिबास का चुनाव</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 66: वस्त्रों की सिलाई एवं कढ़ाई</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 67: वस्त्र एवं परिधान: टीजीटी अभ्यास प्रश्न</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 68: वस्त्र एवं परिधान: विगत वर्षों के प्रश्नों का MCQ अभ्यास</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
 
-            <div class="card"><h3>Class 69: गृह विज्ञान का अर्थ, परिभाषा एवं इतिहास</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 70: गृह विज्ञान का विषय क्षेत्र एवं इसकी विविध शाखाएँ</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 71: गृह विज्ञान की शाखाओं का आपस में अंतर्संबंध</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 72: प्रसार शिक्षा का अर्थ, दर्शन एवं आवश्यकता</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 73: प्रसार शिक्षक की आवश्यकता, भूमिका एवं गुण</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 74: प्रसार शिक्षण की विधियाँ (व्यक्तिगत, समूह एवं जन शिक्षण विधियाँ)</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 75: सामुदायिक विकास की अवधारणा</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 76: प्रमुख सामुदायिक विकास कार्यक्रम</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 77: प्रसार शिक्षा: महत्वपूर्ण प्रश्न MCQ अभ्यास</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 78: टीजीटी गृह विज्ञान: सम्पूर्ण पाठ्यक्रम का रिवीजन</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 79: टीजीटी गृह विज्ञान: सम्पूर्ण पाठ्यक्रम का रिवीजन</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
-            <div class="card"><h3>Class 80: टीजीटी गृह विज्ञान: सम्पूर्ण पाठ्यक्रम का रिवीजन</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 69: गृह विज्ञान का अर्थ, परिभाषा एवं इतिहास</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 70: गृह विज्ञान का विषय क्षेत्र एवं इसकी विविध शाखाएँ</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 71: गृह विज्ञान की शाखाओं का आपस में अंतर्संबंध</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 72: प्रसार शिक्षा का अर्थ, दर्शन एवं आवश्यकता</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 73: प्रसार शिक्षक की आवश्यकता, भूमिका एवं गुण</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 74: प्रसार शिक्षण की विधियाँ (व्यक्तिगत, समूह एवं जन शिक्षण विधियाँ)</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 75: सामुदायिक विकास की अवधारणा</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 76: प्रमुख सामुदायिक विकास कार्यक्रम</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 77: प्रसार शिक्षा: महत्वपूर्ण प्रश्न MCQ अभ्यास</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 78: टीजीटी गृह विज्ञान: सम्पूर्ण पाठ्यक्रम का रिवीजन</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 79: टीजीटी गृह विज्ञान: सम्पूर्ण पाठ्यक्रम का रिवीजन</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 80: टीजीटी गृह विज्ञान: सम्पूर्ण पाठ्यक्रम का रिवीजन</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('#', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
         </div>
     </div>
 
@@ -182,7 +186,6 @@
                     🔒 संपूर्ण TGT कोर्स फीस: <b>₹299</b>
                 </p>
 
-                <!-- 1️⃣ डायरेक्ट UPI ऐप पे बटन -->
                 <a href="upi://pay?pa=medhavistudypoint@okaxis&pn=MedhaviStudyPoint&am=299&cu=INR" 
                    style="display: block; background: #1a73e8; color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: bold; margin-bottom: 10px;">
                    📲 Pay ₹299 via Google Pay / PhonePe / UPI
@@ -190,7 +193,6 @@
 
                 <p style="font-size:11px; color:#64748b; margin: 4px 0;">— या QR Code स्कैन करके पे करें —</p>
 
-                <!-- 2️⃣ QR Code Image -->
                 <img src="qr.png" alt="Payment QR Code" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #cbd5e1; margin: 4px 0;">
                 
                 <div style="font-size:11px; color:#334155; line-height: 1.4; margin-top:4px;">
@@ -198,7 +200,6 @@
                     स्क्रीनशॉट और अपना मोबाइल नंबर नीचे बटन पर क्लिक करके व्हाट्सएप करें:
                 </div>
 
-                <!-- 3️⃣ व्हाट्सएप बटन -->
                 <a href="https://wa.me/919415597889?text=नमस्ते%20सर,%20मैंने%20TGT%20कोर्स%20का%20299%20का%20पेमेंट%20कर%20दिया%20है।%20मेरा%20रजिस्टर्ड%20नंबर%20यह%20है:%20" 
                    target="_blank" 
                    style="display: block; background: #25d366; color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; margin-top: 8px;">
@@ -216,17 +217,39 @@
 
     let pendingUrl = null;
 
-    function checkAccess(url, type) {
-        if (url === '#' || !url) {
-            alert(`⏳ यह ${type || 'सामग्री'} जल्द ही उपलब्ध होगी!`);
-            return;
-        }
+    // 🤖 ऑटोमैटिक कमिंग सून डिटेक्शन स्क्रिप्ट
+    window.addEventListener('DOMContentLoaded', () => {
+        const buttons = document.querySelectorAll('button[onclick*="checkAccess"]');
+        buttons.forEach(btn => {
+            const onclickAttr = btn.getAttribute('onclick') || '';
+            const btnType = btn.getAttribute('data-type') || '';
 
+            if (onclickAttr.includes("'#'") || onclickAttr.includes('""')) {
+                btn.innerText = '⏳ Coming Soon';
+                btn.classList.add('btn-disabled');
+            } else {
+                if (btnType === 'pdf') {
+                    btn.innerText = '📖 PDF डाउनलोड करें';
+                    btn.classList.add('btn-pdf');
+                } else if (btnType === 'video') {
+                    btn.innerText = '▶️ देखें वीडियो';
+                    btn.classList.add('btn-video');
+                }
+                btn.classList.remove('btn-disabled');
+            }
+        });
+    });
+
+    function checkAccess(url, type) {
         pendingUrl = url;
         const isVerified = localStorage.getItem('tgt_user_verified');
         
         if (isVerified === 'true') {
-            window.location.href = url;
+            if (url === '#' || !url) {
+                alert(`⏳ यह ${type || 'सामग्री'} जल्द ही उपलब्ध होगी!`);
+            } else {
+                window.location.href = url;
+            }
         } else {
             document.getElementById('paymentSection').style.display = 'none';
             document.getElementById('userMobileInput').value = '';
@@ -267,7 +290,11 @@
                     msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
                     setTimeout(() => {
                         closeModal();
-                        if (pendingUrl) window.location.href = pendingUrl;
+                        if (pendingUrl === '#' || !pendingUrl) {
+                            alert('⏳ यह सामग्री जल्द ही उपलब्ध होगी!');
+                        } else if (pendingUrl) {
+                            window.location.href = pendingUrl;
+                        }
                     }, 800);
                 } else {
                     msgBox.style.color = "#e11d48";
@@ -291,10 +318,7 @@
 </script>
 </body>
 </html>
-                                                                                                      
-                                                                                                      
-                                                                                                      
-                                                                                                      
-                                                                                                      
-                                                                                                      
-                                                                                                      
+
+
+
+            
