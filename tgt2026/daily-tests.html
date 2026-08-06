@@ -15,47 +15,59 @@
         .container { max-width: 800px; margin: 20px auto 40px; padding: 0 12px; }
         .back-btn { display: inline-block; margin-bottom: 16px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 13px; }
 
-        .test-list { display: flex; flex-direction: column; gap: 10px; }
+        .test-list { display: flex; flex-direction: column; gap: 12px; }
 
+        /* 🎯 मोटा और एलीवेटेड कार्ड बटन डिज़ाइन */
         .test-card {
             background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 14px 18px;
+            border: 2px solid #cbd5e1; /* बॉर्डर थोड़ी मोटी की गई */
+            border-radius: 12px;
+            padding: 16px 20px; /* पैडिंग बढ़ाई गई */
             display: flex;
             justify-content: space-between;
             align-items: center;
             text-decoration: none;
-            color: #334155;
-            font-size: 14px;
-            font-weight: 600;
+            color: #0b1e47;
+            font-size: 15px; /* फॉन्ट साइज़ बड़ा किया गया */
+            font-weight: 700; /* फॉन्ट बोल्ड किया गया */
             cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
         }
 
         .test-card:hover {
-            border-color: #cbd5e1;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            transform: translateY(-1px);
+            border-color: #3b82f6;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
         }
 
         .test-title {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
+        /* 🟢 बड़ा और स्पष्ट लाइव गोला (Big Live Dot & Status) */
         .status-badge {
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 800;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
 
-        .status-live { color: #16a34a; }
+        .status-live { color: #15803d; }
         .status-coming { color: #d97706; }
+
+        /* बड़ा हरा गोला (Dot) */
+        .live-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #16a34a;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px rgba(22, 163, 74, 0.6);
+        }
 
         /* Modal Overlay Styling */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
@@ -163,7 +175,7 @@
 
     let pendingUrl = null;
 
-    // 🤖 ऑटोमैटिक स्टेटस बैज सेट करने वाली स्क्रिप्ट
+    // 🤖 बड़ा गोला और नया स्टेटस बैज सेट करने वाली स्क्रिप्ट
     window.addEventListener('DOMContentLoaded', () => {
         const cards = document.querySelectorAll('.test-card');
         cards.forEach(card => {
@@ -175,25 +187,22 @@
                 badge.innerHTML = '⏳ Coming Soon';
             } else {
                 badge.className = 'status-badge status-live';
-                badge.innerHTML = '🟢 Live';
+                badge.innerHTML = '<span class="live-dot"></span> Live';
             }
         });
     });
 
-    // 🔒 अब हर बटन पर पहले पेमेंट/ऑथेंटिकेशन चेक होगा!
     function checkAccess(url) {
         pendingUrl = url;
         const isVerified = localStorage.getItem('tgt_user_verified');
         
         if (isVerified === 'true') {
-            // अगर छात्र पहले से पेड/वेरिफाइड है
             if (url === '#' || !url) {
                 alert('⏳ यह टेस्ट जल्द ही उपलब्ध होगा!');
             } else {
                 window.location.href = url;
             }
         } else {
-            // अगर छात्र वेरिफाइड नहीं है, तो पहले पेमेंट पॉप-अप दिखेगा
             document.getElementById('paymentSection').style.display = 'none';
             document.getElementById('userMobileInput').value = '';
             document.getElementById('authMessage').innerText = '';
