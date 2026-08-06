@@ -7,109 +7,22 @@
     <style>
         * { box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
-        
-        /* 🌟 होम पेज वाला ब्रांडेड हेडर */
-        .brand-hero { 
-            background: linear-gradient(135deg, #0b1e47, #1e3a8a); 
-            color: white; 
-            padding: 30px 20px 25px; 
-            text-align: center; 
-            border-bottom-left-radius: 20px; 
-            border-bottom-right-radius: 20px; 
-        }
-        
-        .brand-logo {
-            width: 85px;
-            height: 85px;
-            border-radius: 50%;
-            border: 3px solid #facc15;
-            object-fit: cover;
-            margin-bottom: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-
-        .brand-title {
-            font-size: 24px;
-            font-weight: 900;
-            color: #facc15;
-            margin: 0;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-        }
-
-        .brand-tagline {
-            font-size: 13px;
-            color: #ffffff;
-            opacity: 0.95;
-            margin: 6px 0 15px 0;
-            font-weight: 500;
-        }
-
-        .page-badge {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(250, 204, 21, 0.4);
-            color: #ffffff;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
+        .brand-hero { background: linear-gradient(135deg, #0b1e47, #1e3a8a); color: white; padding: 30px 20px 25px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+        .brand-logo { width: 85px; height: 85px; border-radius: 50%; border: 3px solid #facc15; object-fit: cover; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .brand-title { font-size: 24px; font-weight: 900; color: #facc15; margin: 0; letter-spacing: 0.8px; text-transform: uppercase; }
+        .brand-tagline { font-size: 13px; color: #ffffff; opacity: 0.95; margin: 6px 0 15px 0; font-weight: 500; }
+        .page-badge { display: inline-block; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(250, 204, 21, 0.4); color: #ffffff; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; }
         .container { max-width: 800px; margin: 20px auto 40px; padding: 0 12px; }
         .back-btn { display: inline-block; margin-bottom: 16px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 13px; }
-
         .section-title { font-size: 17px; color: #0b1e47; border-bottom: 2px solid #0b1e47; padding-bottom: 5px; margin: 25px 0 15px; font-weight: 800; }
         .grid { display: flex; flex-direction: column; gap: 12px; }
-
-        /* 🎯 मोटा व साफ़ कार्ड बटन डिज़ाइन */
-        .card {
-            background: #ffffff;
-            border: 2px solid #cbd5e1;
-            border-radius: 12px;
-            padding: 16px 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 12px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
-            transition: all 0.2s ease-in-out;
-        }
-
-        @media (min-width: 600px) {
-            .card { flex-direction: row; align-items: center; }
-        }
-
-        .card:hover {
-            border-color: #3b82f6;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-            transform: translateY(-2px);
-        }
-
+        .card { background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; gap: 12px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04); transition: all 0.2s ease-in-out; }
+        @media (min-width: 600px) { .card { flex-direction: row; align-items: center; } }
+        .card:hover { border-color: #3b82f6; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08); transform: translateY(-2px); }
         .card h3 { font-size: 15px; margin: 0; color: #0b1e47; font-weight: 700; line-height: 1.4; }
-
-        .btn-action { 
-            text-align: center; 
-            text-decoration: none; 
-            padding: 9px 18px; 
-            border-radius: 8px; 
-            font-size: 13px; 
-            font-weight: 800; 
-            min-width: 140px; 
-            cursor: pointer; 
-            border: none; 
-            color: white; 
-            white-space: nowrap;
-            transition: background-color 0.2s;
-        }
-
-        .btn-class { background-color: #2563eb; } 
-        .btn-test { background-color: #16a34a; } 
-        .btn-pdf { background-color: #d97706; }
+        .btn-action { text-align: center; text-decoration: none; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 800; min-width: 140px; cursor: pointer; border: none; color: white; white-space: nowrap; transition: background-color 0.2s; }
+        .btn-class { background-color: #2563eb; } .btn-test { background-color: #16a34a; } .btn-pdf { background-color: #d97706; }
         .btn-disabled { background-color: #64748b !important; }
-
-        /* Modal Overlay Styling */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
         .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .modal-box h3 { margin-top: 0; color: #0b1e47; font-size: 18px; }
@@ -121,7 +34,6 @@
 </head>
 <body>
 
-    <!-- 🌟 ब्रांडेड हेडर -->
     <div class="brand-hero">
         <img src="logo.png" alt="Medhavi Logo" class="brand-logo" onerror="this.src='../logo.png'">
         <h1 class="brand-title">MEDHAVI STUDY POINT</h1>
@@ -132,16 +44,11 @@
     <div class="container">
         <a href="gs.html" class="back-btn">⬅️ GS मुख्य पेज पर जाएँ</a>
         
-        <!-- 📚 PDF नोट्स -->
         <div class="section-title">📚 संपूर्ण करेंट अफेयर्स नोट्स (PDF)</div>
         <div class="grid">
-            <div class="card">
-                <div class="card-info"><h3>वार्षिकी करेंट अफेयर्स - संपूर्ण नोट्स PDF</h3></div>
-                <button onclick="checkAccess('gspdf/ca-full.html')" class="btn-action btn-pdf" data-type="pdf">📖 PDF खोलें</button>
-            </div>
+            <div class="card"><div class="card-info"><h3>वार्षिकी करेंट अफेयर्स - संपूर्ण नोट्स PDF</h3></div><button onclick="checkAccess('gspdf/ca-full.html')" class="btn-action btn-pdf" data-type="pdf">📖 PDF खोलें</button></div>
         </div>
 
-        <!-- 🎥 वीडियो क्लासेस -->
         <div class="section-title">🎥 वीडियो क्लासेस (10 Classes)</div>
         <div class="grid">
             <div class="card"><div class="card-info"><h3>Current Affairs Class - 01</h3></div><button onclick="checkAccess('gsclass/c1.html')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
@@ -151,33 +58,31 @@
             <div class="card"><div class="card-info"><h3>Current Affairs Class - 05</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
         </div>
 
-        <!-- 📝 ऑनलाइन मॉक टेस्ट -->
         <div class="section-title">📝 ऑनलाइन मॉक टेस्ट (20 Tests)</div>
         <div class="grid">
             <div class="card"><div class="card-info"><h3>Current Affairs Test - 01</h3></div><button onclick="checkAccess('gstest/ct1.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 02</h3></div><button onclick="checkAccess('gstest/ct2.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 03</h3></div><button onclick="checkAccess('gstest/ct3.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 04</h3></div><button onclick="checkAccess('gstest/ct4.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 05</h3></div><button onclick="checkAccess('gstest/ct5.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 06</h3></div><button onclick="checkAccess('gstest/ct6.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 07</h3></div><button onclick="checkAccess('gstest/ct7.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 08</h3></div><button onclick="checkAccess('gstest/ct8.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 09</h3></div><button onclick="checkAccess('gstest/ct9.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 10</h3></div><button onclick="checkAccess('gstest/ct10.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 11</h3></div><button onclick="checkAccess('gstest/ct11.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 12</h3></div><button onclick="checkAccess('gstest/ct12.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 13</h3></div><button onclick="checkAccess('gstest/ct13.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 14</h3></div><button onclick="checkAccess('gstest/ct14.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 15</h3></div><button onclick="checkAccess('gstest/ct15.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 16</h3></div><button onclick="checkAccess('gstest/ct16.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 17</h3></div><button onclick="checkAccess('gstest/ct17.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 18</h3></div><button onclick="checkAccess('gstest/ct18.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 19</h3></div><button onclick="checkAccess('gstest/ct19.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 20</h3></div><button onclick="checkAccess('gstest/ct20.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 02</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 03</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 04</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 05</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 06</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 07</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 08</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 09</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 10</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 11</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 12</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 13</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 14</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 15</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 16</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 17</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 18</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 19</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <div class="card"><div class="card-info"><h3>Current Affairs Test - 20</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
         </div>
     </div>
 
-    <!-- ऑथेंटिकेशन / पेमेंट मॉडल -->
     <div id="loginModal" class="modal-overlay">
         <div class="modal-box">
             <h3>🔒 TGT पेड स्टूडेंट एक्सेस</h3>
@@ -200,7 +105,6 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec"; 
     let pendingUrl = null;
 
-    // 🤖 ऑटोमैटिक कमिंग सून डिटेक्शन स्क्रिप्ट
     window.addEventListener('DOMContentLoaded', () => {
         const buttons = document.querySelectorAll('.btn-action');
         buttons.forEach(btn => {
@@ -249,50 +153,50 @@
         const msgBox = document.getElementById('authMessage');
         const paySec = document.getElementById('paymentSection');
         paySec.style.display = "none";
-        
-        if (mobile.length !== 10) { 
-            msgBox.style.color = "#e11d48"; 
-            msgBox.innerText = "कृपया सही 10 अंकों का मोबाइल नंबर डालें!"; 
-            return; 
+
+        if (mobile.length !== 10) {
+            msgBox.style.color = "#e11d48";
+            msgBox.innerText = "कृपया सही 10 अंकों का मोबाइल नंबर डालें!";
+            return;
         }
 
         let deviceId = localStorage.getItem('user_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 11) + Date.now());
         localStorage.setItem('user_device_id', deviceId);
-        msgBox.style.color = "#2563eb"; 
+        msgBox.style.color = "#2563eb";
         msgBox.innerText = "जाँच हो रही है...";
 
         fetch(`${SCRIPT_URL}?mobile=${mobile}&deviceId=${deviceId}`)
             .then(res => res.json())
             .then(data => {
                 if (data.allowed) {
-                    localStorage.setItem('tgt_user_verified', 'true'); 
+                    localStorage.setItem('tgt_user_verified', 'true');
                     localStorage.setItem('tgt_user_mobile', mobile);
-                    msgBox.style.color = "#16a34a"; 
+                    msgBox.style.color = "#16a34a";
                     msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
-                    setTimeout(() => { 
-                        closeModal(); 
+                    setTimeout(() => {
+                        closeModal();
                         if (pendingUrl === '#' || !pendingUrl) {
                             alert('⏳ यह सामग्री जल्द ही उपलब्ध होगी!');
                         } else if (pendingUrl) {
-                            window.location.href = pendingUrl; 
+                            window.location.href = pendingUrl;
                         }
                     }, 800);
-                } else { 
-                    msgBox.style.color = "#e11d48"; 
-                    msgBox.innerText = data.message; 
-                    if (data.reason === "NOT_FOUND") paySec.style.display = "block"; 
+                } else {
+                    msgBox.style.color = "#e11d48";
+                    msgBox.innerText = data.message;
+                    if (data.reason === "NOT_FOUND") paySec.style.display = "block";
                 }
             })
-            .catch(err => { 
-                msgBox.style.color = "#e11d48"; 
-                msgBox.innerText = "नेटवर्क खराबी! पुनः प्रयास करें।"; 
+            .catch(err => {
+                msgBox.style.color = "#e11d48";
+                msgBox.innerText = "नेटवर्क खराबी! पुनः प्रयास करें।";
             });
     }
 
-    function closeModal() { 
-        document.getElementById('loginModal').style.display = 'none'; 
-        document.getElementById('authMessage').innerText = ''; 
-        document.getElementById('paymentSection').style.display = 'none'; 
+    function closeModal() {
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('authMessage').innerText = '';
+        document.getElementById('paymentSection').style.display = 'none';
     }
 </script>
 </body>
