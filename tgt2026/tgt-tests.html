@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
+    <script>
+  const userPlan = localStorage.getItem("user_plan");
+
+  // केवल FULL प्लान वाले ही इसे देख सकते हैं
+  if (userPlan !== "FULL") {
+    alert("यह सेक्शन केवल TGT फुल बैच छात्रों के लिए है! कृपया फुल बैच में अपग्रेड करें।");
+    window.location.href = "tgt2026.html"; // TGT मुख्य पेज पर भेज देगा
+  }
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TGT 2026 - 20 फुल मॉक टेस्ट सीरीज़</title>
