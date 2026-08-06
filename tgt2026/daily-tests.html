@@ -6,22 +6,60 @@
     <title>Home Science Daily Practice Tests - Medhavi Study Point</title>
     <style>
         * { box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
-        .hero { background: linear-gradient(135deg, #0b1e47, #1e3a8a); color: white; padding: 30px 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
-        .hero h1 { font-size: 24px; margin: 0; color: #ffcc00; }
-        .container { max-width: 800px; margin: 20px auto 40px; padding: 0 15px; }
-        .back-btn { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 14px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
         
-        .grid { display: flex; flex-direction: column; gap: 12px; }
-        .card { background: white; padding: 15px 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; gap: 10px; }
-        @media (min-width: 600px) {
-            .card { flex-direction: row; align-items: center; }
-        }
-        .card-info { flex: 1; }
-        .card h3 { font-size: 15px; margin: 0 0 4px 0; color: #0b1e47; }
-        .btn-test { background-color: #16a34a; color: white; display: inline-block; text-align: center; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: bold; min-width: 140px; cursor: pointer; border: none; }
-        .btn-disabled { background-color: #64748b !important; }
+        .hero { background: linear-gradient(135deg, #0b1e47, #1e3a8a); color: white; padding: 25px 20px; text-align: center; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; }
+        .hero h1 { font-size: 22px; margin: 0; color: #facc15; font-weight: 800; }
+        .hero p { font-size: 13px; opacity: 0.95; margin-top: 5px; }
 
+        .container { max-width: 800px; margin: 20px auto 40px; padding: 0 12px; }
+        .back-btn { display: inline-block; margin-bottom: 16px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 13px; }
+
+        .test-list { display: flex; flex-direction: column; gap: 10px; }
+
+        /* Screen Shot Matching Card Style */
+        .test-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+
+        .test-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .test-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Status Badge Styles */
+        .status-badge {
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .status-live { color: #16a34a; }
+        .status-coming { color: #d97706; }
+
+        /* Modal Overlay Styling */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
         .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .modal-box h3 { margin-top: 0; color: #0b1e47; font-size: 18px; }
@@ -33,54 +71,57 @@
     </style>
 </head>
 <body>
+
     <div class="hero">
         <h1>📝 Home Science Daily Practice Tests</h1>
+        <p>TGT 2026 - ऑनलाइन टॉपिक-वाइज टेस्ट सीरीज</p>
     </div>
+
     <div class="container">
         <a href="tgt2026.html" class="back-btn">⬅️ TGT मुख्य पेज पर जाएँ</a>
-        <div class="grid">
-            <!-- 🟢 1 से 15 एक्टिव टेस्ट्स (जो अपलोड हैं) -->
-            <div class="card"><div class="card-info"><h3>📝 Daily Mock Test - 1</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test1.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Daily Mock Test - 2</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test2.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Daily Mock Test - 3</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test3.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Daily Mock Test - 4</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test4.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 5 : भोजन एवं पोषण</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test5.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 6 : भोज्य समूह एवं पोषण</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test6.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 7 : संतुलित आहार</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test7.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 8 : ऊर्जा उपापचयन</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test8.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 9 : भोजन जनित रोग</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test9.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 10 : कार्बोहाइड्रेट</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test10.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 11 : प्रोटीन</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test11.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 12 : वसा (लिपिड)</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test12.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 13 : विटामिन</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test13.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 14 : खनिज लवण</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test14.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 15 : जल</h3><p style="font-size:12px; color:#16a34a; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test15.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
 
-            <!-- ⏳ 16 से 35 कमिंग सून टेस्ट्स (जो अभी अपलोड होने हैं) -->
-            <div class="card"><div class="card-info"><h3>📝 Test - 16 : वानस्पतिक भोज्य पदार्थ</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test16.html')" class="btn-test btn-test">अटेम्प्ट करें</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 17 : अनाज एवं दालें</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">🟢 Active</p></div><button onclick="checkAccess('../homescience/daily/test16.html')" class="btn-test">अटेंप्ट करें टेस्ट 📝</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 18 : फल, मेवे व मसाले</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 19 : पेय पदार्थ व दुग्ध उत्पाद</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 20 : माँस, मछली एवं अंडा</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 21 : आहार नियोजन</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 22 : शिशु व बाल आहार</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 23 : गर्भावस्था में आहार</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 24 : वृद्धावस्था व मेनू</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 25 : पोषण मूल्यांकन</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 26 : उपचारात्मक पोषण</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 27 : मधुमेह में आहार</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 28 : पीलिया</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 29 : जठरांत्र संबंधी रोग</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 30 : ज्वर व मोटापा</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 31 : हृदय रोग</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 32 : गुर्दे की बीमारी</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 33 : खाद्य संरक्षण व संग्रह</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 34 : खाद्य मिलावट</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
-            <div class="card"><div class="card-info"><h3>📝 Test - 35 : भोजन पकाने की विधियाँ</h3><p style="font-size:12px; color:#d97706; font-weight:bold; margin:0;">⏳ Coming Soon</p></div><button onclick="checkAccess('#')" class="btn-test btn-disabled">कमिंग सून ⏳</button></div>
+        <div class="test-list">
+            <div class="test-card" onclick="checkAccess('../homescience/daily/test1.html')"><span class="test-title">📝 Daily Mock Test - 1</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('../homescience/daily/test2.html')"><span class="test-title">📝 Daily Mock Test - 2</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('../homescience/daily/test3.html')"><span class="test-title">📝 Daily Mock Test - 3</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('../homescience/daily/test4.html')"><span class="test-title">📝 Daily Mock Test - 4</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('../homescience/daily/test5.html')"><span class="test-title">📝 Test - 5 : भोजन एवं पोषण</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('../homescience/daily/test6.html')"><span class="test-title">📝 Test - 6 : भोज्य समूह एवं पोषण</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('../homescience/daily/test7.html')"><span class="test-title">📝 Test - 7 : संतुलित आहार</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('../homescience/daily/test8.html')"><span class="test-title">📝 Test - 8 : ऊर्जा उपापचयन</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('../homescience/daily/test9.html')"><span class="test-title">📝 Test - 9 : भोजन जनित रोग</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('../homescience/daily/test10.html')"><span class="test-title">📝 Test - 10 : कार्बोहाइड्रेट</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('../homescience/daily/test11.html')"><span class="test-title">📝 Test - 11 : प्रोटीन</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('../homescience/daily/test12.html')"><span class="test-title">📝 Test - 12 : वसा (लिपिड)</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('../homescience/daily/test13.html')"><span class="test-title">📝 Test - 13 : विटामिन</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('../homescience/daily/test14.html')"><span class="test-title">📝 Test - 14 : खनिज लवण</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('../homescience/daily/test15.html')"><span class="test-title">📝 Test - 15 : जल</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('../homescience/daily/test16.html')"><span class="test-title">📝 Test - 16 : वानस्पतिक भोज्य पदार्थ</span><span class="status-badge"></span></div>
+
+            <!-- ⏳ लिंक '#' होने पर खुद कमिंग सून बैज बन जाएगा -->
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 17 : अनाज एवं दालें</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 18 : फल, मेवे व मसाले</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 19 : पेय पदार्थ व दुग्ध उत्पाद</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 20 : माँस, मछली एवं अंडा</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 21 : आहार नियोजन</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 22 : शिशु व बाल आहार</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 23 : गर्भावस्था में आहार</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 24 : वृद्धावस्था व मेनू</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 25 : पोषण मूल्यांकन</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 26 : उपचारात्मक पोषण</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 27 : मधुमेह में आहार</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 28 : पीलिया</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 29 : जठरांत्र संबंधी रोग</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 30 : ज्वर व मोटापा</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 31 : हृदय रोग</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 32 : गुर्दे की बीमारी</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 33 : खाद्य संरक्षण व संग्रह</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 34 : खाद्य मिलावट</span><span class="status-badge"></span></div>
+            <div class="test-card" onclick="checkAccess('#')"><span class="test-title">📝 Test - 35 : भोजन पकाने की विधियाँ</span><span class="status-badge"></span></div>
         </div>
     </div>
 
-    <!-- ऑथेंटिकेशन / लॉगिन पॉप-अप -->
+    <!-- ऑथेंटिकेशन / पेमेंट मॉडल -->
     <div id="loginModal" class="modal-overlay">
         <div class="modal-box">
             <h3>🔒 TGT पेड स्टूडेंट एक्सेस</h3>
@@ -93,7 +134,6 @@
                     🔒 संपूर्ण TGT कोर्स फीस: <b>₹299</b>
                 </p>
 
-                <!-- 1️⃣ डायरेक्ट UPI ऐप पे बटन -->
                 <a href="upi://pay?pa=medhavistudypoint@okaxis&pn=MedhaviStudyPoint&am=299&cu=INR" 
                    style="display: block; background: #1a73e8; color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: bold; margin-bottom: 10px;">
                    📲 Pay ₹299 via Google Pay / PhonePe / UPI
@@ -101,7 +141,6 @@
 
                 <p style="font-size:11px; color:#64748b; margin: 4px 0;">— या QR Code स्कैन करके पे करें —</p>
 
-                <!-- 2️⃣ QR Code Image -->
                 <img src="qr.png" alt="Payment QR Code" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #cbd5e1; margin: 4px 0;">
                 
                 <div style="font-size:11px; color:#334155; line-height: 1.4; margin-top:4px;">
@@ -109,7 +148,6 @@
                     स्क्रीनशॉट और अपना मोबाइल नंबर नीचे बटन पर क्लिक करके व्हाट्सएप करें:
                 </div>
 
-                <!-- 3️⃣ व्हाट्सएप बटन -->
                 <a href="https://wa.me/919415597889?text=नमस्ते%20सर,%20मैंने%20TGT%20कोर्स/टेस्ट%20का%20299%20का%20पेमेंट%20कर%20दिया%20है।%20मेरा%20रजिस्टर्ड%20नंबर%20यह%20है:%20" 
                    target="_blank" 
                    style="display: block; background: #25d366; color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; margin-top: 8px;">
@@ -126,6 +164,23 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec"; 
 
     let pendingUrl = null;
+
+    // 🤖 ऑटोमैटिक स्टेटस बैज सेट करने वाली स्क्रिप्ट
+    window.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.test-card');
+        cards.forEach(card => {
+            const badge = card.querySelector('.status-badge');
+            const onclickAttr = card.getAttribute('onclick') || '';
+
+            if (onclickAttr.includes("'#'") || onclickAttr.includes('""')) {
+                badge.className = 'status-badge status-coming';
+                badge.innerHTML = '⏳ Coming Soon';
+            } else {
+                badge.className = 'status-badge status-live';
+                badge.innerHTML = '🟢 Live';
+            }
+        });
+    });
 
     function checkAccess(url) {
         if (url === '#' || !url) {
