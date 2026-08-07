@@ -88,18 +88,19 @@
         </div>
     </div>
 
+    <!-- ऑथेंटिकेशन / पेमेंट मॉडल -->
     <div id="loginModal" class="modal-overlay">
         <div class="modal-box">
-            <h3>🔒 TGT पेड स्टूडेंट एक्सेस</h3>
+            <h3>🔒 GS पेड स्टूडेंट एक्सेस</h3>
             <p>सामग्री अनलॉक करने के लिए अपना पंजीकृत मोबाइल नंबर दर्ज करें:</p>
             <input type="tel" id="userMobileInput" placeholder="10 अंकों का मोबाइल नंबर दर्ज करें" maxlength="10">
             <button onclick="verifyStudent()" class="btn-submit">अनलॉक करें</button>
             <div id="paymentSection" style="display:none; margin-top:10px; border-top:1px solid #e2e8f0; padding-top:10px;">
-                <p style="color:#d97706; font-weight:bold; font-size:13px; margin-bottom:10px;">🔒 संपूर्ण TGT कोर्स फीस: <b>₹299</b></p>
-                <a href="upi://pay?pa=medhavistudypoint@okaxis&pn=MedhaviStudyPoint&am=299&cu=INR" style="display: block; background: #1a73e8; color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: bold; margin-bottom: 10px;">📲 Pay ₹299 via Google Pay / PhonePe / UPI</a>
+                <p style="color:#d97706; font-weight:bold; font-size:13px; margin-bottom:10px;">🔒 GS बैच फीस: <b>₹99</b></p>
+                <a href="upi://pay?pa=medhavistudypoint@okaxis&pn=MedhaviStudyPoint&am=99&cu=INR" style="display: block; background: #1a73e8; color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: bold; margin-bottom: 10px;">📲 Pay ₹99 via UPI</a>
                 <p style="font-size:11px; color:#64748b; margin: 4px 0;">— या QR Code स्कैन करके पे करें —</p>
                 <img src="qr.png" alt="Payment QR Code" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #cbd5e1; margin: 4px 0;">
-                <a href="https://wa.me/919415597889?text=नमस्ते%20सर,%20मैंने%20TGT%20कोर्स%20का%20299%20का%20पेमेंट%20कर%20दिया%20है।%20मेरा%20रजिस्टर्ड%20नंबर%20यह%20है:%20" target="_blank" style="display: block; background: #25d366; color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; margin-top: 8px;">💬 WhatsApp पर स्क्रीनशॉट भेजें</a>
+                <a href="https://wa.me/919415597889?text=नमस्ते%20सर,%20मैंने%20GS%20कोर्स%20का%20पेमेंट%20कर%20दिया%20है।" target="_blank" style="display: block; background: #25d366; color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; margin-top: 8px;">💬 WhatsApp पर स्क्रीनशॉट भेजें</a>
             </div>
             <p id="authMessage" style="margin: 8px 0; font-size:13px; font-weight:bold;"></p>
             <button onclick="closeModal()" class="btn-close">बंद करें</button>
@@ -107,7 +108,8 @@
     </div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec"; 
+    // ✅ 1-Device Lock सुरक्षा वाला नया Apps Script URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3VolXNGLi8jlH7aAniR7v8_mbpH62Y6Dz4LvNakPpt7Z-FHEPcC8KNLRY7nlbh-gy/exec"; 
     let pendingUrl = null;
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -137,9 +139,10 @@
 
     function checkAccess(url) {
         pendingUrl = url;
-        const isVerified = localStorage.getItem('tgt_user_verified');
+        // ✅ मुख्य पृष्ठ से सेव होने वाले 'user_plan' की जाँच ('FULL' या 'GS')
+        const plan = localStorage.getItem('user_plan');
 
-        if (isVerified === 'true') {
+        if (plan === 'FULL' || plan === 'GS') {
             if (url === '#' || !url) {
                 alert('⏳ यह सामग्री जल्द ही उपलब्ध होगी!');
             } else {
@@ -165,8 +168,13 @@
             return;
         }
 
-        let deviceId = localStorage.getItem('user_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 11) + Date.now());
-        localStorage.setItem('user_device_id', deviceId);
+        // ✅ सही 'my_device_id' का उपयोग
+        let deviceId = localStorage.getItem('my_device_id');
+        if (!deviceId) {
+            deviceId = "DEV_" + Math.random().toString(36).substring(2, 11) + Date.now();
+            localStorage.setItem("my_device_id", deviceId);
+        }
+
         msgBox.style.color = "#2563eb";
         msgBox.innerText = "जाँच हो रही है...";
 
@@ -174,18 +182,23 @@
             .then(res => res.json())
             .then(data => {
                 if (data.allowed) {
-                    localStorage.setItem('tgt_user_verified', 'true');
-                    localStorage.setItem('tgt_user_mobile', mobile);
-                    msgBox.style.color = "#16a34a";
-                    msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
-                    setTimeout(() => {
-                        closeModal();
-                        if (pendingUrl === '#' || !pendingUrl) {
-                            alert('⏳ यह सामग्री जल्द ही उपलब्ध होगी!');
-                        } else if (pendingUrl) {
-                            window.location.href = pendingUrl;
-                        }
-                    }, 800);
+                    if (data.plan === 'FULL' || data.plan === 'GS') {
+                        localStorage.setItem('user_plan', data.plan);
+                        localStorage.setItem('tgt_user_mobile', mobile);
+                        msgBox.style.color = "#16a34a";
+                        msgBox.innerText = data.message;
+                        setTimeout(() => {
+                            closeModal();
+                            if (pendingUrl === '#' || !pendingUrl) {
+                                alert('⏳ यह सामग्री जल्द ही उपलब्ध होगी!');
+                            } else if (pendingUrl) {
+                                window.location.href = pendingUrl;
+                            }
+                        }, 800);
+                    } else {
+                        msgBox.style.color = "#e11d48";
+                        msgBox.innerText = "इस सेक्शन के लिए आपका प्लान मान्य नहीं है!";
+                    }
                 } else {
                     msgBox.style.color = "#e11d48";
                     msgBox.innerText = data.message;
