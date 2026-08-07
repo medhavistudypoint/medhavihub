@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - भारत के राज्य/केंद्रशासित प्रदेश ऑनलाइन मॉक टेस्ट</title>
+    <!-- ✅ आपकी मुख्य CSS फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* TGT पेड ऑथेंटिकेशन पॉप-अप (Modal) स्टाइल्स */
+        .modal-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(11, 30, 71, 0.75); 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 10000; 
+            padding: 15px; 
+            backdrop-filter: blur(4px);
+        }
+        .modal-box { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 16px; 
+            width: 100%; 
+            max-width: 380px; 
+            text-align: center; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border: 1px solid #cbd5e1;
+        }
+        .modal-box h3 { color: #0b1e47; margin-top: 0; font-size: 20px; }
+        .modal-box p { font-size: 14px; color: #64748b; }
+        .modal-box input { 
+            width: 100%; 
+            padding: 12px; 
+            margin-bottom: 12px; 
+            border: 2px solid #cbd5e1; 
+            border-radius: 8px; 
+            text-align: center; 
+            font-size: 16px;
+            outline: none;
+        }
+        .modal-box input:focus { border-color: #1e3a8a; }
+        .modal-box button { 
+            width: 100%; 
+            padding: 12px; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 15px; 
+            font-weight: bold; 
+            cursor: pointer; 
+        }
+        .btn-auth { background: #16a34a; color: white; margin-bottom: 8px; }
+        .btn-auth:hover { background: #15803d; }
+        .btn-close { background: #e2e8f0; color: #1e293b; margin-top: 6px; }
+    </style>
+</head>
+<body>
+
+    <!-- 🔒 सुरक्षा वॉटरमार्क -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>भूगोल - 3. भारत के राज्य/केंद्रशासित प्रदेश मॉक टेस्ट शुरू करने के लिए अपना पूरा नाम भरें:</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="javascript:history.back()" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 प्रीमियम हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">भूगोल — भारत के राज्य/केंद्रशासित प्रदेश (70 प्रश्न)</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">60:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">70</span></span>
+                        <span class="subject-badge">Geography</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 70</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="javascript:history.back()" class="btn-dashboard-redirect">🔙 मुख्य पृष्ठ पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🔒 ऑथेंटिकेशन पॉप-अप (Google Script API Integration) -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3>🔒 TGT पेड स्टूडेंट एक्सेस</h3>
+            <p>टेस्ट शुरू करने के लिए अपना रजिस्टर्ड मोबाइल नंबर दर्ज करें:</p>
+            <input type="tel" id="userMobileInput" placeholder="10 अंकों का मोबाइल नंबर" maxlength="10">
+            <button onclick="verifyStudent()" class="btn-auth">अनलॉक करें</button>
+            <p id="authMessage" style="margin: 8px 0; font-size:13px; font-weight:bold;"></p>
+            <button onclick="closeModal()" class="btn-close">बंद करें</button>
+        </div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और ऑथेंटिकेशन लॉजिक -->
+    <script>
+        const AUTH_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec";
+        const QUIZ_KEY = "medhavi_geography_ch03_mock"; 
+        const NEGATIVE_MARKING = 1 / 3; 
+
+        // ऑथेंटिकेशन चेक (पेज लोड पर)
+        window.onload = function() {
+            if (localStorage.getItem('tgt_user_verified') !== 'true') {
+                document.getElementById('loginModal').style.display = 'flex';
+            } else if (typeof window.checkSavedResultOnLoad === 'function') {
+                window.checkSavedResultOnLoad();
+            }
+        };
+
+        function verifyStudent() {
+            const mobile = document.getElementById('userMobileInput').value.trim();
+            const msgBox = document.getElementById('authMessage');
+            if (mobile.length !== 10) { 
+                msgBox.style.color = "#e11d48"; 
+                msgBox.innerText = "सही 10 अंकों का मोबाइल नंबर डालें!"; 
+                return; 
+            }
+            
+            let deviceId = localStorage.getItem('user_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 11));
+            localStorage.setItem('user_device_id', deviceId);
+            msgBox.style.color = "#2563eb"; 
+            msgBox.innerText = "जाँच हो रही है...";
+            
+            fetch(`${AUTH_SCRIPT_URL}?mobile=${mobile}&deviceId=${deviceId}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.allowed) {
+                        localStorage.setItem('tgt_user_verified', 'true');
+                        msgBox.style.color = "#16a34a"; 
+                        msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
+                        setTimeout(() => closeModal(), 800);
+                    } else {
+                        msgBox.style.color = "#e11d48"; 
+                        msgBox.innerText = data.message || "पहुंच की अनुमति नहीं है!";
+                    }
+                })
+                .catch(() => { 
+                    msgBox.style.color = "#e11d48"; 
+                    msgBox.innerText = "नेटवर्क खराबी! पुनः प्रयास करें।"; 
+                });
+        }
+
+        function closeModal() { 
+            document.getElementById('loginModal').style.display = 'none'; 
+        }
+
+        // 🎯 अध्याय 3: भारत के राज्य/केंद्रशासित प्रदेश - 70 प्रश्नों का डेटासेट
+        const dataset = [
+            { id: 1, tag: "राज्य/केंद्रशासित प्रदेश", question: "लातूर किस प्रांत में है?", options: ["आंध्र प्रदेश", "महाराष्ट्र", "गुजरात", "मध्य प्रदेश"], correct: 1 },
+            { id: 2, tag: "राज्य/केंद्रशासित प्रदेश", question: "'विदर्भ' एक प्रादेशिक नाम है भारत में, और यह—", options: ["गुजरात का अंग है", "महाराष्ट्र का अंग है", "मध्य प्रदेश का अंग है", "ओडिशा का अंग है"], correct: 1 },
+            { id: 3, tag: "राज्य/केंद्रशासित प्रदेश", question: "भारत के किस राज्य को 'सिलिकॉन स्टेट' के नाम से जाना जाता है?", options: ["गोवा", "आंध्र प्रदेश", "कर्नाटक", "केरल"], correct: 2 },
+            { id: 4, tag: "राज्य/केंद्रशासित प्रदेश", question: "कहा जाता है कि भारत में सिलिकॉन वैली स्थित है—", options: ["बंगलूरू में", "चेन्नई में", "कोलकाता में", "हैदराबाद में"], correct: 0 },
+            { id: 5, tag: "राज्य/केंद्रशासित प्रदेश", question: "निम्नलिखित में से कौन सुमेलित नहीं है?", options: ["छत्तीसगढ़ – छत्तीसगढ़ मैदान", "झारखंड – छोटानागपुर पठार", "महाराष्ट्र – वृष्टिछाया प्रदेश", "आंध्र प्रदेश – मालनाड"], correct: 3 },
+            { id: 6, tag: "राज्य/केंद्रशासित प्रदेश", question: "राष्ट्रीय राजधानी क्षेत्र में नहीं सम्मिलित है—", options: ["हरियाणा का भाग", "पंजाब का भाग", "राजस्थान का भाग", "उत्तर प्रदेश का भाग"], correct: 1 },
+            { id: 7, tag: "राज्य/केंद्रशासित प्रदेश", question: "भारत के समस्त राज्यों में क्षेत्रफलानुसार, उत्तर प्रदेश का क्या स्थान है?", options: ["पहला", "दूसरा", "तीसरा", "चौथा"], correct: 3 },
+            { id: 8, tag: "राज्य/केंद्रशासित प्रदेश", question: "निम्न में से कौन-सा राज्य, क्षेत्रफल में सबसे छोटा है?", options: ["उत्तर प्रदेश", "मध्य प्रदेश", "राजस्थान", "उत्तराखंड"], correct: 3 },
+            { id: 9, tag: "राज्य/केंद्रशासित प्रदेश", question: "कौन-सा राज्य उत्तर-पूर्वी राज्यों की 'सात बहनों' का भाग नहीं है?", options: ["मेघालय", "पश्चिम बंगाल", "अरुणाचल प्रदेश", "त्रिपुरा"], correct: 1 },
+            { id: 10, tag: "राज्य/केंद्रशासित प्रदेश", question: "देश के किस प्रदेश में सबसे अधिक जिले हैं?", options: ["मध्य प्रदेश", "महाराष्ट्र", "तमिलनाडु", "उत्तर प्रदेश"], correct: 3 },
+            { id: 11, tag: "राज्य/केंद्रशासित प्रदेश", question: "निम्न में कौन सुमेलित नहीं है?", options: ["त्रिपुरा – अगरतला", "मणिपुर – आइजोल", "नगालैंड – कोहिमा", "अरुणाचल प्रदेश – ईटानगर"], correct: 1 },
+            { id: 12, tag: "राज्य/केंद्रशासित प्रदेश", question: "गुजरात की राजधानी कौन-सी है?", options: ["गोधरा", "बड़ौदा", "गांधीनगर", "अहमदाबाद"], correct: 2 },
+            { id: 13, tag: "राज्य/केंद्रशासित प्रदेश", question: "ईटानगर किस राज्य की राजधानी है ?", options: ["मिजोरम", "पुदुचेरी", "त्रिपुरा", "अरुणाचल प्रदेश"], correct: 3 },
+            { id: 14, tag: "राज्य/केंद्रशासित प्रदेश", question: "भारत का कौन-सा राज्य अधिकतम राज्य सीमाओं को छूता है?", options: ["मध्य प्रदेश", "कर्नाटक", "आंध्र प्रदेश", "उत्तर प्रदेश"], correct: 3 },
+            { id: 15, tag: "राज्य/केंद्रशासित प्रदेश", question: "भारत में केंद्रशासित राज्यों की संख्या कितनी है?", options: ["5", "7", "9", "11"], correct: 2 },
+            { id: 16, tag: "राज्य/केंद्रशासित प्रदेश", question: "भारत का सबसे छोटा केंद्रशासित क्षेत्र कौन-सा है?", options: ["चंडीगढ़", "अंडमान तथा निकोबार", "लक्षद्वीप", "दादरा तथा नगर हवेली"], correct: 2 },
+            { id: 17, tag: "राज्य/केंद्रशासित प्रदेश", question: "पोर्ट ब्लेयर अवस्थित है—", options: ["उत्तरी अंडमान में", "दक्षिणी अंडमान में", "मध्य अंडमान में", "छोटा अंडमान में"], correct: 1 },
+            { id: 18, tag: "राज्य/केंद्रशासित प्रदेश", question: "क्षेत्रफल में कौन-सा राज्य सबसे बड़ा है?", options: ["मध्य प्रदेश", "उत्तर प्रदेश", "राजस्थान", "महाराष्ट्र"], correct: 2 },
+            { id: 19, tag: "राज्य/केंद्रशासित प्रदेश", question: "क्षेत्रफल की दृष्टि से भारत का सबसे छोटा राज्य कौन-सा है?", options: ["त्रिपुरा", "सिक्किम", "गोवा", "मिजोरम"], correct: 2 },
+            { id: 20, tag: "राज्य/केंद्रशासित प्रदेश", question: "निम्नलिखित में से भारतवर्ष का सबसे छोटा राज्य कौन-सा है?", options: ["नगालैंड", "त्रिपुरा", "सिक्किम", "मेघालय"], correct: 2 },
+            { id: 21, tag: "राज्य/केंद्रशासित प्रदेश", question: "किस राज्य की समुद्री सीमा नहीं है?", options: ["गुजरात", "गोवा", "महाराष्ट्र", "राजस्थान"], correct: 3 },
+            { id: 22, tag: "राज्य/केंद्रशासित प्रदेश", question: "निम्न में से कौन-सा युग्म सही सुमेलित नहीं है?", options: ["मदुरै—तमिलनाडु", "झांसी—मध्य प्रदेश", "हरिद्वार—उत्तरांचल", "अलवर—राजस्थान"], correct: 1 },
+            { id: 23, tag: "राज्य/केंद्रशासित प्रदेश", question: "निम्नलिखित में से कौन पंजाब की सीमा पर नहीं है?", options: ["राजस्थान", "हरियाणा", "हिमाचल प्रदेश", "उत्तरांचल"], correct: 3 },
+            { id: 24, tag: "राज्य/केंद्रशासित प्रदेश", question: "निम्नलिखित में से कौन-सा राज्य छत्तीसगढ़ राज्य की सीमाओं को नहीं छूता है?", options: ["उड़ीसा", "आंध्र प्रदेश", "पश्चिम बंगाल", "महाराष्ट्र"], correct: 2 },
+            { id: 25, tag: "राज्य/केंद्रशासित प्रदेश", question: "निम्नलिखित में से कौन-सा क्षेत्र और राज्य की जोड़ी मेल नहीं खाती?", options: ["सौराष्ट्र-गुजरात", "बुंदेलखंड-राजस्थान", "तेलंगाना-आंध्र प्रदेश", "विदर्भ-महाराष्ट्र"], correct: 1 },
+            { id: 26, tag: "राज्य/केंद्रशासित प्रदेश", question: "कश्मीर की ग्रीष्मकालीन राजधानी कौन है?", options: ["जम्मू", "श्रीनगर", "लेह", "लद्दाख"], correct: 1 },
+            { id: 27, tag: "राज्य/केंद्रशासित प्रदेश", question: "हिमाचल प्रदेश के किस जिले की सीमा चीन के साथ लगती है?", options: ["किन्नौर", "चंबा", "कुल्लू", "सिरमौर"], correct: 0 },
+            { id: 28, tag: "राज्य/केंद्रशासित प्रदेश", question: "भारत का सबसे बड़ा संघ राज्य क्षेत्र कौन-सा है?", options: ["चंडीगढ़", "पुदुचेरी", "अंडमान और निकोबार द्वीपसमूह", "लक्षद्वीप"], correct: 2 },
+            { id: 29, tag: "राज्य/केंद्रशासित प्रदेश", question: "राज्यों के किस समूह के साथ नगालैंड की साझी सीमाएं हैं?", options: ["अरुणाचल प्रदेश, असम और मेघालय", "अरुणाचल प्रदेश, असम और मणिपुर", "असम, मेघालय और मणिपुर", "अरुणाचल प्रदेश, असम और मिजोरम"], correct: 1 },
+            { id: 30, tag: "राज्य/केंद्रशासित प्रदेश", question: "निम्नलिखित में से वह कौन-सा राज्य है जिसकी सीमा म्यांमार से नहीं लगती है?", options: ["असम", "मणिपुर", "अरुणाचल प्रदेश", "मिजोरम"], correct: 0 },
+            { id: 31, tag: "राज्य/केंद्रशासित प्रदेश", question: "भारत के कितने राज्य नेपाल के साथ सीमा साझा करते हैं?", options: ["3", "4", "8", "5"], correct: 3 },
+            { id: 32, tag: "राज्य/केंद्रशासित प्रदेश", question: "भारत ने किस देश के साथ अपने सीमा मानचित्रों की अदला-बदली की थी?", options: ["चीन", "श्रीलंका", "पाकिस्तान", "बांग्लादेश"], correct: 3 },
+            { id: 33, tag: "राज्य/केंद्रशासित प्रदेश", question: "राज्य और उसकी राजधानी का सही जोड़ा बताइए—", options: ["नगालैंड – शिलांग", "झारखंड – रांची", "उत्तरांचल – नैनीताल", "छत्तीसगढ़ – बिलासपुर"], correct: 1 },
+            { id: 34, tag: "राज्य/केंद्रशासित प्रदेश", question: "राजस्थान की राजधानी कौन-सी है?", options: ["जयपुर", "उदयपुर", "जोधपुर", "अजमेर"], correct: 0 },
+            { id: 35, tag: "राज्य/केंद्रशासित प्रदेश", question: "भारत के उनतीसवें राज्य की राजधानी है -", options: ["हैदराबाद", "विशाखापत्तनम", "पणजी", "सिलवासा"], correct: 0 },
+            { id: 36, tag: "राज्य/केंद्रशासित प्रदेश", question: "मध्य प्रदेश से किस राज्य की सीमा नहीं छूती है?", options: ["राजस्थान", "गुजरात", "झारखंड", "महाराष्ट्र"], correct: 2 },
+            { id: 37, tag: "राज्य/केंद्रशासित प्रदेश", question: "निम्न में से एक केंद्रशासित क्षेत्र नहीं है—", options: ["त्रिपुरा", "दमन एवं दीव", "लक्षद्वीप", "पुदुचेरी"], correct: 0 },
+            { id: 38, tag: "राज्य/केंद्रशासित प्रदेश", question: "उत्तराखंड की राजधानी क्या है?", options: ["अल्मोड़ा", "पिथौरागढ़", "चमोली", "देहरादून"], correct: 3 },
+            { id: 39, tag: "राज्य/केंद्रशासित प्रदेश", question: "रायपुर किस भारतीय राज्य की राजधानी है?", options: ["झारखंड", "गोवा", "हिमाचल प्रदेश", "छत्तीसगढ़"], correct: 3 },
+            { id: 40, tag: "राज्य/केंद्रशासित प्रदेश", question: "रांची किस भारतीय राज्य की राजधानी है?", options: ["छत्तीसगढ़", "गोवा", "हिमाचल प्रदेश", "झारखंड"], correct: 3 },
+            { id: 41, tag: "राज्य/केंद्रशासित प्रदेश", question: "पटना _______ की राजधानी है।", options: ["अंडमान और निकोबार द्वीपसमूह", "आंध्र प्रदेश", "बिहार", "प. बंगाल"], correct: 2 },
+            { id: 42, tag: "राज्य/केंद्रशासित प्रदेश", question: "भोपाल _______ की राजधानी है।", options: ["हिमाचल प्रदेश", "गोवा", "गुजरात", "मध्य प्रदेश"], correct: 3 },
+            { id: 43, tag: "राज्य/केंद्रशासित प्रदेश", question: "लखनऊ _______ की राजधानी है।", options: ["उत्तराखंड", "उत्तर प्रदेश", "त्रिपुरा", "अरुणाचल प्रदेश"], correct: 1 },
+            { id: 44, tag: "राज्य/केंद्रशासित प्रदेश", question: "पणजी किस भारतीय राज्य की राजधानी है?", options: ["छत्तीसगढ़", "गोवा", "हिमाचल प्रदेश", "झारखंड"], correct: 1 },
+            { id: 45, tag: "राज्य/केंद्रशासित प्रदेश", question: "पोर्ट ब्लेयर _______ की राजधानी है।", options: ["अंडमान और निकोबार द्वीपसमूह", "आंध्र प्रदेश", "बिहार", "प. बंगाल"], correct: 0 },
+            { id: 46, tag: "राज्य/केंद्रशासित प्रदेश", question: "शिमला किस भारतीय राज्य की राजधानी है?", options: ["छत्तीसगढ़", "गोवा", "हिमाचल प्रदेश", "झारखंड"], correct: 2 },
+            { id: 47, tag: "राज्य/केंद्रशासित प्रदेश", question: "93° पूर्वी देशांतर और 27° उत्तरी अक्षांश के बीच समुद्र तल से 530 मी. ऊंचाई पर स्थित राज्य की राजधानी का नाम बताएं।", options: ["ईटानगर", "पटना", "हैदराबाद", "दिसपुर"], correct: 0 },
+            { id: 48, tag: "राज्य/केंद्रशासित प्रदेश", question: "भारत में कितने राज्य और केंद्रशासित प्रदेश, उत्तर प्रदेश के सीमावर्ती हैं?", options: ["10", "5", "9", "7"], correct: 2 },
+            { id: 49, tag: "राज्य/केंद्रशासित प्रदेश", question: "निम्नलिखित में से किस राज्य के साथ त्रिपुरा सीमा साझा करता है?", options: ["अरुणाचल प्रदेश", "पश्चिम बंगाल", "नगालैंड", "असम"], correct: 3 },
+            { id: 50, tag: "राज्य/केंद्रशासित प्रदेश", question: "निम्नलिखित में से किस राज्य की सीमाएं बांग्लादेश से नहीं लगती हैं?", options: ["मणिपुर", "त्रिपुरा", "असम", "पश्चिम बंगाल"], correct: 0 },
+            { id: 51, tag: "राज्य/केंद्रशासित प्रदेश", question: "कौन-सा राज्य हरियाणा के साथ अपनी सीमा साझा नहीं करता?", options: ["उत्तर प्रदेश", "मध्य प्रदेश", "हिमाचल प्रदेश", "राजस्थान"], correct: 1 },
+            { id: 52, tag: "राज्य/केंद्रशासित प्रदेश", question: "इनमें से किस भारतीय राज्य में सूर्योदय सबसे पहले होता है?", options: ["ओडिशा", "अरुणाचल प्रदेश", "मेघालय", "पश्चिम बंगाल"], correct: 1 },
+            { id: 53, tag: "राज्य/केंद्रशासित प्रदेश", question: "मध्य प्रदेश का पंचमढ़ी रिसॉर्ट किस पर्वत श्रृंखला में स्थित है?", options: ["विंध्य श्रृंखला", "अरावली श्रृंखला", "सतपुड़ा श्रृंखला", "कैमूर श्रृंखला"], correct: 2 },
+            { id: 54, tag: "राज्य/केंद्रशासित प्रदेश", question: "मध्य प्रदेश स्थित नेपानगर निम्नांकित में से किसके लिए प्रसिद्ध है?", options: ["इस्पात संयंत्र", "समाचार छापते की फैक्टरी", "प्रोटोटाइप मशीन टूल्स", "यूरेनियम"], correct: 1 },
+            { id: 55, tag: "राज्य/केंद्रशासित प्रदेश", question: "'ब्लैक पगोडा'.....में है।", options: ["मिस्र", "श्रीलंका", "कोणार्क", "मदुरै"], correct: 2 },
+            { id: 56, tag: "राज्य/केंद्रशासित प्रदेश", question: "'पाट' अंचल (Pat Region) अवस्थित है—", options: ["बिहार में", "झारखंड में", "मध्य प्रदेश में", "मेघालय में"], correct: 1 },
+            { id: 57, tag: "राज्य/केंद्रशासित प्रदेश", question: "झुमरी तलैया किस राज्य में स्थित है?", options: ["बिहार", "झारखंड", "ओडिशा", "पश्चिम बंगाल"], correct: 1 },
+            { id: 58, tag: "राज्य/केंद्रशासित प्रदेश", question: "भारत के निम्नलिखित राज्यों में से किसे 'भारत का कोहिनूर' कहा जाता है?", options: ["आंध्र प्रदेश", "केरल", "मध्य प्रदेश", "राजस्थान"], correct: 0 },
+            { id: 59, tag: "राज्य/केंद्रशासित प्रदेश", question: "मणिपुर का अधिकांश धरातल है—", options: ["मैदानी", "पठारी", "दलदली", "पर्वतीय"], correct: 3 },
+            { id: 60, tag: "राज्य/केंद्रशासित प्रदेश", question: "मणिपुर में तैरते हुए द्वीपों पर बने मकानों वाले इन द्वीपों को कहते हैं—", options: ["तिपिस", "बरखान्स", "फूमडि", "इजबा"], correct: 2 },
+            { id: 61, tag: "राज्य/केंद्रशासित प्रदेश", question: "भारत का लगभग 30 प्रतिशत क्षेत्र तीन राज्यों में समाहित है। ये तीन राज्य हैं—", options: ["राजस्थान, उत्तर प्रदेश एवं आंध्र प्रदेश", "मध्य प्रदेश, आंध्र प्रदेश एवं गुजरात", "राजस्थान, मध्य प्रदेश एवं महाराष्ट्र", "महाराष्ट्र, आंध्र प्रदेश एवं उत्तर प्रदेश"], correct: 2 },
+            { id: 62, tag: "राज्य/केंद्रशासित प्रदेश", question: "भारत के निम्नलिखित राज्यों को उनके भौगोलिक क्षेत्र के घटते क्रम में व्यवस्थित कीजिए - I. राजस्थान II. तमिलनाडु III. महाराष्ट्र IV. कर्नाटक", options: ["I, II, III, IV", "III, I, IV, II", "I, III, IV, II", "III, IV, I, II"], correct: 2 },
+            { id: 63, tag: "राज्य/केंद्रशासित प्रदेश", question: "भारत में जनसंख्या के अनुसार, तीसरा एवं क्षेत्रफल में बारहवां राज्य है—", options: ["महाराष्ट्र", "मध्य प्रदेश", "कर्नाटक", "बिहार"], correct: 3 },
+            { id: 64, tag: "राज्य/केंद्रशासित प्रदेश", question: "असम कुल मिलाकर कितने राज्यों एवं केंद्रशासित क्षेत्रों से घिरा हुआ है?", options: ["6", "7", "8", "9"], correct: 1 },
+            { id: 65, tag: "राज्य/केंद्रशासित प्रदेश", question: "छत्तीसगढ़ की सीमा उभयनिष्ठ नहीं है—", options: ["महाराष्ट्र के साथ", "बिहार के साथ", "ओडिशा के साथ", "आंध्र प्रदेश के साथ"], correct: 1 },
+            { id: 66, tag: "राज्य/केंद्रशासित प्रदेश", question: "वर्ष 1953 में, जब आंध्र राज्य एक अलग राज्य बना, तब उसकी राजधानी कौन बनी?", options: ["गुंटूर", "कर्नूल", "नेल्लौर", "वारंगल"], correct: 1 },
+            { id: 67, tag: "राज्य/केंद्रशासित प्रदेश", question: "सोनभद्र जिले को स्पर्श करती हैं—", options: ["दो राज्यों की सीमाएं", "तीन राज्यों की सीमाएं", "चार राज्यों की सीमाएं", "पांच राज्यों की सीमाएं"], correct: 2 },
+            { id: 68, tag: "राज्य/केंद्रशासित प्रदेश", question: "चार दक्षिणी राज्य आंध्र प्रदेश, कर्नाटक, केरल और तमिलनाडु में से कौन-सा सबसे अधिक भारतीय राज्यों के साथ सीमावर्ती है?", options: ["केवल आंध्र प्रदेश", "केवल कर्नाटक", "आंध्र प्रदेश और कर्नाटक में से प्रत्येक", "तमिलनाडु और केरल में से प्रत्येक"], correct: 2 },
+            { id: 69, tag: "राज्य/केंद्रशासित प्रदेश", question: "निम्नलिखित में से कौन सुमेलित है?", options: ["असम—शिलांग", "मेघालय—कोहिमा", "मिजोरम—आइजोल", "नगालैंड—गुवाहाटी"], correct: 2 },
+            { id: 70, tag: "राज्य/केंद्रशासित प्रदेश", question: "निम्नलिखित में से कौन-सा एक सुनियोजित राजधानी नगर नहीं है?", options: ["चंडीगढ़", "भुवनेश्वर", "बंगलूरू", "गांधीनगर"], correct: 2 }
+        ];
+    </script>
+
+    <!-- ✅ आपकी मुख्य JS फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
