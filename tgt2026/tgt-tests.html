@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TGT 2026 - 20 फुल मॉक टेस्ट सीरीज़</title>
@@ -9,7 +8,6 @@
         * { box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
         
-        /* 🌟 ब्रांडेड हेडर (Home Page Style) */
         .brand-hero { 
             background: linear-gradient(135deg, #0b1e47, #1e3a8a); 
             color: white; 
@@ -62,7 +60,6 @@
 
         .test-list { display: flex; flex-direction: column; gap: 12px; }
 
-        /* 🎯 मोटा व सुंदर कार्ड बटन डिज़ाइन */
         .test-card {
             background: #ffffff;
             border: 2px solid #cbd5e1;
@@ -98,7 +95,6 @@
             font-weight: 500;
         }
 
-        /* 🟢 बड़ा स्पष्ट गोला व लाइव स्टेटस बैज */
         .status-badge {
             font-size: 13px;
             font-weight: 800;
@@ -120,7 +116,6 @@
             box-shadow: 0 0 8px rgba(22, 163, 74, 0.6);
         }
 
-        /* Modal Overlay Styling */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
         .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .modal-box h3 { margin-top: 0; color: #0b1e47; font-size: 18px; }
@@ -133,7 +128,6 @@
 </head>
 <body>
 
-    <!-- 🌟 ब्रांडेड हेडर -->
     <div class="brand-hero">
         <img src="logo.png" alt="Medhavi Logo" class="brand-logo" onerror="this.src='../logo.png'">
         <h1 class="brand-title">MEDHAVI STUDY POINT</h1>
@@ -144,7 +138,6 @@
     <div class="container">
         <a href="tgt2026.html" class="back-btn">⬅️ TGT मुख्य पेज पर जाएँ</a>
 
-        <!-- 🎯 कुल 20 फुल मॉक टेस्ट्स की सूची -->
         <div class="test-list">
             <div class="test-card" onclick="checkAccess('tgttest/t1.html')"><div class="test-info"><span>📝 TGT 2026 Full Test - 01</span><span class="test-subtext">125 प्रश्न | 120 मिनट</span></div><span class="status-badge"></span></div>
             <div class="test-card" onclick="checkAccess('tgttest/t2.html')"><div class="test-info"><span>📝 TGT 2026 Full Test - 02</span><span class="test-subtext">125 प्रश्न | 120 मिनट</span></div><span class="status-badge"></span></div>
@@ -153,7 +146,6 @@
             <div class="test-card" onclick="checkAccess('tgttest/t5.html')"><div class="test-info"><span>📝 TGT 2026 Full Test - 05</span><span class="test-subtext">125 प्रश्न | 120 मिनट</span></div><span class="status-badge"></span></div>
             <div class="test-card" onclick="checkAccess('tgttest/t6.html')"><div class="test-info"><span>📝 TGT 2026 Full Test - 06</span><span class="test-subtext">125 प्रश्न | 120 मिनट</span></div><span class="status-badge"></span></div>
             
-            <!-- ⏳ Coming Soon वाले टेस्ट्स (लिंक '#' है) -->
             <div class="test-card" onclick="checkAccess('#')"><div class="test-info"><span>📝 TGT 2026 Full Test - 07</span><span class="test-subtext">125 प्रश्न | 120 मिनट</span></div><span class="status-badge"></span></div>
             <div class="test-card" onclick="checkAccess('#')"><div class="test-info"><span>📝 TGT 2026 Full Test - 08</span><span class="test-subtext">125 प्रश्न | 120 मिनट</span></div><span class="status-badge"></span></div>
             <div class="test-card" onclick="checkAccess('#')"><div class="test-info"><span>📝 TGT 2026 Full Test - 09</span><span class="test-subtext">125 प्रश्न | 120 मिनट</span></div><span class="status-badge"></span></div>
@@ -181,7 +173,7 @@
             
             <div id="paymentSection" style="display:none; margin-top:10px; border-top:1px solid #e2e8f0; padding-top:10px;">
                 <p style="color:#d97706; font-weight:bold; font-size:13px; margin-bottom:10px;">
-                    🔒 संपूर्ण TGT कोर्स फीस: <b>₹299</b>
+                    🔒 संपूर्ण TGT कोर्स/टेस्ट फीस: <b>₹299</b>
                 </p>
 
                 <a href="upi://pay?pa=medhavistudypoint@okaxis&pn=MedhaviStudyPoint&am=299&cu=INR" 
@@ -211,11 +203,10 @@
     </div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec"; 
-
+    // ✅ 1-Device Lock सुरक्षा वाला नया Apps Script URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3VolXNGLi8jlH7aAniR7v8_mbpH62Y6Dz4LvNakPpt7Z-FHEPcC8KNLRY7nlbh-gy/exec"; 
     let pendingUrl = null;
 
-    // 🤖 ऑटोमैटिक बैज अपडेट
     window.addEventListener('DOMContentLoaded', () => {
         const cards = document.querySelectorAll('.test-card');
         cards.forEach(card => {
@@ -234,9 +225,10 @@
 
     function checkAccess(url) {
         pendingUrl = url;
-        const isVerified = localStorage.getItem('tgt_user_verified');
+        // ✅ केवल 'FULL' बैच वालों को ही फुल मॉक टेस्ट की अनुमति दें
+        const plan = localStorage.getItem('user_plan');
         
-        if (isVerified === 'true') {
+        if (plan === 'FULL') {
             if (url === '#' || !url) {
                 alert('⏳ यह फुल टेस्ट जल्द ही उपलब्ध होगा!');
             } else {
@@ -263,10 +255,11 @@
             return;
         }
 
-        let deviceId = localStorage.getItem('user_device_id');
+        // ✅ 'my_device_id' का उपयोग
+        let deviceId = localStorage.getItem('my_device_id');
         if (!deviceId) {
-            deviceId = 'DEV-' + Math.random().toString(36).substring(2, 11) + Date.now();
-            localStorage.setItem('user_device_id', deviceId);
+            deviceId = "DEV_" + Math.random().toString(36).substring(2, 11) + Date.now();
+            localStorage.setItem("my_device_id", deviceId);
         }
 
         msgBox.style.color = "#2563eb";
@@ -276,18 +269,24 @@
             .then(res => res.json())
             .then(data => {
                 if (data.allowed) {
-                    localStorage.setItem('tgt_user_verified', 'true');
-                    localStorage.setItem('tgt_user_mobile', mobile);
-                    msgBox.style.color = "#16a34a";
-                    msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
-                    setTimeout(() => {
-                        closeModal();
-                        if (pendingUrl === '#' || !pendingUrl) {
-                            alert('⏳ यह फुल टेस्ट जल्द ही उपलब्ध होगा!');
-                        } else if (pendingUrl) {
-                            window.location.href = pendingUrl;
-                        }
-                    }, 800);
+                    if (data.plan === 'FULL') {
+                        localStorage.setItem('user_plan', data.plan);
+                        localStorage.setItem('tgt_user_mobile', mobile);
+                        msgBox.style.color = "#16a34a";
+                        msgBox.innerText = data.message;
+                        setTimeout(() => {
+                            closeModal();
+                            if (pendingUrl === '#' || !pendingUrl) {
+                                alert('⏳ यह फुल टेस्ट जल्द ही उपलब्ध होगा!');
+                            } else if (pendingUrl) {
+                                window.location.href = pendingUrl;
+                            }
+                        }, 800);
+                    } else {
+                        msgBox.style.color = "#e11d48";
+                        msgBox.innerText = "फुल मॉक टेस्ट के लिए ₹299 वाला Full Batch आवश्यक है!";
+                        paySec.style.display = "block";
+                    }
                 } else {
                     msgBox.style.color = "#e11d48";
                     msgBox.innerText = data.message;
@@ -309,5 +308,4 @@
     }
 </script>
 </body>
-    </html>
-    
+</html>
