@@ -3,198 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GS Practice Test - Medhavi Study Point</title>
+    <title>Medhavi Study Point - भारतीय इतिहास ऑनलाइन मॉक टेस्ट 01</title>
+    <!-- ✅ आपकी मुख्य CSS फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; padding-bottom: 50px; }
-        
-        .brand-hero { background: linear-gradient(135deg, #0b1e47, #1e3a8a); color: white; padding: 25px 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
-        .brand-title { font-size: 20px; font-weight: 900; color: #facc15; margin: 0; text-transform: uppercase; }
-        .page-badge { display: inline-block; background: rgba(255, 255, 255, 0.15); color: #fff; padding: 4px 14px; border-radius: 15px; font-size: 12px; font-weight: 700; margin-top: 8px; }
-
-        .container { max-width: 700px; margin: 20px auto; padding: 0 15px; }
-        .back-btn { display: inline-block; margin-bottom: 15px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 14px; border-radius: 8px; font-weight: bold; font-size: 13px; }
-
-        .question-card { background: white; border: 1px solid #cbd5e1; border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
-        .question-title { font-size: 16px; font-weight: bold; color: #0b1e47; margin-bottom: 15px; }
-        
-        .option-label { display: block; background: #f1f5f9; border: 1px solid #cbd5e1; padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; font-size: 14px; cursor: pointer; transition: 0.2s; }
-        .option-label:hover { background: #e2e8f0; }
-        .option-label input { margin-right: 10px; }
-
-        .submit-btn { display: block; width: 100%; background: #16a34a; color: white; padding: 14px; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 10px rgba(22,163,74,0.3); }
-        .submit-btn:hover { background: #15803d; }
-
-        .result-box { display: none; background: white; border: 2px solid #16a34a; padding: 25px; border-radius: 12px; text-align: center; margin-top: 20px; }
-        
-        /* Modal Overlay for Login */
-        .modal-overlay { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
-        .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; text-align: center; outline: none; }
-        .modal-box button { width: 100%; padding: 12px; background: #0b1e47; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        /* TGT पेड ऑथेंटिकेशन पॉप-अप (Modal) स्टाइल्स */
+        .modal-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(11, 30, 71, 0.75); 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 10000; 
+            padding: 15px; 
+            backdrop-filter: blur(4px);
+        }
+        .modal-box { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 16px; 
+            width: 100%; 
+            max-width: 380px; 
+            text-align: center; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border: 1px solid #cbd5e1;
+        }
+        .modal-box h3 { color: #0b1e47; margin-top: 0; font-size: 20px; }
+        .modal-box p { font-size: 14px; color: #64748b; }
+        .modal-box input { 
+            width: 100%; 
+            padding: 12px; 
+            margin-bottom: 12px; 
+            border: 2px solid #cbd5e1; 
+            border-radius: 8px; 
+            text-align: center; 
+            font-size: 16px;
+            outline: none;
+        }
+        .modal-box input:focus { border-color: #1e3a8a; }
+        .modal-box button { 
+            width: 100%; 
+            padding: 12px; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 15px; 
+            font-weight: bold; 
+            cursor: pointer; 
+        }
+        .btn-auth { background: #16a34a; color: white; margin-bottom: 8px; }
+        .btn-auth:hover { background: #15803d; }
+        .btn-close { background: #e2e8f0; color: #1e293b; margin-top: 6px; }
     </style>
 </head>
-<body onload="checkPageAccess()">
+<body>
 
-    <!-- 🔒 लॉगिन वेरीफिकेशन मॉडल (यदि वेरीफाई नहीं है तो दिखेगा) -->
-    <div id="loginModal" class="modal-overlay" style="display:none;">
+    <!-- 🔒 सुरक्षा वॉटरमार्क -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>भारतीय इतिहास - ऑनलाइन मॉक टेस्ट 01 शुरू करने के लिए अपना पूरा नाम भरें:</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="javascript:history.back()" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 प्रीमियम हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">भारतीय इतिहास - ऑनलाइन मॉक टेस्ट 01</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">06:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">6</span></span>
+                        <span class="subject-badge">History</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 6</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="javascript:history.back()" class="btn-dashboard-redirect">🔙 मुख्य पृष्ठ पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🔒 ऑथेंटिकेशन पॉप-अप (Google Script API Integration) -->
+    <div id="loginModal" class="modal-overlay">
         <div class="modal-box">
-            <h3 style="color:#0b1e47; margin-top:0;">📱 स्टूडेंट एक्सेस वेरीफाई करें</h3>
-            <p style="font-size:13px; color:#64748b;">टेस्ट शुरू करने के लिए अपना रजिस्टर्ड मोबाइल नंबर डालें:</p>
-            <input type="tel" id="mobileInput" placeholder="10 अंकों का मोबाइल नंबर" maxlength="10">
-            <button onclick="verifyUser()">Verify & Start Test</button>
-            <p id="msg" style="margin-top:10px; font-weight:bold; font-size:13px;"></p>
+            <h3>🔒 TGT पेड स्टूडेंट एक्सेस</h3>
+            <p>टेस्ट शुरू करने के लिए अपना रजिस्टर्ड मोबाइल नंबर दर्ज करें:</p>
+            <input type="tel" id="userMobileInput" placeholder="10 अंकों का मोबाइल नंबर" maxlength="10">
+            <button onclick="verifyStudent()" class="btn-auth">अनलॉक करें</button>
+            <p id="authMessage" style="margin: 8px 0; font-size:13px; font-weight:bold;"></p>
+            <button onclick="closeModal()" class="btn-close">बंद करें</button>
         </div>
     </div>
 
-    <div class="brand-hero">
-        <h1 class="brand-title">MEDHAVI STUDY POINT</h1>
-        <div class="page-badge">📖 GS (सामान्य अध्ययन) - प्रैक्टिस टेस्ट 01</div>
-    </div>
+    <!-- 🎯 टेस्ट डेटासेट और ऑथेंटिकेशन लॉजिक -->
+    <script>
+        const AUTH_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec";
+        const QUIZ_KEY = "medhavi_history_mock_01"; 
+        const NEGATIVE_MARKING = 1 / 3; 
 
-    <div class="container">
-        <a href="tgt2026.html" class="back-btn">⬅️ पोर्टल पर वापस जाएँ</a>
-
-        <div id="testContainer">
-            <!-- प्रश्न 1 -->
-            <div class="question-card">
-                <div class="question-title">प्रश्नोत्तर 1: भारत का राष्ट्रीय गान 'जन गण मन' सबसे पहले किस वर्ष गाया गया था?</div>
-                <label class="option-label"><input type="radio" name="q1" value="A"> A. 1905</label>
-                <label class="option-label"><input type="radio" name="q1" value="B"> B. 1911</label>
-                <label class="option-label"><input type="radio" name="q1" value="C"> C. 1919</label>
-                <label class="option-label"><input type="radio" name="q1" value="D"> D. 1925</label>
-            </div>
-
-            <!-- प्रश्न 2 -->
-            <div class="question-card">
-                <div class="question-title">प्रश्नोत्तर 2: भारत में 'قومی گلاب' (राष्ट्रगीत) 'वंदे मातरम' के रचयिता कौन हैं?</div>
-                <label class="option-label"><input type="radio" name="q2" value="A"> A. बंकिम चंद्र चटर्जी</label>
-                <label class="option-label"><input type="radio" name="q2" value="B"> B. रवींद्रनाथ टैगोर</label>
-                <label class="option-label"><input type="radio" name="q2" value="C"> C. शरतचंद्र चट्टोपाध्याय</label>
-                <label class="option-label"><input type="radio" name="q2" value="D"> D. प्रेमचंद</label>
-            </div>
-
-            <!-- प्रश्न 3 -->
-            <div class="question-card">
-                <div class="question-title">प्रश्नोत्तर 3: संविधान सभा की प्रारूप समिति (Drafting Committee) के अध्यक्ष कौन थे?</div>
-                <label class="option-label"><input type="radio" name="q3" value="A"> A. डॉ. राजेंद्र प्रसाद</label>
-                <label class="option-label"><input type="radio" name="q3" value="B"> B. पंडित जवाहरलाल नेहरू</label>
-                <label class="option-label"><input type="radio" name="q3" value="C"> C. डॉ. बी. आर. अम्बेडकर</label>
-                <label class="option-label"><input type="radio" name="q3" value="D"> D. सरदार वल्लभभाई पटेल</label>
-            </div>
-
-            <!-- प्रश्न 4 -->
-            <div class="question-card">
-                <div class="question-title">प्रश्नोत्तर 4: क्षेत्रफल की दृष्टि से भारत का विश्व में कौन सा स्थान है?</div>
-                <label class="option-label"><input type="radio" name="q4" value="A"> A. दूसरा</label>
-                <label class="option-label"><input type="radio" name="q4" value="B"> B. चौथा</label>
-                <label class="option-label"><input type="radio" name="q4" value="C"> C. छठा</label>
-                <label class="option-label"><input type="radio" name="q4" value="D"> D. सातवां</label>
-            </div>
-
-            <!-- प्रश्न 5 -->
-            <div class="question-card">
-                <div class="question-title">प्रश्नोत्तर 5: 'प्रसिद्ध दिलवाड़ा जैन मंदिर' भारत के किस राज्य में स्थित है?</div>
-                <label class="option-label"><input type="radio" name="q5" value="A"> A. राजस्थान</label>
-                <label class="option-label"><input type="radio" name="q5" value="B"> B. मध्य प्रदेश</label>
-                <label class="option-label"><input type="radio" name="q5" value="C"> C. उत्तर प्रदेश</label>
-                <label class="option-label"><input type="radio" name="q5" value="D"> D. गुजरात</label>
-            </div>
-
-            <button class="submit-btn" onclick="submitTest()">टेस्ट जमा करें (Submit Test)</button>
-        </div>
-
-        <!-- रिजल्ट दिखाने का बॉक्स -->
-        <div id="resultBox" class="result-box">
-            <h2 style="color:#0b1e47; margin-top:0;">🎉 टेस्ट संपन्न हुआ!</h2>
-            <p id="scoreText" style="font-size:18px; font-weight:bold;"></p>
-            <button onclick="location.reload()" style="background:#0b1e47; color:white; border:none; padding:10px 20px; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:10px;">दुबारा दें</button>
-        </div>
-    </div>
-
-<script>
-    // आपका डिप्लॉयड Apps Script URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3VolXNGLi8jlH7aAniR7v8_mbpH62Y6Dz4LvNakPpt7Z-FHEPcC8KNLRY7nlbh-gy/exec";
-
-    function checkPageAccess() {
-        const plan = localStorage.getItem("user_plan");
-        // अगर फुल बैच या जीएस बैच है, तभी खुलेगा
-        if (!plan || (plan !== "FULL" && plan !== "GS")) {
-            document.getElementById("loginModal").style.display = "flex";
-        }
-    }
-
-    function getDeviceId() {
-        let devId = localStorage.getItem("my_device_id");
-        if (!devId) {
-            devId = "DEV_" + Math.random().toString(36).substring(2, 11) + Date.now();
-            localStorage.setItem("my_device_id", devId);
-        }
-        return devId;
-    }
-
-    function verifyUser() {
-        const mobile = document.getElementById("mobileInput").value.trim();
-        const msg = document.getElementById("msg");
-        const deviceId = getDeviceId();
-
-        if (mobile.length !== 10) {
-            alert("कृपया सही 10 अंकों का मोबाइल नंबर डालें!");
-            return;
-        }
-
-        msg.style.color = "#0b1e47";
-        msg.innerText = "जाँच हो रही है...";
-
-        fetch(SCRIPT_URL + "?mobile=" + mobile + "&deviceId=" + deviceId)
-            .then(res => res.json())
-            .then(data => {
-                if (data.allowed) {
-                    if (data.plan === "FULL" || data.plan === "GS") {
-                        localStorage.setItem("user_plan", data.plan);
-                        document.getElementById("loginModal").style.display = "none";
-                    } else {
-                        msg.style.color = "#dc2626";
-                        msg.innerText = "आपका प्लान इस टेस्ट के लिए मान्य नहीं है!";
-                    }
-                } else {
-                    msg.style.color = "#dc2626";
-                    msg.innerText = data.message;
-                }
-            })
-            .catch(err => {
-                msg.style.color = "#dc2626";
-                msg.innerText = "सर्वर कनेक्शन त्रुटि!";
-            });
-    }
-
-    function submitTest() {
-        // सही उत्तरों की कुंजी (Answer Key)
-        const answers = {
-            q1: "B", // 1911
-            q2: "A", // बंकिम चंद्र चटर्जी
-            q3: "C", // डॉ. बी. आर. अम्बेडकर
-            q4: "D", // सातवां
-            q5: "A"  // राजस्थान
+        // ऑथेंटिकेशन चेक (पेज लोड पर)
+        window.onload = function() {
+            if (localStorage.getItem('tgt_user_verified') !== 'true') {
+                document.getElementById('loginModal').style.display = 'flex';
+            } else if (typeof window.checkSavedResultOnLoad === 'function') {
+                window.checkSavedResultOnLoad();
+            }
         };
 
-        let score = 0;
-        let total = 5;
-
-        for (let key in answers) {
-            const selected = document.querySelector(`input[name="${key}"]:checked`);
-            if (selected && selected.value === answers[key]) {
-                score++;
+        function verifyStudent() {
+            const mobile = document.getElementById('userMobileInput').value.trim();
+            const msgBox = document.getElementById('authMessage');
+            if (mobile.length !== 10) { 
+                msgBox.style.color = "#e11d48"; 
+                msgBox.innerText = "सही 10 अंकों का मोबाइल नंबर डालें!"; 
+                return; 
             }
+            
+            let deviceId = localStorage.getItem('user_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 11));
+            localStorage.setItem('user_device_id', deviceId);
+            msgBox.style.color = "#2563eb"; 
+            msgBox.innerText = "जाँच हो रही है...";
+            
+            fetch(`${AUTH_SCRIPT_URL}?mobile=${mobile}&deviceId=${deviceId}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.allowed) {
+                        localStorage.setItem('tgt_user_verified', 'true');
+                        msgBox.style.color = "#16a34a"; 
+                        msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
+                        setTimeout(() => closeModal(), 800);
+                    } else {
+                        msgBox.style.color = "#e11d48"; 
+                        msgBox.innerText = data.message || "पहुंच की अनुमति नहीं है!";
+                    }
+                })
+                .catch(() => { 
+                    msgBox.style.color = "#e11d48"; 
+                    msgBox.innerText = "नेटवर्क खराबी! पुनः प्रयास करें।"; 
+                });
         }
 
-        document.getElementById("testContainer").style.display = "none";
-        const resBox = document.getElementById("resultBox");
-        resBox.style.display = "block";
-        document.getElementById("scoreText").innerText = `आपने ${total} में से ${score} प्रश्न सही किए हैं!`;
-    }
-</script>
+        function closeModal() { 
+            document.getElementById('loginModal').style.display = 'none'; 
+        }
 
+        // 🎯 6 इतिहास प्रश्नों का डेटासेट
+        const dataset = [
+            { id: 1, tag: "प्राचीन भारत", question: "हड़प्पा सभ्यता का बंदरगाह नगर (Dockyard) कौन-सा था?", options: ["कालीबंगा", "लोथल", "मोहनजोदड़ो", "रोपण"], correct: 1 },
+            { id: 2, tag: "प्राचीन भारत", question: "गौतम बुद्ध ने अपना पहला उपदेश (धम्मचक्कप्पवत्तन) कहाँ दिया था?", options: ["बोधगया", "सारनाथ", "कुशीनगर", "वैशाली"], correct: 1 },
+            { id: 3, tag: "मध्यकालीन भारत", question: "पानीपत का प्रथम युद्ध (1526 ई.) किसके बीच लड़ा गया था?", options: ["बाबर और इब्राहिम लोदी", "अकबर और हेमू", "हुमायूँ और शेरशाह सूरी", "राणा सांगा और बाबर"], correct: 0 },
+            { id: 4, tag: "मध्यकालीन भारत", question: "आगरा शहर की स्थापना किस शासक ने की थी?", options: ["फिरोज़ शाह तुगलक", "सिकंदर लोदी", "अलाउद्दीन खिलजी", "इब्राहिम लोदी"], correct: 1 },
+            { id: 5, tag: "आधुनिक भारत", question: "1857 के विद्रोह के समय भारत का वायसराय/गवर्नर-जनरल कौन था?", options: ["लॉर्ड डलहौजी", "लॉर्ड कैनिंग", "लॉर्ड कर्जन", "लॉर्ड रिपन"], correct: 1 },
+            { id: 6, tag: "आधुनिक भारत", question: "'इंकलाब जिंदाबाद' का नारा मुख्य रूप से किसने प्रसिद्ध किया था?", options: ["सुभाष चंद्र बोस", "भगत सिंह", "चंद्रशेखर आज़ाद", "महात्मा गांधी"], correct: 1 }
+        ];
+    </script>
+
+    <!-- ✅ आपकी मुख्य JS फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
 </body>
 </html>
-
