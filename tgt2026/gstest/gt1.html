@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medhavi Study Point - भारत का सामान्य परिचय ऑनलाइन मॉक टेस्ट</title>
-    <!-- ✅ आपकी मुख्य CSS फ़ाइल का पाथ -->
     <link rel="stylesheet" href="../../global-style.css?v=3.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* TGT पेड ऑथेंटिकेशन पॉप-अप (Modal) स्टाइल्स */
         .modal-overlay { 
             display: none; 
             position: fixed; 
@@ -45,7 +43,6 @@
             font-size: 16px;
             outline: none;
         }
-        .modal-box input:focus { border-color: #1e3a8a; }
         .modal-box button { 
             width: 100%; 
             padding: 12px; 
@@ -82,7 +79,6 @@
 
     <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
     <div id="quizWorkspace" class="hidden">
-        <!-- 🌟 प्रीमियम हेडर -->
         <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
                 <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
@@ -135,10 +131,10 @@
         <div id="boxReviewAnswersList"></div>
     </div>
 
-    <!-- 🔒 ऑथेंटिकेशन पॉप-अप (Google Script API Integration) -->
+    <!-- 🔒 ऑथेंटिकेशन पॉप-अप -->
     <div id="loginModal" class="modal-overlay">
         <div class="modal-box">
-            <h3>🔒 TGT पेड स्टूडेंट एक्सेस</h3>
+            <h3>🔒 GS / TGT पेड स्टूडेंट एक्सेस</h3>
             <p>टेस्ट शुरू करने के लिए अपना रजिस्टर्ड मोबाइल नंबर दर्ज करें:</p>
             <input type="tel" id="userMobileInput" placeholder="10 अंकों का मोबाइल नंबर" maxlength="10">
             <button onclick="verifyStudent()" class="btn-auth">अनलॉक करें</button>
@@ -147,15 +143,17 @@
         </div>
     </div>
 
-    <!-- 🎯 टेस्ट डेटासेट और ऑथेंटिकेशन लॉजिक -->
+    <!-- 🎯 टेस्ट डेटासेट और लॉजिक -->
     <script>
-        const AUTH_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec";
+        // ✅ 1-Device Lock सुरक्षा वाला सही Apps Script URL
+        const AUTH_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3VolXNGLi8jlH7aAniR7v8_mbpH62Y6Dz4LvNakPpt7Z-FHEPcC8KNLRY7nlbh-gy/exec";
         const QUIZ_KEY = "medhavi_geography_ch01_mock"; 
         const NEGATIVE_MARKING = 1 / 3; 
 
         // ऑथेंटिकेशन चेक (पेज लोड पर)
         window.onload = function() {
-            if (localStorage.getItem('tgt_user_verified') !== 'true') {
+            const plan = localStorage.getItem('user_plan');
+            if (plan !== 'FULL' && plan !== 'GS') {
                 document.getElementById('loginModal').style.display = 'flex';
             } else if (typeof window.checkSavedResultOnLoad === 'function') {
                 window.checkSavedResultOnLoad();
@@ -171,8 +169,12 @@
                 return; 
             }
             
-            let deviceId = localStorage.getItem('user_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 11));
-            localStorage.setItem('user_device_id', deviceId);
+            let deviceId = localStorage.getItem('my_device_id');
+            if (!deviceId) {
+                deviceId = "DEV_" + Math.random().toString(36).substring(2, 11) + Date.now();
+                localStorage.setItem("my_device_id", deviceId);
+            }
+
             msgBox.style.color = "#2563eb"; 
             msgBox.innerText = "जाँच हो रही है...";
             
@@ -180,10 +182,16 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.allowed) {
-                        localStorage.setItem('tgt_user_verified', 'true');
-                        msgBox.style.color = "#16a34a"; 
-                        msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
-                        setTimeout(() => closeModal(), 800);
+                        if (data.plan === 'FULL' || data.plan === 'GS') {
+                            localStorage.setItem('user_plan', data.plan);
+                            localStorage.setItem('tgt_user_mobile', mobile);
+                            msgBox.style.color = "#16a34a"; 
+                            msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
+                            setTimeout(() => closeModal(), 800);
+                        } else {
+                            msgBox.style.color = "#e11d48";
+                            msgBox.innerText = "आपका प्लान इस टेस्ट के लिए मान्य नहीं है!";
+                        }
                     } else {
                         msgBox.style.color = "#e11d48"; 
                         msgBox.innerText = data.message || "पहुंच की अनुमति नहीं है!";
@@ -199,7 +207,7 @@
             document.getElementById('loginModal').style.display = 'none'; 
         }
 
-        // 🎯 अध्याय 1: भारत का सामान्य परिचय - 40 प्रश्नों का संपूर्ण डेटासेट
+        // 🎯 अध्याय 1: भारत का सामान्य परिचय - 40 प्रश्नों का डेटासेट
         const dataset = [
             { id: 1, tag: "सामान्य परिचय", question: "क्षेत्रफल की दृष्टि से भारत का विश्व के देशों में कौन-सा स्थान है?", options: ["पांचवां", "छठा", "सातवां", "आठवां"], correct: 2 },
             { id: 2, tag: "सामान्य परिचय", question: "भारतवर्ष में लगभग कितने गांव हैं?", options: ["5 लाख", "6 लाख 30 हजार", "8 लाख", "इनमें से कोई नहीं"], correct: 3 },
@@ -243,9 +251,10 @@
             { id: 40, tag: "सामान्य परिचय", question: "निम्नलिखित में से कौन-सा शहर दिल्ली के सबसे समीप के देशांतर पर स्थित है?", options: ["बंगलूरू", "हैदराबाद", "नागपुर", "पुणे"], correct: 0 }
         ];
     </script>
-
-    <!-- ✅ आपकी मुख्य JS फ़ाइल का पाथ -->
     <script src="../../global-quiz.js?v=3.0"></script>
 </body>
-                                    </html>
-                                    
+</html>
+
+
+
+             
