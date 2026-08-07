@@ -275,11 +275,24 @@ function processFinalCalculation() {
             statusText = '<span class="review-status-mark status-incorrect">❌ गलत</span>';
         }
         
+        // 💡 व्याख्या (Explanation) ब्लॉक लॉजिक
+        let explanationHTML = "";
+        if (item.explanation && item.explanation.trim() !== "") {
+            explanationHTML = `
+                <div style="margin-top: 10px; padding: 10px 12px; background: #ffffff; border-radius: 8px; border-left: 4px solid #2563eb; font-size: 14px; color: #1e293b; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <strong style="color: #1e3a8a; display: block; margin-bottom: 4px;">💡 व्याख्या (Explanation):</strong>
+                    ${item.explanation}
+                </div>
+            `;
+        }
+        
+        // 🎯 प्रश्न संख्या दिखाने वाला बदलाव (Q.1, Q.2)
         const cardHTML = `
             <div class="${cardClass}">
-                <div class="review-question-row">${statusText} ${item.question}</div>
+                <div class="review-question-row">${statusText} <b>Q.${idx + 1}.</b> ${item.question}</div>
                 <div class="review-data-line"><b>आपका उत्तर:</b> ${(userAns !== null && userAns >= 0) ? item.options[userAns] : 'अनांसरित'}</div>
                 <div class="review-data-line"><b>सही उत्तर:</b> ${item.options[item.correct]}</div>
+                ${explanationHTML}
             </div>
         `;
         savedReviewHTML += cardHTML;
@@ -409,5 +422,5 @@ function captureCardAndOpenGroup() {
             }, "image/png");
         });
     }
-}
-    
+        }
+        
