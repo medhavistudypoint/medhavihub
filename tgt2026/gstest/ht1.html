@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medhavi Study Point - कंप्यूटर व ICT ऑनलाइन मॉक टेस्ट 02</title>
+    <title>Medhavi Study Point - कंप्यूटर व ICT ऑनलाइन मॉक टेस्ट 03</title>
     <!-- ✅ आपकी मुख्य CSS फ़ाइल का पाथ -->
     <link rel="stylesheet" href="../../global-style.css?v=3.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -73,7 +73,7 @@
     <!-- 1. लॉगिन गेट स्क्रीन -->
     <div id="boxLoginGate" class="login-card">
         <h2>Medhavi Study Point Test Gate</h2>
-        <p>कंप्यूटर व ICT - ऑनलाइन मॉक टेस्ट 02 शुरू करने के लिए अपना पूरा नाम भरें:</p>
+        <p>कंप्यूटर व ICT - ऑनलाइन मॉक टेस्ट 03 शुरू करने के लिए अपना पूरा नाम भरें:</p>
         <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
         <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
         <br><br>
@@ -86,16 +86,16 @@
         <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
                 <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
-                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">कंप्यूटर व ICT - ऑनलाइन मॉक टेस्ट 02</p>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">कंप्यूटर व ICT - ऑनलाइन मॉक टेस्ट 03</p>
             </div>
-            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">06:00</div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">04:00</div>
         </div>
 
         <div class="main-container">
             <div class="card-panel">
                 <div class="meta-row">
                     <div>
-                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">6</span></span>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">4</span></span>
                         <span class="subject-badge">ICT & Computer</span>
                         <span id="lblQuestionTag" class="tag-badge"></span>
                     </div>
@@ -123,7 +123,7 @@
             <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
             <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
             <div class="grid-5-columns">
-                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 6</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 4</div><div class="metric-title">Score</div></div></div>
                 <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
                 <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
                 <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
@@ -150,7 +150,7 @@
     <!-- 🎯 टेस्ट डेटासेट और ऑथेंटिकेशन लॉजिक -->
     <script>
         const AUTH_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec";
-        const QUIZ_KEY = "medhavi_ict_computer_mock_02"; 
+        const QUIZ_KEY = "medhavi_ict_computer_mock_03"; 
         const NEGATIVE_MARKING = 1 / 3; 
 
         // ऑथेंटिकेशन चेक (पेज लोड पर)
@@ -199,14 +199,12 @@
             document.getElementById('loginModal').style.display = 'none'; 
         }
 
-        // 🎯 6 नए ICT & Computer प्रश्नों का डेटासेट
+        // 🎯 4 नए ICT & Computer प्रश्नों का डेटासेट
         const dataset = [
             { id: 1, tag: "ICT", question: "ROM का पूर्ण रूप (Full Form) क्या है?", options: ["Read Only Memory", "Random Output Memory", "Rapid Operation Memory", "Read One Memory"], correct: 0 },
             { id: 2, tag: "ICT", question: "URL का क्या अर्थ होता है?", options: ["Universal Resource Locator", "Uniform Resource Locator", "United Resource Link", "Uniform Real Location"], correct: 1 },
             { id: 3, tag: "ICT", question: "कंप्यूटर में डेटा की सबसे छोटी इकाई कौन-सी है?", options: ["Byte", "Bit", "Nibble", "Kilobyte"], correct: 1 },
-            { id: 4, tag: "ICT", question: "सॉफ्टवेयर का मुख्य उद्देश्य डेटा को किसमें बदलना होता है?", options: ["वेबसाइट", "सूचना (Information)", "ऑब्जेक्ट", "प्रोग्राम"], correct: 1 },
-            { id: 5, tag: "ICT", question: "MS Word किस प्रकार के सॉफ्टवेयर का उदाहरण है?", options: ["सिस्टम सॉफ्टवेयर", "एप्लीकेशन सॉफ्टवेयर", "ऑपरेटिंग सिस्टम", "यूटिलिटी सॉफ्टवेयर"], correct: 1 },
-            { id: 6, tag: "ICT", question: "वाई-फाई (Wi-Fi) का पूरा नाम क्या है?", options: ["Wireless Fidelity", "Wireless Field", "Wired Fidelity", "Wireless Finder"], correct: 0 }
+            { id: 4, tag: "ICT", question: "सॉफ्टवेयर का मुख्य उद्देश्य डेटा को किसमें बदलना होता है?", options: ["वेबसाइट", "सूचना (Information)", "ऑब्जेक्ट", "प्रोग्राम"], correct: 1 }
         ];
     </script>
 
