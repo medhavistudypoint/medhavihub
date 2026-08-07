@@ -8,7 +8,6 @@
         * { box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
         
-        /* 🌟 ब्रांडेड हेडर */
         .brand-hero { 
             background: linear-gradient(135deg, #0b1e47, #1e3a8a); 
             color: white; 
@@ -84,15 +83,11 @@
     <div class="container">
         <a href="tgt2026.html" class="back-btn">⬅️ TGT मुख्य पेज पर जाएँ</a>
 
-        <!-- 📚 संपूर्ण गृह विज्ञान यूनिट PDF सेक्शन (अभी style="display: none;" से छुपा दिया गया है) -->
         <div style="display: none;">
             <div class="section-title">📚 संपूर्ण गृह विज्ञान (Unit Wise PDF Notes)</div>
-            <div class="unit-pdf-grid">
-                <!-- यूनिट कार्ड्स यहाँ सुरक्षित हैं, बाद में display: none हटाकर वापस ला सकते हैं -->
-            </div>
+            <div class="unit-pdf-grid"></div>
         </div>
 
-        <!-- 🎥 क्लास वाइज वीडियो एवं नोट्स -->
         <div class="section-title">🎥 चैप्टर-वाइज़ वीडियो क्लासेस</div>
         <div class="grid">
             <div class="card"><h3>Class 01: पौष्टिकता की संकल्पना एवं आहार की परिभाषा</h3><div class="btn-group"><button onclick="checkAccess('#', 'वीडियो')" class="btn btn-video" data-type="video">▶️ देखें वीडियो</button><button onclick="checkAccess('tgtpdf/p1.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
@@ -223,7 +218,8 @@
     </div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec"; 
+    // ✅ 1-Device Lock सुरक्षा वाला नया Apps Script URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3VolXNGLi8jlH7aAniR7v8_mbpH62Y6Dz4LvNakPpt7Z-FHEPcC8KNLRY7nlbh-gy/exec"; 
 
     let pendingUrl = null;
 
@@ -252,9 +248,10 @@
 
     function checkAccess(url, type) {
         pendingUrl = url;
-        const isVerified = localStorage.getItem('tgt_user_verified');
+        // ✅ केवल TGT Full Batch (₹299) वाले छात्र ही विषयगत कक्षाएँ देख सकते हैं
+        const plan = localStorage.getItem('user_plan');
         
-        if (isVerified === 'true') {
+        if (plan === 'FULL') {
             if (url === '#' || !url) {
                 alert(`⏳ यह ${type || 'सामग्री'} जल्द ही उपलब्ध होगी!`);
             } else {
@@ -281,10 +278,11 @@
             return;
         }
 
-        let deviceId = localStorage.getItem('user_device_id');
+        // ✅ 'my_device_id' का प्रयोग
+        let deviceId = localStorage.getItem('my_device_id');
         if (!deviceId) {
-            deviceId = 'DEV-' + Math.random().toString(36).substring(2, 11) + Date.now();
-            localStorage.setItem('user_device_id', deviceId);
+            deviceId = "DEV_" + Math.random().toString(36).substring(2, 11) + Date.now();
+            localStorage.setItem("my_device_id", deviceId);
         }
 
         msgBox.style.color = "#2563eb";
@@ -294,18 +292,24 @@
             .then(res => res.json())
             .then(data => {
                 if (data.allowed) {
-                    localStorage.setItem('tgt_user_verified', 'true');
-                    localStorage.setItem('tgt_user_mobile', mobile);
-                    msgBox.style.color = "#16a34a";
-                    msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
-                    setTimeout(() => {
-                        closeModal();
-                        if (pendingUrl === '#' || !pendingUrl) {
-                            alert('⏳ यह सामग्री जल्द ही उपलब्ध होगी!');
-                        } else if (pendingUrl) {
-                            window.location.href = pendingUrl;
-                        }
-                    }, 800);
+                    if (data.plan === 'FULL') {
+                        localStorage.setItem('user_plan', data.plan);
+                        localStorage.setItem('tgt_user_mobile', mobile);
+                        msgBox.style.color = "#16a34a";
+                        msgBox.innerText = data.message;
+                        setTimeout(() => {
+                            closeModal();
+                            if (pendingUrl === '#' || !pendingUrl) {
+                                alert('⏳ यह सामग्री जल्द ही उपलब्ध होगी!');
+                            } else if (pendingUrl) {
+                                window.location.href = pendingUrl;
+                            }
+                        }, 800);
+                    } else {
+                        msgBox.style.color = "#e11d48";
+                        msgBox.innerText = "गृह विज्ञान क्लासेस के लिए ₹299 वाला Full Batch आवश्यक है!";
+                        paySec.style.display = "block";
+                    }
                 } else {
                     msgBox.style.color = "#e11d48";
                     msgBox.innerText = data.message;
@@ -327,8 +331,7 @@
     }
 </script>
 </body>
-                                                                                                                     </html>                                                                                                                                                                                    
-                                                                                                                                                                                                          
-                                                                                                                                                                                                          
-                                                                                                                                                                                                          
-                                                                                                                                                                                                          
+</html>                                                                               
+                                                                                                                
+                                                                                                                
+                                                                                                                
