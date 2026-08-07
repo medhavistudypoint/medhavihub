@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - भारत के सीमावर्ती देश ऑनलाइन मॉक टेस्ट</title>
+    <!-- ✅ आपकी मुख्य CSS फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* TGT पेड ऑथेंटिकेशन पॉप-अप (Modal) स्टाइल्स */
+        .modal-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(11, 30, 71, 0.75); 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 10000; 
+            padding: 15px; 
+            backdrop-filter: blur(4px);
+        }
+        .modal-box { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 16px; 
+            width: 100%; 
+            max-width: 380px; 
+            text-align: center; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border: 1px solid #cbd5e1;
+        }
+        .modal-box h3 { color: #0b1e47; margin-top: 0; font-size: 20px; }
+        .modal-box p { font-size: 14px; color: #64748b; }
+        .modal-box input { 
+            width: 100%; 
+            padding: 12px; 
+            margin-bottom: 12px; 
+            border: 2px solid #cbd5e1; 
+            border-radius: 8px; 
+            text-align: center; 
+            font-size: 16px;
+            outline: none;
+        }
+        .modal-box input:focus { border-color: #1e3a8a; }
+        .modal-box button { 
+            width: 100%; 
+            padding: 12px; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 15px; 
+            font-weight: bold; 
+            cursor: pointer; 
+        }
+        .btn-auth { background: #16a34a; color: white; margin-bottom: 8px; }
+        .btn-auth:hover { background: #15803d; }
+        .btn-close { background: #e2e8f0; color: #1e293b; margin-top: 6px; }
+    </style>
+</head>
+<body>
+
+    <!-- 🔒 सुरक्षा वॉटरमार्क -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>भूगोल - 2. भारत के सीमावर्ती देश मॉक टेस्ट शुरू करने के लिए अपना पूरा नाम भरें:</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="javascript:history.back()" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 प्रीमियम हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">भूगोल — भारत के सीमावर्ती देश (30 प्रश्न)</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">30:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">30</span></span>
+                        <span class="subject-badge">Geography</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 30</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="javascript:history.back()" class="btn-dashboard-redirect">🔙 मुख्य पृष्ठ पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🔒 ऑथेंटिकेशन पॉप-अप (Google Script API Integration) -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3>🔒 TGT पेड स्टूडेंट एक्सेस</h3>
+            <p>टेस्ट शुरू करने के लिए अपना रजिस्टर्ड मोबाइल नंबर दर्ज करें:</p>
+            <input type="tel" id="userMobileInput" placeholder="10 अंकों का मोबाइल नंबर" maxlength="10">
+            <button onclick="verifyStudent()" class="btn-auth">अनलॉक करें</button>
+            <p id="authMessage" style="margin: 8px 0; font-size:13px; font-weight:bold;"></p>
+            <button onclick="closeModal()" class="btn-close">बंद करें</button>
+        </div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और ऑथेंटिकेशन लॉजिक -->
+    <script>
+        const AUTH_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec";
+        const QUIZ_KEY = "medhavi_geography_ch02_mock"; 
+        const NEGATIVE_MARKING = 1 / 3; 
+
+        // ऑथेंटिकेशन चेक (पेज लोड पर)
+        window.onload = function() {
+            if (localStorage.getItem('tgt_user_verified') !== 'true') {
+                document.getElementById('loginModal').style.display = 'flex';
+            } else if (typeof window.checkSavedResultOnLoad === 'function') {
+                window.checkSavedResultOnLoad();
+            }
+        };
+
+        function verifyStudent() {
+            const mobile = document.getElementById('userMobileInput').value.trim();
+            const msgBox = document.getElementById('authMessage');
+            if (mobile.length !== 10) { 
+                msgBox.style.color = "#e11d48"; 
+                msgBox.innerText = "सही 10 अंकों का मोबाइल नंबर डालें!"; 
+                return; 
+            }
+            
+            let deviceId = localStorage.getItem('user_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 11));
+            localStorage.setItem('user_device_id', deviceId);
+            msgBox.style.color = "#2563eb"; 
+            msgBox.innerText = "जाँच हो रही है...";
+            
+            fetch(`${AUTH_SCRIPT_URL}?mobile=${mobile}&deviceId=${deviceId}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.allowed) {
+                        localStorage.setItem('tgt_user_verified', 'true');
+                        msgBox.style.color = "#16a34a"; 
+                        msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
+                        setTimeout(() => closeModal(), 800);
+                    } else {
+                        msgBox.style.color = "#e11d48"; 
+                        msgBox.innerText = data.message || "पहुंच की अनुमति नहीं है!";
+                    }
+                })
+                .catch(() => { 
+                    msgBox.style.color = "#e11d48"; 
+                    msgBox.innerText = "नेटवर्क खराबी! पुनः प्रयास करें।"; 
+                });
+        }
+
+        function closeModal() { 
+            document.getElementById('loginModal').style.display = 'none'; 
+        }
+
+        // 🎯 अध्याय 2: भारत के सीमावर्ती देश - 30 प्रश्नों का संपूर्ण डेटासेट
+        const dataset = [
+            { id: 1, tag: "सीमावर्ती देश", question: "बांग्लादेश की सीमा से लगे भारत के राज्य हैं—", options: ["पश्चिम बंगाल, नगालैंड, असम, मेघालय", "नगालैंड, असम, सिक्किम, पश्चिम बंगाल", "मेघालय, असम, पश्चिम बंगाल, त्रिपुरा", "नगालैंड, असम, पश्चिम बंगाल, मणिपुर"], correct: 2 },
+            { id: 2, tag: "सीमावर्ती देश", question: "निम्नलिखित में से किस भारतीय राज्य की सीमाएं भूटान राष्ट्र के साथ नहीं मिलती हैं?", options: ["सिक्किम", "मेघालय", "अरुणाचल प्रदेश", "पश्चिम बंगाल"], correct: 1 },
+            { id: 3, tag: "सीमावर्ती देश", question: "कौन-से भारतीय राज्य की अधिकतम सीमा म्यांमार से स्पर्श करती है?", options: ["मणिपुर", "अरुणाचल प्रदेश", "मिजोरम", "नगालैंड"], correct: 1 },
+            { id: 4, tag: "सीमावर्ती देश", question: "निम्नलिखित में से भारत के किस राज्य की सीमा म्यांमार से उभयनिष्ठ नहीं है?", options: ["असम", "नगालैंड", "अरुणाचल प्रदेश", "मिजोरम"], correct: 0 },
+            { id: 5, tag: "सीमावर्ती देश", question: "निम्नलिखित में से किस देश की भारत के साथ सबसे लंबी स्थलीय सीमा है?", options: ["चीन", "नेपाल", "पाकिस्तान", "बांग्लादेश"], correct: 3 },
+            { id: 6, tag: "सीमावर्ती देश", question: "भारत तथा पाकिस्तान के बीच सीमा निर्धारित की गई थी—", options: ["डूरंड रेखा द्वारा", "मैकमोहन रेखा द्वारा", "मैगीनॉट रेखा द्वारा", "रेडक्लिफ रेखा द्वारा"], correct: 3 },
+            { id: 7, tag: "सीमावर्ती देश", question: "डूरंड लाइन किसके साथ भारत की सीमा निर्धारित करती है?", options: ["अफगानिस्तान", "बर्मा", "नेपाल", "तिब्बत"], correct: 0 },
+            { id: 8, tag: "सीमावर्ती देश", question: "भारत तथा पाकिस्तान के मध्य सीमा-रेखा एक उदाहरण है—", options: ["अध्यारोपित सीमा का", "पूर्ववर्ती सीमा का", "अवशिष्ट सीमा का", "परवर्ती सीमा का"], correct: 0 },
+            { id: 9, tag: "सीमावर्ती देश", question: "भारत और चीन की उत्तर-पूर्वी सीमा का सीमांकन कौन-सी रेखा करती है?", options: ["डूरंड रेखा", "मैकमोहन रेखा", "रेडक्लिफ रेखा", "उपर्युक्त में से कोई नहीं"], correct: 1 },
+            { id: 10, tag: "सीमावर्ती देश", question: "किसके द्वारा भारत-श्रीलंका से अलग होता है?", options: ["स्वेज नहर", "पाक जलडमरूमध्य", "खंभात की खाड़ी", "कच्छ की खाड़ी"], correct: 1 },
+            { id: 11, tag: "सीमावर्ती देश", question: "भारत के किस प्रदेश की सीमाएं तीन देशों क्रमशः नेपाल, भूटान एवं चीन से मिलती हैं?", options: ["अरुणाचल प्रदेश", "मेघालय", "पश्चिम बंगाल", "सिक्किम"], correct: 3 },
+            { id: 12, tag: "सीमावर्ती देश", question: "भारत के निम्नांकित राज्यों में से किससे तीन तरफ अंतर्राष्ट्रीय सीमाएं हैं?", options: ["असम", "नगालैंड", "त्रिपुरा", "पश्चिम बंगाल"], correct: 2 },
+            { id: 13, tag: "सीमावर्ती देश", question: "किस राज्य की सीमा चीन से जुड़ी हुई है?", options: ["नगालैंड", "मणिपुर", "असम", "अरुणाचल प्रदेश"], correct: 3 },
+            { id: 14, tag: "सीमावर्ती देश", question: "निम्नलिखित में से किस देश के साथ भारत की अंतर्राष्ट्रीय सीमा नहीं लगती है?", options: ["पाकिस्तान", "बांग्लादेश", "भूटान", "श्रीलंका"], correct: 3 },
+            { id: 15, tag: "सीमावर्ती देश", question: "भारत अपनी अंतर्राष्ट्रीय सीमा सबसे कम किस देश से साझा करता है?", options: ["पाकिस्तान", "चीन", "अफगानिस्तान", "नेपाल"], correct: 2 },
+            { id: 16, tag: "सीमावर्ती देश", question: "उत्तर-पश्चिम में भारत भूमि की सीमाएं किस देश के साथ लगी हुई हैं?", options: ["श्रीलंका", "म्यांमार", "बांग्लादेश", "पाकिस्तान"], correct: 3 },
+            { id: 17, tag: "सीमावर्ती देश", question: "पूर्व में भारत की सीमा किन-किन देशों से लगती है?", options: ["पाकिस्तान और अफगानिस्तान", "चीन, नेपाल और भूटान", "भूटान और अफगानिस्तान", "म्यांमार और बांग्लादेश"], correct: 3 },
+            { id: 18, tag: "सीमावर्ती देश", question: "गुजरात की सीमा किस पड़ोसी देश के साथ लगती है?", options: ["पाकिस्तान", "बांग्लादेश", "भूटान", "नेपाल"], correct: 0 },
+            { id: 19, tag: "सीमावर्ती देश", question: "भारत का कौन-सा पड़ोसी देश बर्मा के नाम से भी जाना जाता है?", options: ["म्यांमार", "बांग्लादेश", "भूटान", "चीन"], correct: 0 },
+            { id: 20, tag: "सीमावर्ती देश", question: "निम्नलिखित में से भारत का कौन-सा पड़ोसी देश स्थल सीमा से घिरा हुआ नहीं है?", options: ["म्यांमार", "भूटान", "नेपाल", "अफगानिस्तान"], correct: 0 },
+            { id: 21, tag: "सीमावर्ती देश", question: "'सर क्रीक मुद्दा' भारत और _______ के बीच का एक मुद्दा है।", options: ["चीन", "पाकिस्तान", "अफगानिस्तान", "जापान"], correct: 1 },
+            { id: 22, tag: "सीमावर्ती देश", question: "निम्नलिखित में से कौन-सा देश पाक जलडमरूमध्य और मन्नार की खाड़ी द्वारा निर्मित समुद्र के संकीर्ण जलमार्ग के द्वारा भारत से अलग होता है?", options: ["पाकिस्तान", "मालदीव", "नेपाल", "श्रीलंका"], correct: 3 },
+            { id: 23, tag: "सीमावर्ती देश", question: "थार का रेगिस्तान _______ में स्थित है।", options: ["मध्य प्रदेश", "राजस्थान", "गुजरात", "उत्तराखंड"], correct: 1 },
+            { id: 24, tag: "सीमावर्ती देश", question: "भारत के निम्नलिखित राज्यों के समूहों में से कौन-सा समूह पाकिस्तान से सीमा बनाता है?", options: ["जम्मू एवं कश्मीर, हिमाचल प्रदेश, पंजाब तथा राजस्थान", "पंजाब, जम्मू एवं कश्मीर, राजस्थान तथा गुजरात", "पंजाब, हरियाणा, जम्मू एवं कश्मीर तथा राजस्थान", "पंजाब, हिमाचल प्रदेश, राजस्थान तथा गुजरात"], correct: 1 },
+            { id: 25, tag: "सीमावर्ती देश", question: "नेपाल के पड़ोसी भारतीय राज्यों का युग्म है—", options: ["सिक्किम-भूटान", "सिक्किम-बिहार", "असम-बिहार", "उत्तर प्रदेश-हरियाणा"], correct: 1 },
+            { id: 26, tag: "सीमावर्ती देश", question: "भारत का अपने पड़ोसी देशों के मध्य अंतर्राष्ट्रीय सीमा के विस्तार का आरोही क्रम है?", options: ["चीन, बांग्लादेश, पाकिस्तान, नेपाल", "नेपाल, पाकिस्तान, चीन, बांग्लादेश", "नेपाल, पाकिस्तान, बांग्लादेश, चीन", "पाकिस्तान, नेपाल, चीन, बांग्लादेश"], correct: 1 },
+            { id: 27, tag: "सीमावर्ती देश", question: "किस राज्य की सीमा पाकिस्तान के साथ सर्वाधिक लंबी है?", options: ["राजस्थान", "जम्मू-कश्मीर", "गुजरात", "पंजाब"], correct: 0 },
+            { id: 28, tag: "सीमावर्ती देश", question: "भारत के किन राज्यों की सीमाएं म्यांमार की सीमा के साथ हैं?", options: ["मिजोरम, मणिपुर, नगालैंड, अरुणाचल प्रदेश", "मिजोरम, मणिपुर, त्रिपुरा, मेघालय", "मिजोरम, त्रिपुरा, मेघालय, असम", "असम, मणिपुर, त्रिपुरा, अरुणाचल प्रदेश"], correct: 0 },
+            { id: 29, tag: "सीमावर्ती देश", question: "भारत, म्यांमार और चीन के बीच का त्रिकोणीय जंक्शन 'दीफू दर्रा' किस सीमा रेखा पर है?", options: ["रेडक्लिफ रेखा", "पाल्क स्ट्रेट", "मैकमोहन रेखा", "डूरंड रेखा"], correct: 2 },
+            { id: 30, tag: "सीमावर्ती देश", question: "एलएसी (LAC - वास्तविक नियंत्रण रेखा) भारत और _______ के बीच एक प्रभावी सीमा है।", options: ["पाकिस्तान", "चीन", "श्रीलंका", "भूटान"], correct: 1 }
+        ];
+    </script>
+
+    <!-- ✅ आपकी मुख्य JS फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
+
