@@ -82,8 +82,8 @@
     </div>
 
 <script>
-    // ✅ आपका नया वेब ऐप URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYew9zqsMxF3HoqTPFQL0sB2meHHo4CTG52aiLpmCiZBY8c_fcTgXVenXP3BKbfsKD/exec";
+    // ✅ आपका नया डिप्लॉयड वेब ऐप URL (Device Lock सपोर्टेड)
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3VolXNGLi8jlH7aAniR7v8_mbpH62Y6Dz4LvNakPpt7Z-FHEPcC8KNLRY7nlbh-gy/exec";
 
     window.onload = function() {
         checkStatus();
@@ -101,9 +101,20 @@
         }
     }
 
+    // 🔒 फ़ोन की अनोखी Device ID निकालना/बनाना
+    function getDeviceId() {
+        let devId = localStorage.getItem("my_device_id");
+        if (!devId) {
+            devId = "DEV_" + Math.random().toString(36).substring(2, 11) + Date.now();
+            localStorage.setItem("my_device_id", devId);
+        }
+        return devId;
+    }
+
     function verifyUser() {
         const mobile = document.getElementById("mobileInput").value.trim();
         const msg = document.getElementById("msg");
+        const deviceId = getDeviceId(); // डिवाइस ID निकाल रहे हैं
 
         if (mobile.length !== 10) {
             alert("कृपया सही 10 अंकों का मोबाइल नंबर डालें!");
@@ -113,7 +124,8 @@
         msg.style.color = "#0b1e47";
         msg.innerText = "गूगल शीट में जाँच हो रही है...";
 
-        fetch(SCRIPT_URL + "?mobile=" + mobile)
+        // मोबाइल नंबर और डिवाइस ID दोनों सर्वर को भेज रहे हैं
+        fetch(SCRIPT_URL + "?mobile=" + mobile + "&deviceId=" + deviceId)
             .then(res => res.json())
             .then(data => {
                 if (data.allowed) {
@@ -123,7 +135,7 @@
                     setTimeout(() => { location.reload(); }, 1000);
                 } else {
                     msg.style.color = "#dc2626";
-                    msg.innerText = "नंबर रजिस्टर्ड नहीं है! कृपया पहले भुगतान करें।";
+                    msg.innerText = data.message; // सुरक्षा संदेश दिखाएगा
                 }
             })
             .catch(err => {
@@ -141,7 +153,6 @@
         }
 
         if (requiredPlan === "ANY") {
-            // GS बटन GS और FULL दोनों छात्रों के लिए खुलेगा
             window.location.href = targetUrl;
         } else if (requiredPlan === "FULL") {
             if (plan === "FULL") {
