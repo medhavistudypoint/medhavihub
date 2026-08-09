@@ -1,3 +1,37 @@
+Skip to content
+medhavistudypoint
+medhavihub
+Repository navigation
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security and quality
+Commit 1aaec55
+medhavistudypoint
+medhavistudypoint
+authored
+2 days ago
+·
+·
+Verified
+Create test18.html
+main
+1 parent 
+583aa71
+ commit 
+1aaec55
+1 file changed
+
++157
+Lines changed: 157 additions & 0 deletions
+Search within code
+ 
+‎homescience/daily/test18.html‎
+Original file line number	Diff line number	Diff line change
+@@ -0,0 +1,157 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -9,7 +43,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-
     <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
     <div class="watermark-overlay">
         <div class="watermark-text">MEDHAVI STUDY POINT</div>
@@ -17,7 +50,6 @@
         <div class="watermark-text">MEDHAVI STUDY POINT</div>
         <div class="watermark-text">MEDHAVI STUDY POINT</div>
     </div>
-
     <!-- 1. लॉगिन गेट स्क्रीन -->
     <div id="boxLoginGate" class="login-card">
         <h2>Medhavi Home Science Test Gate</h2>
@@ -28,7 +60,6 @@
         <!-- ✅ सही किया गया बैक बटन का पाथ -->
         <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
     </div>
-
     <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
     <div id="quizWorkspace" class="hidden">
         <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
@@ -39,7 +70,6 @@
             </div>
             <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
         </div>
-
         <div class="main-container">
             <div class="card-panel">
                 <div class="meta-row">
@@ -66,7 +96,6 @@
             </div>
         </div>
     </div>
-
     <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
     <div id="boxReportDashboard" class="report-view">
         <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
@@ -85,68 +114,77 @@
         <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
         <div id="boxReviewAnswersList"></div>
     </div>
-
     <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
     <script>
         // 1. इस टेस्ट की यूनिक KEY
-        const QUIZ_KEY = "medhavi_homescience_dairy_beverages_50q"; 
-
-        // 2. 50 प्रश्नों का दुग्ध विज्ञान, पेय पदार्थ एवं आहारिकी आधारित डेटासेट (व्याख्या सहित)
+        const QUIZ_KEY = "medhavi_homescience_adulteration_50q"; 
+        // 2. 50 प्रश्नों का NCERT + YCT आधारित मिलावट एवं खाद्य सुरक्षा डेटासेट
         const dataset = [
-            { id: 1, tag: "NCERT", question: "पाश्चुरीकरण की LTH (Low Temperature Holding) विधि में दूध को किस तापमान पर गर्म किया जाता है?", options: ["63°C पर 30 मिनट", "72°C पर 15 सेकंड", "100°C पर 5 मिनट", "135°C पर 2 सेकंड"], correct: 0 },
-            { id: 2, tag: "NCERT", question: "दूध में पाई जाने वाली मुख्य शर्करा कौन-सी है?", options: ["फ्रक्टोज", "लैक्टोज", "सुक्रोज", "माल्टोज"], correct: 1 },
-            { id: 3, tag: "NCERT", question: "'पूर्ण तरल आहार' (Full Liquid Diet) के अंतर्गत निम्न में से किसे शामिल किया जा सकता है?", options: ["उबली हुई ठोस सब्जियाँ", "दूध, कस्टर्ड और पतला सूप", "दलिया और परांठा", "उबला अंडा"], correct: 1 },
-            { id: 4, tag: "NCERT", question: "दूध को पाउडर में बदलने की प्रक्रिया (Drying) का मुख्य खाद्य संरक्षण सिद्धांत क्या है?", options: ["जल सक्रियता को कम करके सूक्ष्मजीवों की वृद्धि रोकना", "वसा की मात्रा बढ़ाना", "केवल रंग में सुधार करना", "मिठास बढ़ाना"], correct: 0 },
-            { id: 5, tag: "NCERT", question: "दूध में वसा किस रूप में निलंबित रहती है?", options: ["ठोस कणों के रूप में", "पायस के रूप में", "कोलॉइडल घोल के रूप में", "वास्तविक विलयन के रूप में"], correct: 1 },
-            { id: 6, tag: "NCERT", question: "दूध का सफेद रंग मुख्य रूप से किस प्रोटीन के कारण होता है?", options: ["एल्ब्यूमिन", "कैसीन", "ग्लोबुलिन", "केरातिन"], correct: 1 },
-            { id: 7, tag: "NCERT", question: "कॉफी बीन्स को भूनने (Roasting) की प्रक्रिया से उसमें कौन-सा विशिष्ट सुगंधित यौगिक विकसित होता है?", options: ["कैफीन", "कैफियोल", "टैनिन", "थियोब्रोमीन"], correct: 1 },
-            { id: 8, tag: "NCERT", question: "गाय के दूध का हल्का पीला रंग किस वर्णक की उपस्थिति के कारण होता है?", options: ["क्लोरोफिल", "कैरोटीन", "एंथोसायनिन", "लाइकोपीन"], correct: 1 },
-            { id: 9, tag: "NCERT", question: "खाद्य संरक्षण में खमीरीकरण की प्रक्रिया द्वारा मुख्यतः किसका उत्पादन होता है जो हानिकारक सूक्ष्मजीवों की वृद्धि को रोकता है?", options: ["लैक्टिक एसिड या अल्कोहल", "केवल ग्लूकोज", "नाइट्रिक एसिड", "सल्फर डाइऑक्साइड"], correct: 0 },
-            { id: 10, tag: "NCERT", question: "भारत में खाद्य सुरक्षा और मानकों को विनियमित करने वाली संस्था FSSAI का पूर्ण रूप क्या है?", options: ["Food Safety and Standards Authority of India", "Food Security and Standards Association of India", "Federal Safety and Sanitation Agency of India", "Food Supply and Storage Authority of India"], correct: 0 },
-            { id: 11, tag: "NCERT", question: "'सॉफ्ट आहार' (Soft Diet) मुख्य रूप से किस प्रकार के रोगियों के लिए अनुशंसित किया जाता है?", options: ["जिन्हें पाचन, चबाने या निगलने में कठिनाई हो", "जो अत्यधिक शारीरिक श्रम करते हों", "जिन्हें केवल निर्जलीकरण हो", "जो पूर्णतः स्वस्थ हों"], correct: 0 },
-            { id: 12, tag: "NCERT", question: "भारतीय मानकों के अनुसार 'टोंड मिल्क' (Toned Milk) में वसा और S.N.F. की न्यूनतम मात्रा कितनी होनी चाहिए?", options: ["3.0% वसा और 8.5% S.N.F.", "1.5% वसा और 9.0% S.N.F.", "4.5% वसा और 8.5% S.N.F.", "6.0% वसा और 9.0% S.N.F."], correct: 0 },
-            { id: 13, tag: "NCERT", question: "Ultra-High Temperature (UHT) पाश्चुरीकरण प्रक्रिया में दूध को किस तापमान पर गर्म किया जाता है?", options: ["135°C से 150°C पर 1 से 2 सेकंड के लिए", "100°C पर 30 मिनट के लिए", "72°C पर 15 मिनट के लिए", "60°C पर 1 घंटे के लिए"], correct: 0 },
-            { id: 14, tag: "NCERT", question: "कोको और चॉकलेट में पाया जाने वाला मुख्य उत्तेजक पदार्थ कौन-सा है?", options: ["थियोब्रोमीन", "मॉर्फीन", "निकोटिन", "कोकीन"], correct: 0 },
-            { id: 15, tag: "NCERT", question: "दूध में अम्ल मिलाने पर कैसीन प्रोटीन के अलग होकर जमने की प्रक्रिया क्या कहलाती है?", options: ["स्कंदन", "कैरमेलाइजेशन", "हाइड्रोजनीकरण", "वसा अवक्षेपण"], correct: 0 },
-            { id: 16, tag: "NCERT", question: "बेकरी और मद्य निर्माण में प्रयुक्त होने वाला प्रमुख खमीर कौन-सा है?", options: ["Saccharomyces cerevisiae", "Penicillium notatum", "Rhizopus stolonifer", "Aspergillus niger"], correct: 0 },
-            { id: 17, tag: "NCERT", question: "कृत्रिम दूध में तटस्थक (Neutralizers) के रूप में किसकी मिलावट की जाँच की जाती है?", options: ["कास्टिक सोडे या सोडियम कार्बोनेट की", "केवल नमक की", "साइट्रिक एसिड की", "चीनी की"], correct: 0 },
-            { id: 18, tag: "NCERT", question: "भारतीय मानकों के अनुसार मक्खन में दुग्ध वसा की न्यूनतम मात्रा कितनी होनी चाहिए?", options: ["80%", "50%", "30%", "65%"], correct: 0 },
-            { id: 19, tag: "NCERT", question: "शल्य चिकित्सा (Surgery) या ऑपरेशन के तुरंत बाद रोगी को सबसे पहले किस प्रकार का आहार दिया जाता है?", options: ["स्पष्ट/शुद्ध तरल आहार", "कठोर एवं गरिष्ठ आहार", "सामान्य भोजन", "उच्च वसायुक्त आहार"], correct: 0 },
-            { id: 20, tag: "PYQ", question: "निम्न में से कौन-सा शुद्ध तरल आहार (Clear Liquid Diet) नहीं है?", options: ["फलों का रस", "नींबू पानी", "दाल का पानी", "चाय"], correct: 2, explanation: "<b>शुद्ध तरल आहार:</b> इसमें वे पारदर्शी द्रव आते हैं जो पचने में आसान होते हैं और आंतों में कोई ठोस अवशेष नहीं छोड़ते (उदा: बिना दूध की चाय, नींबू पानी, साफ फलों का रस)।<br><b>दाल का पानी:</b> इसमें उबली हुई दाल के स्टार्च और प्रोटीन के कण घुले रहते हैं, जिससे यह पारदर्शी नहीं रहता। इसलिए यह 'पूर्ण तरल आहार' (Full Liquid Diet) में आता है।" },
-            { id: 21, tag: "PYQ", question: "कौन-सा सॉफ्ट आहार नहीं है?", options: ["सूप", "खीर", "पुडिंग", "खिचड़ी"], correct: 0 },
-            { id: 22, tag: "PYQ", question: "कमेलिया नामक वृक्ष की पत्तियों को सुखाकर बनाई जाती है:", options: ["अजवाइन", "जीरा", "चाय", "मेथी"], correct: 2 },
-            { id: 23, tag: "PYQ", question: "वह तरल जिसके घोल में पदार्थ होता है, किस रूप में जाना जाता है?", options: ["विलेय", "विलायक", "पारगम्यता", "अर्ध-पारगम्य"], correct: 1 },
-            { id: 24, tag: "PYQ", question: "निम्न के उत्पादन में खमीरीकरण का प्रयोग होता है: (1) सॉस (2) वाइन (3) कोको पाउडर (4) मार्मलेड (5) चीज", options: ["1, 2, 4", "2, 3, 5", "1, 3, 5", "2, 4, 5"], correct: 1 },
-            { id: 25, tag: "PYQ", question: "चाय में पाया जाता है:", options: ["थियोफाइलिन", "कैफीन", "टैनिक एसिड", "इनमें से सभी"], correct: 3 },
-            { id: 26, tag: "PYQ", question: "दूध के उस अपमिश्रक का नाम क्या है जो कि इसमें आयोडीन घोल मिला कर निर्धारित किया जाता है?", options: ["चॉक पाउडर", "स्टार्च", "खनिज तेल", "पानी"], correct: 1 },
-            { id: 27, tag: "PYQ", question: "आम तौर पर, सामान्य वायुमंडलीय स्थितियों में माँस, मछली और दूध उत्पादों का भंडारण कितना रखा जा सकता है?", options: ["1 से 2 दिन", "1 से 2 सप्ताह", "3 से 4 सप्ताह", "12 माह"], correct: 0 },
-            { id: 28, tag: "PYQ", question: "दही जमाने की अवधि में दूध को दही में परिवर्तित करता है:", options: ["ई. कोलाई", "लैक्टोबैसिलस", "राइजोबियम", "क्लोस्ट्रीडियम"], correct: 1 },
-            { id: 29, tag: "PYQ", question: "दूध का पाश्चुरीकरण किस तापमान पर किया जाता है?", options: ["145°F", "135°F", "125°F", "115°F"], correct: 0 },
-            { id: 30, tag: "PYQ", question: "पाश्चुरीकृत दूध की क्षमता की जाँच की जाती है:", options: ["कॉलीफॉर्म टेस्ट प्रयुक्त करके", "आयोडीन टेस्ट प्रयुक्त करके", "नाइट्रिक एसिड टेस्ट प्रयुक्त करके", "फॉस्फेटेज टेस्ट प्रयुक्त करके"], correct: 3 },
-            { id: 31, tag: "PYQ", question: "दूध का एक एक्सचेंज (खाद्य विनिमय) ............ प्रोटीन उपलब्ध करता है।", options: ["4 g", "8 g", "10 g", "12 g"], correct: 1 },
-            { id: 32, tag: "PYQ", question: "दूध में मिलावट की जाती है:", options: ["अजवाइन तेल की", "चॉक पाउडर की", "स्टार्च की", "टैल्कम पाउडर की"], correct: 2 },
-            { id: 33, tag: "PYQ", question: "दूध पाश्चुरीकरण का HTST तरीका करा जाता है:", options: ["63°C पर 30 मिनट के लिये", "100°C पर 1 सेकंड के लिये", "89°C पर 10 सेकंड के लिये", "72°C पर 15 सेकंड के लिये"], correct: 3 },
-            { id: 34, tag: "PYQ", question: "दूध के पाउडर के उत्पादन में आने वाली प्रक्रियाओं को सही क्रम में लगाएँ: (A) पाश्चुरीजेशन (B) इवैपोरेशन (C) मिलिंग (D) पैकिंग (E) क्लेरीफिकेशन (F) वसा को अलग करना (G) रोलर-ड्राइंग", options: ["A, B, C, D, E, F, G", "E, F, A, B, G, C, D", "F, E, A, B, G, D, C", "E, A, F, B, G, C, D"], correct: 1 },
-            { id: 35, tag: "PYQ", question: "चीज बनाने की प्रक्रिया को सही क्रम में लगाएँ: (1) दही जमाना (2) शेड़र (3) पाश्चुरीकरण (4) परिपक्वन (5) साँचे में डालना (6) पीसना और नमक लगाना", options: ["1, 2, 3, 4, 5, 6", "3, 1, 2, 6, 5, 4", "3, 2, 1, 5, 6, 4", "1, 3, 2, 5, 6, 4"], correct: 1 },
-            { id: 36, tag: "PYQ", question: "............... को गरीब आदमी का दूध कहा जाता है।", options: ["रागी", "गेहूँ", "ज्वार", "बाजरा"], correct: 0 },
-            { id: 37, tag: "PYQ", question: "जब दूध में यह डाला जाता है तो कैल्शियम में समृद्ध पनीर प्राप्त होता है:", options: ["एसिटिक एसिड", "साइट्रिक एसिड", "रेनिन", "लैक्टेज"], correct: 2, explanation: "<b>साइट्रिक एसिड (अम्ल द्वारा स्कंदन):</b> pH कम होकर 4.6 हो जाता है, जिससे कैसीन प्रोटीन जमती है और अधिकांश कैल्शियम पानी (Whey) में बह जाता है।<br><b>रेनिन (एंजाइम द्वारा स्कंदन):</b> यह कैसीन को पैराकैसीन में बदलकर Calcium Paracaseinate बनाता है, जिससे कैल्शियम पनीर के अंदर सुरक्षित रहता है।" },
-            { id: 38, tag: "PYQ", question: "मानक दूध में S.N.F. की मात्रा निम्न होनी चाहिए:", options: ["8.5%", "7.2%", "6.5%", "5.2%"], correct: 0 },
-            { id: 39, tag: "PYQ", question: "अभिकथन (A): दूध का पाश्चुरीकरण रोगाणु/जीवाणुओं को नष्ट करने के लिए किया जाता है। कारण (R): दूध में लैक्टिक एसिड की उपस्थिति के लिए इसका परीक्षण किया जाता है।", options: ["(A) और (R) दोनों सही हैं।", "(A) और (R) दोनों गलत हैं।", "(A) सत्य है, परन्तु (R) असत्य है।", "(A) असत्य है, परन्तु (R) सत्य है।"], correct: 2 },
-            { id: 40, tag: "PYQ", question: "दूध से पनीर बनाने की क्रिया में किस pH पर कैसीन अवक्षेपित होती है?", options: ["pH 6.5", "pH 4.6", "pH 7.5", "pH 3.0"], correct: 1 },
-            { id: 41, tag: "PYQ", question: "दूध को पाश्चुरीकरण किया जाता है—", options: ["सूक्ष्म जीवाणुओं को मारने तथा दूध को लंबे समय तक संरक्षित रखने के लिए", "क्रीम निकालने के लिए", "गर्मी कम करने के लिए", "विटामिन बढ़ाने के लिए"], correct: 0 },
-            { id: 42, tag: "PYQ", question: "निम्नलिखित में से कौन-सा युग्म सही सुमेलित है? स्तम्भ-I : (A) ठोस कण का द्रव में विलयन | (B) एक ठोस कण का दूसरे ठोस कण के साथ संयोजन --- स्तम्भ-II : (1) विलयन | (2) मिश्रधातु", options: ["(A)-(1), (B)-(2)", "(A)-(2), (B)-(1)", "दोनों गलत हैं", "दोनों में से कोई नहीं"], correct: 0 },
-            { id: 43, tag: "PYQ", question: "काली चाय के उत्पादन की प्रक्रिया का सही क्रम कौन-सा है? I. मुरझाना II. बेलन फेरना III. खमीरीकरण/ऑक्सीकरण IV. सुखाना V. श्रेणीबद्ध करना VI. मिश्रित करना", options: ["I, II, IV, III, VI, V", "II, I, III, IV, V, VI", "I, II, III, IV, V, VI", "III, I, II, IV, V, VI"], correct: 2 },
-            { id: 44, tag: "PYQ", question: "निम्नलिखित में से कौन-सा एक मादक पेय है?", options: ["दूध", "अफीम", "बीयर", "चाय"], correct: 2 },
-            { id: 45, tag: "PYQ", question: "बीयर में सामान्यतः अल्कोहल की मात्रा लगभग कितनी होती है?", options: ["0.5–1%", "3–6%", "10–15%", "40–50%"], correct: 1 },
-            { id: 46, tag: "PYQ", question: "गाय के दूध की तुलना में भैंस के दूध में सामान्यतः क्या अधिक पाया जाता है?", options: ["वसा, प्रोटीन एवं कैल्शियम", "केवल कार्बोहाइड्रेट", "केवल विटामिन C", "केवल जल"], correct: 0 },
-            { id: 47, tag: "PYQ", question: "मानव दूध में उपस्थित Bifidus factor मुख्यतः किस जीवाणु की वृद्धि को बढ़ावा देता है?", options: ["Escherichia coli", "Bifidobacterium", "Salmonella", "Staphylococcus"], correct: 1 },
-            { id: 48, tag: "PYQ", question: "स्किम्ड मिल्क में वसा की मात्रा सामान्यतः कितनी होती है?", options: ["लगभग 0.5% या उससे कम", "लगभग 3%", "लगभग 6%", "लगभग 10%"], correct: 0 },
-            { id: 49, tag: "PYQ", question: "अभिकथन (A): दूध को अधिक समय तक गर्म रखने पर उसका रंग भूरा हो सकता है। कारण (R): दूध में उपस्थित लैक्टोज तथा प्रोटीन के अमीनो समूहों के बीच Maillard reaction हो सकती है।", options: ["A तथा R दोनों सही हैं और R, A की सही व्याख्या करता है।", "A तथा R दोनों सही हैं, लेकिन R, A की सही व्याख्या नहीं करता।", "A सही है, लेकिन R गलत है।", "A गलत है, लेकिन R सही है।"], correct: 0 },
-            { id: 50, tag: "PYQ", question: "निम्नलिखित में से कौन-सा दूध का खमीरीकृत उत्पाद है?", options: ["घी", "दही", "मक्खन", "खोया"], correct: 1 }
+            // --- भाग 1: NCERT आधारित प्रश्न (1 से 25) ---
+            { id: 1, tag: "NCERT", question: "भारत में खाद्य सुरक्षा और मानकों को एकीकृत करने के लिए 'खाद्य सुरक्षा और मानक अधिनियम' (FSS Act) किस वर्ष पारित किया गया था?", options: ["1954 में", "2006 में", "2011 में", "1986 में"], correct: 1 },
+            { id: 2, tag: "NCERT", question: "FSSAI का पूर्ण रूप (Full Form) क्या है?", options: ["Food Safety and Standards Association of India", "Food Safety and Standards Authority of India", "Federal Safety and Security Agency of India", "Food System and Standards Authority of India"], correct: 1 },
+            { id: 3, tag: "NCERT", question: "अंतर्राष्ट्रीय स्तर पर खाद्य मानकों, दिशानिर्देशों और आचार संहिता का संग्रह 'कोडेक्स एलिमेंटेरियस आयोग' (Codex Alimentarius Commission - CAC) किसके द्वारा संयुक्त रूप से स्थापित किया गया है?", options: ["WHO और UNICEF", "FAO और WHO", "ISO और WTO", "UNESCO और FAO"], correct: 1 },
+            { id: 4, tag: "NCERT", question: "कृषि उत्पादों (जैसे खाद्यान्न, तेलहन, मसाले आदि) की ग्रेडिंग और गुणवत्ता प्रमाणीकरण के लिए भारत में कौन सा मानक चिह्न (Standard Mark) प्रदान किया जाता है?", options: ["ISI मार्क", "AGMARK", "FPO मार्क", "BIS हॉलमार्क"], correct: 1 },
+            { id: 5, tag: "NCERT", question: "खाद्य सुरक्षा के संदर्भ में 'HACCP' का पूरा नाम क्या है?", options: ["Hazard Analysis and Critical Control Point", "Hygiene and Critical Control Process", "Food Hazard Assessment and Control Program", "Health Analysis and Critical Care Plan"], correct: 0 },
+            { id: 6, tag: "NCERT", question: "खाद्य पदार्थों में जैविक संदूषक (Biological Contaminant) का उदाहरण कौन सा है?", options: ["कीटनाशक (Pesticides)", "सीसा (Lead)", "साल्मोनेला जीवाणु (Salmonella)", "मैटानिल येलो"], correct: 2 },
+            { id: 7, tag: "NCERT", question: "खाद्य स्वच्छता और सुरक्षा में 'खतरे' (Hazard) का क्या अर्थ है?", options: ["भोजन की खराब पैकेजिंग", "भोजन में उपस्थित कोई भी जैविक, रासायनिक या भौतिक कारक जो स्वास्थ्य को नुकसान पहुँचा सकता है", "भोजन का अधिक मूल्य होना", "भोजन का स्वाद खराब होना"], correct: 1 },
+            { id: 8, tag: "NCERT", question: "'अंतर्राष्ट्रीय मानकीकरण संगठन' (ISO) का मुख्यालय कहाँ स्थित है?", options: ["रोम (इटली)", "जेनेवा (स्विट्जरलैंड)", "पेरिस (फ्रांस)", "न्यू यॉर्क (अमेरिका)"], correct: 1 },
+            { id: 9, tag: "NCERT", question: "प्रसंस्कृत फल उत्पादों (जैसे जैम, जेली, स्क्वैश, अचार) की गुणवत्ता सुनिश्चित करने के लिए पहले कौन सा आदेश प्रभावी था जिसे अब FSSAI में शामिल कर लिया गया है?", options: ["FPO (Fruit Products Order)", "MMPO (Milk and Milk Products Order)", "Agmark Act", "Bureau of Indian Standards Act"], correct: 0 },
+            { id: 10, tag: "NCERT", question: "खाद्य सुरक्षा प्रबंधन प्रणाली (FSMS) के लिए अंतर्राष्ट्रीय स्तर पर स्वीकृत मानक कौन सा है?", options: ["ISO 9001", "ISO 14001", "ISO 22000", "ISO 50001"], correct: 2 },
+            { id: 11, tag: "NCERT", question: "भोजन विषैलापन (Food Poisoning) फैलाने वाला कौन सा जीवाणु डिब्बाबंद (Canned) भोजन में मुख्य रूप से पनपता है?", options: ["एस्चेरिचिया कोलाई (E. coli)", "क्लॉस्ट्रिडियम बॉटुलिनम (Clostridium botulinum)", "स्टैफिलोकोकस ऑरियस", "लैक्टोबैसिलस"], correct: 1 },
+            { id: 12, tag: "NCERT", question: "खाद्य पदार्थों में कांच के टुकड़े, बाल, पत्थर या धातु के कणों का मिलना किस प्रकार के खतरे (Hazard) का उदाहरण है?", options: ["जैविक खतरा (Biological Hazard)", "रासायनिक खतरा (Chemical Hazard)", "भौतिक खतरा (Physical Hazard)", "पर्यावरणीय खतरा (Environmental Hazard)"], correct: 2 },
+            { id: 13, tag: "NCERT", question: "विश्व व्यापार संगठन (WTO) के तहत खाद्य सुरक्षा और वनस्पति स्वास्थ्य के उपायों से संबंधित समझौता कौन सा है?", options: ["TRIPS समझौता", "SPS समझौता (Sanitary and Phytosanitary Measures)", "GATT समझौता", "TBT समझौता"], correct: 1 },
+            { id: 14, tag: "NCERT", question: "शुद्ध घी या तेल में 'ट्राइ-ऑर्थो-क्रेशिल फॉस्फेट' (TOCP) की मिलावट से कौन सा अंग गंभीर रूप से प्रभावित होता है?", options: ["यकृत (Liver)", "तंत्रिका तंत्र और पक्षाघात (Nervous System & Paralysis)", "फेफड़े (Lungs)", "त्वचा (Skin)"], correct: 1 },
+            { id: 15, tag: "NCERT", question: "खाद्य पदार्थों में नमी (Moisture content) का अधिक होना किस प्रकार के संदूषण को बढ़ावा देता है?", options: ["रासायनिक प्रतिक्रियाओं को रोकेगा", "सूक्ष्मजैविक वृद्धि (Microbial Growth) और कवक उत्पादन", "रंग में सुधार", "पोषक तत्वों में वृद्धि"], correct: 1 },
+            { id: 16, tag: "NCERT", question: "दुग्ध एवं दुग्ध उत्पादों की गुणवत्ता के लिए भारत सरकार द्वारा लागू आदेश MMPO किस वर्ष लागू किया गया था?", options: ["1972", "1992", "2002", "1982"], correct: 1 },
+            { id: 17, tag: "NCERT", question: "खाद्य सुरक्षा के '3Gs' या स्वच्छता नियमों में व्यक्तिगत स्वच्छता से तात्पर्य क्या है?", options: ["केवल साफ कपड़े पहनना", "हाथों की बार-बार धुलाई, बालों को ढकना, और बीमारी की स्थिति में भोजन न छूना", "भोजन को केवल ढककर रखना", "महंगे बर्तनों का उपयोग करना"], correct: 1 },
+            { id: 18, tag: "NCERT", question: "भारत में 'भारतीय मानक ब्यूरो' (BIS) द्वारा दिए जाने वाले ISI मार्क का उपयोग मुख्य रूप से किस पर होता है?", options: ["केवल कच्ची सब्जियों पर", "औद्योगिक उत्पादों, डिब्बाबंद पेयजल, बिस्कुट और शिशु आहार आदि पर", "केवल ताजे फलों पर", "केवल सूती कपड़ों पर"], correct: 1 },
+            { id: 19, tag: "NCERT", question: "'कोडेक्स इंडिया' (National Codex Contact Point - NCCP) भारत में कहाँ स्थित है?", options: ["ICAR, नई दिल्ली", "FSSAI, स्वास्थ्य एवं परिवार कल्याण मंत्रालय, नई दिल्ली", "CFTRI, मैसूर", "NIFTEM, सोनीपत"], correct: 1 },
+            { id: 20, tag: "NCERT", question: "खाद्य उद्योग में 'GHP' का तात्पर्य क्या है?", options: ["General Hazard Procedure", "Good Hygiene Practices", "Global Health Plan", "Good Handling Process"], correct: 1 },
+            { id: 21, tag: "NCERT", question: "भोजन को किस तापमान सीमा (Danger Zone) में रखने पर सूक्ष्मजीव सबसे तेजी से पनपते हैं?", options: ["0°C से 4°C", "5°C से 60°C", "70°C से 100°C", "-18°C से 0°C"], correct: 1 },
+            { id: 22, tag: "NCERT", question: "'अनाज में एर्गॉट (Ergoted grain)' की मिलावट या उपस्थिति से होने वाला विषाक्त प्रभाव किसके कारण होता है?", options: ["कवक (Fungus - Claviceps purpurea)", "विषाणु (Virus)", "कीटनाशक", "भारी धातु"], correct: 0 },
+            { id: 23, tag: "NCERT", question: "खाद्य अपमिश्रण (Food Adulteration) में 'इंटेंशनल' (Intentional / जानबूझकर) मिलावट का उदाहरण कौन सा है?", options: ["फसल में कीटनाशक के अवशेष बचना", "पैकेजिंग के समय धूल-मिट्टी गिरना", "दूध में पानी या स्टार्च मिलाना", "गोदाम में चूहों द्वारा भोजन दूषित करना"], correct: 2 },
+            { id: 24, tag: "NCERT", question: "दूध में यूरिया या डिटर्जेंट की उपस्थिति की जाँच के लिए किस रासायनिक अभिकर्मक/परीक्षण का उपयोग किया जाता है?", options: ["आयोडीन परीक्षण", "डीएमएबी (DMAB) / यूरियेज़ परीक्षण", "सांद्र HCl परीक्षण", "एल्कोहल परीक्षण"], correct: 1 },
+            { id: 25, tag: "NCERT", question: "खाद्य पदार्थों की गुणवत्ता नियंत्रण में 'GMP' का क्या अर्थ है?", options: ["Good Manufacturing Practices", "General Material Process", "Global Management Protocol", "Good Marketing Policy"], correct: 0 },
+            // --- भाग 2: YCT प्लैनर आधारित प्रश्न (26 से 50) ---
+            { id: 26, tag: "PYQ", question: "मिलावट कहते हैं—", options: ["बाहरी वस्तुओं को भोजन में मिलाने को", "भोजन से मूल्यवान तत्वों को निकालने को", "अधिक गुणवत्ता वाले पदार्थ के मूल्य पर कम गुणवत्ता का सामान बेचने को", "उपर्युक्त सभी"], correct: 3 },
+            { id: 27, tag: "PYQ", question: "सामान्यतः मीठी सौंफ एवं सुपारी में कौन सी मिलावट की जाती है?", options: ["केवल ऑरामिन", "दोनों शुगर सीरप एवं मैलाकाइट ग्रीन", "दोनों मैलाकाइट ग्रीन एवं रोडामीन बी", "केवल रोडामीन बी"], correct: 0 },
+            { id: 28, tag: "PYQ", question: "पानी में डालने पर ताजा अण्डा:", options: ["नीचे बैठ जायेगा", "तैरने लगेगा", "दोनों (a) और (b)", "उपर्युक्त में से कोई नहीं"], correct: 0 },
+            { id: 29, tag: "PYQ", question: "एपिडेमिक ड्राप्सी नामक गंभीर रोग किस मिलावटी तत्व के सेवन से होता है?", options: ["तिल का तेल", "नारियल का तेल", "सरसों का तेल", "आर्जिमोन का तेल"], correct: 3 },
+            { id: 30, tag: "PYQ", question: "निम्न में से मैटानिल की मिलावट किस भोज्य पदार्थ में की जाती है?", options: ["आटा", "बेसन", "सूजी", "दलिया"], correct: 1 },
+            { id: 31, tag: "PYQ", question: "मूंगफली को खराब करने वाला विषैला तत्व है:", options: ["आज़ालेट", "गॉईट्रोजन", "एफ्लाटॉक्सिन", "बॉट्यूलिज्म टॉक्सिन"], correct: 2 },
+            { id: 32, tag: "PYQ", question: "हल्दी में मिलावट का परीक्षण किस रासायनिक पदार्थ द्वारा किया जाता है?", options: ["सांद्र हाइड्रोक्लोरिक अम्ल द्वारा", "टैपिओका द्वारा", "लैड क्रोमेट द्वारा", "सैक्रीन द्वारा"], correct: 0 },
+            { id: 33, tag: "PYQ", question: "खाद्य मिलावट निरोधक अधिनियम (PFA Act) की स्थापना की गई थी—", options: ["1965 ई. में", "1954 ई. में", "1937 ई. में", "1987 ई. में"], correct: 1 },
+            { id: 34, tag: "PYQ", question: "एच ए सी सी पी (HACCP) सिस्टम मुख्य रूप से किसके लिए उपयोग किया जाता है?", options: ["केवल पैकेजिंग के लिए", "नियंत्रण बिन्दुओं के सभी सोपानों का क्रमिक विश्लेषण और नियमित अन्वीक्षण", "केवल उत्पादों के विपणन के लिए", "भोजन के स्वाद में सुधार के लिए"], correct: 1 },
+            { id: 35, tag: "PYQ", question: "सूची-I में मिलावट को सूची-II के भोजन से मिलाइए:<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0;'><tr style='border-bottom:2px solid #cbd5e1;'><th style='text-align:left; padding:6px; width:50%;'>सूची-I (खाद्य)</th><th style='text-align:left; padding:6px; width:50%;'>सूची-II (मिलावट)</th></tr><tr><td style='padding:5px;'>A. कालीमिर्च</td><td style='padding:5px;'>i. पपीते के बीज</td></tr><tr><td style='padding:5px;'>B. मिर्ची पाउडर</td><td style='padding:5px;'>ii. ईंट का चूरा</td></tr><tr><td style='padding:5px;'>C. हल्दी</td><td style='padding:5px;'>iii. मेटेलिन पीला</td></tr><tr><td style='padding:5px;'>D. धनिया पाउडर</td><td style='padding:5px;'>iv. लकड़ी का बुरादा / गोबर</td></tr></table><br><b>कूट :</b>", options: ["A-i, B-iv, C-iii, D-ii", "A-ii, B-i, C-iv, D-iii", "A-i, B-ii, C-iii, D-iv", "A-iii, B-ii, C-i, D-iv"], correct: 2 },
+            { id: 36, tag: "PYQ", question: "पीएफए (PFA) का विस्तृत रूप है—", options: ["Prevention of Fortified Adulterants", "Pure Fatty Acids", "Prevention of Food Adulteration", "Purified Fatty Acids"], correct: 2 },
+            { id: 37, tag: "PYQ", question: "कच्चा माल या संसाधित माल पाते ही सबसे पहले उसका उपयोग किये जाने की पद्धति कहलाती है—", options: ["FFI", "FIF", "FIFO", "FOFI"], correct: 2 },
+            { id: 38, tag: "PYQ", question: "खाद्य अपमिश्रण निवारण अधिनियम किस वर्ष में पारित किया गया था?", options: ["1944", "1954", "1964", "1974"], correct: 1 },
+            { id: 39, tag: "PYQ", question: "सरसों के तेल में मुख्य रूप से किसकी मिलावट की जाती है?", options: ["यूरिया", "कीटनाशक", "लौह भराव", "अर्जीमोन"], correct: 3 },
+            { id: 40, tag: "PYQ", question: "सरसों के तेल में अर्जीमोन तेल द्वारा मिलावट को किस परीक्षण द्वारा जांचा जा सकता है?", options: ["सांद्र नाइट्रिक अम्ल मिलाकर", "साइट्रिक अम्ल मिलाकर", "एसीटिक अम्ल मिलाकर", "उपर्युक्त में से कोई नहीं"], correct: 0 },
+            { id: 41, tag: "PYQ", question: "प्रायः दही में आयतन बढ़ाने के लिए किसकी मिलावट की जाती है?", options: ["रेत", "मांड़ (स्टार्च)", "पानी", "ब्लीचिंग पेपर"], correct: 2 },
+            { id: 42, tag: "PYQ", question: "केसरी दाल को मिलावटी तत्व के रूप में मुख्य रूप से किसमें मिलाया जाता है?", options: ["अरहर दाल में", "मैदा में", "दलिया में", "मूंगफली में"], correct: 0 },
+            { id: 43, tag: "PYQ", question: "मिर्ची पाउडर में पाया जाने वाला मिलावटी तत्व है—", options: ["चिकोरी", "चौक (खड़ि‍या) पाउडर", "इमली पाउडर", "ईंट का पाउडर"], correct: 3 },
+            { id: 44, tag: "PYQ", question: "हैसप (HACCP) आरोग्य नियंत्रण के चरणों का सही क्रम है:<br>I. खतरों का अभिर्निधारण एवं मूल्यांकन<br>II. जटिल नियंत्रण बिंदुओं (CCP) का अभिर्निधारण<br>III. मापदंड विकसित करना<br>IV. प्रत्येक जटिल नियंत्रण बिंदु को मॉनीटर करना<br>V. सुधारात्मक उपाय करना", options: ["I, II, III, IV, V", "II, I, III, V, IV", "III, I, II, V, IV", "I, III, II, IV, V"], correct: 0 },
+            { id: 45, tag: "PYQ", question: "सूची-I में दिये खाद्यों को सूची-II के संयोज्य से सुमेलित करें:<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0;'><tr style='border-bottom:2px solid #cbd5e1;'><th style='text-align:left; padding:6px; width:50%;'>सूची-I (खाद्य)</th><th style='text-align:left; padding:6px; width:50%;'>सूची-II (संयोज्य)</th></tr><tr><td style='padding:5px;'>A. मक्खन</td><td style='padding:5px;'>i. ऐंनेटो</td></tr><tr><td style='padding:5px;'>B. केक</td><td style='padding:5px;'>ii. बेकिंग सोडा</td></tr><tr><td style='padding:5px;'>C. तेल</td><td style='padding:5px;'>iii. बी एच ए (BHA)</td></tr><tr><td style='padding:5px;'>D. संतरे का स्क्वैश</td><td style='padding:5px;'>iv. सोडियम बेन्जोएट</td></tr></table><br><b>कूट :</b>", options: ["A-i, B-ii, C-iii, D-iv", "A-ii, B-i, C-iv, D-iii", "A-iv, B-iii, C-i, D-ii", "A-iii, B-iv, C-ii, D-i"], correct: 0 },
+            { id: 46, tag: "PYQ", question: "राई के बीजों में अधिकतर किसकी मिलावट की जाती है?", options: ["केरावे बीज", "खसखस बीज", "अर्जीमोन बीज", "धतुरा बीज"], correct: 2 },
+            { id: 47, tag: "PYQ", question: "मूंग दाल, बेसन, चना जैसी दालों में पीला रंग उभारने के लिए किस रासायनिक अपमिश्रक का उपयोग किया जाता है?", options: ["मसले हुए आलू", "मैटेनिल येलो", "यूरिया", "चिकोरी"], correct: 1 },
+            { id: 48, tag: "PYQ", question: "गेहूं के आटे में सामान्यतः मिलाए जाने वाले अपमिश्रक का नाम क्या है?", options: ["मुल्तानी मिट्टी", "ब्रान डस्ट (Bran Dust)", "यूरिया", "चिकोरी"], correct: 1 },
+            { id: 49, tag: "PYQ", question: "मक्खन में रंग प्रदान करने के लिए मिलाया जाने वाला प्राकृतिक/स्वीकृत रंजक कौन सा है?", options: ["मैटेनिल येलो", "ऐंनेटो (Annatto)", "रोडामीन बी", "ऑरामिन"], correct: 1 },
+            { id: 50, tag: "PYQ", question: "PFA नियमों के अनुसार, किसी खाद्य पदार्थ को 'अपमिश्रित' (Adulterated) माना जाता है यदि:", options: ["उसमें कोई सस्ता या हानिकारक पदार्थ मिलाया गया हो", "उससे कोई आवश्यक घटक निकाल लिया गया हो", "उसे अस्वास्थ्यकर परिस्थितियों में तैयार या संगृहीत किया गया हो", "उपर्युक्त सभी परिस्थितियों में"], correct: 3 }
         ];
     </script>
-
     <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
     <script src="../../global-quiz.js?v=3.0"></script>
 </body>
 </html>
+             
+0 commit comments
+Comments
+0
+ (0)
+Comment
+You're not receiving notifications from this thread.
+
+There are no files selected for viewing
+Copied!
