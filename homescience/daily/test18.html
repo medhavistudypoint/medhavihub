@@ -1,37 +1,3 @@
-Skip to content
-medhavistudypoint
-medhavihub
-Repository navigation
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security and quality
-Commit 1aaec55
-medhavistudypoint
-medhavistudypoint
-authored
-2 days ago
-·
-·
-Verified
-Create test18.html
-main
-1 parent 
-583aa71
- commit 
-1aaec55
-1 file changed
-
-+157
-Lines changed: 157 additions & 0 deletions
-Search within code
- 
-‎homescience/daily/test18.html‎
-Original file line number	Diff line number	Diff line change
-@@ -0,0 +1,157 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -43,6 +9,7 @@ Original file line number	Diff line number	Diff line change
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
+
     <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
     <div class="watermark-overlay">
         <div class="watermark-text">MEDHAVI STUDY POINT</div>
@@ -50,6 +17,7 @@ Original file line number	Diff line number	Diff line change
         <div class="watermark-text">MEDHAVI STUDY POINT</div>
         <div class="watermark-text">MEDHAVI STUDY POINT</div>
     </div>
+
     <!-- 1. लॉगिन गेट स्क्रीन -->
     <div id="boxLoginGate" class="login-card">
         <h2>Medhavi Home Science Test Gate</h2>
@@ -60,6 +28,7 @@ Original file line number	Diff line number	Diff line change
         <!-- ✅ सही किया गया बैक बटन का पाथ -->
         <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
     </div>
+
     <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
     <div id="quizWorkspace" class="hidden">
         <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
@@ -70,6 +39,7 @@ Original file line number	Diff line number	Diff line change
             </div>
             <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
         </div>
+
         <div class="main-container">
             <div class="card-panel">
                 <div class="meta-row">
@@ -96,6 +66,7 @@ Original file line number	Diff line number	Diff line change
             </div>
         </div>
     </div>
+
     <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
     <div id="boxReportDashboard" class="report-view">
         <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
@@ -114,10 +85,12 @@ Original file line number	Diff line number	Diff line change
         <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
         <div id="boxReviewAnswersList"></div>
     </div>
+
     <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
     <script>
         // 1. इस टेस्ट की यूनिक KEY
         const QUIZ_KEY = "medhavi_homescience_adulteration_50q"; 
+
         // 2. 50 प्रश्नों का NCERT + YCT आधारित मिलावट एवं खाद्य सुरक्षा डेटासेट
         const dataset = [
             // --- भाग 1: NCERT आधारित प्रश्न (1 से 25) ---
@@ -146,6 +119,7 @@ Original file line number	Diff line number	Diff line change
             { id: 23, tag: "NCERT", question: "खाद्य अपमिश्रण (Food Adulteration) में 'इंटेंशनल' (Intentional / जानबूझकर) मिलावट का उदाहरण कौन सा है?", options: ["फसल में कीटनाशक के अवशेष बचना", "पैकेजिंग के समय धूल-मिट्टी गिरना", "दूध में पानी या स्टार्च मिलाना", "गोदाम में चूहों द्वारा भोजन दूषित करना"], correct: 2 },
             { id: 24, tag: "NCERT", question: "दूध में यूरिया या डिटर्जेंट की उपस्थिति की जाँच के लिए किस रासायनिक अभिकर्मक/परीक्षण का उपयोग किया जाता है?", options: ["आयोडीन परीक्षण", "डीएमएबी (DMAB) / यूरियेज़ परीक्षण", "सांद्र HCl परीक्षण", "एल्कोहल परीक्षण"], correct: 1 },
             { id: 25, tag: "NCERT", question: "खाद्य पदार्थों की गुणवत्ता नियंत्रण में 'GMP' का क्या अर्थ है?", options: ["Good Manufacturing Practices", "General Material Process", "Global Management Protocol", "Good Marketing Policy"], correct: 0 },
+
             // --- भाग 2: YCT प्लैनर आधारित प्रश्न (26 से 50) ---
             { id: 26, tag: "PYQ", question: "मिलावट कहते हैं—", options: ["बाहरी वस्तुओं को भोजन में मिलाने को", "भोजन से मूल्यवान तत्वों को निकालने को", "अधिक गुणवत्ता वाले पदार्थ के मूल्य पर कम गुणवत्ता का सामान बेचने को", "उपर्युक्त सभी"], correct: 3 },
             { id: 27, tag: "PYQ", question: "सामान्यतः मीठी सौंफ एवं सुपारी में कौन सी मिलावट की जाती है?", options: ["केवल ऑरामिन", "दोनों शुगर सीरप एवं मैलाकाइट ग्रीन", "दोनों मैलाकाइट ग्रीन एवं रोडामीन बी", "केवल रोडामीन बी"], correct: 0 },
@@ -174,17 +148,10 @@ Original file line number	Diff line number	Diff line change
             { id: 50, tag: "PYQ", question: "PFA नियमों के अनुसार, किसी खाद्य पदार्थ को 'अपमिश्रित' (Adulterated) माना जाता है यदि:", options: ["उसमें कोई सस्ता या हानिकारक पदार्थ मिलाया गया हो", "उससे कोई आवश्यक घटक निकाल लिया गया हो", "उसे अस्वास्थ्यकर परिस्थितियों में तैयार या संगृहीत किया गया हो", "उपर्युक्त सभी परिस्थितियों में"], correct: 3 }
         ];
     </script>
+
     <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
     <script src="../../global-quiz.js?v=3.0"></script>
 </body>
 </html>
-             
-0 commit comments
-Comments
-0
- (0)
-Comment
-You're not receiving notifications from this thread.
 
-There are no files selected for viewing
-Copied!
+             
