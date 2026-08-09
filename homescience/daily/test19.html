@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ सही किया गया बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">गृह विज्ञान (Home Science)</span>
+                        <!-- 🌟 यहाँ डायनेमिक टैग दिखेगा -->
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ सही किया गया डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_homescience_dairy_beverages_50q"; 
+
+        // 2. 50 प्रश्नों का दुग्ध विज्ञान, पेय पदार्थ एवं आहारिकी आधारित डेटासेट
+        const dataset = [
+            { id: 1, tag: "NCERT", question: "पाश्चुरीकरण की LTH (Low Temperature Holding) विधि में दूध को किस तापमान पर गर्म किया जाता है?", options: ["63°C पर 30 मिनट", "72°C पर 15 सेकंड", "100°C पर 5 मिनट", "135°C पर 2 सेकंड"], correct: 0 },
+            { id: 2, tag: "NCERT", question: "दूध में पाई जाने वाली मुख्य शर्करा कौन-सी है?", options: ["फ्रक्टोज", "लैक्टोज", "सुक्रोज", "माल्टोज"], correct: 1 },
+            { id: 3, tag: "NCERT", question: "'पूर्ण तरल आहार' (Full Liquid Diet) के अंतर्गत निम्न में से किसे शामिल किया जा सकता है?", options: ["उबली हुई ठोस सब्जियाँ", "दूध, कस्टर्ड और पतला सूप", "दलिया और परांठा", "उबला अंडा"], correct: 1 },
+            { id: 4, tag: "NCERT", question: "दूध को पाउडर में बदलने की प्रक्रिया (Drying) का मुख्य खाद्य संरक्षण सिद्धांत क्या है?", options: ["जल सक्रियता को कम करके सूक्ष्मजीवों की वृद्धि रोकना", "वसा की मात्रा बढ़ाना", "केवल रंग में सुधार करना", "मिठास बढ़ाना"], correct: 0 },
+            { id: 5, tag: "NCERT", question: "दूध में वसा किस रूप में निलंबित रहती है?", options: ["ठोस कणों के रूप में", "पायस के रूप में", "कोलॉइडल घोल के रूप में", "वास्तविक विलयन के रूप में"], correct: 1 },
+            { id: 6, tag: "NCERT", question: "दूध का सफेद रंग मुख्य रूप से किस प्रोटीन के कारण होता है?", options: ["एल्ब्यूमिन", "कैसीन", "ग्लोबुलिन", "केरातिन"], correct: 1 },
+            { id: 7, tag: "NCERT", question: "कॉफी बीन्स को भूनने (Roasting) की प्रक्रिया से उसमें कौन-सा विशिष्ट सुगंधित यौगिक विकसित होता है?", options: ["कैफीन", "कैफियोल", "टैनिन", "थियोब्रोमीन"], correct: 1 },
+            { id: 8, tag: "NCERT", question: "गाय के दूध का हल्का पीला रंग किस वर्णक की उपस्थिति के कारण होता है?", options: ["क्लोरोफिल", "कैरोटीन", "एंथोसायनिन", "लाइकोपीन"], correct: 1 },
+            { id: 9, tag: "NCERT", question: "खाद्य संरक्षण में खमीरीकरण की प्रक्रिया द्वारा मुख्यतः किसका उत्पादन होता है जो हानिकारक सूक्ष्मजीवों की वृद्धि को रोकता है?", options: ["लैक्टिक एसिड या अल्कोहल", "केवल ग्लूकोज", "नाइट्रिक एसिड", "सल्फर डाइऑक्साइड"], correct: 0 },
+            { id: 10, tag: "NCERT", question: "भारत में खाद्य सुरक्षा और मानकों को विनियमित करने वाली संस्था FSSAI का पूर्ण रूप क्या है?", options: ["Food Safety and Standards Authority of India", "Food Security and Standards Association of India", "Federal Safety and Sanitation Agency of India", "Food Supply and Storage Authority of India"], correct: 0 },
+            { id: 11, tag: "NCERT", question: "'सॉफ्ट आहार' (Soft Diet) मुख्य रूप से किस प्रकार के रोगियों के लिए अनुशंसित किया जाता है?", options: ["जिन्हें पाचन, चबाने या निगलने में कठिनाई हो", "जो अत्यधिक शारीरिक श्रम करते हों", "जिन्हें केवल निर्जलीकरण हो", "जो पूर्णतः स्वस्थ हों"], correct: 0 },
+            { id: 12, tag: "NCERT", question: "भारतीय मानकों के अनुसार 'टोंड मिल्क' (Toned Milk) में वसा और S.N.F. की न्यूनतम मात्रा कितनी होनी चाहिए?", options: ["3.0% वसा और 8.5% S.N.F.", "1.5% वसा और 9.0% S.N.F.", "4.5% वसा और 8.5% S.N.F.", "6.0% वसा और 9.0% S.N.F."], correct: 0 },
+            { id: 13, tag: "NCERT", question: "Ultra-High Temperature (UHT) पाश्चुरीकरण प्रक्रिया में दूध को किस तापमान पर गर्म किया जाता है?", options: ["135°C से 150°C पर 1 से 2 सेकंड के लिए", "100°C पर 30 मिनट के लिए", "72°C पर 15 मिनट के लिए", "60°C पर 1 घंटे के लिए"], correct: 0 },
+            { id: 14, tag: "NCERT", question: "कोको और चॉकलेट में पाया जाने वाला मुख्य उत्तेजक पदार्थ कौन-सा है?", options: ["थियोब्रोमीन", "मॉर्फीन", "निकोटिन", "कोकीन"], correct: 0 },
+            { id: 15, tag: "NCERT", question: "दूध में अम्ल मिलाने पर कैसीन प्रोटीन के अलग होकर जमने की प्रक्रिया क्या कहलाती है?", options: ["स्कंदन", "कैरमेलाइजेशन", "हाइड्रोजनीकरण", "वसा अवक्षेपण"], correct: 0 },
+            { id: 16, tag: "NCERT", question: "बेकरी और मद्य निर्माण में प्रयुक्त होने वाला प्रमुख खमीर कौन-सा है?", options: ["Saccharomyces cerevisiae", "Penicillium notatum", "Rhizopus stolonifer", "Aspergillus niger"], correct: 0 },
+            { id: 17, tag: "NCERT", question: "कृत्रिम दूध में तटस्थक (Neutralizers) के रूप में किसकी मिलावट की जाँच की जाती है?", options: ["कास्टिक सोडे या सोडियम कार्बोनेट की", "केवल नमक की", "साइट्रिक एसिड की", "चीनी की"], correct: 0 },
+            { id: 18, tag: "NCERT", question: "भारतीय मानकों के अनुसार मक्खन में दुग्ध वसा की न्यूनतम मात्रा कितनी होनी चाहिए?", options: ["80%", "50%", "30%", "65%"], correct: 0 },
+            { id: 19, tag: "NCERT", question: "शल्य चिकित्सा (Surgery) या ऑपरेशन के तुरंत बाद रोगी को सबसे पहले किस प्रकार का आहार दिया जाता है?", options: ["स्पष्ट/शुद्ध तरल आहार", "कठोर एवं गरिष्ठ आहार", "सामान्य भोजन", "उच्च वसायुक्त आहार"], correct: 0 },
+            { id: 20, tag: "PYQ", question: "निम्न में से कौन-सा शुद्ध तरल आहार (Clear Liquid Diet) नहीं है?", options: ["फलों का रस", "नींबू पानी", "दाल का पानी", "चाय"], correct: 2 },
+            { id: 21, tag: "PYQ", question: "कौन-सा सॉफ्ट आहार नहीं है?", options: ["सूप", "खीर", "पुडिंग", "खिचड़ी"], correct: 0 },
+            { id: 22, tag: "PYQ", question: "कमेलिया नामक वृक्ष की पत्तियों को सुखाकर बनाई जाती है:", options: ["अजवाइन", "जीरा", "चाय", "मेथी"], correct: 2 },
+            { id: 23, tag: "PYQ", question: "वह तरल जिसके घोल में पदार्थ होता है, किस रूप में जाना जाता है?", options: ["विलेय", "विलायक", "पारगम्यता", "अर्ध-पारगम्य"], correct: 1 },
+            { id: 24, tag: "PYQ", question: "निम्न के उत्पादन में खमीरीकरण का प्रयोग होता है: (1) सॉस (2) वाइन (3) कोको पाउडर (4) मार्मलेड (5) चीज", options: ["1, 2, 4", "2, 3, 5", "1, 3, 5", "2, 4, 5"], correct: 1 },
+            { id: 25, tag: "PYQ", question: "चाय में पाया जाता है:", options: ["थियोफाइलिन", "कैफीन", "टैनिक एसिड", "इनमें से सभी"], correct: 3 },
+            { id: 26, tag: "PYQ", question: "दूध के उस अपमिश्रक का नाम क्या है जो कि इसमें आयोडीन घोल मिला कर निर्धारित किया जाता है?", options: ["चॉक पाउडर", "स्टार्च", "खनिज तेल", "पानी"], correct: 1 },
+            { id: 27, tag: "PYQ", question: "आम तौर पर, सामान्य वायुमंडलीय स्थितियों में माँस, मछली और दूध उत्पादों का भंडारण कितना रखा जा सकता है?", options: ["1 से 2 दिन", "1 से 2 सप्ताह", "3 से 4 सप्ताह", "12 माह"], correct: 0 },
+            { id: 28, tag: "PYQ", question: "दही जमाने की अवधि में दूध को दही में परिवर्तित करता है:", options: ["ई. कोलाई", "लैक्टोबैसिलस", "राइजोबियम", "क्लोस्ट्रीडियम"], correct: 1 },
+            { id: 29, tag: "PYQ", question: "दूध का पाश्चुरीकरण किस तापमान पर किया जाता है?", options: ["145°F", "135°F", "125°F", "115°F"], correct: 0 },
+            { id: 30, tag: "PYQ", question: "पाश्चुरीकृत दूध की क्षमता की जाँच की जाती है:", options: ["कॉलीफॉर्म टेस्ट प्रयुक्त करके", "आयोडीन टेस्ट प्रयुक्त करके", "नाइट्रिक एसिड टेस्ट प्रयुक्त करके", "फॉस्फेटेज टेस्ट प्रयुक्त करके"], correct: 3 },
+            { id: 31, tag: "PYQ", question: "दूध का एक एक्सचेंज (खाद्य विनिमय) ............ प्रोटीन उपलब्ध करता है।", options: ["4 g", "8 g", "10 g", "12 g"], correct: 1 },
+            { id: 32, tag: "PYQ", question: "दूध में मिलावट की जाती है:", options: ["अजवाइन तेल की", "चॉक पाउडर की", "स्टार्च की", "टैल्कम पाउडर की"], correct: 2 },
+            { id: 33, tag: "PYQ", question: "दूध पाश्चुरीकरण का HTST तरीका करा जाता है:", options: ["63°C पर 30 मिनट के लिये", "100°C पर 1 सेकंड के लिये", "89°C पर 10 सेकंड के लिये", "72°C पर 15 सेकंड के लिये"], correct: 3 },
+            { id: 34, tag: "PYQ", question: "दूध के पाउडर के उत्पादन में आने वाली प्रक्रियाओं को सही क्रम में लगाएँ: (A) पाश्चुरीजेशन (B) इवैपोरेशन (C) मिलिंग (D) पैकिंग (E) क्लेरीफिकेशन (F) वसा को अलग करना (G) रोलर-ड्राइंग", options: ["A, B, C, D, E, F, G", "E, F, A, B, G, C, D", "F, E, A, B, G, D, C", "E, A, F, B, G, C, D"], correct: 1 },
+            { id: 35, tag: "PYQ", question: "चीज बनाने की प्रक्रिया को सही क्रम में लगाएँ: (1) दही जमाना (2) शेड़र (3) पाश्चुरीकरण (4) परिपक्वन (5) साँचे में डालना (6) पीसना और नमक लगाना", options: ["1, 2, 3, 4, 5, 6", "3, 1, 2, 6, 5, 4", "3, 2, 1, 5, 6, 4", "1, 3, 2, 5, 6, 4"], correct: 1 },
+            { id: 36, tag: "PYQ", question: "............... को गरीब आदमी का दूध कहा जाता है।", options: ["रागी", "गेहूँ", "ज्वार", "बाजरा"], correct: 0 },
+            { id: 37, tag: "PYQ", question: "जब दूध में यह डाला जाता है तो कैल्शियम में समृद्ध पनीर प्राप्त होता है:", options: ["एसिटिक एसिड", "साइट्रिक एसिड", "रेनिन", "लैक्टेज"], correct: 2 },
+            { id: 38, tag: "PYQ", question: "मानक दूध में S.N.F. की मात्रा निम्न होनी चाहिए:", options: ["8.5%", "7.2%", "6.5%", "5.2%"], correct: 0 },
+            { id: 39, tag: "PYQ", question: "अभिकथन (A): दूध का पाश्चुरीकरण रोगाणु/जीवाणुओं को नष्ट करने के लिए किया जाता है। कारण (R): दूध में लैक्टिक एसिड की उपस्थिति के लिए इसका परीक्षण किया जाता है।", options: ["(A) और (R) दोनों सही हैं।", "(A) और (R) दोनों गलत हैं।", "(A) सत्य है, परन्तु (R) असत्य है।", "(A) असत्य है, परन्तु (R) सत्य है।"], correct: 2 },
+            { id: 40, tag: "PYQ", question: "दूध से पनीर बनाने की क्रिया में किस pH पर कैसीन अवक्षेपित होती है?", options: ["pH 6.5", "pH 4.6", "pH 7.5", "pH 3.0"], correct: 1 },
+            { id: 41, tag: "PYQ", question: "दूध को पाश्चुरीकरण किया जाता है—", options: ["सूक्ष्म जीवाणुओं को मारने तथा दूध को लंबे समय तक संरक्षित रखने के लिए", "क्रीम निकालने के लिए", "गर्मी कम करने के लिए", "विटामिन बढ़ाने के लिए"], correct: 0 },
+            { id: 42, tag: "PYQ", question: "निम्नलिखित में से कौन-सा युग्म सही सुमेलित है? स्तम्भ-I : (A) ठोस कण का द्रव में विलयन | (B) एक ठोस कण का दूसरे ठोस कण के साथ संयोजन --- स्तम्भ-II : (1) विलयन | (2) मिश्रधातु", options: ["(A)-(1), (B)-(2)", "(A)-(2), (B)-(1)", "दोनों गलत हैं", "दोनों में से कोई नहीं"], correct: 0 },
+            { id: 43, tag: "PYQ", question: "काली चाय के उत्पादन की प्रक्रिया का सही क्रम कौन-सा है? I. मुरझाना II. बेलन फेरना III. खमीरीकरण/ऑक्सीकरण IV. सुखाना V. श्रेणीबद्ध करना VI. मिश्रित करना", options: ["I, II, IV, III, VI, V", "II, I, III, IV, V, VI", "I, II, III, IV, V, VI", "III, I, II, IV, V, VI"], correct: 2 },
+            { id: 44, tag: "PYQ", question: "निम्नलिखित में से कौन-सा एक मादक पेय है?", options: ["दूध", "अफीम", "बीयर", "चाय"], correct: 2 },
+            { id: 45, tag: "PYQ", question: "बीयर में सामान्यतः अल्कोहल की मात्रा लगभग कितनी होती है?", options: ["0.5–1%", "3–6%", "10–15%", "40–50%"], correct: 1 },
+            { id: 46, tag: "PYQ", question: "गाय के दूध की तुलना में भैंस के दूध में सामान्यतः क्या अधिक पाया जाता है?", options: ["वसा, प्रोटीन एवं कैल्शियम", "केवल कार्बोहाइड्रेट", "केवल विटामिन C", "केवल जल"], correct: 0 },
+            { id: 47, tag: "PYQ", question: "मानव दूध में उपस्थित Bifidus factor मुख्यतः किस जीवाणु की वृद्धि को बढ़ावा देता है?", options: ["Escherichia coli", "Bifidobacterium", "Salmonella", "Staphylococcus"], correct: 1 },
+            { id: 48, tag: "PYQ", question: "स्किम्ड मिल्क में वसा की मात्रा सामान्यतः कितनी होती है?", options: ["लगभग 0.5% या उससे कम", "लगभग 3%", "लगभग 6%", "लगभग 10%"], correct: 0 },
+            { id: 49, tag: "PYQ", question: "अभिकथन (A): दूध को अधिक समय तक गर्म रखने पर उसका रंग भूरा हो सकता है। कारण (R): दूध में उपस्थित लैक्टोज तथा प्रोटीन के अमीनो समूहों के बीच Maillard reaction हो सकती है।", options: ["A तथा R दोनों सही हैं और R, A की सही व्याख्या करता है।", "A तथा R दोनों सही हैं, लेकिन R, A की सही व्याख्या नहीं करता।", "A सही है, लेकिन R गलत है।", "A गलत है, लेकिन R सही है।"], correct: 0 },
+            { id: 50, tag: "PYQ", question: "निम्नलिखित में से कौन-सा दूध का खमीरीकृत उत्पाद है?", options: ["घी", "दही", "मक्खन", "खोया"], correct: 1 }
+        ];
+    </script>
+
+    <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+  </html>
+
