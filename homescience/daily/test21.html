@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ सही किया गया बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">40</span></span>
+                        <span class="subject-badge">गृह विज्ञान (Home Science)</span>
+                        <!-- 🌟 यहाँ डायनेमिक टैग दिखेगा -->
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 40</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ सही किया गया डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY (अपनी आवश्यकता अनुसार बदल भी सकते हैं)
+        const QUIZ_KEY = "medhavi_homescience_clinical_nutrition_40q"; 
+
+        // 2. 40 प्रश्नों का डेटासेट
+        /* 🌟 यहाँ अपना 40 प्रश्नों का dataset पेस्ट करें 🌟 */
+        const dataset = [
+    { id: 1, tag: "NCERT", question: "'नैदानिक पोषण' (Clinical Nutrition) का मुख्य ध्यान किस पर केंद्रित होता है?", options: ["केवल खेलकूद और फिटनेस पर", "बीमारियों के दौरान रोगियों के पोषण प्रबंधन और आहार संशोधन पर", "खाद्य पदार्थों के व्यावसायिक विज्ञापन पर", "केवल डिब्बाबंद खाद्य सामग्री के उत्पादन पर"], correct: 1 },
+    { id: 2, tag: "NCERT", question: "'आहार संशोधन' (Diet Modification) का क्या तात्पर्य है?", options: ["भोजन के स्वाद में केवल मसाले बढ़ाना", "रोगी की शारीरिक स्थिति के अनुसार भोजन की बनावट, रूप या पोषक तत्वों में बदलाव करना", "भोजन की कीमत बढ़ाना", "केवल भोजन पकाने के बर्तन बदलना"], correct: 1 },
+    { id: 3, tag: "NCERT", question: "शल्य चिकित्सा (Surgery) के तुरंत बाद दिए जाने वाले 'स्पष्ट तरल आहार' (Clear Liquid Diet) की मुख्य विशेषता क्या है?", options: ["यह आंतों में कोई ठोस अवशेष नहीं छोड़ता और आसानी से पचता है", "इसमें वसा और प्रोटीन अत्यधिक मात्रा में होता है", "यह रोगी को दिन भर की पूरी कैलोरी प्रदान करता है", "यह केवल उबले हुए साबुत अनाज से बनता है"], correct: 0 },
+    { id: 4, tag: "NCERT", question: "'पूर्ण तरल आहार' (Full Liquid Diet) के अंतर्गत निम्न में से किसे शामिल किया जाता है?", options: ["बिना दूध की चाय और स्पष्ट सूप", "दूध, कस्टर्ड, पतला दलिया और गाढ़ा सूप", "कठोर चपाती और तले हुए स्नैक्स", "कच्चा फल और साबुत चना"], correct: 1 },
+    { id: 5, tag: "NCERT", question: "'सॉफ्ट आहार' (Soft Diet) मुख्य रूप से किन व्यक्तियों के लिए उपयुक्त होता है?", options: ["जो अत्यधिक एथलेटिक कार्य करते हैं", "जिन्हें भोजन चबाने, निगलने या पचाने में कठिनाई होती है", "जो केवल निर्जलीकरण से पीड़ित हैं", "जो पूर्णतः स्वस्थ और सामान्य जीवन जी रहे हैं"], correct: 1 },
+    { id: 6, tag: "NCERT", question: "आहार नियोजन (Meal Planning) का मुख्य उद्देश्य क्या है?", options: ["परिवार के सभी सदस्यों को उनकी पोषण आवश्यकताओं के अनुसार संतुलित आहार प्रदान करना", "केवल महंगे खाद्य पदार्थों की खरीदारी करना", "भोजन बनाने में लगने वाला समय अत्यधिक बढ़ाना", "केवल एक ही प्रकार का भोजन रोज बनाना"], correct: 0 },
+    { id: 7, tag: "NCERT", question: "ICMR-NIN के अद्यतन मानकों के अनुसार, एक सामान्य वयस्क के लिए प्रतिदिन प्रोटीन की अनुशंसित आहारीय आवश्यकता कितनी है?", options: ["लगभग 0.83 ग्राम प्रति किलोग्राम शरीर भार", "2.5 ग्राम प्रति किलोग्राम शरीर भार", "5.0 ग्राम प्रति किलोग्राम शरीर भार", "10 ग्राम प्रति किलोग्राम शरीर भार"], correct: 0 },
+    { id: 8, tag: "NCERT", question: "गर्भावस्था (Pregnancy) के दौरान प्रतिदिन अतिरिक्त ऊर्जा (Extra Energy) की कितनी आवश्यकता होती है?", options: ["+100 kcal/day", "+350 kcal/day", "+800 kcal/day", "+1200 kcal/day"], correct: 1 },
+    { id: 9, tag: "NCERT", question: "आहार नियोजन को प्रभावित करने वाला सबसे मुख्य जैविक कारक कौन-सा है?", options: ["आयु, लिंग और शारीरिक अवस्था", "बाजार का स्थान", "घर का क्षेत्रफल", "रसोई का आकार"], correct: 0 },
+    { id: 10, tag: "NCERT", question: "जब दो खाद्य पदार्थों (जैसे दाल और चावल) को मिलाकर खाया जाता है, तो इस प्रक्रिया को क्या कहते हैं?", options: ["प्रोटीन अनुपूरण", "प्रोटीन स्कंदन", "कार्बोहाइड्रेट अवशोषण", "वसा पायसीकरण"], correct: 0 },
+    { id: 11, tag: "NCERT", question: "दाल-चावल के मिश्रण (खिचड़ी) में कौन-से दो मुख्य अमीनो एसिड एक-दूसरे की कमी को पूरा करते हैं?", options: ["दाल का लाइसीन और चावल का मिथियोनिन", "दाल का केवल टैनिन और चावल का कैफीन", "दोनों का केवल ग्लूकोज", "दोनों का केवल सोडियम"], correct: 0 },
+    { id: 12, tag: "NCERT", question: "'आहार विशेषज्ञ' (Dietitian) का प्राथमिक कार्य क्या होता है?", options: ["रोगियों की चिकित्सीय स्थिति के आधार पर आहार योजना तैयार करना और पोषण संबंधी परामर्श देना", "अस्पतालों में केवल दवाइयाँ बेचना", "केवल भोजन पकाने के बर्तन साफ करना", "खाद्य पदार्थों का आयात-निर्यात करना"], correct: 0 },
+    { id: 13, tag: "NCERT", question: "भोजन में पर्याप्त मात्रा में आहारीय रेशा (Dietary Fiber) शामिल करने से किस स्वास्थ्य समस्या का निवारण होता है?", options: ["कब्ज", "रिकेट्स", "स्कर्वी", "नाइट ब्लाइंडनेस"], correct: 0 },
+    { id: 14, tag: "NCERT", question: "खाद्य सुदृढ़ीकरण (Food Fortification) का क्या अर्थ है?", options: ["भोजन से पानी की मात्रा पूरी तरह निकालना", "किसी खाद्य पदार्थ में उन आवश्यक सूक्ष्म पोषक तत्वों को मिलाना जो उसमें प्राकृतिक रूप से कम या अनुपस्थित हैं", "भोजन में केवल कृत्रिम रंग मिलाना", "भोजन को अत्यधिक तापमान पर पकाना"], correct: 1 },
+    { id: 15, tag: "NCERT", question: "आयोडीन युक्त नमक (Iodised Salt) किसका एक सर्वोत्कृष्ट उदाहरण है?", options: ["खाद्य सुदृढ़ीकरण (Food Fortification)", "खाद्य अपमिश्रण (Food Adulteration)", "खमीरीकरण (Fermentation)", "पाश्चुरीकरण (Pasteurization)"], correct: 0 },
+    { id: 16, tag: "NCERT", question: "आहार नियोजन करते समय समय और ऊर्जा की बचत के लिए किस सिद्धांत का पालन किया जाता है?", options: ["पूर्व-तैयारी और खाद्य समूहों का बुद्धिमत्तापूर्ण चयन", "हर भोजन के लिए तुरंत बाजार जाना", "केवल डिब्बाबंद और बासी भोजन का प्रयोग करना", "बिना योजना के खाना पकाना"], correct: 0 },
+    { id: 17, tag: "NCERT", question: "नैदानिक पोषण में 'एन्थ्रोपोमेट्रिक मापन' (Anthropometric Measurement) के अंतर्गत क्या मापा जाता है?", options: ["शरीर की ऊँचाई, भार और परिधि", "केवल रक्त चाप", "केवल दृष्टि क्षमता", "दाँतों की संख्या"], correct: 0 },
+    { id: 18, tag: "NCERT", question: "उच्च रक्तचाप (Hypertension) से पीड़ित रोगी के आहार नियोजन में किसकी मात्रा सीमित करने की सलाह दी जाती है?", options: ["सोडियम (नमक)", "कैल्शियम", "विटामिन C", "जल"], correct: 0 },
+    { id: 19, tag: "NCERT", question: "मधुमेह (Diabetes Mellitus) के रोगी के आहार प्रबंधन में किस प्रकार के कार्बोहाइड्रेट को प्राथमिकता दी जानी चाहिए?", options: ["जटिल कार्बोहाइड्रेट और उच्च रेशा युक्त खाद्य पदार्थ", "साधारण शर्करा (चीनी, मिठाई)", "केवल मीठे फलों का रस", "रिफाइंड मैदा"], correct: 0 },
+    { id: 20, tag: "NCERT", question: "'कमिशरी' (Commissary) भोजन सेवा प्रणाली का मुख्य लक्षण क्या है?", options: ["एक केंद्रीय स्थान पर भोजन तैयार कर विभिन्न बिक्री केंद्रों/इकाइयों में वितरित करना", "प्रत्येक ग्राहक के घर जाकर खाना पकाना", "केवल डिब्बाबंद खाद्य बेचना", "केवल भोजन की ऑनलाइन डिलीवरी करना"], correct: 0 },
+    { id: 21, tag: "", question: "शाकाहारी आहार नियोजन में लोहतत्व (Iron) के अवशोषण को बढ़ाने के लिए आहार में किसे शामिल करना चाहिए?", options: ["विटामिन C युक्त खाद्य पदार्थ (जैसे नींबू, आंवला)", "अत्यधिक चाय या कॉफी", "अत्यधिक कैल्शियम की गोलियाँ भोजन के तुरंत बाद", "केवल सफेद मैदा"], correct: 0 },
+    { id: 22, tag: "", question: "किशोरावस्था (Adolescence) में तीव्र शारीरिक वृद्धि के कारण आहार में किन पोषक तत्वों की आवश्यकता बढ़ जाती है?", options: ["प्रोटीन, कैल्शियम और आयरन", "केवल संतृप्त वसा", "केवल नमक", "केवल कार्बोहाइड्रेट"], correct: 0 },
+    { id: 23, tag: "", question: "धात्री माता (Lactating Mother) के आहार नियोजन में अतिरिक्त पोषक तत्वों की आवश्यकता क्यों होती है?", options: ["पर्याप्त दुग्ध स्राव और स्वयं के स्वास्थ्य को बनाए रखने के लिए", "केवल नींद बढ़ाने के लिए", "केवल शारीरिक वजन कम करने के लिए", "इनमें से कोई नहीं"], correct: 0 },
+    { id: 24, tag: "", question: "बुजुर्ग व्यक्तियों (Elderly People) के आहार प्रबंधन में किस बात का विशेष ध्यान रखना चाहिए?", options: ["सुपाच्य, मृदु और पोषक तत्वों से भरपूर आहार", "अत्यधिक मसालेदार और कठोर भोजन", "केवल उच्च वसायुक्त भोजन", "पानी की मात्रा अत्यधिक कम करना"], correct: 0 },
+    { id: 25, tag: "", question: "खाद्य सुरक्षा और मानक अधिनियम (FSSA) के अनुसार आहार प्रबंधन में स्वच्छता का पालन क्यों आवश्यक है?", options: ["भोजनजन्य बीमारियों से बचाव के लिए", "केवल भोजन का रंग बदलने के लिए", "केवल भोजन का वजन बढ़ाने के लिए", "केवल बर्तन चमकाने के लिए"], correct: 0 },
+    { id: 26, tag: "", question: "सीलिएक रोग (Celiac Disease) से पीड़ित रोगी के आहार नियोजन में किस तत्व को पूरी तरह हटाना अनिवार्य है?", options: ["ग्लूटन (Gluten) प्रोटीन", "केवल पानी", "चावल", "केवल आलू"], correct: 0 },
+    { id: 27, tag: "", question: "आहार नियोजन में 'खाद्य बजट' (Food Budget) को प्रभावित करने वाला मुख्य कारक कौन-सा है?", options: ["पारिवारिक आय और खाद्य पदार्थों की उपलब्धता", "रसोई की सजावट", "घर के सदस्यों के कपड़ों का प्रकार", "केवल टीवी विज्ञापन"], correct: 0 },
+    { id: 28, tag: "", question: "पीलिया (Jaundice) या यकृत (Liver) के रोग में आहार नियोजन में किसकी मात्रा अत्यधिक कम कर दी जाती है?", options: ["वसा", "जल", "कार्बोहाइड्रेट", "विटामिन"], correct: 0 },
+    { id: 29, tag: "", question: "संतुलित आहार (Balanced Diet) की एनसीईआरटी आधारित सही परिभाषा क्या है?", options: ["वह आहार जिसमें शरीर की सभी पोषणात्मक आवश्यकताओं को पूरा करने के लिए सही अनुपात में सभी आवश्यक पोषक तत्व मौजूद हों", "केवल फल और सब्जियाँ खाना", "केवल अत्यधिक प्रोटीन युक्त भोजन खाना", "जो पेट को पूरी तरह भर दे चाहे पोषक तत्व हों या न हों"], correct: 0 },
+    { id: 30, tag: "", question: "भोजन में हरी पत्तेदार सब्जियाँ शामिल करना क्यों आवश्यक है?", options: ["ये केवल भोजन को आकर्षक बनाती हैं", "इनमें बहुत सारे विटामिन और खनिज होते हैं", "ये शरीर में वसा का स्तर बढ़ाती हैं", "इनमें अत्यधिक प्रोटीन होता है"], correct: 1 },
+    { id: 31, tag: "", question: "खेल-कूद पोषण (Sports Nutrition) का मुख्य संबंध किसमें सुधार करने से है?", options: ["एथलेटिक निष्पादन (Athletic Performance)", "केवल मतिहीन निष्पादन", "मध्यम निष्पादन", "इनमें से कोई नहीं"], correct: 0 },
+    { id: 32, tag: "", question: "रोगी के लिए आहार आयोजित करते समय निम्न में से किस पर ध्यान देना आवश्यक है?", options: ["रोग का कारण और प्रकार", "आहार की प्रकृति", "रोगी की भोजन संबंधी व्यक्तिगत आदतें", "इनमें से सभी"], correct: 3 },
+    { id: 33, tag: "", question: "खाद्य नियोजन में RDA का पूर्ण रूप क्या है?", options: ["रिकमेंडेड डोजिंग अलाउंस", "रिकमेंडेड डोसेज अलाउंस", "रिकमेंडेड डे टू डे अलाउंस", "रिकमेंडेड डाइटरी अलाउंस"], correct: 3 },
+    { id: 34, tag: "", question: "'स्पष्ट तरल आहार' और 'पूर्ण तरल आहार' के संबंध में कौन-सा कथन सत्य है?", options: ["स्पष्ट तरल आहार में कोई ठोस अवशेष नहीं बचता जबकि पूर्ण तरल में दूध व सूप शामिल होते हैं", "दोनों में ठोस सब्जियाँ दी जाती हैं", "पूर्ण तरल आहार शल्य चिकित्सा के तुरंत बाद दिया जाता है", "स्पष्ट तरल आहार केवल मधुमेह रोगियों के लिए है"], correct: 0 },
+    { id: 35, tag: "", question: "मधुमेह (Diabetes Mellitus) के रोगियों के संदर्भ में निम्नलिखित कथनों में से कौन-सा सत्य है?", options: ["इनके आहार में जटिल कार्बोहाइड्रेट और उच्च रेशा होना चाहिए", "इन्हें अत्यधिक साधारण शर्करा दी जानी चाहिए", "इन्हें भोजन में वसा की मात्रा अत्यधिक बढ़ानी चाहिए", "इन्हें जल का सेवन बंद कर देना चाहिए"], correct: 0 },
+    { id: 36, tag: "", question: "सूची-I (आहार का प्रकार) को सूची-II (उपयुक्त खाद्य पदार्थ) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0;'><tr style='border-bottom:2px solid #cbd5e1;'><th style='text-align:left; padding:6px; width:50%;'>सूची-I (आहार का प्रकार)</th><th style='text-align:left; padding:6px; width:50%;'>सूची-II (उपयुक्त खाद्य पदार्थ)</th></tr><tr><td style='padding:5px;'>A. स्पष्ट तरल आहार</td><td style='padding:5px;'>1. दलिया, खिचड़ी</td></tr><tr><td style='padding:5px;'>B. पूर्ण तरल आहार</td><td style='padding:5px;'>2. नींबू पानी, बिना गूदे का रस</td></tr><tr><td style='padding:5px;'>C. सॉफ्ट आहार</td><td style='padding:5px;'>3. गाढ़ा सूप, दूध</td></tr><tr><td style='padding:5px;'>D. सामान्य आहार</td><td style='padding:5px;'>4. दाल-चावल, रोटी</td></tr></table><br><b>कूट :</b>", options: ["A-2, B-3, C-1, D-4", "A-3, B-2, C-4, D-1", "A-2, B-1, C-3, D-4", "A-4, B-3, C-1, D-2"], correct: 0 },
+    { id: 37, tag: "", question: "सूची-I (स्वास्थ्य स्थिति) को सूची-II (आहारीय संशोधन) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0;'><tr style='border-bottom:2px solid #cbd5e1;'><th style='text-align:left; padding:6px; width:50%;'>सूची-I (स्वास्थ्य स्थिति)</th><th style='text-align:left; padding:6px; width:50%;'>सूची-II (आहारीय संशोधन)</th></tr><tr><td style='padding:5px;'>A. उच्च रक्तचाप</td><td style='padding:5px;'>1. ग्लूटन मुक्त आहार</td></tr><tr><td style='padding:5px;'>B. यकृत रोग / पीलिया</td><td style='padding:5px;'>2. कम सोडियम युक्त आहार</td></tr><tr><td style='padding:5px;'>C. सीलिएक रोग</td><td style='padding:5px;'>3. कम ग्लाइसेमिक इंडेक्स आहार</td></tr><tr><td style='padding:5px;'>D. मधुमेह</td><td style='padding:5px;'>4. कम वसा युक्त आहार</td></tr></table><br><b>कूट :</b>", options: ["A-2, B-4, C-1, D-3", "A-1, B-3, C-2, D-4", "A-2, B-1, C-4, D-3", "A-4, B-2, C-1, D-3"], correct: 0 },
+    { id: 38, tag: "", question: "सूची-I (पोषक तत्व / घटक) को सूची-II (मुख्य भूमिका) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0;'><tr style='border-bottom:2px solid #cbd5e1;'><th style='text-align:left; padding:6px; width:50%;'>सूची-I (पोषक तत्व / घटक)</th><th style='text-align:left; padding:6px; width:50%;'>सूची-II (मुख्य भूमिका)</th></tr><tr><td style='padding:5px;'>A. आहारीय रेशा</td><td style='padding:5px;'>1. अमीनो एसिड की कमी पूरी करना</td></tr><tr><td style='padding:5px;'>B. प्रोटीन अनुपूरण</td><td style='padding:5px;'>2. कब्ज रोकना</td></tr><tr><td style='padding:5px;'>C. विटामिन C</td><td style='padding:5px;'>3. हड्डियों की मजबूती</td></tr><tr><td style='padding:5px;'>D. कैल्शियम</td><td style='padding:5px;'>4. आयरन अवशोषण बढ़ाना</td></tr></table><br><b>कूट :</b>", options: ["A-2, B-1, C-4, D-3", "A-1, B-2, C-3, D-4", "A-2, B-4, C-1, D-3", "A-3, B-1, C-4, D-2"], correct: 0 },
+    { id: 39, tag: "", question: "सूची-I (जीवन चक्र की अवस्था) को सूची-II (विशेष आहारीय आवश्यकता) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0;'><tr style='border-bottom:2px solid #cbd5e1;'><th style='text-align:left; padding:6px; width:50%;'>सूची-I (जीवन चक्र की अवस्था)</th><th style='text-align:left; padding:6px; width:50%;'>सूची-II (विशेष आहारीय आवश्यकता)</th></tr><tr><td style='padding:5px;'>A. गर्भावस्था</td><td style='padding:5px;'>1. सुपाच्य व मृदु आहार</td></tr><tr><td style='padding:5px;'>B. धात्री माता</td><td style='padding:5px;'>2. +350 kcal/day अतिरिक्त ऊर्जा</td></tr><tr><td style='padding:5px;'>C. किशोरावस्था</td><td style='padding:5px;'>3. दुग्ध स्राव हेतु उच्च प्रोटीन</td></tr><tr><td style='padding:5px;'>D. वृद्धावस्था</td><td style='padding:5px;'>4. तीव्र वृद्धि हेतु प्रोटीन व आयरन</td></tr></table><br><b>कूट :</b>", options: ["A-2, B-3, C-4, D-1", "A-3, B-2, C-1, D-4", "A-2, B-4, C-3, D-1", "A-1, B-3, C-4, D-2"], correct: 0 },
+    { id: 40, tag: "", question: "सूची-I (भोजन सेवा प्रणाली) को सूची-II (मुख्य विशेषता) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0;'><tr style='border-bottom:2px solid #cbd5e1;'><th style='text-align:left; padding:6px; width:50%;'>सूची-I (भोजन सेवा प्रणाली)</th><th style='text-align:left; padding:6px; width:50%;'>सूची-II (मुख्य विशेषता)</th></tr><tr><td style='padding:5px;'>A. पारम्परिक प्रणाली</td><td style='padding:5px;'>1. केंद्रीय रसोई से वितरण</td></tr><tr><td style='padding:5px;'>B. कमिशरी प्रणाली</td><td style='padding:5px;'>2. पकाकर फ्रीज करना व गर्म करना</td></tr><tr><td style='padding:5px;'>C. कुक-चिल प्रणाली</td><td style='padding:5px;'>3. रसोई में तैयार कर तुरंत परोसना</td></tr><tr><td style='padding:5px;'>D. असेंबली-सर्व</td><td style='padding:5px;'>4. तैयार भोजन लाकर केवल परोसना</td></tr></table><br><b>कूट :</b>", options: ["A-3, B-1, C-2, D-4", "A-1, B-3, C-4, D-2", "A-3, B-2, C-1, D-4", "A-2, B-1, C-3, D-4"], correct: 0 }
+];
+     
+    </script>
+
+    <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
