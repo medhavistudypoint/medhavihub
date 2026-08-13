@@ -3,66 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medhavi Study Point - कंप्यूटर व ICT ऑनलाइन मॉक टेस्ट 02</title>
-    <!-- ✅ आपकी मुख्य CSS फ़ाइल का पाथ -->
+    <title>Medhavi Study Point - Home Science & GS Test (120 Q)</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
     <link rel="stylesheet" href="../../global-style.css?v=3.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        /* TGT पेड ऑथेंटिकेशन पॉप-अप (Modal) स्टाइल्स */
-        .modal-overlay { 
-            display: none; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: rgba(11, 30, 71, 0.75); 
-            justify-content: center; 
-            align-items: center; 
-            z-index: 10000; 
-            padding: 15px; 
-            backdrop-filter: blur(4px);
-        }
-        .modal-box { 
-            background: white; 
-            padding: 25px; 
-            border-radius: 16px; 
-            width: 100%; 
-            max-width: 380px; 
-            text-align: center; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            border: 1px solid #cbd5e1;
-        }
-        .modal-box h3 { color: #0b1e47; margin-top: 0; font-size: 20px; }
-        .modal-box p { font-size: 14px; color: #64748b; }
-        .modal-box input { 
-            width: 100%; 
-            padding: 12px; 
-            margin-bottom: 12px; 
-            border: 2px solid #cbd5e1; 
-            border-radius: 8px; 
-            text-align: center; 
-            font-size: 16px;
-            outline: none;
-        }
-        .modal-box input:focus { border-color: #1e3a8a; }
-        .modal-box button { 
-            width: 100%; 
-            padding: 12px; 
-            border: none; 
-            border-radius: 8px; 
-            font-size: 15px; 
-            font-weight: bold; 
-            cursor: pointer; 
-        }
-        .btn-auth { background: #16a34a; color: white; margin-bottom: 8px; }
-        .btn-auth:hover { background: #15803d; }
-        .btn-close { background: #e2e8f0; color: #1e293b; margin-top: 6px; }
-    </style>
 </head>
 <body>
 
-    <!-- 🔒 सुरक्षा वॉटरमार्क -->
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
     <div class="watermark-overlay">
         <div class="watermark-text">MEDHAVI STUDY POINT</div>
         <div class="watermark-text">MEDHAVI STUDY POINT</div>
@@ -72,31 +20,33 @@
 
     <!-- 1. लॉगिन गेट स्क्रीन -->
     <div id="boxLoginGate" class="login-card">
-        <h2>Medhavi Study Point Test Gate</h2>
-        <p>कंप्यूटर व ICT - ऑनलाइन मॉक टेस्ट 02 शुरू करने के लिए अपना पूरा नाम भरें:</p>
+        <h2>Medhavi Combined Test Gate (120 Q)</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और परीक्षा शुरू करें.</p>
         <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
         <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
         <br><br>
-        <a href="javascript:history.back()" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 वापस जाएं</a>
+        <!-- ✅ सही किया गया बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
     </div>
 
     <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
     <div id="quizWorkspace" class="hidden">
-        <!-- 🌟 प्रीमियम हेडर -->
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
         <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
                 <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
-                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">कंप्यूटर व ICT - ऑनलाइन मॉक टेस्ट 02</p>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / GS & Home Science</p>
             </div>
-            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">06:00</div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">90:00</div>
         </div>
 
         <div class="main-container">
             <div class="card-panel">
                 <div class="meta-row">
                     <div>
-                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">6</span></span>
-                        <span class="subject-badge">ICT & Computer</span>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">120</span></span>
+                        <span class="subject-badge">गृह विज्ञान एवं सामान्य ज्ञान (120 Q)</span>
+                        <!-- 🌟 यहाँ डायनेमिक टैग दिखेगा -->
                         <span id="lblQuestionTag" class="tag-badge"></span>
                     </div>
                 </div>
@@ -120,10 +70,10 @@
     <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
     <div id="boxReportDashboard" class="report-view">
         <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
-            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <div class="report-header-title">Medhavi Study Point — Complete Test Result Dashboard</div>
             <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
             <div class="grid-5-columns">
-                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 6</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 120</div><div class="metric-title">Score</div></div></div>
                 <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
                 <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
                 <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
@@ -131,87 +81,149 @@
             </div>
         </div>
         <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
-        <a href="javascript:history.back()" class="btn-dashboard-redirect">🔙 मुख्य पृष्ठ पर वापस जाएं</a>
+        <!-- ✅ सही किया गया डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
         <div id="boxReviewAnswersList"></div>
     </div>
 
-    <!-- 🔒 ऑथेंटिकेशन पॉप-अप (Google Script API Integration) -->
-    <div id="loginModal" class="modal-overlay">
-        <div class="modal-box">
-            <h3>🔒 TGT पेड स्टूडेंट एक्सेस</h3>
-            <p>टेस्ट शुरू करने के लिए अपना रजिस्टर्ड मोबाइल नंबर दर्ज करें:</p>
-            <input type="tel" id="userMobileInput" placeholder="10 अंकों का मोबाइल नंबर" maxlength="10">
-            <button onclick="verifyStudent()" class="btn-auth">अनलॉक करें</button>
-            <p id="authMessage" style="margin: 8px 0; font-size:13px; font-weight:bold;"></p>
-            <button onclick="closeModal()" class="btn-close">बंद करें</button>
-        </div>
-    </div>
-
-    <!-- 🎯 टेस्ट डेटासेट और ऑथेंटिकेशन लॉजिक -->
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
     <script>
-        const AUTH_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec";
-        const QUIZ_KEY = "medhavi_ict_computer_mock_02"; 
-        const NEGATIVE_MARKING = 1 / 3; 
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_homescience_and_gs_120q"; 
 
-        // ऑथेंटिकेशन चेक (पेज लोड पर)
-        window.onload = function() {
-            if (localStorage.getItem('tgt_user_verified') !== 'true') {
-                document.getElementById('loginModal').style.display = 'flex';
-            } else if (typeof window.checkSavedResultOnLoad === 'function') {
-                window.checkSavedResultOnLoad();
-            }
-        };
-
-        function verifyStudent() {
-            const mobile = document.getElementById('userMobileInput').value.trim();
-            const msgBox = document.getElementById('authMessage');
-            if (mobile.length !== 10) { 
-                msgBox.style.color = "#e11d48"; 
-                msgBox.innerText = "सही 10 अंकों का मोबाइल नंबर डालें!"; 
-                return; 
-            }
-            
-            let deviceId = localStorage.getItem('user_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 11));
-            localStorage.setItem('user_device_id', deviceId);
-            msgBox.style.color = "#2563eb"; 
-            msgBox.innerText = "जाँच हो रही है...";
-            
-            fetch(`${AUTH_SCRIPT_URL}?mobile=${mobile}&deviceId=${deviceId}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.allowed) {
-                        localStorage.setItem('tgt_user_verified', 'true');
-                        msgBox.style.color = "#16a34a"; 
-                        msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
-                        setTimeout(() => closeModal(), 800);
-                    } else {
-                        msgBox.style.color = "#e11d48"; 
-                        msgBox.innerText = data.message || "पहुंच की अनुमति नहीं है!";
-                    }
-                })
-                .catch(() => { 
-                    msgBox.style.color = "#e11d48"; 
-                    msgBox.innerText = "नेटवर्क खराबी! पुनः प्रयास करें।"; 
-                });
-        }
-
-        function closeModal() { 
-            document.getElementById('loginModal').style.display = 'none'; 
-        }
-
-        // 🎯 6 नए ICT & Computer प्रश्नों का डेटासेट
+        // 2. 120 प्रश्नों का संयुक्त डेटासेट (30 GS प्रश्न + 90 गृह विज्ञान प्रश्न)
         const dataset = [
-            { id: 1, tag: "ICT", question: "ROM का पूर्ण रूप (Full Form) क्या है?", options: ["Read Only Memory", "Random Output Memory", "Rapid Operation Memory", "Read One Memory"], correct: 0 },
-            { id: 2, tag: "ICT", question: "URL का क्या अर्थ होता है?", options: ["Universal Resource Locator", "Uniform Resource Locator", "United Resource Link", "Uniform Real Location"], correct: 1 },
-            { id: 3, tag: "ICT", question: "कंप्यूटर में डेटा की सबसे छोटी इकाई कौन-सी है?", options: ["Byte", "Bit", "Nibble", "Kilobyte"], correct: 1 },
-            { id: 4, tag: "ICT", question: "सॉफ्टवेयर का मुख्य उद्देश्य डेटा को किसमें बदलना होता है?", options: ["वेबसाइट", "सूचना (Information)", "ऑब्जेक्ट", "प्रोग्राम"], correct: 1 },
-            { id: 5, tag: "ICT", question: "MS Word किस प्रकार के सॉफ्टवेयर का उदाहरण है?", options: ["सिस्टम सॉफ्टवेयर", "एप्लीकेशन सॉफ्टवेयर", "ऑपरेटिंग सिस्टम", "यूटिलिटी सॉफ्टवेयर"], correct: 1 },
-            { id: 6, tag: "ICT", question: "वाई-फाई (Wi-Fi) का पूरा नाम क्या है?", options: ["Wireless Fidelity", "Wireless Field", "Wired Fidelity", "Wireless Finder"], correct: 0 }
+            // --- सामान्य ज्ञान (GS) के 30 प्रश्न (इकाई 1, 2, 3 आधारित) ---
+            { id: 1, tag: "GS-इकाई1", question: "राज्य, राष्ट्रीय एवं अंतरराष्ट्रीय महत्व की समसामयिक घटनाओं के संदर्भ में, हाल ही में चर्चा में रहे 'प्रमुख व्यक्तित्व' से संबंधित प्रश्न: भारत की पहली महिला आदिवासी राष्ट्रपति कौन बनी हैं?", options: ["द्रौपदी मुर्मू", "प्रतिभा पाटिल", "सुमित्रा महाजन", "मृणाल पाटिल"], correct: 0, explanation: "द्रौपदी मुर्मू भारत की पहली आदिवासी और कुल दूसरी महिला राष्ट्रपति हैं।" },
+            { id: 2, tag: "GS-इकाई1", question: "अंतरराष्ट्रीय खेल आयोजनों में भारत की स्थिति के अनुसार, ओलंपिक खेलों में व्यक्तिगत स्वर्ण पदक जीतने वाले पहले भारतीय निशानेबाज कौन हैं?", options: ["अभिनव बिंद्रा", "राज्यवर्धन सिंह राठौड़", "नीरज चोपड़ा", "गगन नारंग"], correct: 0, explanation: "अभिनव बिंद्रा ने बीजिंग ओलंपिक (2008) में पुरुषों की 10 मीटर एयर राइफल स्पर्धा में स्वर्ण पदक जीता था।" },
+            { id: 3, tag: "GS-इकाई2", question: "भारतीय राष्ट्रीय आंदोलन के दौरान 'स्वराज मेरा जन्मसिद्ध अधिकार है और मैं इसे लेकर रहूँगा' का नारा किसने दिया था?", options: ["महात्मा गांधी", "बाल गंगाधर तिलक", "सुभाष चंद्र बोस", "लाला लाजपत राय"], correct: 1, explanation: "यह प्रसिद्ध नारा बाल गंगाधर तिलक द्वारा दिया गया था।" },
+            { id: 4, tag: "GS-इकाई2", question: "भारतीय संविधान के किस अनुच्छेद के अंतर्गत 'अस्पृश्यता का अंत' (Abolition of Untouchability) किया गया है?", options: ["अनुच्छेद 16", "अनुच्छेद 17", "अनुच्छेद 18", "अनुच्छेद 19"], correct: 1, explanation: "संविधान के अनुच्छेद 17 के तहत अस्पृश्यता का उन्मूलन किया गया है और इसका किसी भी रूप में आचरण वर्जित है।" },
+            { id: 5, tag: "GS-इकाई2", question: "भारतीय अर्थव्यवस्था में 'हरित क्रांति' (Green Revolution) के जनक के रूप में किसे जाना जाता है?", options: ["वर्गीज कुरियन", "एम. एस. स्वामीनाथन", "सैम पित्रोदा", "Norman Borlaug"], correct: 1, explanation: "भारत में हरित क्रांति के जनक डॉ. एम. एस. स्वामीनाथन माने जाते हैं (वैश्विक स्तर पर नॉर्मन बोरलोग हैं)।" },
+            { id: 6, tag: "GS-इकाई2", question: "भारत का भौगोलिक क्षेत्रफल विश्व के कुल स्थलीय क्षेत्रफल का लगभग कितना प्रतिशत है?", options: ["2.4%", "3.2%", "4.2%", "2.8%"], correct: 0, explanation: "भारत का क्षेत्रफल 32,87,263 वर्ग किमी है, जो विश्व के कुल क्षेत्रफल का लगभग 2.4% है।" },
+            { id: 7, tag: "GS-इकाई3", question: "मानव शरीर में विटामिन 'डी' की कमी से बच्चों में कौन-सा रोग उत्पन्न होता है?", options: ["स्कर्वी", "रिकेट्स", "बेरी-बेरी", "रतौंधी"], correct: 1, explanation: "विटामिन डी की कमी से बच्चों में रिकेट्स (सूखा रोग) और वयस्कों में ऑस्टियोमलेशिया होता है।" },
+            { id: 8, tag: "GS-इकाई3", question: "कंप्यूटर और इंटरनेट शब्दावली में 'WWW' का पूर्ण रूप (Full Form) क्या है?", options: ["World Wide Web", "World Wide Wrestling", "Web Wide World", "Wide World Web"], correct: 0, explanation: "WWW का अर्थ वर्ल्ड वाइड वेब (World Wide Web) है, जिसके आविष्कारक टिम बर्नर्स-ली हैं।" },
+            { id: 9, tag: "GS-इकाई3", question: "ICT (सूचना और संचार प्रौद्योगिकी) के अनुप्रयोग के तहत 'स्मार्ट क्लासरूम' में किसका उपयोग मुख्य रूप से किया जाता है?", options: ["केवल चाक और ब्लैकबोर्ड", "डिजिटल प्रोजेक्टर, स्मार्ट बोर्ड और इंटरनेट", "केवल पारंपरिक पुस्तकें", "केवल रेडियो"], correct: 1, explanation: "शैक्षणिक प्रौद्योगिकी में ICT के प्रयोग से स्मार्ट बोर्ड, प्रोजेक्टर और ऑनलाइन ई-कंटेंट का उपयोग होता है।" },
+            { id: 10, tag: "GS-इकाई2", question: "भारतीय संविधान की कौन-सी अनुसूची 'भाषाओं' से संबंधित है?", options: ["सातवीं अनुसूची", "आठवीं अनुसूची", "नौवीं अनुसूची", "दसवीं अनुसूची"], correct: 1, explanation: "भारतीय संविधान की आठवीं अनुसूची में 22 आधिकारिक भाषाओं का उल्लेख किया गया है।" },
+            { id: 11, tag: "GS-इकाई3", question: "पर्यावरण संरक्षण के लिए प्रसिद्ध 'चिपको आंदोलन' का संबंध मुख्य रूप से किस राज्य से था?", options: ["मध्य प्रदेश", "उत्तराखंड (तत्कालीन उत्तर प्रदेश)", "कर्नाटक", "Kerala"], correct: 1, explanation: "चिपको आंदोलन की शुरुआत उत्तराखंड के चमोली जिले से सुंदरलाल बहुगुणा और गौरा देवी के नेतृत्व में हुई थी।" },
+            { id: 12, tag: "GS-इकाई1", question: "वर्तमान में नीति आयोग (NITI Aayog) के अध्यक्ष कौन होते हैं?", options: ["भारत के राष्ट्रपति", "भारत के प्रधानमंत्री", "वित्त मंत्री", "RBI गवर्नर"], correct: 1, explanation: "नीति आयोग के पदेन अध्यक्ष देश के प्रधानमंत्री होते हैं।" },
+            { id: 13, tag: "GS-इकाई2", question: "भारतीय अर्थव्यवस्था किस प्रकार की अर्थव्यवस्था का उदाहरण है?", options: ["पूंजीवादी अर्थव्यवस्था", "समाजवादी अर्थव्यवस्था", "मिश्रित अर्थव्यवस्था", "साम्यवादी अर्थव्यवस्था"], correct: 2, explanation: "भारतीय अर्थव्यवस्था एक मिश्रित अर्थव्यवस्था (Mixed Economy) है जहाँ सार्वजनिक और निजी क्षेत्र दोनों सह-अस्तित्व में हैं।" },
+            { id: 14, tag: "GS-इकाई2", question: "भारत की जनगणना 2011 के अनुसार सर्वाधिक जनसंख्या घनत्व वाला राज्य कौन-सा है?", options: ["उत्तर प्रदेश", "बिहार", "पश्चिम बंगाल", "केरल"], correct: 1, explanation: "जनगणना 2011 के अनुसार बिहार भारत का सर्वाधिक जनसंख्या घनत्व (1106 व्यक्ति/वर्ग किमी) वाला राज्य है।" },
+            { id: 15, tag: "GS-इकाई3", question: "मानव शरीर की सबसे बड़ी ग्रंथि (Gland) कौन-सी है?", options: ["अग्न्याशय (Pancreas)", "यकृत (Liver)", "थायराइड (Thyroid)", "पीयूष ग्रंथि (Pituitary)"], correct: 1, explanation: "यकृत (Liver) मानव शरीर की सबसे बड़ी बहिस्रावी ग्रंथि है।" },
+            { id: 16, tag: "GS-इकाई3", question: "शैक्षणिक प्रौद्योगिकी (Educational Technology) में 'MOOCs' का पूर्ण रूप क्या है?", options: ["Massive Open Online Courses", "Mobile Open Online Classes", "Multiple Online Open Content", "Massive Offline Open Courses"], correct: 0, explanation: "MOOCs का अर्थ 'मैसिव ओपन ऑनलाइन कोर्सेज' है जो उच्च शिक्षा में डिजिटल लर्निंग का प्रमुख माध्यम है।" },
+            { id: 17, tag: "GS-इकाई1", question: "अंतरराष्ट्रीय योग दिवस प्रतिवर्ष किस तिथि को मनाया जाता है?", options: ["21 जून", "5 जून", "22 अप्रैल", "11 जुलाई"], correct: 0, explanation: "प्रतिवर्ष 21 जून को अंतरराष्ट्रीय योग दिवस मनाया जाता है।" },
+            { id: 18, tag: "GS-इकाई2", question: "भारतीय राष्ट्रीय कांग्रेस की स्थापना किस वर्ष हुई थी?", options: ["1882", "1885", "1905", "1919"], correct: 1, explanation: "भारतीय राष्ट्रीय कांग्रेस की स्थापना 28 दिसंबर 1885 को ए.ओ. ह्यूम द्वारा बंबई में की गई थी।" },
+            { id: 19, tag: "GS-इकाई2", question: "भारतीय संसद के ऊपरी सदन (Upper House) को किस नाम से जाना जाता है?", options: ["लोकसभा", "राज्यसभा", "विधानसभा", "मंत्रिमंडल"], correct: 1, explanation: "संसद के उच्च सदन को राज्यसभा तथा निचले सदन को लोकसभा कहा जाता है।" },
+            { id: 20, tag: "GS-इकाई3", question: "पौधों में प्रकाश संश्लेषण (Photosynthesis) के दौरान कौन-सी गैस मुक्त होती है?", options: ["कार्बन डाइऑक्साइड", "ऑक्सीजन", "नाइट्रोजन", "हाइड्रोजन"], correct: 1, explanation: "प्रकाश संश्लेषण में पौधे कार्बन डाइऑक्साइड लेते हैं और ऑक्सीजन गैस मुक्त करते हैं।" },
+            { id: 21, tag: "GS-इकाई3", question: "इंटरनेट पर सुरक्षित डेटा ट्रांसफर के लिए प्रयुक्त होने वाले प्रोटोकॉल 'HTTPS' में 'S' का क्या अर्थ है?", options: ["Secure", "System", "Simple", "Server"], correct: 0, explanation: "HTTPS में 'S' का अर्थ 'Secure' (सुरक्षित) होता है।" },
+            { id: 22, tag: "GS-इकाई1", question: "क्षेत्रफल की दृष्टि से भारत का विश्व में कौन-सा स्थान है?", options: ["दूसरा", "पाँचवा", "सातवाँ", "दसवाँ"], correct: 2, explanation: "क्षेत्रफल के आधार पर रूस, कनाडा, चीन, अमेरिका, ब्राजील और ऑस्ट्रेलिया के बाद भारत का विश्व में सातवाँ स्थान है।" },
+            { id: 23, tag: "GS-इकाई2", question: "भारतीय संविधान में 'मौलिक अधिकार' (Fundamental Rights) किस देश के संविधान से लिए गए हैं?", options: ["ब्रिटेन", "संयुक्त राज्य अमेरिका (USA)", "आयरलैंड", "सोवियत संघ (USSR)"], correct: 1, explanation: "भारतीय संविधान के भाग-III में वर्णित मौलिक अधिकार अमेरिकी संविधान से प्रेरित हैं।" },
+            { id: 24, tag: "GS-इकाई2", question: "भारत में पंचायती राज व्यवस्था का शुभारंभ सबसे पहले किस राज्य में हुआ था?", options: ["उत्तर प्रदेश", "राजस्थान (नागौर)", "आंध्र प्रदेश", "गुजरात"], correct: 1, explanation: "2 अक्टूबर 1959 को राजस्थान के नागौर जिले में सबसे पहले पंचायती राज व्यवस्था लागू की गई थी।" },
+            { id: 25, tag: "GS-इकाई3", question: "एंजाइम मूल रूप से क्या होते हैं?", options: ["कार्बोहाइड्रेट", "प्रोटीन", "लिपिड", "विटामिन"], correct: 1, explanation: "सभी एंजाइम रासायनिक रूप से प्रोटीन होते हैं जो जैविक उत्प्रेरक (Catalyst) का कार्य करते हैं।" },
+            { id: 26, tag: "GS-इकाई3", question: "ई-गवर्नेंस (E-Governance) और ICT अनुप्रयोगों के संदर्भ में 'UMANG' ऐप का मुख्य उद्देश्य क्या है?", options: ["केवल मौसम की जानकारी देना", "नागरिकों को भारत में मोबाइल के माध्यम से सरकारी सेवाएं प्रदान करना", "केवल ऑनलाइन गेमिंग", "बैंक लोन देना"], correct: 1, explanation: "UMANG ऐप नागरिकों को केंद्र और राज्य सरकार की विभिन्न ई-गवर्नेंस सेवाएं एक ही प्लेटफॉर्म पर उपलब्ध कराता है।" },
+            { id: 27, tag: "GS-इकाई1", question: "वर्ष 2024 का पुरुष T20 विश्व कप क्रिकेट टूर्नामेंट किस देश ने जीता था?", options: ["ऑस्ट्रेलिया", "भारत", "इंग्लैंड", "दक्षिण अफ्रीका"], correct: 1, explanation: "भारत ने फाइनल में दक्षिण अफ्रीका को हराकर 2024 का T20 विश्व कप जीता था।" },
+            { id: 28, tag: "GS-इकाई2", question: "भारतीय अर्थव्यवस्था का प्राथमिक क्षेत्र (Primary Sector) मुख्य रूप से किससे संबंधित है?", options: ["विनिर्माण (Manufacturing)", "कृषि एवं संबद्ध गतिविधियाँ", "बैंकिंग एवं बीमा", "सूचना प्रौद्योगिकी"], correct: 1, explanation: "कृषि, वानिकी, मत्स्य पालन और खनन प्राथमिक क्षेत्र के अंतर्गत आते हैं।" },
+            { id: 29, tag: "GS-इकाई3", question: "पारिस्थितिकी तंत्र (Ecosystem) शब्द का सबसे पहले प्रयोग किसने किया था?", options: ["ए.जी. टांसले (A.G. Tansley)", "अर्नस्ट हेकेल", "रिफ़ेल", "चार्ल्स डार्विन"], correct: 0, explanation: "पारिस्थितिकी तंत्र (Ecosystem) शब्द का सर्वप्रथम प्रयोग ए.जी. टांसले द्वारा 1935 में किया गया था।" },
+            { id: 30, tag: "GS-इकाई3", question: "विटामिन 'सी' का रासायनिक नाम निम्नलिखित में से क्या है?", options: ["रेटीवॉल", "थायमिन", "एस्कॉर्बिक एसिड", "टोकोफेरोल"], correct: 2, explanation: "विटामिन सी का रासायनिक नाम एस्कॉर्बिक एसिड (Ascorbic Acid) है।" },
+
+            // --- गृह विज्ञान (Home Science) के 90 प्रश्न (आपके द्वारा दिए गए सेट से) ---
+            { id: 31, tag: "NCERT", question: "शिशु के लिए जन्म के बाद प्रारंभिक अवधि में सर्वोत्तम एवं प्राकृतिक आहार कौन-सा है?", options: ["गाय का दूध", "माँ का दूध", "फलों का रस", "अनाज का मांड"], correct: 1, explanation: "माँ का दूध शिशु के लिए आदर्श प्राकृतिक आहार है। इसमें ऊर्जा, पोषक तत्व तथा प्रतिरक्षात्मक घटक उपयुक्त मात्रा में पाए जाते हैं।" },
+            { id: 32, tag: "NCERT", question: "स्तनपान के संदर्भ में 'कोलोस्ट्रम' (Colostrum) क्या है?", options: ["स्तनपान समाप्त होने के बाद बनने वाला दूध", "प्रसव के बाद प्रारंभ में निकलने वाला पीला गाढ़ा दूध", "गाय के दूध से बना शिशु आहार", "फॉर्मूला दूध का एक प्रकार"], correct: 1, explanation: "कोलोस्ट्रम प्रसव के बाद शुरुआती दिनों में निकलने वाला पीला एवं गाढ़ा दूध है। इसमें प्रतिरक्षात्मक घटक, विशेषकर IgA, पर्याप्त मात्रा में पाए जाते हैं।" },
+            { id: 33, tag: "NCERT", question: "कोलोस्ट्रम का शिशु के लिए प्रमुख महत्व क्या है?", options: ["यह केवल ऊर्जा प्रदान करता है", "यह शिशु को संक्रमणों से सुरक्षा देने में सहायता करता है", "यह शिशु में दाँतों का निर्माण करता है", "यह केवल शरीर में वसा बढ़ाता है"], correct: 1, explanation: "कोलोस्ट्रम में प्रतिरक्षात्मक पदार्थ होते हैं, इसलिए यह नवजात को संक्रमणों से सुरक्षा प्रदान करने में महत्वपूर्ण भूमिका निभाता है।" },
+            { id: 34, tag: "NCERT", question: "विशेष स्तनपान (Exclusive Breastfeeding) की अनुशंसित अवधि कितनी है?", options: ["3 महीने", "4 महीने", "6 महीने", "12 महीने"], correct: 2, explanation: "WHO तथा ICMR-NIN की पोषण संबंधी अनुशंसाओं के अनुरूप शिशु को लगभग पहले 6 महीनों तक केवल स्तनपान कराने की सलाह दी जाती है।" },
+            { id: 35, tag: "NCERT", question: "पूरक आहार (Complementary Feeding) सामान्यतः किस आयु के बाद प्रारंभ किया जाना चाहिए?", options: ["2 महीने", "4 महीने", "6 महीने", "12 महीने"], correct: 2, explanation: "लगभग 6 महीने की आयु पर केवल स्तनपान शिशु की बढ़ती पोषण आवश्यकताओं को पूरा करने के लिए पर्याप्त नहीं रहता। इसलिए उचित पूरक आहार प्रारंभ किया जाता है।" },
+            { id: 36, tag: "", question: "पूरक आहार प्रारंभ करने के बाद स्तनपान के संबंध में सही कथन कौन-सा है?", options: ["स्तनपान तुरंत बंद कर देना चाहिए", "केवल गाय का दूध देना चाहिए", "पूरक आहार के साथ स्तनपान जारी रखना चाहिए", "स्तनपान केवल रात में करना चाहिए"], correct: 2, explanation: "पूरक आहार शुरू होने का अर्थ स्तनपान बंद करना नहीं है। स्तनपान जारी रखते हुए धीरे-धीरे विविध पूरक आहार दिया जाता है।" },
+            { id: 37, tag: "NCERT", question: "मानव दूध में निम्न में से किस प्रोटीन की प्रधानता होती है?", options: ["केसीन", "व्हे प्रोटीन", "ग्लूटेन", "कोलेजन"], correct: 1, explanation: "मानव दूध में Whey protein का अनुपात अधिक होता है, जिससे यह शिशु के लिए अपेक्षाकृत आसानी से पचने योग्य होता है।" },
+            { id: 38, tag: "", question: "मानव दूध की तुलना में गाय के दूध की कौन-सी विशेषता शिशु के लिए एक महत्वपूर्ण अंतर है?", options: ["गाय के दूध में प्रोटीन और खनिजों की मात्रा अधिक होती है", "गाय के दूध में पानी नहीं होता", "गाय के दूध में कोई प्रोटीन नहीं होता", "गाय के दूध में लैक्टोज नहीं होता"], correct: 0, explanation: "गाय के दूध में प्रोटीन और खनिजों की सांद्रता मानव दूध की तुलना में अधिक होती है। यही कारण है कि छोटे शिशु के लिए यह मानव दूध का सीधा विकल्प नहीं माना जाता।" },
+            { id: 39, tag: "", question: "मानव दूध में पाए जाने वाले Lactose का शिशु के लिए एक महत्वपूर्ण लाभ क्या है?", options: ["यह केवल स्वाद बढ़ाता है", "यह ऊर्जा देता है और कैल्शियम के अवशोषण में सहायता करता है", "यह प्रोटीन का स्थान लेता है", "यह शरीर में आयरन को नष्ट करता है"], correct: 1, explanation: "लैक्टोज शिशु को ऊर्जा प्रदान करता है तथा कैल्शियम के अवशोषण में सहायक माना जाता है।" },
+            { id: 40, tag: "", question: "मानव दूध में प्रमुख प्रतिरक्षात्मक इम्यूनोग्लोबुलिन कौन-सा है?", options: ["IgA", "IgE", "IgD", "IgG"], correct: 0, explanation: "मानव दूध, विशेषकर कोलोस्ट्रम, में Secretory IgA महत्वपूर्ण प्रतिरक्षात्मक भूमिका निभाता है और शिशु की श्लेष्म झिल्लियों की रक्षा में सहायता करता है।" },
+            { id: 41, tag: "NCERT", question: "शिशु को पूरक आहार देते समय सबसे उपयुक्त भोजन की विशेषता क्या होनी चाहिए?", options: ["बहुत पतला और पानी जैसा", "ऊर्जा एवं पोषक तत्वों से पर्याप्त तथा उपयुक्त गाढ़ापन वाला", "केवल मीठा", "केवल तरल"], correct: 1, explanation: "पूरक आहार ऊर्जा और पोषक तत्वों से पर्याप्त होना चाहिए तथा उसकी consistency ऐसी होनी चाहिए कि शिशु उसे आसानी से ग्रहण कर सके।" },
+            { id: 42, tag: "", question: "6–9 माह के शिशु के लिए पूरक आहार की consistency के संदर्भ में कौन-सा विकल्प अधिक उपयुक्त है?", options: ["केवल पानी", "गाढ़ा, मसला हुआ एवं अर्ध-ठोस भोजन", "कठोर साबुत खाद्य पदार्थ", "केवल फलों का रस"], correct: 1, explanation: "इस अवस्था में गाढ़ा, मसला हुआ तथा अर्ध-ठोस भोजन शिशु की feeding skills के विकास तथा पर्याप्त पोषण के लिए उपयुक्त होता है।" },
+            { id: 43, tag: "", question: "शिशु के पूरक आहार को बहुत अधिक पानी से पतला करने का प्रमुख नुकसान क्या है?", options: ["पोषक तत्वों का घनत्व कम हो जाता है", "प्रोटीन की मात्रा बढ़ जाती है", "ऊर्जा घनत्व बढ़ जाता है", "भोजन अधिक पौष्टिक हो जाता है"], correct: 0, explanation: "बहुत अधिक पानी मिलाने से भोजन का nutrient density कम हो जाता है। शिशु की छोटी पेट क्षमता को देखते हुए कम मात्रा में अधिक पोषक भोजन देना आवश्यक है।" },
+            { id: 44, tag: "", question: "पूरक आहार में ऊर्जा घनत्व बढ़ाने के लिए निम्न में से कौन-सा उपाय अधिक उपयुक्त है?", options: ["भोजन को अत्यधिक पानी से पतला करना", "उचित मात्रा में तेल/घी मिलाना", "केवल पानी मिलाना", "भोजन को छानकर केवल पानी देना"], correct: 1, explanation: "उचित मात्रा में तेल या घी मिलाने से भोजन की ऊर्जा घनत्व बढ़ सकती है, जिससे कम मात्रा में अधिक ऊर्जा प्राप्त होती है।" },
+            { id: 45, tag: "", question: "एमाइलेज-रिच फूड (ARF) का प्रयोग शिशु के पूरक आहार में मुख्यतः किस उद्देश्य से किया जाता है?", options: ["भोजन की मात्रा कम करने के लिए", "गाढ़े भोजन की viscosity कम करके ऊर्जा एवं पोषक घनत्व बढ़ाने में सहायता के लिए", "भोजन को अधिक मीठा बनाने के लिए", "प्रोटीन को पूरी तरह हटाने के लिए"], correct: 1, explanation: "अंकुरित/माल्टेड अनाज से प्राप्त amylase स्टार्च को तोड़ने में मदद करता है। इससे भोजन कम गाढ़ा रखते हुए अधिक nutrient-dense बनाया जा सकता है।" },
+            { id: 46, tag: "NCERT", question: "शिशु के पूरक आहार में विविधता बढ़ाने का प्रमुख उद्देश्य क्या है?", options: ["केवल भोजन का रंग बदलना", "विभिन्न पोषक तत्वों की आवश्यकताओं को पूरा करना", "भोजन की लागत बढ़ाना", "शिशु को केवल मीठा भोजन देना"], correct: 1, explanation: "विभिन्न खाद्य समूहों को शामिल करने से प्रोटीन, ऊर्जा, विटामिन, खनिज तथा अन्य आवश्यक पोषक तत्वों की पूर्ति बेहतर होती है।" },
+            { id: 47, tag: "", question: "शिशु के लिए अनाज और दाल के संयोजन का प्रमुख पोषणात्मक लाभ क्या है?", options: ["प्रोटीन की गुणवत्ता में सुधार", "सभी विटामिन समाप्त करना", "ऊर्जा को शून्य करना", "केवल स्वाद बढ़ाना"], correct: 0, explanation: "अनाज और दालों के amino acid profiles एक-दूसरे को पूरक करते हैं। इसलिए उनका संयोजन प्रोटीन की गुणवत्ता सुधारने में सहायक होता है।" },
+            { id: 48, tag: "", question: "शिशु के आहार में Vitamin C युक्त खाद्य पदार्थ शामिल करने का एक प्रमुख लाभ क्या है?", options: ["Non-heme iron के absorption में सहायता", "कैल्शियम को पूरी तरह नष्ट करना", "प्रोटीन का पाचन रोकना", "वसा का अवशोषण रोकना"], correct: 0, explanation: "Vitamin C पौधों से प्राप्त non-heme iron के absorption को बढ़ाने में सहायता करता है। इसलिए आयरन-युक्त पूरक आहार के साथ Vitamin C युक्त खाद्य उपयोगी हैं।" },
+            { id: 49, tag: "NCERT", question: "शिशु के आहार में अंकुरित अनाजों का उपयोग करने से सामान्यतः किस प्रकार के पोषक तत्वों की उपलब्धता में सुधार हो सकता है?", options: ["कुछ B-विटामिन तथा Vitamin C", "केवल Vitamin D", "केवल Vitamin K", "केवल saturated fat"], correct: 0, explanation: "अंकुरण से कुछ B-विटामिनों की उपलब्धता बढ़ सकती है और अंकुरित अनाज/दालों में Vitamin C भी विकसित हो सकता है।" },
+            { id: 50, tag: "", question: "शिशु को पूरक आहार देते समय 'responsive feeding' का अर्थ क्या है?", options: ["शिशु को जबरदस्ती भोजन कराना", "शिशु के भूख और तृप्ति के संकेतों पर ध्यान देकर भोजन कराना", "हर भोजन में केवल दूध देना", "शिशु को अकेले भोजन करने के लिए छोड़ देना"], correct: 1, explanation: "Responsive feeding में caregiver शिशु के hunger और satiety cues को पहचानकर धैर्यपूर्वक भोजन कराता है और जबरदस्ती नहीं करता।" },
+            { id: 51, tag: "", question: "शिशु के आहार में अत्यधिक मीठे खाद्य पदार्थ देने से बचने का एक प्रमुख कारण क्या है?", options: ["यह विविध भोजन की आदत को प्रभावित कर सकता है", "इससे प्रोटीन तुरंत नष्ट हो जाता है", "इससे पानी की आवश्यकता समाप्त हो जाती है", "इससे सभी विटामिन बढ़ जाते हैं"], correct: 0, explanation: "अत्यधिक मीठे खाद्य पदार्थ nutrient-poor हो सकते हैं और कम उम्र में अत्यधिक मीठे स्वाद की आदत विकसित कर सकते हैं।" },
+            { id: 52, tag: "", question: "शिशु के पूरक आहार में निम्न में से किस खाद्य समूह को आयरन के अच्छे स्रोत के रूप में प्राथमिकता दी जा सकती है?", options: ["दालें एवं आयरन-युक्त खाद्य पदार्थ", "केवल चीनी", "केवल मक्खन", "केवल फलों का रस"], correct: 0, explanation: "दालें और अन्य आयरन-युक्त खाद्य पदार्थ शिशु के आहार में आयरन प्रदान करने में महत्वपूर्ण भूमिका निभाते हैं।" },
+            { id: 53, tag: "", question: "स्तनपान कराने वाली माता द्वारा अत्यधिक कैफीन सेवन का संभावित प्रभाव शिशु में क्या हो सकता है?", options: ["चिड़चिड़ापन या नींद में बाधा", "तुरंत हड्डियों का निर्माण", "दृष्टि का स्थायी सुधार", "आयरन की आवश्यकता समाप्त होना"], correct: 0, explanation: "कैफीन का कुछ भाग breast milk में पहुँच सकता है और संवेदनशील शिशुओं में irritability या sleep disturbance से संबंधित हो सकता है।" },
+            { id: 54, tag: "", question: "स्तनपान कराने वाली माता के आहार के संबंध में सबसे उपयुक्त सिद्धांत क्या है?", options: ["केवल दूध और फल लेना", "विविध एवं संतुलित आहार लेना", "सभी वसा पूरी तरह बंद करना", "केवल प्रोटीन लेना"], correct: 1, explanation: "स्तनपान कराने वाली माता को पर्याप्त ऊर्जा एवं पोषक तत्वों वाला विविध और संतुलित आहार लेना चाहिए।" },
+            { id: 55, tag: "NCERT", question: "शिशु के लिए माँ के दूध का एक प्रमुख प्रतिरक्षात्मक घटक कौन-सा है?", options: ["Secretory IgA", "केवल Hemoglobin", "केवल Insulin", "केवल Albumin"], correct: 0, explanation: "Secretory IgA breast milk का प्रमुख immunological component है और शिशु की mucosal surfaces की सुरक्षा में सहायता करता है।" },
+            { id: 56, tag: "", question: "माँ के दूध में पाए जाने वाले Bifidus factor का संबंध मुख्यतः किससे है?", options: ["लाभकारी Lactobacillus/Bifidobacteria के विकास को बढ़ावा देना", "वसा को पूरी तरह समाप्त करना", "कैल्शियम को नष्ट करना", "प्रोटीन को अवशोषित होने से रोकना"], correct: 0, explanation: "Bifidus factor शिशु की आंत में लाभकारी सूक्ष्मजीवों की वृद्धि को बढ़ावा देने वाले घटकों से संबंधित है।" },
+            { id: 57, tag: "", question: "Preterm शिशुओं के पोषण नियोजन में विशेष सावधानी क्यों आवश्यक होती है?", options: ["उनकी पोषण आवश्यकताएँ और feeding क्षमता अलग हो सकती हैं", "उन्हें कभी ऊर्जा की आवश्यकता नहीं होती", "उन्हें केवल पानी देना चाहिए", "वे सभी खाद्य पदार्थ आसानी से पचा लेते हैं"], correct: 0, explanation: "Preterm शिशुओं में growth, nutrient requirements तथा feeding maturity सामान्य term infants से भिन्न हो सकती है।" },
+            { id: 58, tag: "", question: "Preterm शिशुओं में Vitamin E की कमी से किस स्थिति का जोखिम बढ़ सकता है?", options: ["Hemolytic anemia", "Scurvy", "Rickets", "Goitre"], correct: 0, explanation: "विशेषकर preterm infants में Vitamin E deficiency oxidative damage और hemolytic anemia के जोखिम से जुड़ी हो सकती है।" },
+            { id: 59, tag: "", question: "नवजात शिशु में Vitamin K की कमी को देखते हुए Vitamin K देने का मुख्य उद्देश्य क्या है?", options: ["रक्तस्राव संबंधी समस्या की रोकथाम", "दाँतों की संख्या बढ़ाना", "ऊर्जा की आवश्यकता समाप्त करना", "भूख रोकना"], correct: 0, explanation: "नवजातों में Vitamin K की कम उपलब्धता के कारण bleeding risk हो सकता है। इसलिए जन्म के बाद Vitamin K prophylaxis दी जाती है।" },
+            { id: 60, tag: "", question: "शिशु में Marasmus मुख्यतः किस प्रकार के पोषण अभाव से संबंधित है?", options: ["ऊर्जा और प्रोटीन दोनों की गंभीर कमी", "केवल Vitamin C की कमी", "केवल आयोडीन की कमी", "केवल Vitamin K की कमी"], correct: 0, explanation: "Marasmus गंभीर protein-energy deficiency से संबंधित है, जिसमें ऊर्जा की कमी प्रमुख होती है और शरीर में wasting दिखाई देती है।" },
+            { id: 61, tag: "", question: "Kwashiorkor की तुलना में Marasmus में कौन-सा लक्षण अधिक विशिष्ट माना जाता है?", options: ["Severe wasting", "Edema", "Moon face", "Fatty liver"], correct: 0, explanation: "Marasmus में severe wasting और subcutaneous fat तथा muscle mass का स्पष्ट loss प्रमुख विशेषताएँ हैं।" },
+            { id: 62, tag: "NCERT", question: "शिशु एवं छोटे बच्चों के आहार नियोजन में 'न्यूट्रिएंट डेंसिटी' का क्या अर्थ है?", options: ["भोजन के प्रति इकाई मात्रा में उपलब्ध पोषक तत्वों की मात्रा", "भोजन में केवल पानी की मात्रा", "भोजन का केवल रंग", "भोजन की कीमत"], correct: 0, explanation: "Nutrient density से तात्पर्य भोजन की निश्चित मात्रा में उपलब्ध पोषक तत्वों की मात्रा से है।" },
+            { id: 63, tag: "", question: "शिशु की छोटी पेट क्षमता को ध्यान में रखते हुए आहार नियोजन में कौन-सा सिद्धांत अधिक उपयुक्त है?", options: ["कम पोषक और अधिक मात्रा वाला भोजन", "छोटी मात्रा में nutrient-dense भोजन", "केवल पानी", "दिनभर केवल फलों का रस"], correct: 1, explanation: "शिशु की पेट क्षमता सीमित होती है। इसलिए कम मात्रा में अधिक ऊर्जा एवं पोषक तत्व देने वाला भोजन अधिक उपयुक्त है।" },
+            { id: 64, tag: "NCERT", question: "शिशु के पूरक आहार में बार-बार केवल चावल का पतला मांड देने की मुख्य समस्या क्या हो सकती है?", options: ["ऊर्जा एवं पोषक तत्वों का घनत्व कम होना", "प्रोटीन की अत्यधिक मात्रा", "खनिजों की अत्यधिक मात्रा", "वसा की अत्यधिक मात्रा"], correct: 0, explanation: "बहुत पतले मांड में पानी की मात्रा अधिक होने से nutrient density कम हो जाती है।" },
+            { id: 65, tag: "", question: "शिशु के पूरक आहार में दाल, अनाज, सब्जी और थोड़ी मात्रा में वसा को मिलाकर देने का प्रमुख लाभ क्या है?", options: ["आहार को अधिक विविध और पोषक बनाना", "सभी पोषक तत्वों को हटाना", "केवल स्वाद कम करना", "भोजन की ऊर्जा समाप्त करना"], correct: 0, explanation: "विभिन्न खाद्य समूहों के संयोजन से भोजन में ऊर्जा, प्रोटीन, विटामिन, खनिज और आवश्यक fatty acids उपलब्ध हो सकते हैं।" },
+            { id: 66, tag: "", question: "शिशु के पूरक आहार में खाद्य पदार्थों की विविधता धीरे-धीरे बढ़ाने का एक महत्वपूर्ण कारण क्या है?", options: ["विभिन्न पोषक तत्वों की पूर्ति तथा feeding skills का विकास", "केवल भोजन का खर्च बढ़ाना", "शिशु को केवल मीठे स्वाद का आदी बनाना", "स्तनपान बंद करना"], correct: 0, explanation: "विविधता से nutrient adequacy बेहतर होती है और शिशु की feeding skills विकसित होती हैं।" },
+            { id: 67, tag: "", question: "शिशु के आहार में स्वच्छता का पालन न करने पर सबसे प्रमुख जोखिम क्या है?", options: ["Food-borne infection और diarrhea", "ऊँचाई तुरंत बढ़ना", "दाँत जल्दी निकलना", "आयरन की आवश्यकता समाप्त होना"], correct: 0, explanation: "शिशु संक्रमणों के प्रति संवेदनशील होते हैं। दूषित भोजन या पानी से diarrhea और infections का खतरा बढ़ सकता है।" },
+            { id: 68, tag: "", question: "शिशु के पूरक आहार की तैयारी में हाथ धोना और साफ बर्तनों का प्रयोग मुख्यतः किसका उदाहरण है?", options: ["Food hygiene", "Food fortification", "Food adulteration", "Food preservation"], correct: 0, explanation: "भोजन तैयार करने से पहले हाथ धोना और साफ उपकरणों का प्रयोग food hygiene के महत्वपूर्ण घटक हैं।" },
+            { id: 69, tag: "ICMR-NIN", question: "ICMR-NIN की पोषण संबंधी वर्तमान मार्गदर्शिकाओं के अनुसार 2 वर्ष से कम आयु के बच्चों के लिए added sugar के संबंध में कौन-सा कथन सही है?", options: ["Added sugar को नियमित रूप से अधिक मात्रा में देना चाहिए", "Added sugar से बचने की सलाह दी जाती है", "केवल चीनी से ऊर्जा पूरी करनी चाहिए", "Added sugar स्तनपान का विकल्प है"], correct: 1, explanation: "ICMR-NIN की Dietary Guidelines में 2 वर्ष से कम आयु के बच्चों के लिए added sugar न देने की सलाह दी गई है।" },
+            { id: 70, tag: "", question: "निम्न में से कौन-सा कथन शिशु एवं छोटे बच्चे के आहार नियोजन के मूल सिद्धांतों को सबसे अच्छी तरह व्यक्त करता है?", options: ["6 माह तक केवल स्तनपान, फिर सुरक्षित एवं पोषक पूरक आहार के साथ स्तनपान जारी रखना", "6 माह के बाद स्तनपान पूरी तरह बंद कर देना", "6 माह से पहले ही पूरक आहार शुरू कर देना", "पूरक आहार में केवल तरल पदार्थ देना"], correct: 0, explanation: "WHO और ICMR-NIN के अनुसार 6 माह तक केवल स्तनपान और उसके बाद सुरक्षित पूरक आहार के साथ 2 वर्ष या अधिक समय तक स्तनपान जारी रखना चाहिए।" },
+            { id: 71, tag: "NCERT", question: "पाश्चुरीकरण की LTH (Low Temperature Holding) विधि में दूध को किस तापमान पर गर्म किया जाता है?", options: ["63°C पर 30 मिनट", "72°C पर 15 सेकंड", "100°C पर 5 मिनट", "135°C पर 2 सेकंड"], correct: 0, explanation: "LTH विधि में दूध को 63°C (145°F) पर 30 मिनट तक गर्म किया जाता है।" },
+            { id: 72, tag: "NCERT", question: "दूध में पाई जाने वाली मुख्य शर्करा कौन-सी है?", options: ["फ्रक्टोज", "लैक्टोज", "सुक्रोज", "माल्टोज"], correct: 1, explanation: "दूध में प्राकृतिक रूप से लैक्टोज नामक डिसैकराइड शर्करा पाई जाती है।" },
+            { id: 73, tag: "NCERT", question: "'पूर्ण तरल आहार' (Full Liquid Diet) के अंतर्गत निम्न में से किसे शामिल किया जा सकता है?", options: ["उबली हुई ठोस सब्जियाँ", "दूध, कस्टर्ड और पतला सूप", "दलिया और परांठा", "उबला अंडा"], correct: 1, explanation: "पूर्ण तरल आहार में दूध, कस्टर्ड, पतले सूप और मिल्कशेक आते हैं जो बिना चबाए लिए जा सकते हैं।" },
+            { id: 74, tag: "NCERT", question: "दूध को पाउडर में बदलने की प्रक्रिया (Drying) का मुख्य खाद्य संरक्षण सिद्धांत क्या है?", options: ["जल सक्रियता को कम करके सूक्ष्मजीवों की वृद्धि रोकना", "वसा की मात्रा बढ़ाना", "केवल रंग में सुधार करना", "मिठास बढ़ाना"], correct: 0, explanation: "सुखाने की प्रक्रिया से जल सक्रियता (Water activity) घट जाती है जिससे बैक्टीरिया पनप नहीं पाते।" },
+            { id: 75, tag: "NCERT", question: "दूध में वसा किस रूप में निलंबित रहती है?", options: ["ठोस कणों के रूप में", "पायस के रूप में", "कोलॉइडल घोल के रूप में", "वास्तविक विलयन के रूप में"], correct: 1, explanation: "दूध वसा और पानी का एक प्राकृतिक पायस (Emulsion) है।" },
+            { id: 76, tag: "NCERT", question: "दूध का सफेद रंग मुख्य रूप से किस प्रोटीन के कारण होता है?", options: ["एल्ब्यूमिन", "कैसीन", "ग्लोबुलिन", "केरातिन"], correct: 1, explanation: "दूध में मौजूद कैसीन प्रोटीन और कैल्शियम के कारण इसका रंग दूधिया सफेद होता है।" },
+            { id: 77, tag: "NCERT", question: "कॉफी बीन्स को भूनने (Roasting) की प्रक्रिया से उसमें कौन-सा विशिष्ट सुगंधित यौगिक विकसित होता है?", options: ["कैफीन", "कैफियोल", "टैनिन", "थियोब्रोमीन"], correct: 1, explanation: "भूनने के दौरान कैफियोल नामक वाष्पशील तेल बनता है जो कॉफी की महक पैदा करता है।" },
+            { id: 78, tag: "NCERT", question: "गाय के दूध का हल्का पीला रंग किस वर्णक की उपस्थिति के कारण होता है?", options: ["क्लोरोफिल", "कैरोटीन", "एंथोसायनिन", "लाइकोपीन"], correct: 1, explanation: "गाय के दूध में कैरोटीन पिगमेंट होने से उसका रंग हल्का पीला होता है।" },
+            { id: 79, tag: "NCERT", question: "खाद्य संरक्षण में खमीरीकरण की प्रक्रिया द्वारा मुख्यतः किसका उत्पादन होता है जो हानिकारक सूक्ष्मजीवों की वृद्धि को रोकता है?", options: ["लैक्टिक एसिड या अल्कोहल", "केवल ग्लूकोज", "नाइट्रिक एसिड", "सल्फर डाइऑक्साइड"], correct: 0, explanation: "खमीरीकरण से बने लैक्टिक एसिड या अल्कोहल पीएच घटाकर खाद्य पदार्थों को सुरक्षित रखते हैं।" },
+            { id: 80, tag: "NCERT", question: "भारत में खाद्य सुरक्षा और मानकों को विनियमित करने वाली संस्था FSSAI का पूर्ण रूप क्या है?", options: ["Food Safety and Standards Authority of India", "Food Security and Standards Association of India", "Federal Safety and Sanitation Agency of India", "Food Supply and Storage Authority of India"], correct: 0, explanation: "FSSAI का पूर्ण रूप फूड सेफ्टी एंड स्टैंडर्ड्स अथॉरिटी ऑफ इंडिया है।" },
+            { id: 81, tag: "NCERT", question: "'सॉफ्ट आहार' (Soft Diet) मुख्य रूप से किस प्रकार के रोगियों के लिए अनुशंसित किया जाता है?", options: ["जिन्हें पाचन, चबाने या निगलने में कठिनाई हो", "जो अत्यधिक शारीरिक श्रम करते हों", "जिन्हें केवल निर्जलीकरण हो", "जो पूर्णतः स्वस्थ हों"], correct: 0, explanation: "सॉफ्ट आहार आसानी से पचने वाला और चबाने में आसान होता है, जो कमजोर या बीमार व्यक्तियों को दिया जाता है।" },
+            { id: 82, tag: "NCERT", question: "भारतीय मानकों के अनुसार 'टोंड मिल्क' (Toned Milk) में वसा और S.N.F. की न्यूनतम मात्रा कितनी होनी चाहिए?", options: ["3.0% वसा और 8.5% S.N.F.", "1.5% वसा और 9.0% S.N.F.", "4.5% वसा और 8.5% S.N.F.", "6.0% वसा और 9.0% S.N.F."], correct: 0, explanation: "टोंड मिल्क में न्यूनतम 3.0% वसा और 8.5% एस.एन.एफ. होता है।" },
+            { id: 83, tag: "NCERT", question: "Ultra-High Temperature (UHT) पाश्चुरीकरण प्रक्रिया में दूध को किस तापमान पर गर्म किया जाता है?", options: ["135°C से 150°C पर 1 से 2 सेकंड के लिए", "100°C पर 30 मिनट के लिए", "72°C पर 15 मिनट के लिए", "60°C पर 1 घंटे के लिए"], correct: 0, explanation: "UHT विधि में दूध को अति उच्च तापमान पर कुछ सेकंड के लिए स्टरलाइज किया जाता है।" },
+            { id: 84, tag: "NCERT", question: "कोको और चॉकलेट में पाया जाने वाला मुख्य उत्तेजक पदार्थ कौन-सा है?", options: ["थियोब्रोमीन", "मॉर्फीन", "निकोटिन", "कोकीन"], correct: 0, explanation: "कोको बीन्स में थियोब्रोमीन नामक अल्कलॉइड पाया जाता है।" },
+            { id: 85, tag: "NCERT", question: "दूध में अम्ल मिलाने पर कैसीन प्रोटीन के अलग होकर जमने की प्रक्रिया क्या कहलाती है?", options: ["स्कंदन", "कैरमेलाइजेशन", "हाइड्रोजनीकरण", "वसा अवक्षेपण"], correct: 0, explanation: "अम्ल या रेनिन मिलने पर कैसीन स्कंदित (Coagulate) होकर फट जाती है।" },
+            { id: 86, tag: "NCERT", question: "बेकरी और मद्य निर्माण में प्रयुक्त होने वाला प्रमुख खमीर कौन-सा है?", options: ["Saccharomyces cerevisiae", "Penicillium notatum", "Rhizopus stolonifer", "Aspergillus niger"], correct: 0, explanation: "सैकरोमाइसीस सेरेविसी (यीस्ट) किण्वन के लिए उत्तरदायी है।" },
+            { id: 87, tag: "NCERT", question: "कृत्रिम दूध में तटस्थक (Neutralizers) के रूप में किसकी मिलावट की जाँच की जाती है?", options: ["कास्टिक सोडे या सोडियम कार्बोनेट की", "केवल नमक की", "साइट्रिक एसिड की", "चीनी की"], correct: 0, explanation: "दूध के अम्लीकरण को छिपाने के लिए न्यूट्रलाइजर्स जैसे कास्टिक सोडा मिलाया जाता है।" },
+            { id: 88, tag: "NCERT", question: "भारतीय मानकों के अनुसार मक्खन में दुग्ध वसा की न्यूनतम मात्रा कितनी होनी चाहिए?", options: ["80%", "50%", "30%", "65%"], correct: 0, explanation: "ब्यूरो ऑफ इंडियन स्टैंडर्ड्स के अनुसार मक्खन में कम से कम 80% वसा होनी चाहिए।" },
+            { id: 89, tag: "NCERT", question: "शल्य चिकित्सा (Surgery) या ऑपरेशन के तुरंत बाद रोगी को सबसे पहले किस प्रकार का आहार दिया जाता है?", options: ["स्पष्ट/शुद्ध तरल आहार", "कठोर एवं गरिष्ठ आहार", "सामान्य भोजन", "उच्च वसायुक्त आहार"], correct: 0, explanation: "ऑपरेशन के बाद पाचन तंत्र को आराम देने के लिए स्पष्ट तरल आहार दिया जाता है।" },
+            { id: 90, tag: "", question: "निम्न में से कौन-सा शुद्ध तरल आहार (Clear Liquid Diet) नहीं है?", options: ["फलों का रस", "नींबू पानी", "दाल का पानी", "चाय"], correct: 2, explanation: "दाल के पानी में प्रोटीन और स्टार्च के कण होते हैं, इसलिए यह पूर्ण तरल में आता है, स्पष्ट तरल में नहीं।" },
+            { id: 91, tag: "", question: "कौन-सा सॉफ्ट आहार नहीं है?", options: ["सूप", "खीर", "पुडिंग", "खिचड़ी"], correct: 0, explanation: "सूप तरल आहार की श्रेणी में आता है, सॉफ्ट आहार में खिचड़ी, दलिया आदि आते हैं।" },
+            { id: 92, tag: "", question: "कमेलिया नामक वृक्ष की पत्तियों को सुखाकर बनाई जाती है:", options: ["अजवाइन", "जीरा", "चाय", "मेथी"], correct: 2, explanation: "चाय कैमेलिया साइनेन्सिस पौधे की पत्तियों से प्राप्त होती है।" },
+            { id: 93, tag: "", question: "वह तरल जिसके घोल में पदार्थ होता है, किस रूप में जाना जाता है?", options: ["विलेय", "विलायक", "पारगम्यता", "अर्ध-पारगम्य"], correct: 1, explanation: "विलायक (Solvent) वह माध्यम है जिसमें विलेय पदार्थ घुलता है।" },
+            { id: 94, tag: "", question: "निम्न के उत्पादन में खमीरीकरण का प्रयोग होता है: (1) सॉस (2) वाइन (3) कोको पाउडर (4) मार्मलेड (5) चीज", options: ["1, 2, 4", "2, 3, 5", "1, 3, 5", "2, 4, 5"], correct: 1, explanation: "वाइन, कोको और चीज़ के निर्माण में किण्वन (Fermentation) की मुख्य भूमिका होती है।" },
+            { id: 95, tag: "me", question: "चाय में पाया जाता है:", options: ["थियोफाइलिन", "कैफीन", "टैनिक एसिड", "इनमें से सभी"], correct: 3, explanation: "चाय में कैफीन, टैनिक एसिड और थियोफाइलिन तीनों पाए जाते हैं।" },
+            { id: 96, tag: "", question: "दूध के उस अपमिश्रक का नाम क्या है जो कि इसमें आयोडीन घोल मिला कर निर्धारित किया जाता है?", options: ["चॉक पाउडर", "स्टार्च", "खनिज तेल", "पानी"], correct: 1, explanation: "दूध में स्टार्च की मिलावट का पता लगाने के लिए आयोडीन टेस्ट किया जाता है, जिससे रंग नीला हो जाता है।" },
+            { id: 97, tag: "", question: "आम तौर पर, सामान्य वायुमंडलीय स्थितियों में माँस, मछली और दूध उत्पादों का भंडारण कितना रखा जा सकता है?", options: ["1 से 2 दिन", "1 से 2 सप्ताह", "3 से 4 सप्ताह", "12 माह"], correct: 0, explanation: "शीतन के बिना ये बहुत जल्दी खराब होने वाले खाद्य पदार्थ हैं जिन्हें 1-2 दिन ही सुरक्षित रखा जा सकता है।" },
+            { id: 98, tag: "", question: "दही जमाने की अवधि में दूध को दही में परिवर्तित करता है:", options: ["ई. कोलाई", "लैक्टोबैसिलस", "राइजोबियम", "क्लोस्ट्रीडियम"], correct: 1, explanation: "लैक्टोबैसिलस बैक्टीरिया दूध के लैक्टोज को लैक्टिक एसिड में बदलते हैं।" },
+            { id: 99, tag: "", question: "दूध का पाश्चुरीकरण किस तापमान पर किया जाता है?", options: ["145°F", "135°F", "125°F", "115°F"], correct: 0, explanation: "LTH विधि में 145°F (63°C) तापमान का उपयोग होता है।" },
+            { id: 100, tag: "", question: "पाश्चुरीकृत दूध की क्षमता की जाँच की जाती है:", options: ["कॉलीफॉर्म टेस्ट", "आयोडीन टेस्ट", "नाइट्रिक एसिड टेस्ट", "फॉस्फेटेज टेस्ट"], correct: 3, explanation: "फॉस्फेटेज टेस्ट यह सुनिश्चित करता है कि पाश्चुरीकरण ठीक से हुआ है या नहीं।" },
+            { id: 101, tag: "", question: "दूध का एक एक्सचेंज (खाद्य विनिमय) ............ प्रोटीन उपलब्ध करता है।", options: ["4 g", "8 g", "10 g", "12 g"], correct: 1, explanation: "दूध के एक मानक एक्सचेंज से लगभग 8 ग्राम प्रोटीन प्राप्त होता है।" },
+            { id: 102, tag: "", question: "दूध में मिलावट की जाती है:", options: ["अजवाइन तेल की", "चॉक पाउडर की", "स्टार्च की", "टैल्कम पाउडर की"], correct: 2, explanation: "दूध गाढ़ा दिखाने के लिए स्टार्च या अरारोट मिलाया जाता है।" },
+            { id: 103, tag: "", question: "दूध पाश्चुरीकरण का HTST तरीका करा जाता है:", options: ["63°C पर 30 मिनट", "100°C पर 1 सेकंड", "89°C पर 10 सेकंड", "72°C पर 15 सेकंड"], correct: 3, explanation: "HTST विधि में दूध को 72°C पर 15 सेकंड के लिए गर्म किया जाता है।" },
+            { id: 104, tag: "", question: "दूध के पाउडर के उत्पादन में आने वाली प्रक्रियाओं का सही क्रम: (A) पाश्चुरीजेशन (B) इवैपोरेशन (C) मिलिंग (D) पैकिंग (E) क्लेरीफिकेशन (F) वसा अलग करना (G) रोलर-ड्राइंग", options: ["A, B, C, D, E, F, G", "E, F, A, B, G, C, D", "F, E, A, B, G, D, C", "E, A, F, B, G, C, D"], correct: 1, explanation: "सही क्रम में पहले दूध की सफाई और मानकीकरण (E, F) फिर पाश्चुरीकरण व सांद्रण (A, B) और अंत में सुखाने व पैकिंग की प्रक्रिया आती है।" },
+            { id: 105, tag: "PYQ", question: "चीज बनाने की प्रक्रिया को सही क्रम में लगाएँ: (1) दही जमाना (2) शेड़र (3) पाश्चुरीकरण (4) परिपक्वन (5) साँचे में डालना (6) पीसना और नमक लगाना", options: ["1, 2, 3, 4, 5, 6", "3, 1, 2, 6, 5, 4", "3, 2, 1, 5, 6, 4", "1, 3, 2, 5, 6, 4"], correct: 1, explanation: "चीज निर्माण में पहले पाश्चुरीकरण, फिर कर्डिंग, चेडरिंग, मिलिंग, मोल्डिंग और अंत में राइपनिंग (परिपक्वन) होता है।" },
+            { id: 106, tag: "PYQ", question: "............... को गरीब आदमी का दूध कहा जाता है।", options: ["रागी", "गेहूँ", "ज्वार", "बाजरा"], correct: 0, explanation: "रागी (मडुआ) में कैल्शियम और आयरन प्रचुर मात्रा में होने के कारण इसे गरीबों का दूध कहा जाता है।" },
+            { id: 17, tag: "PYQ", question: "जब दूध में यह डाला जाता है तो कैल्शियम में समृद्ध पनीर प्राप्त होता है:", options: ["एसिटिक एसिड", "साइट्रिक एसिड", "रेनिन", "लैक्टेज"], correct: 2, explanation: "रेनिन एंजाइम द्वारा स्कंदन कराने से कैल्शियम पनीर के अंदर सुरक्षित रहता है।" },
+            { id: 108, tag: "PYQ", question: "मानक दूध में S.N.F. की मात्रा निम्न होनी चाहिए:", options: ["8.5%", "7.2%", "6.5%", "5.2%"], correct: 0, explanation: "मानक दूध (Standardised Milk) में न्यूनतम 8.5% SNF होना आवश्यक है।" },
+            { id: 109, tag: "PYQ", question: "अभिकथन (A): दूध का पाश्चुरीकरण रोगाणु/जीवाणुओं को नष्ट करने के लिए किया जाता है। कारण (R): दूध में लैक्टिक एसिड की उपस्थिति के लिए इसका परीक्षण किया जाता है।", options: ["(A) और (R) दोनों सही हैं।", "(A) और (R) दोनों गलत हैं।", "(A) सत्य है, परन्तु (R) असत्य है।", "(A) असत्य है, परन्तु (R) सत्य है।"], correct: 2, explanation: "पाश्चुरीकरण रोगाणु मारने के लिए होता है, लेकिन लैक्टिक एसिड परीक्षण इसका कारण नहीं है।" },
+            { id: 110, tag: "PYQ", question: "दूध से पनीर बनाने की क्रिया में किस pH पर कैसीन अवक्षेपित होती है?", options: ["pH 6.5", "pH 4.6", "pH 7.5", "pH 3.0"], correct: 1, explanation: "कैसीन का आइसोइलेक्ट्रिक पॉइंट pH 4.6 होता है जिस पर वह अवक्षेपित हो जाती है।" },
+            { id: 111, tag: "PYQ", question: "दूध को पाश्चुरीकरण किया जाता है—", options: ["सूक्ष्म जीवाणुओं को मारने तथा लंबे समय तक संरक्षित रखने के लिए", "क्रीम निकालने के लिए", "गर्मी कम करने के लिए", "विटामिन बढ़ाने के लिए"], correct: 0, explanation: "इसका मुख्य उद्देश्य रोगजनक सूक्ष्मजीवों को नष्ट करना है।" },
+            { id: 112, tag: "PYQ", question: "निम्नलिखित में से कौन-सा युग्म सही सुमेलित है? स्तम्भ-I : (A) ठोस कण का द्रव में विलयन | (B) एक ठोस कण का दूसरे ठोस कण के साथ संयोजन --- स्तम्भ-II : (1) विलयन | (2) मिश्रधातु", options: ["(A)-(1), (B)-(2)", "(A)-(2), (B)-(1)", "दोनों गलत हैं", "दोनों में से कोई नहीं"], correct: 0, explanation: "ठोस का द्रव में विलयन 'विलयन' और ठोस का ठोस के साथ संयोजन 'मिश्रधातु' बनाता है।" },
+            { id: 113, tag: "PYQ", question: "काली चाय के उत्पादन की प्रक्रिया का सही क्रम कौन-सा है? I. मुरझाना II. बेलन फेरना III. खमीरीकरण/ऑक्सीकरण IV. सुखाना V. श्रेणीबद्ध करना VI. मिश्रित करना", options: ["I, II, IV, III, VI, V", "II, I, III, IV, V, VI", "I, II, III, IV, V, VI", "III, I, II, IV, V, VI"], correct: 2, explanation: "चायपत्ती निर्माण का वैज्ञानिक क्रम विदरिंग, रोलिंग, फर्मेंटेशन, ड्राइंग, ग्रेडिंग और ब्लेंडिंग है।" },
+            { id: 114, tag: "PYQ", question: "निम्नलिखित में से कौन-सा एक मादक पेय है?", options: ["दूध", "अफीम", "बीयर", "चाय"], correct: 2, explanation: "बीयर एक किण्वित मादक पेय (Alcoholic beverage) है।" },
+            { id: 115, tag: "PYQ", question: "बीयर में सामान्यतः अल्कोहल की मात्रा लगभग कितनी होती है?", options: ["0.5–1%", "3–6%", "10–15%", "40–50%"], correct: 1, explanation: "सामान्य बीयर में अल्कोहल की मात्रा 3 से 6 प्रतिशत होती है।" },
+            { id: 116, tag: "PYQ", question: "गाय के दूध की तुलना में भैंस के दूध में सामान्यतः क्या अधिक पाया जाता है?", options: ["वसा, प्रोटीन एवं कैल्शियम", "केवल कार्बोहाइड्रेट", "केवल विटामिन C", "केवल जल"], correct: 0, explanation: "भैंस के दूध में गाय की तुलना में सॉलिड्स, फैट, प्रोटीन और मिनरल्स अधिक होते हैं।" },
+            { id: 117, tag: "PYQ", question: "मानव दूध में उपस्थित Bifidus factor मुख्यतः किस जीवाणु की वृद्धि को बढ़ावा देता है?", options: ["Escherichia coli", "Bifidobacterium", "Salmonella", "Staphylococcus"], correct: 1, explanation: "यह शिशुओं की आंतों में बिफिडोबैक्टेरियम की वृद्धि को प्रेरित करता है।" },
+            { id: 118, tag: "PYQ", question: "स्किम्ड मिल्क में वसा की मात्रा सामान्यतः कितनी होती है?", options: ["लगभग 0.5% या उससे कम", "लगभग 3%", "लगभग 6%", "लगभग 10%"], correct: 1, explanation: "वसा रहित (Skimmed) दूध में फैट 0.5% से भी कम होता है।" },
+            { id: 119, tag: "PYQ", question: "अभिकथन (A): दूध को अधिक समय तक गर्म रखने पर उसका रंग भूरा हो सकता है। कारण (R): दूध में उपस्थित लैक्टोज तथा प्रोटीन के अमीनो समूहों के बीच Maillard reaction हो सकती है.", options: ["A तथा R दोनों सही हैं और R, A की सही व्याख्या करता है।", "A तथा R दोनों सही हैं, लेकिन R, A की सही व्याख्या नहीं करता।", "A सही है, लेकिन R गलत है।", "A गलत है, लेकिन R सही है।"], correct: 0, explanation: "मेलार्ड रिएक्शन (अमीनो-कार्बोहाइड्रेट प्रतिक्रिया) के कारण अधिक देर गर्म करने पर दूध भूरा हो जाता है।" },
+            { id: 120, tag: "PYQ", question: "निम्नलिखित में से कौन-सा दूध का खमीरीकृत उत्पाद है?", options: ["घी", "दही", "मक्खन", "खोया"], correct: 1, explanation: "दही दूध का एक किण्वित (Fermented) उत्पाद है।" }
         ];
     </script>
 
-    <!-- ✅ आपकी मुख्य JS फ़ाइल का पाथ -->
+    <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
     <script src="../../global-quiz.js?v=3.0"></script>
 </body>
 </html>
 
+
+
+             
