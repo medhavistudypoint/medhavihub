@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - करेंट अफेयर्स अर्द्धवार्षिकी 2026 (व्याख्या सहित) ऑनलाइन मॉक टेस्ट</title>
+    <!-- ✅ सही किया गया CSS पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* TGT पेड ऑथेंटिकेशन पॉप-अप (Modal) स्टाइल्स */
+        .modal-overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(11, 30, 71, 0.75); justify-content: center; align-items: center; 
+            z-index: 10000; padding: 15px; backdrop-filter: blur(4px);
+        }
+        .modal-box { 
+            background: white; padding: 25px; border-radius: 16px; width: 100%; 
+            max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+            border: 1px solid #cbd5e1;
+        }
+        .modal-box h3 { color: #0b1e47; margin-top: 0; font-size: 20px; }
+        .modal-box p { font-size: 14px; color: #64748b; }
+        .modal-box input { 
+            width: 100%; padding: 12px; margin-bottom: 12px; border: 2px solid #cbd5e1; 
+            border-radius: 8px; text-align: center; font-size: 16px; outline: none;
+        }
+        .modal-box input:focus { border-color: #1e3a8a; }
+        .modal-box button { 
+            width: 100%; padding: 12px; border: none; border-radius: 8px; 
+            font-size: 15px; font-weight: bold; cursor: pointer; 
+        }
+        .btn-auth { background: #16a34a; color: white; margin-bottom: 8px; }
+        .btn-auth:hover { background: #15803d; }
+        .btn-close { background: #e2e8f0; color: #1e293b; margin-top: 6px; }
+    </style>
+</head>
+<body>
+
+    <!-- 🔒 सुरक्षा वॉटरमार्क -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>करेंट अफेयर्स अर्द्धवार्षिकी 2026 शुरू करने के लिए अपना पूरा नाम भरें:</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="javascript:history.back()" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">करेंट अफेयर्स अर्द्धवार्षिकी 2026 (30 प्रश्न)</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">30:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">30</span></span>
+                        <span class="subject-badge">Current Affairs</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 30</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="javascript:history.back()" class="btn-dashboard-redirect">🔙 मुख्य पृष्ठ पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🔒 ऑथेंटिकेशन पॉप-अप -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3>🔒 TGT पेड स्टूडेंट एक्सेस</h3>
+            <p>टेस्ट शुरू करने के लिए अपना रजिस्टर्ड मोबाइल नंबर दर्ज करें:</p>
+            <input type="tel" id="userMobileInput" placeholder="10 अंकों का मोबाइल नंबर" maxlength="10">
+            <button onclick="verifyStudent()" class="btn-auth">अनलॉक करें</button>
+            <p id="authMessage" style="margin: 8px 0; font-size:13px; font-weight:bold;"></p>
+            <button onclick="closeModal()" class="btn-close">बंद करें</button>
+        </div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट एवं ऑथेंटिकेशन लॉजिक -->
+    <script>
+        const AUTH_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywLCvpIF2I34-saQCYPBQqcZi9a3Gx3MhdFrDERRmaP1yS4Y5qxYkaQ-lIDFvO1b8E/exec";
+        const QUIZ_KEY = "medhavi_current_affairs_2026_mock"; 
+        const NEGATIVE_MARKING = 1 / 3; 
+
+        window.onload = function() {
+            if (localStorage.getItem('tgt_user_verified') !== 'true') {
+                document.getElementById('loginModal').style.display = 'flex';
+            } else if (typeof window.checkSavedResultOnLoad === 'function') {
+                window.checkSavedResultOnLoad();
+            }
+        };
+
+        function verifyStudent() {
+            const mobile = document.getElementById('userMobileInput').value.trim();
+            const msgBox = document.getElementById('authMessage');
+            if (mobile.length !== 10) { 
+                msgBox.style.color = "#e11d48"; 
+                msgBox.innerText = "सही 10 अंकों का मोबाइल नंबर डालें!"; 
+                return; 
+            }
+            
+            let deviceId = localStorage.getItem('user_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 11));
+            localStorage.setItem('user_device_id', deviceId);
+            msgBox.style.color = "#2563eb"; 
+            msgBox.innerText = "जाँच हो रही है...";
+            
+            fetch(`${AUTH_SCRIPT_URL}?mobile=${mobile}&deviceId=${deviceId}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.allowed) {
+                        localStorage.setItem('tgt_user_verified', 'true');
+                        msgBox.style.color = "#16a34a"; 
+                        msgBox.innerText = "सफलतापूर्वक अनलॉक हो गया!";
+                        setTimeout(() => closeModal(), 800);
+                    } else {
+                        msgBox.style.color = "#e11d48"; 
+                        msgBox.innerText = data.message || "पहुंच की अनुमति नहीं है!";
+                    }
+                })
+                .catch(() => { 
+                    msgBox.style.color = "#e11d48"; 
+                    msgBox.innerText = "नेटवर्क खराबी! पुनः प्रयास करें।"; 
+                });
+        }
+
+        function closeModal() { 
+            document.getElementById('loginModal').style.display = 'none'; 
+        }
+
+        // 🎯 कर्रेंट अफेयर्स अर्द्धवार्षिकी 2026 - 30 प्रश्नों का डेटासेट (व्याख्या सहित)
+        const dataset = [
+            { id: 1, tag: "करेंट अफेयर्स", question: "जल सुरक्षा और पारिस्थितिक संतुलन को बढ़ावा देने के लिए अप्रैल 2026 में ‘प्रोजेक्ट हिम सरोवर’ किस क्षेत्र में शुरू किया गया?", options: ["सिक्किम", "लद्दाख", "हिमाचल प्रदेश", "उत्तराखंड"], correct: 1, explanation: "लद्दाख में बर्फ के पिघले पानी को एकत्र कर जल सुरक्षा तथा पारिस्थितिक संतुलन को बढ़ावा देने के उद्देश्य से ‘प्रोजेक्ट हिम सरोवर’ शुरू किया गया।" },
+            { id: 2, tag: "करेंट अफेयर्स", question: "15 अप्रैल 2026 को बिहार के पहले भाजपा मुख्यमंत्री के रूप में किसने शपथ ग्रहण की?", options: ["नीतीश कुमार", "सम्राट चौधरी", "सुशील कुमार मोदी", "विजय कुमार सिन्हा"], correct: 1, explanation: "नीतीश कुमार के मुख्यमंत्री पद से हटने के बाद सम्राट चौधरी ने बिहार के मुख्यमंत्री के रूप में शपथ ग्रहण की।" },
+            { id: 3, tag: "करेंट अफेयर्स", question: "प्रस्तावित 131वें संविधान संशोधन विधेयक, 2026 में लोकसभा की सीटों की संख्या 543 से बढ़ाकर कितनी करने का प्रस्ताव था?", options: ["750", "800", "850", "900"], correct: 2, explanation: "विधेयक में लोकसभा की वर्तमान 543 सीटों को बढ़ाकर 850 करने का प्रस्ताव था। यह विधेयक 54 वोटों के अंतर से पारित नहीं हो सका।" },
+            { id: 4, tag: "करेंट अफेयर्स", question: "14 अप्रैल 2026 को प्रधानमंत्री नरेंद्र मोदी द्वारा समर्पित ‘दून-दिल्ली इकोनॉमिक कॉरिडोर एक्सप्रेसवे’ किस व्यापक उद्देश्य से अधिक संबंधित है?", options: ["आर्थिक एवं क्षेत्रीय कनेक्टिविटी", "केवल सीमा सुरक्षा", "केवल कृषि सिंचाई", "समुद्री परिवहन"], correct: 0, explanation: "आर्थिक कॉरिडोर का प्रमुख उद्देश्य क्षेत्रों के बीच बेहतर कनेक्टिविटी स्थापित करके आर्थिक गतिविधियों को बढ़ावा देना है।" },
+            { id: 5, tag: "करेंट अफेयर्स", question: "भारतीय सेना की ‘त्रिशक्ति कोर’ द्वारा सिक्किम के सीमावर्ती गाँव में स्थापित सामुदायिक रेडियो स्टेशन का नाम क्या था?", options: ["हिमालय वाणी", "सिक्किम सुंदरी", "सीमा संवाद", "सिक्किम आवाज"], correct: 1, explanation: "12 अप्रैल 2026 को त्रिशक्ति कोर ने सिक्किम के सीमावर्ती गाँव में ‘सिक्किम सुंदरी’ नामक सामुदायिक रेडियो स्टेशन का उद्घाटन किया।" },
+            { id: 6, tag: "करेंट अफेयर्स", question: "अप्रैल 2026 में किस राज्य ने स्वयं को आधिकारिक रूप से नक्सल-मुक्त राज्य घोषित किया?", options: ["छत्तीसगढ़", "झारखंड", "तेलंगाना", "ओडिशा"], correct: 2, explanation: "10 अप्रैल 2026 को तेलंगाना ने स्वयं को आधिकारिक रूप से नक्सल-मुक्त राज्य घोषित किया।" },
+            { id: 7, tag: "करेंट अफेयर्स", question: "UGC की सलाह पर अप्रैल 2026 में किस संस्था को ‘डीम्ड यूनिवर्सिटी’ का दर्जा प्रदान किया गया?", options: ["NCERT", "NIOS", "IGNOU", "UGC"], correct: 0, explanation: "राष्ट्रीय शैक्षिक अनुसंधान एवं प्रशिक्षण परिषद (NCERT) को UGC की सलाह पर ‘डीम्ड यूनिवर्सिटी’ का दर्जा दिए जाने का उल्लेख है।" },
+            { id: 8, tag: "करेंट अफेयर्स", question: "भारत में मनोरोगियों के लिए मार्च 2026 में शुरू किए गए पहले डेटाबेस ‘CALM-Brain’ का शुभारंभ कहाँ किया गया?", options: ["नई दिल्ली", "मुंबई", "बेंगलुरु", "हैदराबाद"], correct: 2, explanation: "‘CALM-Brain’ नामक भारत के पहले मनोरोगी डेटाबेस को बेंगलुरु में लॉन्च किया गया।" },
+            { id: 9, tag: "करेंट अफेयर्स", question: "अप्रैल 2026 में अमेरिका में प्रतिष्ठित ‘Governor’s Chair’ पद प्राप्त करने वाले भारतीय मूल के वैज्ञानिक कौन थे?", options: ["दीप जरीवाला", "विकास शर्मा", "अरुण कुमार", "संजय गुप्ता"], correct: 0, explanation: "दिए गए करंट अफेयर्स स्रोत के अनुसार भारतीय मूल के वैज्ञानिक दीप जरीवाला को अमेरिका में प्रतिष्ठित ‘Governor’s Chair’ पद प्राप्त हुआ।" },
+            { id: 10, tag: "करेंट अफेयर्स", question: "अप्रैल 2026 में ‘President’s Police Colour’ से किन पुलिस बलों को सम्मानित किया गया?", options: ["बिहार और झारखंड पुलिस", "ओडिशा और उत्तराखंड पुलिस", "गुजरात और महाराष्ट्र पुलिस", "पंजाब और हरियाणा पुलिस"], correct: 1, explanation: "President’s Police Colour पुलिस बल को मिलने वाले सर्वोच्च सम्मानों में से एक है। अप्रैल 2026 में ओडिशा और उत्तराखंड पुलिस को यह सम्मान मिला।" },
+            { id: 11, tag: "करेंट अफेयर्स", question: "‘महाकाल द मास्टर ऑफ टाइम’ अंतरराष्ट्रीय सम्मेलन का आयोजन कहाँ किया गया?", options: ["भोपाल", "उज्जैन", "इंदौर", "वाराणसी"], correct: 1, explanation: "3–5 अप्रैल 2026 के बीच ‘महाकाल द मास्टर ऑफ टाइम’ नामक अंतरराष्ट्रीय सम्मेलन उज्जैन, मध्य प्रदेश में आयोजित हुआ।" },
+            { id: 12, tag: "करेंट अफेयर्स", question: "11 अप्रैल 2026 को अमेरिका के सिएटल में किस महान भारतीय व्यक्तित्व की पहली सरकारी आदमकद प्रतिमा का अनावरण किया गया?", options: ["महात्मा गांधी", "स्वामी विवेकानंद", "डॉ. ए.पी.जे. अब्दुल कलाम", "सरदार पटेल"], correct: 1, explanation: "सिएटल के वेस्टलेक स्क्वायर पार्क में स्वामी विवेकानंद की पहली सरकारी आदमकद प्रतिमा का अनावरण किया गया।" },
+            { id: 13, tag: "करेंट अफेयर्स", question: "‘World Youth Parliament 2026’ में भारत का प्रतिनिधित्व करने के लिए किसे चुना गया?", options: ["स्तुति प्रधान", "गीतांजलि ओम प्रकाश", "सुधाकर दलेला", "पुनीत गुप्ता"], correct: 0, explanation: "दिए गए स्रोत के अनुसार सिक्किम की स्तुति प्रधान को World Youth Parliament 2026 में भारत का प्रतिनिधित्व करने के लिए चुना गया।" },
+            { id: 14, tag: "करेंट अफेयर्स", question: "समुद्री सुरक्षा को मजबूत करने के लिए भारत के पहले ‘Port of Refuge’ (POR) तंत्र को किन बंदरगाहों पर लॉन्च किया गया?", options: ["मुंबई और चेन्नई", "दिघी और गोपालपुर", "कोच्चि और विशाखापत्तनम", "कांडला और पारादीप"], correct: 1, explanation: "27 मार्च 2026 को महाराष्ट्र के दिघी और ओडिशा के गोपालपुर बंदरगाहों पर भारत के पहले Port of Refuge तंत्र को लॉन्च किया गया।" },
+            { id: 15, tag: "करेंट अफेयर्स", question: "‘e-Safe HER’ कार्यक्रम का प्रमुख उद्देश्य किस वर्ग को साइबर सुरक्षा के प्रति जागरूक करना था?", options: ["ग्रामीण महिलाएँ", "ग्रामीण पुरुष", "कॉलेज विद्यार्थी", "वरिष्ठ नागरिक"], correct: 0, explanation: "13 अप्रैल 2026 को C-DAC हैदराबाद और रिलायंस फाउंडेशन ने ग्रामीण भारत की 10 लाख महिलाओं के लिए साइबर सुरक्षा जागरूकता कार्यक्रम ‘e-Safe HER’ शुरू किया।" },
+            { id: 16, tag: "करेंट अफेयर्स", question: "जनगणना 2027 के प्रथम चरण की शुरुआत किस तारीख से हुई?", options: ["1 जनवरी 2026", "1 मार्च 2026", "1 अप्रैल 2026", "1 मई 2026"], correct: 2, explanation: "स्रोत के अनुसार जनगणना 2027 के प्रथम चरण की शुरुआत 1 अप्रैल 2026 से हुई।" },
+            { id: 17, tag: "करेंट अफेयर्स", question: "Jumpstart Approach के माध्यम से गंभीर रूप से लुप्तप्राय किस पक्षी के बच्चे का सफलतापूर्वक जन्म कराया गया?", options: ["ग्रेट इंडियन बस्टर्ड", "सारस", "मोर", "हिमालयी मोनाल"], correct: 0, explanation: "Jumpstart Approach के प्रयोग से गंभीर रूप से लुप्तप्राय Great Indian Bustard (GIB) के बच्चे के सफल जन्म की घोषणा की गई।" },
+            { id: 18, tag: "करेंट अफेयर्स", question: "‘वंतारा यूनिवर्सिटी’ की आधारशिला किस स्थान पर रखी गई?", options: ["जामनगर, गुजरात", "गांधीनगर, गुजरात", "अहमदाबाद, गुजरात", "राजकोट, गुजरात"], correct: 0, explanation: "10 अप्रैल 2026 को भारत के पहले Global Wildlife Institution ‘वंतारा यूनिवर्सिटी’ की आधारशिला जामनगर, गुजरात में रखी गई।" },
+            { id: 19, tag: "करेंट अफेयर्स", question: "भारतीय नौसेना द्वारा कोच्चि में दक्षिणी नौसेना कमान के समुद्री युद्ध केंद्र में किस अभ्यास की मेजबानी की गई?", options: ["MILAN 2026", "IONS (IMEX) TTX 2026", "मालाबार 2026", "वरुण 2026"], correct: 1, explanation: "27 मार्च 2026 को कोच्चि में दक्षिणी नौसेना कमान के Maritime Warfare Centre में IONS (IMEX) TTX 2026 आयोजित किया गया।" },
+            { id: 20, tag: "करेंट अफेयर्स", question: "भारत की पहली स्वदेशी Quantum Computing Testing Facility कहाँ लॉन्च की गई?", options: ["आंध्र प्रदेश", "गुजरात", "कर्नाटक", "तेलंगाना"], correct: 0, explanation: "स्रोत के अनुसार 14 अप्रैल 2026 को भारत की पहली स्वदेशी Quantum Computing Testing Facility आंध्र प्रदेश में लॉन्च की गई।" },
+            { id: 21, tag: "करेंट अफेयर्स", question: "ओडिशा का पहला ‘स्मार्ट गाँव’ बनाने के लिए किस गाँव को चुना गया?", options: ["कुसुनपुर", "पुरी", "कोणार्क", "बरहामपुर"], correct: 0, explanation: "स्रोत में कुसुनपुर को ओडिशा का पहला स्मार्ट गाँव बनाने की घोषणा का उल्लेख किया गया है।" },
+            { id: 22, tag: "करेंट अफेयर्स", question: "‘भू भारती’ पोर्टल किस राज्य में एकीकृत भूमि रिकॉर्ड प्रबंधन और पंजीकरण से संबंधित है?", options: ["आंध्र प्रदेश", "तेलंगाना", "कर्नाटक", "महाराष्ट्र"], correct: 1, explanation: "तेलंगाना सरकार ने राज्य में एकीकृत भूमि रिकॉर्ड प्रबंधन एवं पंजीकरण के लिए ‘भू भारती’ पोर्टल शुरू किया।" },
+            { id: 23, tag: "करेंट अफेयर्स", question: "‘नमो ड्रोन दीदी’ योजना के अंतर्गत किस राज्य ने सबसे अधिक महिला स्वयं सहायता समूहों को ड्रोन पायलट के रूप में प्रशिक्षित किया?", options: ["हरियाणा", "कर्नाटक", "गुजरात", "उत्तर प्रदेश"], correct: 0, explanation: "4 अप्रैल 2026 तक उपलब्ध आँकड़ों के अनुसार नमो ड्रोन दीदी योजना में हरियाणा ने सबसे अधिक महिला SHGs को ड्रोन पायलट के रूप में प्रशिक्षित किया।" },
+            { id: 24, tag: "करेंट अफेयर्स", question: "भारतीय नौसेना में 30 मार्च 2026 को शामिल किया गया स्वदेशी Stealth Frigate कौन-सा था?", options: ["INS सूरत", "INS दूनागिरी", "INS विक्रांत", "INS नीलगिरि"], correct: 1, explanation: "Garden Reach Shipbuilders & Engineers Limited द्वारा निर्मित INS दूनागिरी को 30 मार्च 2026 को भारतीय नौसेना में शामिल किया गया।" },
+            { id: 25, tag: "करेंट अफेयर्स", question: "‘Survey Vessel Vishaal’ किस क्षेत्र से संबंधित परियोजना है?", options: ["समुद्री सर्वेक्षण", "वायु सर्वेक्षण", "भूमि सर्वेक्षण", "अंतरिक्ष सर्वेक्षण"], correct: 0, explanation: "भारतीय नौसेना के लिए निर्मित सर्वेक्षण पोत समुद्री सर्वेक्षण और संबंधित हाइड्रोग्राफिक कार्यों के लिए उपयोग किए जाते हैं।" },
+            { id: 26, tag: "करेंट अफेयर्स", question: "‘20 Cities Towards Zero Waste’ पहल में शामिल होने वाला पहला भारतीय शहर कौन-सा था?", options: ["कोच्चि", "वर्कला", "इंदौर", "सूरत"], correct: 1, explanation: "केरल का वर्कला ‘20 Cities Towards Zero Waste’ सूची में शामिल होने वाला पहला भारतीय शहर बना।" },
+            { id: 27, tag: "करेंट अफेयर्स", question: "‘World Air Quality Report 2025’ के अनुसार दुनिया के सर्वाधिक प्रदूषित देशों की सूची में भारत का स्थान क्या बताया गया?", options: ["दूसरा", "चौथा", "छठा", "आठवाँ"], correct: 2, explanation: "स्रोत के अनुसार IQAir की World Air Quality Report 2025 में भारत छठे स्थान पर था।" },
+            { id: 28, tag: "करेंट अफेयर्स", question: "16 मार्च 2026 को भारतीय भूवैज्ञानिक सर्वेक्षण (GSI) ने किस स्थान को राष्ट्रीय भू-विरासत स्थल घोषित किया?", options: ["कलिंजर पहाड़ी, उत्तर प्रदेश", "अरावली पहाड़ी, राजस्थान", "राजगीर पहाड़ी, बिहार", "नीलगिरि पहाड़ी, तमिलनाडु"], correct: 0, explanation: "GSI ने कलिंजर किले के आसपास स्थित कलिंजर पहाड़ी क्षेत्र को राष्ट्रीय भू-विरासत स्थल घोषित किया।" },
+            { id: 29, tag: "करेंट अफेयर्स", question: "‘योग 365’ पहल के अंतर्गत किस प्रकार की सुविधा घर-घर पहुँचाने का उद्देश्य रखा गया?", options: ["निःशुल्क ऑनलाइन योग सत्र", "निःशुल्क खेल प्रशिक्षण", "निःशुल्क स्वास्थ्य बीमा", "निःशुल्क आयुर्वेदिक दवाएँ"], correct: 0, explanation: "आयुष मंत्रालय ने ‘योग 365’ के तहत घर-घर योग पहुँचाने के लिए निःशुल्क ऑनलाइन सत्र उपलब्ध कराने की पहल की।" },
+            { id: 30, tag: "करेंट अफेयर्स", question: "मार्च 2026 में जारी ‘Energy Statistics India 2026’ के अनुसार नवीकरणीय ऊर्जा उत्पादन में शीर्ष स्थान किस राज्य ने प्राप्त किया?", options: ["गुजरात", "राजस्थान", "तमिलनाडु", "कर्नाटक"], correct: 1, explanation: "रिपोर्ट के अनुसार नवीकरणीय ऊर्जा उत्पादन में राजस्थान शीर्ष पर रहा और उसका हिस्सा 23.7% बताया गया।" }
+        ];
+    </script>
+
+    <!-- ✅ सही किया गया JS पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
