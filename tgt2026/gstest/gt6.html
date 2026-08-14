@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medhavi Study Point - Computer Test</title>
-    <!-- ✅ CSS का पाथ ठीक कर दिया गया है -->
-    <link rel="stylesheet" href="global-style.css?v=3.0">
+    <!-- ✅ सही किया गया CSS पाथ (दो फोल्डर बाहर जाने के लिए) -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <!-- 🔒 एक्सेस कंट्रोल कोड -->
@@ -13,7 +13,7 @@
         const userPlan = localStorage.getItem("user_plan");
         if (userPlan !== "FULL" && userPlan !== "GS") {
             alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS बैच जॉइन करें!");
-            window.location.href = "../gs.html"; 
+            window.location.href = "../../gs.html"; 
         }
     </script>
 </head>
@@ -34,7 +34,7 @@
         <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
         <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
         <br><br>
-        <a href="../gs.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+        <a href="../../gs.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
     </div>
 
     <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
@@ -87,7 +87,7 @@
             </div>
         </div>
         <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
-        <a href="../gs.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <a href="../../gs.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
         <div id="boxReviewAnswersList"></div>
     </div>
 
@@ -104,7 +104,7 @@
         ];
     </script>
 
-    <!-- ✅ JS का पाथ ठीक कर दिया गया है -->
-    <script src="global-quiz.js?v=3.0"></script>
+    <!-- ✅ सही किया गया JS पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
 </body>
 </html>
