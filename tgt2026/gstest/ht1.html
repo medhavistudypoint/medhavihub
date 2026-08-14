@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../../homescience.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">विषय (Subject)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY (यहाँ अपना डेटा डालें) -->
+    <script>
+        // 1. इस टेस्ट की यूनिक की (हर नए टेस्ट के लिए इसे बदलें जैसे medhavi_test_25)
+        const QUIZ_KEY = "medhavi_custom_test_unique_key"; 
+
+        // 2. अपना प्रश्न डेटासेट यहाँ पेस्ट करें
+
+      const dataset = [
+    { id: 1, tag: "प्राचीन इतिहास", question: "भारतीय पुरातत्व के जनक के रूप में सामान्यतः किसे जाना जाता है?", options: ["अलेक्जेंडर कनिंघम", "जॉन मार्शल", "मॉर्टिमर व्हीलर", "जेम्स प्रिंसेप"], correct: 0, explanation: "सर अलेक्जेंडर कनिंघम भारतीय पुरातत्व के संस्थागत विकास में अत्यंत महत्वपूर्ण व्यक्ति थे। उन्होंने 1861 में स्थापित Archaeological Survey of India के प्रथम Archaeological Surveyor के रूप में कार्य किया।" },
+    { id: 2, tag: "प्राचीन इतिहास", question: "र रॉबर्ट ब्रूस फूट मूलतः किस क्षेत्र के विशेषज्ञ थे?", options: ["भूगर्भ-विज्ञान", "इतिहास", "पुराणशास्त्र", "मानवशास्त्र"], correct: 0, explanation: "रॉबर्ट ब्रूस फूट Geological Survey of India से जुड़े भूगर्भ-वैज्ञानिक थे। उन्हें “Father of Indian Pre-history” कहा जाता है।" },
+    { id: 3, tag: "प्राचीन इतिहास", question: "पाषाण, कांस्य और लौह युग के त्रियुगीय विभाजन का संबंध किससे है?", options: ["थॉमसन", "टेलर", "कनिंघम", "व्हीलर"], correct: 0, explanation: "डेनमार्क के पुरातत्वविद् C. J. Thomsen ने पुरावशेषों के आधार पर Three Age System का प्रतिपादन किया।" },
+    { id: 4, tag: "प्राचीन इतिहास", question: "इतिहास के प्रारंभिक काल को सामान्यतः क्या कहा जाता है?", options: ["पुरापाषाण काल", "मध्यपाषाण काल", "लघुपाषाण काल", "नवपाषाण काल"], correct: 0, explanation: "मानव इतिहास के प्रारंभिक चरण को पुरापाषाण काल कहा जाता है। इसमें मानव मुख्यतः शिकार एवं खाद्य-संग्रह पर निर्भर था।" },
+    { id: 5, tag: "प्राचीन इतिहास", question: "सबसे प्रारंभिक पत्थर के औजारों का संबंध किस काल से है?", options: ["नवपाषाण काल", "पुरापाषाण काल", "मध्यपाषाण काल", "ताम्रपाषाण काल"], correct: 1, explanation: "पुरापाषाण काल में पत्थर से निर्मित औजार मानव तकनीक की प्रमुख पहचान थे।" },
+    { id: 6, tag: "प्राचीन इतिहास", question: "पुरापाषाण काल की अर्थव्यवस्था का प्रमुख आधार क्या था?", options: ["कृषि", "शिकार एवं खाद्य-संग्रह", "व्यापार", "धातु-कर्म"], correct: 1, explanation: "पुरापाषाणकालीन मानव की आजीविका मुख्यतः शिकार, मछली पकड़ने तथा जंगली वनस्पतियों एवं फलों के संग्रह पर आधारित थी।" },
+    { id: 7, tag: "प्राचीन इतिहास", question: "कृषि के प्रारंभिक प्रमाणों के लिए निम्न में से कौन-सा स्थल विशेष रूप से महत्वपूर्ण है?", options: ["मेहरगढ़", "तक्षशिला", "पाटलिपुत्र", "सारनाथ"], correct: 0, explanation: "मेहरगढ़ वर्तमान पाकिस्तान के बलूचिस्तान क्षेत्र में स्थित है। इसके प्रारंभिक स्तर लगभग 7000 ई.पू. तक जाते हैं और यहाँ कृषि तथा पशुपालन के प्रमाण मिले हैं।" },
+    { id: 8, tag: "प्राचीन इतिहास", question: "मेहरगढ़ के प्रारंभिक कृषि समुदायों में निम्न में से कौन-सी फसल प्रमुख थी?", options: ["गेहूँ एवं जौ", "चाय एवं कॉफी", "गन्ना एवं कपास", "बाजरा एवं मक्का"], correct: 0, explanation: "मेहरगढ़ के प्रारंभिक चरण से गेहूँ और जौ के जले हुए बीज मिले हैं।" },
+    { id: 9, tag: "प्राचीन इतिहास", question: "भारत में प्रागैतिहासिक मानव के प्रारंभिक जीवाश्म प्रमाणों के लिए कौन-सा क्षेत्र प्रसिद्ध है?", options: ["नर्मदा घाटी", "गंगा डेल्टा", "कावेरी डेल्टा", "ब्रह्मपुत्र घाटी"], correct: 0, explanation: "नर्मदा घाटी, विशेषकर हथनौरा क्षेत्र, भारत में प्राचीन मानव के जीवाश्म अध्ययन के लिए महत्वपूर्ण है।" },
+    { id: 10, tag: "प्राचीन इतिहास", question: "मध्यपाषाण काल में सूक्ष्म पाषाण उपकरणों को क्या कहा जाता है?", options: ["मेगालिथ", "माइक्रोलिथ", "मृद्भांड", "ताम्रपाषाण"], correct: 1, explanation: "मध्यपाषाण काल की प्रमुख तकनीकी विशेषताओं में Microliths अर्थात सूक्ष्म पाषाण उपकरण शामिल हैं।" },
+    { id: 11, tag: "प्राचीन इतिहास", question: "एक ही कब्र में तीन मानव कंकाल मिलने का प्रमाण किस स्थल से मिला है?", options: ["सराय नाहर राय", "दमदमा", "महदहा", "लंघनाज"], correct: 1, explanation: "दमदमा उत्तर प्रदेश के प्रतापगढ़ क्षेत्र का महत्वपूर्ण मध्यपाषाण स्थल है जहाँ एक ही कब्र में तीन मानव कंकाल मिलने का प्रमाण मिला है।" },
+    { id: 12, tag: "प्राचीन इतिहास", question: "निम्नलिखित में से कौन-सा समूह मध्यपाषाणकालीन स्थलों का है?", options: ["सराय नाहर राय, महदहा, दमदमा", "हड़प्पा, मोहनजोदड़ो, लोथल", "पाटलिपुत्र, वैशाली, नालंदा", "सांची, भरहुत, सारनाथ"], correct: 0, explanation: "सराय नाहर राय, महदहा और दमदमा उत्तर प्रदेश के गंगा मैदान क्षेत्र के महत्वपूर्ण मध्यपाषाणकालीन पुरास्थल हैं।" },
+    { id: 13, tag: "प्राचीन इतिहास", question: "मध्यपाषाणकालीन स्थलों में पशुपालन के प्रमाण के लिए कौन-सा स्थल प्रसिद्ध है?", options: ["ओझे", "बेरी", "बागोर", "लखनिया"], correct: 2, explanation: "राजस्थान का बागोर मध्यपाषाणकालीन संस्कृति के महत्वपूर्ण स्थलों में से है जहाँ से पशुपालन के प्रमाण मिले हैं।" },
+    { id: 14, tag: "प्राचीन इतिहास", question: "नवपाषाण काल की सबसे महत्वपूर्ण आर्थिक विशेषता क्या थी?", options: ["केवल शिकार", "केवल मछली पकड़ना", "कृषि एवं पशुपालन", "लौह उत्पादन"], correct: 2, explanation: "नवपाषाण काल में मानव ने कृषि द्वारा पौधों को उगाना और पशुओं को पालना शुरू किया।" },
+    { id: 15, tag: "प्राचीन इतिहास", question: "भारतीय उपमहाद्वीप में प्रारंभिक कृषि के प्रमाणों के संदर्भ में कौन-सा स्थल अत्यंत महत्वपूर्ण है?", options: ["मेहरगढ़", "भीमबेटका", "तक्षशिला", "अमरावती"], correct: 0, explanation: "मेहरगढ़ के प्रारंभिक स्तरों से कृषि और पशुपालन के स्पष्ट प्रमाण मिले हैं।" },
+    { id: 16, tag: "प्राचीन इतिहास", question: "प्राचीनतम स्थायी जीवन के प्रमाणों के संदर्भ में निम्न में से कौन-सा स्थल महत्वपूर्ण है?", options: ["भीमबेटका", "किले गुल मोहम्मद", "कालीबंगा", "मेहरगढ़"], correct: 3, explanation: "मेहरगढ़ के प्रारंभिक चरणों में मिट्टी-ईंट के आवास, कृषि, पशुपालन तथा अनाज भंडारण से संबंधित प्रमाण मिले हैं।" },
+    { id: 17, tag: "प्राचीन इतिहास", question: "चाल्कोलिथिक (Chalcolithic) युग को हिंदी में क्या कहा जाता है?", options: ["पुरापाषाण युग", "नवपाषाण युग", "ताम्रपाषाण युग", "लौह युग"], correct: 2, explanation: "इस काल में तांबे के साथ-साथ पत्थर के औजारों का भी उपयोग जारी रहा, इसलिए इसे ताम्रपाषाण काल कहा जाता है।" },
+    { id: 18, tag: "प्राचीन इतिहास", question: "पाषाण संस्कृति से लेकर हड़प्पा सभ्यता तक सांस्कृतिक विकास के प्रमाणों के लिए कौन-सा स्थल महत्वपूर्ण है?", options: ["आदी", "मेहरगढ़", "कोटदीजी", "कालीबंगा"], correct: 1, explanation: "मेहरगढ़ की विशेषता इसकी लंबी सांस्कृतिक अनुक्रमता है।" },
+    { id: 19, tag: "प्राचीन इतिहास", question: "नवदाटोली का उत्खनन मुख्य रूप से किस पुरातत्वविद् से जुड़ा है?", options: ["एच. डी. सांकलिया", "वी. एस. वाकणकर", "अलेक्जेंडर कनिंघम", "मॉर्टिमर व्हीलर"], correct: 0, explanation: "एच. डी. सांकलिया और उनके सहयोगियों ने नवदाटोली में महत्वपूर्ण उत्खनन कार्य किया।" },
+    { id: 20, tag: "प्राचीन इतिहास", question: "नवदाटोली वर्तमान में किस राज्य में स्थित है?", options: ["गुजरात", "महाराष्ट्र", "छत्तीसगढ़", "मध्य प्रदेश"], correct: 3, explanation: "नवदाटोली मध्य प्रदेश में नर्मदा घाटी क्षेत्र का महत्वपूर्ण ताम्रपाषाणकालीन स्थल है।" },
+    { id: 21, tag: "प्राचीन इतिहास", question: "बृहद्पाषाण (Megalithic) स्मारकों की प्रमुख पहचान क्या है?", options: ["संन्यासी गुफाएँ", "मृतकों को दफनाने से संबंधित संरचनाएँ", "मंदिर", "राजमहल"], correct: 1, explanation: "भारतीय बृहद्पाषाण परंपरा में बड़े पत्थरों से निर्मित अनेक संरचनाएँ शवाधान एवं स्मारकीय उद्देश्यों से संबंधित थीं।" },
+    { id: 22, tag: "प्राचीन इतिहास", question: "‘राख का टीला’ निम्नलिखित में से किस नवपाषाण स्थल से संबंधित है?", options: ["बुर्जहोम", "संगनकल्लू", "कोल्डीहवा", "ब्रह्मगिरि"], correct: 1, explanation: "दक्षिण भारत के नवपाषाण संदर्भ में Ash-mounds (राख के टीले) महत्वपूर्ण पुरातात्विक विशेषता हैं, संगनकल्लू इसके लिए प्रसिद्ध है।" },
+    { id: 23, tag: "प्राचीन इतिहास", question: "प्रागैतिहासिक शैलचित्रों के लिए निम्न में से कौन-सा स्थल प्रसिद्ध है?", options: ["अजंता", "भीमबेटका", "बाघ", "अमरावती"], correct: 1, explanation: "भीमबेटका मध्य प्रदेश में स्थित प्रागैतिहासिक शैलाश्रयों का प्रसिद्ध समूह है जहाँ बड़ी संख्या में शैलचित्र मिले हैं।" },
+    { id: 24, tag: "प्राचीन इतिहास", question: "भीमबेटका की गुफाएँ/शैलाश्रय कहाँ स्थित हैं?", options: ["भोपाल", "पंचमढ़ी", "सिंगरौली", "अब्दुल्लागंज–रायसेन क्षेत्र"], correct: 3, explanation: "भीमबेटका मध्य प्रदेश के रायसेन जिले में स्थित है।" },
+    { id: 25, tag: "प्राचीन इतिहास", question: "किस स्थल से मानव कंकाल के साथ कुत्ते का कंकाल मिलने का प्रमाण प्राप्त हुआ है?", options: ["ब्रह्मगिरि", "बुर्जहोम", "चिरांद", "मास्की"], correct: 1, explanation: "कश्मीर का बुर्जहोम नवपाषाण संस्कृति का महत्वपूर्ण स्थल है जहाँ मानव कंकालों के साथ कुत्तों के अवशेष मिले हैं।" },
+    { id: 26, tag: "प्राचीन इतिहास", question: "बुर्जहोम की सबसे विशिष्ट आवासीय विशेषता क्या है?", options: ["विशाल पत्थर के मंदिर", "गर्त आवास", "ईंट के महल", "स्तूप"], correct: 1, explanation: "बुर्जहोम के नवपाषाण स्तरों की प्रमुख विशेषता Pit dwellings यानी गर्त आवास हैं।" },
+    { id: 27, tag: "प्राचीन इतिहास", question: "भारतीय पुरातत्व सर्वेक्षण (ASI) किस मंत्रालय के अधीन कार्य करता है?", options: ["शिक्षा मंत्रालय", "पर्यटन मंत्रालय", "संस्कृति मंत्रालय", "गृह मंत्रालय"], correct: 2, explanation: "Archaeological Survey of India (ASI) वर्तमान में संस्कृति मंत्रालय के अधीन कार्य करती है।" },
+    { id: 28, tag: "प्राचीन इतिहास", question: "राष्ट्रीय मानव संग्रहालय (Indira Gandhi Rashtriya Manav Sangrahalaya) कहाँ स्थित है?", options: ["गुवाहाटी", "वाराणसी", "भोपाल", "चेन्नई"], correct: 2, explanation: "इंदिरा गांधी राष्ट्रीय मानव संग्रहालय भोपाल, मध्य प्रदेश में स्थित है।" },
+    { id: 29, tag: "प्राचीन इतिहास", question: "भीमबेटका शैलाश्रयों की खोज 1957 में किसने की थी?", options: ["एच. डी. सांकलिया", "बी. बी. लाल", "वी. एस. वाकणकर", "जॉन मार्शल"], correct: 2, explanation: "डॉ. विष्णु श्रीधर वाकणकर (V. S. Wakankar) ने 1957 में भीमबेटका के शैलाश्रयों की खोज की।" },
+    { id: 30, tag: "प्राचीन इतिहास", question: "निम्न में से कौन-सा युग्म सही सुमेलित है?", options: ["रॉबर्ट ब्रूस फूट — भारतीय प्रागैतिहासिक अध्ययन", "वी. एस. वाकणकर — हड़प्पा की खोज", "एच. डी. सांकलिया — भीमबेटका की खोज", "अलेक्जेंडर कनिंघम — नवदाटोली उत्खनन"], correct: 0, explanation: "रॉबर्ट ब्रूस फूट को Father of Indian Pre-history कहा जाता है, जो भारतीय प्रागैतिहासिक अध्ययन के अग्रणी थे।" }
+];
+        
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+  </html>
+
