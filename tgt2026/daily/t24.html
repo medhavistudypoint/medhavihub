@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Test 23 : वृद्धावस्था में आहार एवं मेनू नियोजन (50 Q)</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TEST–23 : वृद्धावस्था में आहार व मेनू नियोजन (50 Q)</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">गृह विज्ञान (Home Science)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Test 23 Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_test23_elderly_nutrition_menu_50q"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "वृद्धावस्था में सामान्यतः ऊर्जा आवश्यकता कम होने का प्रमुख कारण क्या है?", options: ["Protein digestion पूर्णतः बंद हो जाना", "Physical activity तथा basal metabolic rate में कमी", "सभी micronutrient requirements समाप्त हो जाना", "शरीर में water absorption पूर्णतः बढ़ जाना"], correct: 1, explanation: "वृद्धावस्था में physical activity और अक्सर basal metabolic rate में कमी के कारण कुल energy requirement घट सकती है। लेकिन protein, vitamins और minerals की आवश्यकता उसी अनुपात में कम नहीं होती।" },
+            { id: 2, tag: "", question: "वृद्ध व्यक्ति के लिए energy कम करते समय किस nutritional principle को बनाए रखना सबसे महत्वपूर्ण है?", options: ["Nutrient density बढ़ाना", "केवल carbohydrate बढ़ाना", "Protein पूरी तरह सीमित करना", "Micronutrient-rich foods कम करना"], correct: 0, explanation: "वृद्धावस्था में physical activity और basal metabolic rate में कमी के कारण कुल energy requirement घट सकती है, लेकिन कम calories में अधिक nutrients उपलब्ध कराने वाले nutrient-dense foods महत्वपूर्ण होते हैं।" },
+            { id: 3, tag: "", question: "वृद्धावस्था में कब्ज की समस्या के dietary management के लिए सबसे उपयुक्त combination कौन-सा है?", options: ["Low-fibre diet + कम fluids", "High-fat diet + refined foods", "Fibre-rich foods + पर्याप्त fluids", "केवल liquid sugar"], correct: 2, explanation: "Dietary fibre stool bulk बढ़ाता है, पर्याप्त fluid fibre के प्रभाव को support करता है और physical activity bowel motility में सहायता कर सकती है।" },
+            { id: 4, tag: "", question: "वृद्ध व्यक्ति के लिए भोजन की consistency तय करते समय किस factor को सबसे अधिक ध्यान में रखना चाहिए?", options: ["केवल भोजन का रंग", "Chewing और swallowing ability", "केवल भोजन की लागत", "केवल protein percentage"], correct: 1, explanation: "Age-related dental problems के कारण कठोर भोजन चबाना कठिन हो सकता है। इसलिए chewing और swallowing ability को ध्यान में रखकर food consistency तय की जाती है।" },
+            { id: 5, tag: "", question: "वृद्धावस्था में calcium और vitamin D की पर्याप्तता विशेष रूप से किस कारण महत्वपूर्ण है?", options: ["Bone health बनाए रखने के लिए", "केवल haemoglobin synthesis के लिए", "केवल glucose absorption के लिए", "केवल taste perception के लिए"], correct: 0, explanation: "Vitamin D calcium absorption और bone metabolism में महत्वपूर्ण है। Calcium और vitamin D की पर्याप्तता bone health बनाए रखने के लिए महत्वपूर्ण है।" },
+            { id: 6, tag: "", question: "वृद्ध व्यक्ति में nutrient deficiency का जोखिम बढ़ने पर कौन-सी dietary strategy अधिक उपयुक्त है?", options: ["केवल food quantity बढ़ाना", "Nutrient-dense foods का चयन", "सभी fats समाप्त करना", "केवल liquid foods देना"], correct: 1, explanation: "Nutrient deficiency के जोखिम को कम करने के लिए कम मात्रा में उच्च पोषक तत्वों वाले nutrient-dense foods का चयन करना सबसे उपयुक्त strategy है।" },
+            { id: 7, tag: "", question: "यदि वृद्ध व्यक्ति को दाँतों की समस्या के कारण कठोर भोजन चबाने में कठिनाई हो, तो menu में क्या परिवर्तन उचित होगा?", options: ["कच्चे और कठोर foods बढ़ाना", "केवल dry foods देना", "Soft, moist और आसानी से चबाए जाने वाले foods चुनना", "Protein-rich foods पूर्णतः हटाना"], correct: 2, explanation: "दंत समस्याओं के कारण soft, moist और आसानी से चबाए जाने वाले foods—जैसे खिचड़ी, दलिया, soft cooked vegetables—चुनना उचित होता है।" },
+            { id: 8, tag: "", question: "वृद्धावस्था में पर्याप्त protein का महत्व मुख्यतः किससे संबंधित है?", options: ["केवल body fat बढ़ाने से", "Muscle mass और tissue maintenance से", "केवल water retention से", "केवल taste enhancement से"], correct: 1, explanation: "उम्र बढ़ने के साथ muscle mass में कमी की प्रवृत्ति हो सकती है। पर्याप्त dietary protein muscle mass और tissue maintenance के लिए आवश्यक है।" },
+            { id: 9, tag: "", question: "वृद्ध व्यक्ति में dehydration का जोखिम बढ़ने का एक कारण क्या हो सकता है?", options: ["Thirst sensation में कमी", "Protein requirement का समाप्त होना", "Calcium absorption का पूर्ण अवरोध", "Fibre digestion का बंद होना"], correct: 0, explanation: "उम्र बढ़ने पर thirst perception कम हो सकती है, इसलिए व्यक्ति को प्यास कम महसूस होने पर भी पर्याप्त fluids की आवश्यकता होती है।" },
+            { id: 10, tag: "", question: "वृद्धावस्था में अत्यधिक refined foods की जगह whole-grain foods चुनने का प्रमुख लाभ क्या है?", options: ["Fibre और nutrient intake में सहायता", "केवल sodium intake बढ़ाना", "Protein absorption रोकना", "Fluid requirement समाप्त करना"], correct: 0, explanation: "Whole grains में dietary fibre तथा कई nutrients अधिक मात्रा में संरक्षित रहते हैं, जो constipation management और dietary quality में सहायक हैं।" },
+            { id: 11, tag: "", question: "यदि वृद्ध व्यक्ति को hypertension है, तो menu planning में किस परिवर्तन को प्राथमिकता दी जानी चाहिए?", options: ["High-sodium processed foods बढ़ाना", "Sodium-rich snacks बढ़ाना", "Excess sodium को सीमित करना", "Fluids पूर्णतः बंद करना"], correct: 2, explanation: "Excess sodium intake blood pressure management के लिए प्रतिकूल हो सकता है। इसलिए excess sodium को सीमित करना आवश्यक है।" },
+            { id: 12, tag: "", question: "वृद्ध व्यक्ति के लिए भोजन में पर्याप्त फल और सब्जियाँ रखने का प्रमुख nutritional advantage क्या है?", options: ["केवल fat supply", "Fibre, vitamins, minerals और phytochemicals", "केवल sodium", "केवल cholesterol"], correct: 1, explanation: "फल और सब्जियाँ dietary fibre, vitamins, minerals और phytochemicals के उत्कृष्ट स्रोत होते हैं।" },
+            { id: 13, tag: "", question: "वृद्धावस्था में iron deficiency का जोखिम कम करने के लिए कौन-सा approach बेहतर है?", options: ["Iron-rich foods तथा absorption-supporting food combinations", "सभी legumes हटाना", "केवल refined cereal लेना", "Tea को प्रत्येक iron-rich meal के साथ लेना"], correct: 0, explanation: "Iron-rich foods के साथ absorption-supporting (जैसे vitamin C युक्त खाद्य पदार्थ) combinations अपनाने से iron absorption बेहतर होता है।" },
+            { id: 14, tag: "", question: "वृद्ध व्यक्ति में appetite कम होने पर कौन-सा विकल्प सबसे उपयुक्त है?", options: ["कम मात्रा में nutrient-dense meals", "भोजन पूरी तरह छोड़ना", "केवल पानी देना", "केवल high-sugar drinks देना"], correct: 0, explanation: "कम appetite होने पर बड़े meals खाना कठिन होता है, इसलिए छोटे portions में nutrient-dense meals देना सबसे उपयुक्त है।" },
+            { id: 15, tag: "", question: "वृद्धावस्था में excessive saturated fat और trans fat intake को सीमित करने का प्रमुख कारण क्या है?", options: ["Cardiovascular health की दृष्टि से", "केवल fibre digestion के लिए", "केवल calcium absorption के लिए", "केवल taste सुधारने के लिए"], correct: 0, explanation: "Excessive saturated और trans fats cardiovascular health के लिए प्रतिकूल हो सकते हैं, इसलिए इन्हें सीमित करना आवश्यक है।" },
+            { id: 16, tag: "", question: "वृद्ध व्यक्ति में meal frequency बढ़ाने का सबसे उपयुक्त कारण कौन-सा हो सकता है?", options: ["छोटे meals को tolerate करना आसान हो सकता है", "इससे nutrient requirement समाप्त हो जाती है", "इससे water requirement समाप्त हो जाती है", "इससे protein की आवश्यकता आधी हो जाती है"], correct: 0, explanation: "कम appetite या digestive comfort के लिए दिनभर में छोटे-छोटे meals (meal frequency बढ़ाना) लेना अधिक सहन करने योग्य होता है।" },
+            { id: 17, tag: "", question: "वृद्धावस्था में vitamin B12 की पर्याप्तता पर विशेष ध्यान देने का एक कारण क्या है?", options: ["Neurological तथा red blood cell functions से संबंध", "केवल fat storage", "केवल calcium excretion", "केवल sodium balance"], correct: 0, explanation: "Vitamin B12 nervous system function और normal red blood cell formation के लिए अत्यंत महत्वपूर्ण है।" },
+            { id: 18, tag: "", question: "वृद्ध व्यक्ति के लिए beverage selection में निम्न में से कौन-सा विकल्प सामान्यतः बेहतर है?", options: ["Sugary soft drink", "अत्यधिक caffeinated drink", "पर्याप्त पानी और unsweetened nutritious beverages", "केवल energy drinks"], correct: 2, explanation: "Hydration के लिए पर्याप्त पानी और बिना चीनी वाले पौष्टिक पेय (unsweetened nutritious beverages) सबसे अच्छे विकल्प हैं।" },
+            { id: 19, tag: "", question: "वृद्धावस्था में constipation के संदर्भ में निम्न में से कौन-सा combination सबसे कम उपयुक्त है?", options: ["Whole grains + vegetables", "Fruits + adequate fluids", "Refined foods + low fluid intake", "Legumes + vegetables"], correct: 2, explanation: "Refined foods और low fluid intake constipation की समस्या को और अधिक बढ़ा सकते हैं, अतः यह सबसे कम उपयुक्त है।" },
+            { id: 20, tag: "", question: "वृद्धावस्था में menu planning के लिए “nutrient density” का महत्व क्यों बढ़ जाता है?", options: ["कम energy intake में भी nutrient requirements पूरी करने में सहायता मिलती है", "इससे भोजन की मात्रा हमेशा दोगुनी होती है", "इससे केवल sugar intake बढ़ता है", "इससे सभी micronutrients की आवश्यकता समाप्त हो जाती है"], correct: 0, explanation: "कम energy intake (कम calories) होने पर भी शरीर की nutrient requirements पूरी करने में nutrient density मदद करती है।" },
+            { id: 21, tag: "", question: "वृद्ध व्यक्ति में osteoporosis risk के संदर्भ में किस combination पर ध्यान देना अधिक उचित है?", options: ["Calcium + vitamin D + appropriate physical activity", "Sodium + sugar + saturated fat", "केवल vitamin C + caffeine", "केवल carbohydrate + fluids"], correct: 0, explanation: "Osteoporosis के जोखिम को प्रबंधित करने के लिए calcium, vitamin D और उपयुक्त physical activity का संयोजन सबसे उचित है।" },
+            { id: 22, tag: "", question: "वृद्धावस्था में भोजन का स्वाद कम महसूस होने पर कौन-सी strategy अपेक्षाकृत बेहतर है?", options: ["अत्यधिक नमक बढ़ाना", "अत्यधिक sugar बढ़ाना", "Herbs और natural flavouring का उपयोग", "Processed salty foods बढ़ाना"], correct: 2, explanation: "स्वाद कम होने पर अत्यधिक नमक या चीनी बढ़ाने के बजाय herbs और natural flavouring का उपयोग करना स्वास्थ्य की दृष्टि से बेहतर है।" },
+            { id: 23, tag: "", question: "वृद्ध व्यक्ति के लिए protein source चुनते समय किस principle को प्राथमिकता दी जानी चाहिए?", options: ["पर्याप्त और अच्छी quality का protein", "Protein को न्यूनतम करना", "केवल sugar-based foods", "केवल refined cereals"], correct: 0, explanation: "Muscle mass और tissue maintenance के लिए वृद्ध व्यक्ति के आहार में पर्याप्त और उच्च गुणवत्ता (good quality) का protein होना आवश्यक है।" },
+            { id: 24, tag: "", question: "यदि वृद्ध व्यक्ति को swallowing difficulty है, तो निम्न में से कौन-सा menu modification अधिक उपयुक्त है?", options: ["Dry और crumbly foods", "उपयुक्त consistency वाले soft/moist foods", "बहुत कठोर raw vegetables", "केवल nuts"], correct: 1, explanation: "Swallowing difficulty (dysphagia) होने पर choking से बचने के लिए उपयुक्त consistency वाले soft और moist foods देने चाहिए।" },
+            { id: 25, tag: "", question: "वृद्धावस्था में balanced diet का सबसे उपयुक्त वर्णन कौन-सा है?", options: ["केवल low-calorie diet", "केवल high-protein diet", "आवश्यकता के अनुसार energy-controlled लेकिन nutrient-dense और varied diet", "केवल liquid diet"], correct: 2, explanation: "वृद्धावस्था में balanced diet का अर्थ आवश्यकतानुसार energy-controlled लेकिन nutrient-dense और विविध (varied) आहार से है।" },
+            { id: 26, tag: "", question: "Menu planning का सबसे व्यापक उद्देश्य क्या है?", options: ["केवल भोजन की लागत कम करना", "Nutritional adequacy, variety और resources का संतुलित उपयोग", "केवल भोजन की मात्रा बढ़ाना", "केवल भोजन को आकर्षक बनाना"], correct: 1, explanation: "Menu planning का मुख्य उद्देश्य nutritional adequacy, variety प्राप्त करना और उपलब्ध resources (धन, समय, श्रम) का संतुलित उपयोग करना है।" },
+            { id: 27, tag: "", question: "एक अच्छे menu में colour, texture और flavour में variety रखने का मुख्य उद्देश्य क्या है?", options: ["केवल cost बढ़ाना", "Sensory appeal और acceptability बढ़ाना", "केवल protein बढ़ाना", "केवल cooking time बढ़ाना"], correct: 1, explanation: "रंग, बनावट (texture) और स्वाद (flavour) में विविधता भोजन के sensory appeal और उसकी स्वीकार्यता (acceptability) को बढ़ाती है।" },
+            { id: 28, tag: "", question: "Menu planning में परिवार के सदस्यों की आयु और physiological condition को शामिल करना क्यों आवश्यक है?", options: ["सभी व्यक्तियों की nutritional requirements समान नहीं होतीं", "इससे food cost हमेशा समाप्त हो जाती है", "इससे cooking की आवश्यकता समाप्त हो जाती है", "इससे केवल menu का colour बदलता है"], correct: 0, explanation: "परिवार के सभी सदस्यों की आयु, लिंग और physiological condition (जैसे गर्भावस्था, वृद्धावस्था) अलग होने के कारण nutritional requirements भी भिन्न होती हैं।" },
+            { id: 29, tag: "", question: "यदि lunch में rice-based main dish है, तो menu में variety बनाए रखने के लिए किस approach को प्राथमिकता दी जानी चाहिए?", options: ["फिर से rice-based दूसरा मुख्य dish", "अलग cereal/pulse/vegetable component जोड़ना", "केवल rice की मात्रा बढ़ाना", "केवल sweet dish बढ़ाना"], correct: 1, explanation: "एक ही अनाज की पुनरावृत्ति से बचने के लिए दूसरे घटकों (जैसे अलग cereal, pulse या vegetable) को जोड़कर variety बढ़ानी चाहिए।" },
+            { id: 30, tag: "", question: "Menu planning में seasonality को ध्यान में रखने का प्रमुख लाभ क्या है?", options: ["Seasonal foods अक्सर उपलब्ध और अपेक्षाकृत economical होते हैं", "इससे सभी foods imported हो जाते हैं", "इससे nutrient value हमेशा समाप्त हो जाती है", "इससे food variety कम हो जाती है"], correct: 0, explanation: "मौसमी (seasonal) खाद्य पदार्थ आसानी से ताजे रूप में उपलब्ध होते हैं और जेब के अनुकूल (economical) भी होते हैं।" },
+            { id: 31, tag: "", question: "एक balanced menu में निम्न में से किस principle का पालन होना चाहिए?", options: ["हर meal में बिल्कुल वही food", "केवल expensive foods", "Food-group diversity और nutritional balance", "केवल high-protein foods"], correct: 2, explanation: "संतुलित मेनू में विभिन्न खाद्य समूहों की विविधता (food-group diversity) और पोषण संबंधी संतुलन होना अनिवार्य है।" },
+            { id: 32, tag: "", question: "Menu planning में leftovers को ध्यान में रखना किस factor से सबसे अधिक संबंधित है?", options: ["Resource management और economy", "केवल colour harmony", "केवल taste", "केवल nutrient destruction"], correct: 0, explanation: "बचे हुए भोजन (leftovers) का सही प्रबंधन और योजना बनाना resource management और economy के अंतर्गत आता है।" },
+            { id: 33, tag: "", question: "एक अच्छे menu में बार-बार एक ही preparation दोहराने से मुख्यतः क्या प्रभावित होता है?", options: ["Variety और acceptability", "केवल protein digestion", "केवल food safety", "केवल water balance"], correct: 0, explanation: "एक ही तरह की तैयारी बार-बार दोहराने से भोजन की विविधता (variety) और उसकी स्वीकार्यता (acceptability) कम हो जाती है।" },
+            { id: 34, tag: "", question: "यदि परिवार का food budget सीमित है, तो menu planning में कौन-सा approach अधिक उपयुक्त है?", options: ["केवल costly foods चुनना", "Locally available और seasonal nutrient-rich foods चुनना", "सभी protein foods हटाना", "केवल packaged foods लेना"], correct: 1, explanation: "सीमित बजट में स्थानीय स्तर पर उपलब्ध और मौसमी पौष्टिक खाद्य पदार्थों का चयन सबसे समझदारी भरा कदम है।" },
+            { id: 35, tag: "", question: "Menu planning में “nutritional adequacy” का अर्थ क्या है?", options: ["भोजन केवल स्वादिष्ट हो", "भोजन केवल सस्ता हो", "भोजन से आवश्यक nutrients उचित मात्रा में मिलें", "भोजन केवल attractive दिखाई दे"], correct: 2, explanation: "पोषण संबंधी पर्याप्तता (nutritional adequacy) का अर्थ है कि भोजन से शरीर की जरूरत के सभी आवश्यक पोषक तत्व सही मात्रा में मिलें।" },
+            { id: 36, tag: "", question: "meal/menu planning निम्न में से किन उद्देश्यों के लिए महत्वपूर्ण है? (i) Food budget planning (ii) Nutritional adequacy (iii) Variety in diet (iv) Efficient use of resources", options: ["केवल (i) और (ii)", "केवल (ii) और क्रमशः (iii)", "केवल (i), (ii) और (iii)", "(i), (ii), (iii) और (iv)"], correct: 3, explanation: "भोजन योजना बजट, पोषण संबंधी पर्याप्तता, आहार में विविधता और संसाधनों के कुशल उपयोग—इन सभी चारों उद्देश्यों के लिए महत्वपूर्ण है।" },
+            { id: 37, tag: "", question: "Food-service unit में menu को महत्वपूर्ण component मानने का सबसे उचित कारण क्या है?", options: ["यह केवल food price तय करता है", "यह खाद्य-सेवा (food-service) की अनेक गतिविधियों (activities) को प्रभावित करता है", "यह केवल decoration तय करता है", "यह केवल kitchen size तय करता है्स"], correct: 1, explanation: "फूड-सर्विस यूनिट में मेनू एक केंद्रीय धुरी है जो क्रय (purchasing), उत्पादन (production) और सेवा जैसी अनेक गतिविधियों को प्रत्यक्ष रूप से प्रभावित करता है।" },
+            { id: 38, tag: "", question: "Food-service unit में भोजन तैयार करने और परोसने की मूल प्रक्रिया को क्या कहा गया है?", options: ["Purchasing", "Menu", "Production", "Work simplification"], correct: 2, explanation: "फूड-सर्विस यूनिट में भोजन तैयार करने की मुख्य प्रक्रिया को उत्पादन (production) कहा जाता है।" },
+            { id: 39, tag: "", question: "menu के प्रकारों में कौन-सा शामिल है?", options: ["Cycle menu", "Random menu", "Emergency menu", "Seasonal-only menu"], correct: 0, explanation: "मेनू के प्रमुख प्रकारों में चक्रिय मेनू (Cycle menu) शामिल होता है, जिसे एक निश्चित समयावधि के बाद दोहराया जाता है।" },
+            { id: 40, tag: "", question: "Cycle menu की प्रमुख विशेषता क्या है?", options: ["प्रत्येक दिन बिल्कुल वही menu दोहराना", "निर्धारित अवधि के बाद menu को पुनः cycle करना", "केवल एक food item रखना", "केवल buffet में प्रयोग होना"], correct: 1, explanation: "चक्र (Cycle menu) की विशेषता यह है कि एक निश्चित दिनों का मेनू पूरा होने के बाद उसे उसी क्रम में दोबारा शुरू किया जाता है।" },
+            { id: 41, tag: "", question: "Buffet के लिए menu की सबसे उपयुक्त विशेषता क्या होगी?", options: ["भोजन चुनना कठिन हो", "विकल्प स्पष्ट और आसानी से चुनने योग्य हों", "सभी dishes एक जैसी हों", "केवल एक मुख्य dish हो"], correct: 1, explanation: "बुफेत (Buffet) सेवा के लिए मेनू ऐसा होना चाहिए जिसमें व्यंजन स्पष्ट हों और अतिथि आसानी से अपनी पसंद का चयन कर सकें।" },
+            { id: 42, tag: "", question: "meal planning को किन उद्देश्यों से जोड़ा गया है?", options: ["केवल food cost", "केवल food variety", "Nutritional adequacy, variety, budget और resource utilisation", "केवल food appearance"], correct: 2, explanation: "भोजन योजना पोषण की पर्याप्तता, विविधता, बजट और संसाधनों के सही उपयोग (resource utilisation) से जुड़ी होती है।" },
+            { id: 43, tag: "", question: "यदि menu में लगातार एक ही प्रकार की preparation रखी जाए, तो कौन-सा principle सबसे अधिक प्रभावित होगा?", options: ["Variety", "Food safety", "Storage life", "Purchasing procedure"], correct: 0, explanation: "लगातार एक ही प्रकार की तैयारी रखने से आहार की विविधता (variety) का सिद्धांत सबसे अधिक प्रभावित होता है।" },
+            { id: 44, tag: "", question: "Menu planning में family members की nutritional needs को ध्यान में रखना किस principle का उदाहरण है?", options: ["Individualisation of meal planning", "Standardisation of taste", "Uniform food selection", "Maximum repetition"], correct: 0, explanation: "परिवार के प्रत्येक सदस्य की विशिष्ट पोषण जरूरतों को ध्यान में रखना व्यक्तिगत भोजन योजना (Individualisation) का उदाहरण है।" },
+            { id: 45, tag: "", question: "वृद्ध व्यक्ति के लिए menu बनाते समय सामान्य adult menu की तुलना में किस factor का महत्व अधिक हो सकता है?", options: ["केवल food colour", "Chewing ability, appetite और nutrient density", "केवल serving size", "केवल food cost"], correct: 1, explanation: "वृद्ध व्यक्तियों के लिए चबाने की क्षमता (chewing ability), कम भूख (appetite) और पोषक घनत्व (nutrient density) का विशेष महत्व होता है।" },
+            { id: 46, tag: "", question: "वृद्ध व्यक्ति के menu में soft cooked vegetables और appropriate consistency foods रखने का प्रमुख उद्देश्य क्या है?", options: ["केवल colour improvement", "Chewing/swallowing को आसान बनाना", "केवल calorie बढ़ाना", "केवल protein कम करना"], correct: 1, explanation: "नरम पकी हुई सब्जियां और उचित स्थिरता वाले खाद्य पदार्थ वृद्धों के लिए चबाने और निगलने (chewing/swallowing) की प्रक्रिया को आसान बनाते हैं।" },
+            { id: 47, tag: "", question: "वृद्धावस्था में menu planning के संदर्भ में निम्न में से कौन-सा combination सबसे उपयुक्त है?", options: ["High sodium + refined foods + low fluids", "Nutrient-dense foods + adequate fibre + suitable consistency", "केवल sweets + fried foods", "केवल liquid calories"], correct: 1, explanation: "वृद्धों के लिए पोषक तत्वों से भरपूर खाद्य पदार्थ (nutrient-dense), पर्याप्त फाइबर और उपयुक्त स्थिरता (suitable consistency) वाला संयोजन सबसे श्रेष्ठ है।" },
+            { id: 48, tag: "", question: "यदि वृद्ध व्यक्ति को constipation की शिकायत है, तो menu में निम्न में से किस परिवर्तन को प्राथमिकता दी जानी चाहिए?", options: ["Fibre और fluids बढ़ाना", "Refined foods बढ़ाना", "Vegetables कम करना", "Water कम करना"], correct: 0, explanation: "कब्ज (constipation) की स्थिति में आहार में रेशे (fibre) और तरल पदार्थों (fluids) की मात्रा बढ़ाना सबसे प्रभावी उपाय है।" },
+            { id: 49, tag: "", question: "वृद्ध व्यक्ति के लिए menu में protein-rich food शामिल करने का प्रमुख उद्देश्य क्या है?", options: ["केवल स्वाद बढ़ाना", "Muscle/tissue maintenance में सहायता", "केवल water retention", "केवल carbohydrate storage"], correct: 1, explanation: "वृद्धों के मेनू में प्रोटीनयुक्त भोजन का मुख्य उद्देश्य मांसपेशियों और ऊतकों के रखरखाव (muscle/tissue maintenance) में सहायता करना है।" },
+            { id: 50, tag: "", question: "एक वृद्ध व्यक्ति के लिए आदर्श menu का सबसे व्यापक combination कौन-सा है?", options: ["Low-calorie + low-protein + low-fibre", "Nutrient-dense + varied + adequate protein + appropriate consistency", "High-sugar + high-sodium + low-fluid", "केवल liquid और fruit-based"], correct: 1, explanation: "एक आदर्श वृद्ध मेनू वह है जिसमें पोषक घनत्व (nutrient-dense), विविधता, पर्याप्त प्रोटीन और उम्र के अनुकूल उचित स्थिरता (appropriate consistency) हो।" }
+        ];
+    </script>
+
+    <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
