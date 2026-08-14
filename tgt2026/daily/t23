@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Test 23 : गर्भावस्था में आहार (50 Q)</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ सही किया गया बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TEST–23 : गर्भावस्था में आहार (50 Q)</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">गृह विज्ञान (Home Science)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Test 23 Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_test23_pregnancy_nutrition_50q"; 
+
+        // 2. 50 प्रश्नों का डेटासेट (बिना किसी टैग के)
+        const dataset = [
+            { id: 1, tag: "", question: "गर्भावस्था के दौरान प्रोटीन की आवश्यकता बढ़ने का सबसे व्यापक कारण कौन-सा है?", options: ["केवल मातृ शरीर में वसा का संचय", "भ्रूणीय ऊतकों के निर्माण के साथ मातृ ऊतकों में होने वाले परिवर्तनों की पूर्ति", "केवल रक्त में ग्लूकोज का नियमन", "केवल कैल्शियम के अवशोषण को बढ़ाना"], correct: 1, explanation: "गर्भावस्था में भ्रूण के विकास के साथ placenta, maternal tissues तथा रक्त आदि में भी परिवर्तन होते हैं। इसलिए protein requirement बढ़ती है।" },
+            { id: 2, tag: "", question: "गर्भावस्था में बढ़ी हुई प्रोटीन आवश्यकता को पूरा करने के लिए निम्न में से कौन-सा संयोजन सबसे उपयुक्त है?", options: ["चावल + चीनी + तेल", "दाल + दूध/दही + सोयाबीन/अंडा", "फल + शर्करा + चाय", "सब्जियाँ + नमक + तेल"], correct: 1, explanation: "दाल, दूध, सोयाबीन और अंडा जैसे खाद्य पदार्थ protein के अच्छे स्रोत हैं। विविध स्रोतों का संयोजन protein adequacy बेहतर करता है।" },
+            { id: 3, tag: "", question: "ICMR-NIN 2020 के अनुसार pregnancy में protein की अतिरिक्त RDA किस प्रकार बदलती है?", options: ["दूसरे trimester में +9.5 g और तीसरे में +22 g/day", "दूसरे trimester में +22 g और तीसरे में +9.5 g/day", "दोनों trimester में +5 g/day", "केवल पहले trimester में +22 g/day"], correct: 0, explanation: "ICMR-NIN 2020 में second trimester के लिए +9.5 g/day और third trimester के लिए +22 g/day अतिरिक्त protein RDA दी गई है।" },
+            { id: 4, tag: "", question: "गर्भावस्था में iron की आवश्यकता बढ़ने का सबसे सीधा संबंध किससे है?", options: ["केवल मांसपेशीय वृद्धि", "बढ़ी हुई रक्त-निर्माण एवं haemoglobin आवश्यकता", "केवल वसा के पाचन", "केवल calcium deposition"], correct: 1, explanation: "गर्भावस्था में maternal blood volume तथा fetal requirements के कारण iron की आवश्यकता बढ़ती है।" },
+            { id: 5, tag: "", question: "ICMR-NIN 2020 के अनुसार pregnant women के लिए iron RDA क्या है?", options: ["21 mg/day", "24 mg/day", "27 mg/day", "35 mg/day"], correct: 2, explanation: "ICMR-NIN 2020 में pregnancy के लिए iron RDA 27 mg/day है।" },
+            { id: 6, tag: "", question: "गर्भावस्था में iron deficiency का सबसे प्रत्यक्ष परिणाम निम्न में से कौन-सा है?", options: ["Pellagra", "Iron-deficiency anaemia", "Scurvy", "Rickets"], correct: 1, explanation: "Iron haemoglobin synthesis का महत्वपूर्ण घटक है। इसकी कमी से iron-deficiency anaemia हो सकता है।" },
+            { id: 7, tag: "", question: "गर्भावस्था में folate का महत्व मुख्यतः किस प्रक्रिया से संबंधित है?", options: ["कोशिका-विभाजन एवं fetal development", "केवल dietary fat digestion", "केवल calcium excretion", "केवल blood glucose storage"], correct: 0, explanation: "Folate तीव्र cell division और fetal development के लिए महत्वपूर्ण है, विशेषकर pregnancy के प्रारंभिक चरण में।" },
+            { id: 8, tag: "", question: "यदि गर्भवती महिला का भोजन protein-rich है लेकिन iron और folate बहुत कम हैं, तो उसका आहार—", options: ["पूर्णतः balanced माना जाएगा", "केवल energy-deficient माना जाएगा", "कुछ nutrients में adequate लेकिन micronutrient-wise inadequate हो सकता है", "therapeutic diet कहलाएगा"], correct: 2, explanation: "Balanced diet का अर्थ केवल पर्याप्त protein या calories नहीं है; सभी आवश्यक nutrients की adequacy आवश्यक है।" },
+            { id: 9, tag: "", question: "गर्भावस्था में भोजन में calcium-rich foods शामिल करने का प्रमुख उद्देश्य क्या है?", options: ["केवल maternal body weight बढ़ाना", "fetal skeletal development और maternal calcium needs को support करना", "केवल haemoglobin बढ़ाना", "केवल fat absorption रोकना"], correct: 1, explanation: "Calcium fetal bone development तथा maternal skeletal health दोनों के लिए महत्वपूर्ण है।" },
+            { id: 10, tag: "", question: "ICMR-NIN 2020 के अनुसार pregnancy में calcium की RDA लगभग कितनी है?", options: ["600 mg/day", "800 mg/day", "1000 mg/day", "1500 mg/day"], correct: 2, explanation: "ICMR-NIN 2020 में pregnancy के लिए calcium RDA 1000 mg/day है।" },
+            { id: 11, tag: "", question: "गर्भावस्था में energy requirement के संदर्भ में ICMR-NIN 2020 का सही कथन कौन-सा है?", options: ["pregnancy में कोई अतिरिक्त energy नहीं चाहिए", "सभी महिलाओं के लिए निश्चित रूप से +500 kcal/day", "सामान्यतः +350 kcal/day का अतिरिक्त प्रावधान किया गया है", "केवल पहले trimester में +350 kcal/day"], correct: 2, explanation: "ICMR-NIN 2020 में pregnancy के लिए +350 kcal/day दिया गया है; वास्तविक आवश्यकता body weight, weight gain और activity के अनुसार adjust की जाती है।" },
+            { id: 12, tag: "", question: "गर्भावस्था में “दो व्यक्तियों के लिए खाना” कहने का वैज्ञानिक अर्थ क्या होना चाहिए?", options: ["भोजन की मात्रा को ठीक दोगुना करना", "केवल protein को दोगुना करना", "बढ़ी हुई nutrient requirements के अनुसार diet की गुणवत्ता और मात्रा को समायोजित करना", "केवल दूध की मात्रा दोगुनी करना"], correct: 2, explanation: "Pregnancy में requirements बढ़ती हैं, लेकिन इसका अर्थ सामान्य भोजन की मात्रा को mechanically दो गुना करना नहीं है।" },
+            { id: 13, tag: "", question: "गर्भावस्था में protein-rich foods के चयन के संदर्भ में निम्न में से कौन-सा विकल्प अधिक उपयुक्त है?", options: ["केवल refined cereals", "pulses, milk, egg/appropriate animal foods और soybean जैसे विविध स्रोत", "केवल fruit juices", "केवल sugar-containing foods"], correct: 1, explanation: "विविध protein sources maternal और fetal requirements पूरी करने में सहायता करते हैं।" },
+            { id: 14, tag: "", question: "गर्भावस्था में iodine की पर्याप्तता विशेष रूप से किससे जुड़ी है?", options: ["thyroid hormone synthesis और fetal development", "केवल fat storage", "केवल digestion", "केवल haemoglobin breakdown"], correct: 0, explanation: "Iodine thyroid hormones के निर्माण के लिए आवश्यक है और ये fetal growth तथा neurological development में महत्वपूर्ण हैं।" },
+            { id: 15, tag: "", question: "गर्भावस्था में भोजन की dietary diversity क्यों महत्वपूर्ण है?", options: ["इससे केवल भोजन का रंग बदलता है", "इससे विभिन्न आवश्यक nutrients की adequacy की संभावना बढ़ती है", "इससे केवल calories बढ़ती हैं", "इससे protein की आवश्यकता समाप्त हो जाती है"], correct: 1, explanation: "अलग-अलग food groups से protein, vitamins, minerals, essential fatty acids आदि प्राप्त होते हैं।" },
+            { id: 16, tag: "", question: "गर्भवती महिला के लिए निम्न में से कौन-सा meal pattern अधिक उपयुक्त होगा?", options: ["केवल cereal-based meals", "cereal + pulse + vegetable + fruit + milk/other protein source का विविध संयोजन", "केवल fruit diet", "केवल high-fat foods"], correct: 1, explanation: "विविध food groups को शामिल करने से overall nutrient adequacy बेहतर होती है।" },
+            { id: 17, tag: "", question: "यदि गर्भवती महिला में iron-rich food का सेवन पर्याप्त है लेकिन भोजन के साथ बार-बार चाय ली जाती है, तो किस nutrient की bioavailability प्रभावित हो सकती है?", options: ["Non-heme iron", "Vitamin B12", "Vitamin D", "Iodine"], correct: 0, explanation: "Tea में उपस्थित polyphenolic compounds non-heme iron absorption को कम कर सकते हैं।" },
+            { id: 18, tag: "", question: "गर्भावस्था में protein की आवश्यकता बढ़ने के पीछे निम्न में से कौन-सा कारण सबसे कम उपयुक्त है?", options: ["भ्रूणीय tissue synthesis", "maternal tissue growth/repair", "नए cellular structures का निर्माण", "केवल शरीर का तापमान बनाए रखना"], correct: 3, explanation: "Protein की बढ़ी आवश्यकता मुख्यतः tissue synthesis, growth और repair से जुड़ी है; केवल body temperature maintenance इसका प्रमुख कारण नहीं है।" },
+            { id: 19, tag: "", question: "गर्भावस्था में भोजन की योजना बनाते समय निम्न में से किस सिद्धांत को प्राथमिकता मिलनी चाहिए?", options: ["केवल calorie density", "nutrient density और dietary diversity", "केवल भोजन की कम लागत", "केवल protein concentration"], correct: 1, explanation: "Pregnancy में कई nutrients की आवश्यकता बढ़ती है, इसलिए nutrient-dense और diverse diet अधिक उपयुक्त है।" },
+            { id: 20, tag: "", question: "गर्भावस्था में iron, folate और protein को एक साथ पर्याप्त रखने का सबसे उचित कारण क्या है?", options: ["तीनों केवल energy देते हैं", "तीनों maternal तथा fetal growth/development से अलग-अलग लेकिन महत्वपूर्ण रूप से जुड़े हैं", "तीनों केवल digestion में काम करते हैं", "तीनों calcium के substitutes हैं"], correct: 1, explanation: "Protein tissue formation में, iron haemoglobin synthesis में और folate cell division/fetal development में महत्वपूर्ण है।" },
+            { id: 21, tag: "", question: "balanced diet की आवश्यकता किस आधार पर निर्धारित होती है?", options: ["केवल आयु", "केवल gender", "आवश्यकता, जिसमें age, gender, activity और health status जैसे कारक शामिल हैं", "केवल भोजन की उपलब्धता"], correct: 2, explanation: "Balanced diet व्यक्ति की physiological requirements पर निर्भर करती है।" },
+            { id: 22, tag: "", question: "एक ही आयु की सामान्य महिला और गर्भवती महिला के balanced diet में अंतर का सबसे उचित कारण क्या है?", options: ["दोनों की nutrient requirements हमेशा समान होती हैं", "pregnancy में physiological और nutritional requirements बदलती हैं", "गर्भवती महिला को केवल liquid foods चाहिए", "pregnancy में protein की आवश्यकता समाप्त हो जाती है"], correct: 1, explanation: "Expecting women की balanced diet सामान्य महिलाओं से अलग होती है क्योंकि pregnancy में requirements बदलती हैं।" },
+            { id: 23, tag: "", question: "balanced diet के बारे में सही कथन कौन-सा है?", options: ["हर meal में सभी nutrients का होना अनिवार्य है", "हर दिन केवल एक ही food group पर्याप्त है", "food items समय के साथ विविध होने चाहिए ताकि requirements पूरी हों", "अधिक nutrients वाला diet हमेशा बेहतर होता है"], correct: 2, explanation: "Balanced diet का अर्थ प्रत्येक meal में हर nutrient लेना नहीं है; reasonable period में dietary variety महत्वपूर्ण है।" },
+            { id: 24, tag: "", question: "यदि एक गर्भवती महिला महंगे foods नहीं खरीद सकती, तो कौन-सा विकल्प अधिक उचित है?", options: ["केवल supplements पर निर्भर रहना", "low-cost nutritious foods जैसे pulses, groundnut, soybean आदि का उपयोग", "भोजन कम कर देना", "केवल refined foods लेना"], correct: 1, explanation: "Low-cost plant foods भी nutritional requirements पूरी करने में योगदान कर सकते हैं।" },
+            { id: 25, tag: "", question: "निम्न में से कौन-सा combination plant-based nutrition की दृष्टि से उपयोगी हो सकता है?", options: ["pulses + cereals", "sugar + salt", "oil + sugar", "refined flour + sugar"], correct: 0, explanation: "Cereals और pulses का संयोजन dietary protein quality को बेहतर कर सकता है।" },
+            { id: 26, tag: "", question: "protein का प्रमुख कार्य क्या है?", options: ["केवल energy storage", "नई कोशिकाओं के निर्माण और damaged cells की repair में सहायता", "केवल body temperature control", "केवल water balance"], correct: 1, explanation: "Protein growth, tissue building और repair में महत्वपूर्ण भूमिका निभाता है।" },
+            { id: 27, tag: "", question: "यदि किसी भोजन में protein पर्याप्त है लेकिन micronutrients की विविधता बहुत कम है, तो balanced-diet अवधारणा के अनुसार—", options: ["वह स्वतः balanced diet है", "केवल protein पर्याप्त होने से balanced diet सिद्ध नहीं होती", "calories समाप्त हो जाती हैं", "vitamins की आवश्यकता नहीं रहती"], correct: 1, explanation: "Balanced diet में विभिन्न nutrients की आवश्यकतानुसार पर्याप्तता जरूरी है।" },
+            { id: 28, tag: "", question: "गर्भवती महिला के लिए भोजन का चयन करते समय सबसे अच्छा विकल्प कौन-सा है?", options: ["महंगे खाद्य पदार्थों का अनिवार्य चयन", "उपलब्ध, विविध और nutrient-rich foods का उचित संयोजन", "केवल animal foods", "केवल packaged foods"], correct: 1, explanation: "Nutrition केवल expensive या non-vegetarian foods पर निर्भर नहीं है।" },
+            { id: 29, tag: "", question: "निम्न में से कौन-सा food protein का plant source है?", options: ["Soybean", "Sugar", "Refined oil", "Salt"], correct: 0, explanation: "Soybean एक प्रमुख plant protein source है।" },
+            { id: 30, tag: "", question: "एक गर्भवती महिला की diet में cereals, pulses, vegetables और milk products को अलग-अलग दिनों में बदलकर शामिल किया जाता है। यह किस सिद्धांत को दर्शाता है?", options: ["Dietary monotony", "Dietary diversity", "Therapeutic restriction", "Nutrient elimination"], correct: 1, explanation: "Dietary variety से अलग-अलग nutrients प्राप्त करने की संभावना बढ़ती है।" },
+            { id: 31, tag: "", question: "overnutrition के संदर्भ में कौन-सा कथन सही है?", options: ["जितने अधिक nutrients, उतना बेहतर", "excess nutrients भी undesirable हो सकते हैं", "overnutrition केवल pregnancy में होता है", "overnutrition का obesity से कोई संबंध नहीं"], correct: 1, explanation: "Overnutrition desirable नहीं है और obesity तथा उससे जुड़े health risks को बढ़ा सकता है।" },
+            { id: 32, tag: "", question: "गर्भावस्था में balanced diet बनाते समय “nutritional requirement” को आधार मानना क्यों आवश्यक है?", options: ["क्योंकि सभी महिलाओं की requirements बिल्कुल समान होती हैं", "क्योंकि physiological state के अनुसार nutrient needs बदल सकती हैं", "क्योंकि food groups महत्वहीन हैं", "क्योंकि केवल calories देखना पर्याप्त है"], correct: 1, explanation: "Pregnancy एक अलग physiological state है, इसलिए nutrient needs सामान्य अवस्था से अलग हो सकती हैं।" },
+            { id: 33, tag: "", question: "निम्न में से कौन-सा low-cost nutrition अवधारणा के अनुरूप नहीं है?", options: ["Soybean", "Groundnut", "Pulses", "केवल imported expensive foods पर निर्भरता"], correct: 3, explanation: "Low-cost और plant-based foods nutritional requirements पूरी करने में उपयोगी होते हैं, न कि केवल expensive imported foods।" },
+            { id: 34, tag: "", question: "यदि एक गर्भवती महिला भोजन की quantity तो पर्याप्त ले रही है, लेकिन food variety बहुत कम है, तो मुख्य चिंता क्या होगी?", options: ["केवल पानी की कमी", "micronutrient inadequacy का जोखिम", "protein का स्वतः बढ़ जाना", "energy का स्वतः शून्य हो जाना"], correct: 1, explanation: "पर्याप्त मात्रा हमेशा पर्याप्त nutrient diversity की गारंटी नहीं देती।" },
+            { id: 35, tag: "", question: "balanced diet अवधारणा में pregnancy के संदर्भ में सबसे महत्वपूर्ण निष्कर्ष क्या है?", options: ["सभी गर्भवती महिलाओं के लिए एक ही fixed menu होना चाहिए", "diet को व्यक्ति की बदलती nutritional requirements के अनुसार plan करना चाहिए", "केवल calorie count करना पर्याप्त है", "केवल supplements balanced diet का स्थान ले सकते हैं"], correct: 1, explanation: "Balanced diet requirements-based होती है; pregnancy में requirements बदलती हैं।" },
+            { id: 36, tag: "", question: "एक गर्भवती महिला प्रतिदिन पर्याप्त calories ले रही है, लेकिन उसके भोजन में protein, iron और folate के अच्छे स्रोत बहुत कम हैं। Nutritionist को सबसे पहले किस सुधार पर जोर देना चाहिए?", options: ["केवल calories और बढ़ाना", "nutrient density तथा food-group diversity बढ़ाना", "केवल dietary fat बढ़ाना", "केवल sugar बढ़ाना"], correct: 1 },
+            { id: 37, tag: "", question: "यदि pregnancy के दूसरे trimester में protein requirement बढ़ती है, तो इसका सबसे अच्छा biological explanation क्या है?", options: ["fetal tissue formation की आवश्यकता बढ़ना", "केवल maternal fat storage बढ़ना", "केवल carbohydrate oxidation बढ़ना", "केवल water retention बढ़ना"], correct: 0 },
+            { id: 38, tag: "", question: "किस meal में iron nutrition के दृष्टिकोण से absorption बेहतर होने की संभावना अधिक है?", options: ["दाल + नींबू + सब्जी", "दाल + भोजन के साथ चाय", "चावल + चीनी", "रोटी + चाय"], correct: 0 },
+            { id: 39, tag: "", question: "एक vegetarian गर्भवती महिला protein adequacy सुधारना चाहती है। निम्न में से कौन-सा विकल्प सबसे तर्कसंगत है?", options: ["cereals को पूरी तरह हटाना", "cereal-pulse combinations तथा milk/soy foods का उपयोग", "केवल fruit juices", "केवल refined carbohydrates"], correct: 1 },
+            { id: 40, tag: "", question: "गर्भावस्था में किसी nutrient की RDA बढ़ी होने का अर्थ यह नहीं है कि—", options: ["उस nutrient की physiological importance बढ़ सकती है", "diet planning में उस nutrient पर ध्यान देना चाहिए", "सामान्य भोजन की मात्रा को बिना सीमा बढ़ा देना चाहिए", "adequacy सुनिश्चित करनी चाहिए"], correct: 2 },
+            { id: 41, tag: "", question: "एक महिला की pregnancy से पहले diet पर्याप्त थी। Pregnancy के दौरान उसी diet को बिल्कुल अपरिवर्तित रखना क्यों उचित नहीं हो सकता?", options: ["pregnancy में शरीर की physiological requirements बदलती हैं", "pregnancy में सभी nutrients की आवश्यकता घट जाती है", "pregnancy में protein की आवश्यकता समाप्त हो जाती है", "pregnancy में केवल पानी की आवश्यकता होती है"], correct: 0 },
+            { id: 42, tag: "", question: "ICMR-NIN 2020 के अनुसार pregnancy में +350 kcal/day को समझने का सबसे सही तरीका क्या है?", options: ["हर pregnant woman को बिल्कुल समान total calories मिलनी चाहिए", "यह अतिरिक्त energy provision है, जिसे actual body weight, weight gain और activity के अनुसार adjust किया जाता है", "यह केवल third trimester के लिए है", "यह केवल undernourished women के लिए है"], correct: 1 },
+            { id: 43, tag: "", question: "एक pregnant woman को iron-rich meal के तुरंत बाद चाय पीने की आदत है। Dietary counselling में सबसे तार्किक सुधार क्या होगा?", options: ["iron-rich foods बंद करना", "tea को iron-rich meal के साथ लेने की आदत कम करना", "केवल sugar बढ़ाना", "protein बंद करना"], correct: 1 },
+            { id: 44, tag: "", question: "निम्न में से कौन-सा pregnancy meal का सबसे अधिक nutrient-dense विकल्प है?", options: ["सफेद ब्रेड + मीठा पेय", "दाल + हरी सब्जी + दूध/दही + फल", "चीनी + नमकीन", "केवल refined cereal"], correct: 1 },
+            { id: 45, tag: "", question: "यदि pregnant woman का BMI पहले से अधिक है, तो “अधिक खाना क्योंकि pregnancy में दो लोगों को खाना है” वाली सलाह क्यों गलत है?", options: ["pregnancy में energy की कोई आवश्यकता नहीं बढ़ती", "increased requirement का अर्थ uncontrolled overeating नहीं है", "pregnancy में केवल protein चाहिए", "overweight women को सभी nutrients बंद कर देने चाहिए"], correct: 1 },
+            { id: 46, tag: "", question: "यदि गर्भवती महिला को protein के दो स्रोत दिए जाएँ—एक अकेला cereal और दूसरा cereal + pulse combination—तो दूसरे विकल्प का प्रमुख लाभ क्या होगा?", options: ["केवल calories कम होना", "amino-acid complementarity के कारण protein quality बेहतर होना", "iron पूरी तरह समाप्त होना", "fat digestion रुकना"], correct: 1 },
+            { id: 47, tag: "", question: "गर्भावस्था में folate की पर्याप्तता को केवल delivery के समय से जोड़ना क्यों अनुचित है?", options: ["folate की भूमिका pregnancy के प्रारंभिक fetal development में भी महत्वपूर्ण है", "folate केवल lactation में काम करता है", "folate केवल digestion में काम करता है", "folate का pregnancy से कोई संबंध नहीं"], correct: 0 },
+            { id: 48, tag: "", question: "एक गर्भवती महिला के भोजन में protein और calories पर्याप्त हैं, लेकिन fruits और vegetables लगभग नहीं हैं। निम्न में से कौन-सी समस्या सबसे तार्किक रूप से संभावित है?", options: ["dietary micronutrient diversity में कमी", "protein स्वतः toxic हो जाना", "energy बिल्कुल समाप्त हो जाना", "calcium की आवश्यकता समाप्त होना"], correct: 0 },
+            { id: 49, tag: "", question: "nutrient supplementation के बारे में सबसे वैज्ञानिक दृष्टिकोण कौन-सा है?", options: ["supplements balanced diet का पूर्ण विकल्प हैं", "सभी supplements स्वतः निषिद्ध हैं", "आवश्यक supplements diet के साथ, appropriate health guidance के अनुसार दिए जा सकते हैं", "जितनी अधिक मात्रा, उतना बेहतर"], correct: 2 },
+            { id: 50, tag: "", question: "एक TGT Home Science शिक्षक को गर्भावस्था के आहार पर एक model meal plan बनाना है। निम्न में से कौन-सा approach सबसे वैज्ञानिक होगा?", options: ["केवल calorie target निर्धारित करना", "केवल protein target निर्धारित करना", "energy requirement के साथ protein, iron, folate, calcium और dietary diversity को ध्यान में रखना", "केवल supplements की सूची बनाना"], correct: 2 }
+        ];
+    </script>
+
+    <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
+
+
+
