@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Computer Test Set 3</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS बैच जॉइन करें!");
+            window.location.href = "../../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Computer Test Set 3 Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../gs.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">COMPUTER SCIENCE - SET 3</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">30:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">40</span></span>
+                        <span class="subject-badge">कंप्यूटर ज्ञान (Computer Science)</span>
+                        <span id="lblQuestionTag" class="tag-badge" style="display:none;"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Computer Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 40</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../gs.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_computer_set_03"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "कंप्यूटर का मुख्य पटल (Main Board) किसे कहा जाता है?", options: ["मदरबोर्ड (Motherboard)", "कीबोर्ड", "हार्ड डिस्क", "सीपीयू"], correct: 0, explanation: "मदरबोर्ड कंप्यूटर का मुख्य सर्किट बोर्ड होता है जिससे सभी हार्डवेयर घटक जुड़े होते हैं।" },
+            { id: 2, tag: "", question: "कंप्यूटर में सूचना (Information) किसे कहा जाता है?", options: ["व्यवस्थित डेटा को", "कच्चे डेटा को", "संख्याओं को", "प्रोग्राम को"], correct: 0, explanation: "जब रॉ डेटा (Raw Data) को प्रोसेस करके अर्थपूर्ण बना दिया जाता है, तो उसे सूचना या इंफॉर्मेशन कहते हैं।" },
+            { id: 3, tag: "", question: "निम्नलिखित में से कौन-सा एक सर्च इंजन (Search Engine) नहीं है?", options: ["गूगल", "याहू", "फ्लिपकार्ट", "बिंग"], correct: 2, explanation: "फ्लिपकार्ट एक ई-कॉमर्स वेबसाइट है, सर्च इंजन नहीं।" },
+            { id: 4, tag: "", question: "ईमेल भेजते समय किस फील्ड में संदेश का संक्षिप्त विषय लिखा जाता है?", options: ["Subject", "To", "CC", "BCC"], correct: 0, explanation: "Subject फील्ड में ईमेल के मुख्य विषय या शीर्षक की जानकारी दी जाती है।" },
+            { id: 5, tag: "", question: "बीसीसी (BCC) का ईमेल में पूर्ण रूप क्या होता है?", options: ["Blind Carbon Copy", "Backup Carbon Copy", "Base Carbon Code", "Browser Carbon Copy"], correct: 0, explanation: "BCC का अर्थ Blind Carbon Copy होता है, जिससे प्राप्तकर्ताओं की सूची अन्य लोगों को दिखाई नहीं देती।" },
+            { id: 6, tag: "", question: "एम.एस. वर्ड में सिलेक्टेड टेक्स्ट को कॉपी करने की शॉर्टकट की क्या है?", options: ["Ctrl + C", "Ctrl + V", "Ctrl + X", "Ctrl + A"], correct: 0, explanation: "टेक्स्ट को कॉपी करने के लिए Ctrl + C का उपयोग किया जाता है।" },
+            { id: 7, tag: "", question: "पूरे डॉक्यूमेंट को एक साथ सेलेक्ट (Select All) करने के लिए शॉर्टकट कुंजी क्या है?", options: ["Ctrl + A", "Ctrl + B", "Ctrl + S", "Ctrl + F"], correct: 0, explanation: "डॉक्यूमेंट की संपूर्ण सामग्री को एक साथ चुनने के लिए Ctrl + A दबाया जाता है।" },
+            { id: 8, tag: "", question: "कंप्यूटर में किसी डॉक्यूमेंट को प्रिंट करने के लिए शॉर्टकट की क्या है?", options: ["Ctrl + P", "Ctrl + S", "Ctrl + N", "Ctrl + O"], correct: 0, explanation: "प्रिंट कमांड देने के लिए Ctrl + P का उपयोग होता है।" },
+            { id: 9, tag: "", question: "एम.एस. एक्सेल में कुल कॉलम की चौड़ाई या रो की अधिकतम सीमा किस पर निर्भर करती है?", options: ["सॉफ्टवेयर के वर्जन पर", "मॉनिटर के आकार पर", "सीपीयू की स्पीड पर", "कीबोर्ड पर"], correct: 0, explanation: "एक्सेल की सीमाएं (जैसे रो और कॉलम की संख्या) उसके सॉफ्टवेयर और वर्जन पर निर्भर करती हैं।" },
+            { id: 10, tag: "", question: "निम्नलिखित में से कौन-सा स्टोरेज मीडिया सबसे अधिक डेटा स्टोर कर सकता है?", options: ["ब्लू-रे डिस्क", "डीवीडी (DVD)", "सीडी-रोम", "फ्लॉपी डिस्क"], correct: 0, explanation: "ब्लू-रे डिस्क (Blu-ray Disc) की स्टोरेज क्षमता सीडी और डीवीडी दोनों से काफी अधिक होती है।" },
+            { id: 11, tag: "", question: "वेबसाइट का एड्रेस क्या कहलाता है?", options: ["URL", "IP", "HTML", "HTTP"], correct: 0, explanation: "URL (Uniform Resource Locator) किसी भी वेबसाइट का यूनिक वेब एड्रेस होता है।" },
+            { id: 12, tag: "", question: "एम.एस. पावरपॉइंट में नई स्लाइड जोड़ने की शॉर्टकट की क्या है?", options: ["Ctrl + M", "Ctrl + N", "Ctrl + S", "Ctrl + P"], correct: 0, explanation: "प्रेजेंटेशन में नई स्लाइड जोड़ने के लिए Ctrl + M शॉर्टकट का उपयोग किया जाता है।" },
+            { id: 13, tag: "", question: "कंप्यूटर में 'मिश्रित कंप्यूटर' (Hybrid Computer) किसका संयोजन होता है?", options: ["डिजिटल और एनालॉग कंप्यूटर का", "सुपर और मिनी कंप्यूटर का", "मेनफ्रेम और माइक्रो कंप्यूटर का", "इनमें से कोई नहीं"], correct: 0, explanation: "हाइब्रिड कंप्यूटर एनालॉग और डिजिटल दोनों प्रकार के कंप्यूटरों के गुण रखता है।" },
+            { id: 14, tag: "", question: "लैन (LAN) किस प्रकार के क्षेत्र के लिए उपयुक्त है?", options: ["स्थानीय क्षेत्र (एक इमारत या कार्यालय)", "पूरा देश", "पूरा विश्व", "दो देशों के बीच"], correct: 0, explanation: "LAN का उपयोग एक कमरे, घर या ऑफिस बिल्डिंग जैसे सीमित स्थानीय क्षेत्र के लिए किया जाता है।" },
+            { id: 15, tag: "", question: "कंप्यूटर में 'मैक' (MAC) एड्रेस का पूर्ण रूप क्या है?", options: ["Media Access Control", "Main Access Code", "Machine Activity Control", "Memory Access Code"], correct: 0, explanation: "MAC एड्रेस का पूर्ण रूप Media Access Control एड्रेस होता है जो नेटवर्क हार्डवेयर की पहचान करता है।" },
+            { id: 16, tag: "", question: "ऑप्टिकल माउस (Optical Mouse) किस तकनीक का उपयोग करके काम करता है?", options: ["प्रकाश (LED/Laser)", "मैग्नेटिक सेंसर", "रेडियो तरंगें", "यांत्रिक गियर"], correct: 0, explanation: "ऑप्टिकल माउस सतह को ट्रैक करने के लिए लेज़र या एलईडी लाइट (प्रकाश) का उपयोग करता है।" },
+            { id: 17, tag: "", question: "कंप्यूटर की कचरा पेटी (Trash / Recycle Bin) से डिलीट की गई फाइलें कहाँ जाती हैं?", options: ["रीसायकल बिन से स्थायी हट जाती हैं या रिस्टोर हो सकती हैं", "वापस डेस्कटॉप पर आती हैं", "रैम में जाती हैं", "हार्डवेयर में फिक्स होती हैं"], correct: 0, explanation: "रीसायकल बिन से फाइलों को रिस्टोर किया जा सकता है या हमेशा के लिए डिलीट किया जा सकता है।" },
+            { id: 18, tag: "", question: "निम्नलिखित में से कौन-सी कंप्यूटर की उच्च स्तरीय भाषा (High-Level Language) है?", options: ["पायथन (Python)", "मशीनी भाषा", "बाइनरी भाषा", "असेंबली भाषा"], correct: 0, explanation: "Python एक उच्च स्तरीय प्रोग्रामिंग भाषा है।" },
+            { id: 19, tag: "", question: "असेंबली भाषा को मशीनी भाषा में बदलने के लिए किसका उपयोग होता है?", options: ["असेंबलर", "कंपाइलर", "इंटरप्रेटर", "लोडर"], correct: 0, explanation: "असेंबली भाषा के प्रोग्राम को मशीनी भाषा में बदलने का कार्य 'असेंबलर' करता है।" },
+            { id: 20, tag: "", question: "कंपाइलर (Compiler) का मुख्य कार्य क्या है?", options: ["उच्च स्तरीय भाषा को मशीनी भाषा में एक साथ बदलना", "केवल त्रुटि दिखाना", "डेटा सेव करना", "इंटरनेट चलाना"], correct: 0, explanation: "कंपाइलर पूरे सोर्स कोड को एक साथ मशीन लैंग्वेज में ट्रांसलेट करता है।" },
+            { id: 21, tag: "", question: "इलेक्ट्रॉनिक मेल (Email) के एड्रेस में '@' चिह्न के बाद क्या आता है?", options: ["डोमेन नेम (Domain Name)", "यूजरनेम", "पासवर्ड", "प्रोटोकॉल"], correct: 0, explanation: "ईमेल एड्रेस में @ के बाद डोमेन नेम (जैसे gmail.com) होता है।" },
+            { id: 22, tag: "", question: "एम.एस. वर्ड में 'फाइंड' (Find) करने की शॉर्टकट की क्या है?", options: ["Ctrl + F", "Ctrl + H", "Ctrl + G", "Ctrl + P"], correct: 0, explanation: "डॉक्यूमेंट में किसी शब्द को खोजने के लिए Ctrl + F का उपयोग किया जाता है।" },
+            { id: 23, tag: "", question: "एम.एस. वर्ड में 'रिप्लेस' (Replace) करने की शॉर्टकट की क्या है?", options: ["Ctrl + H", "Ctrl + F", "Ctrl + R", "Ctrl + G"], correct: 0, explanation: "शब्द को बदलने (Replace) के लिए Ctrl + H का उपयोग किया जाता है।" },
+            { id: 24, tag: "", question: "कंप्यूटर बूटिंग प्रक्रिया में 'कोल्ड बूटिंग' का अर्थ क्या है?", options: ["कंप्यूटर को पूरी तरह बंद करके पहली बार चालू करना", "चालू कंप्यूटर को रीस्टार्ट करना", "स्लीप मोड में डालना", "इंटरनेट कनेक्ट करना"], correct: 0, explanation: "जब कंप्यूटर पूरी तरह बंद (Off) स्थिति से ऑन किया जाता है, तो उसे कोल्ड बूटिंग कहते हैं।" },
+            { id: 25, tag: "", question: "निम्नलिखित में से कौन-सा एक इम्पैक्ट प्रिंटर (Impact Printer) का उदाहरण है?", options: ["डॉट मैट्रिक्स प्रिंटर", "इंक जेट प्रिंटर", "लेजर प्रिंटर", "थर्मल प्रिंटर"], correct: 0, explanation: "डॉट मैट्रिक्स प्रिंटर एक इम्पैक्ट प्रिंटर है जो कागज पर हथौड़े या पिन से प्रहार करके छाप छोड़ता है।" },
+            { id: 26, tag: "", question: "लेजर प्रिंटर (Laser Printer) किस तकनीक का उपयोग करता है?", options: ["लेजर बीम और टोनर", "स्याही की बौछार", "थर्मल पेपर", "मैग्नेटिक रिबन"], correct: 0, explanation: "लेजर प्रिंटर उच्च गुणवत्ता के लिए लेजर बीम और ड्राई टोनर पाउडर का उपयोग करते हैं।" },
+            { id: 27, tag: "", question: "एम.एस. एक्सेल में किसी भी फंक्शन या फॉर्मूले की शुरुआत किससे होती है?", options: ["=", "+", "-", "*"], correct: 0, explanation: "एक्सेल में फॉर्मूला बराबर (=) चिह्न से शुरू होता है।" },
+            { id: 28, tag: "", question: "कंप्यूटर में 'मल्टीटास्किंग' (Multitasking) का क्या अर्थ है?", options: ["एक साथ कई कार्य करना", "एक समय में एक कार्य", "केवल गेम खेलना", "नेटवर्क चलाना"], correct: 0, explanation: "मल्टीटास्किंग का अर्थ है एक ही समय में एक से अधिक सॉफ्टवेयर या कार्यों को निष्पादित करना।" },
+            { id: 29, tag: "", question: "ब्लूटूथ (Bluetooth) तकनीक किस संचार के लिए उपयोग होती है?", options: ["कम दूरी के वायरलेस संचार", "सैटेलाइट संचार", "लंबी दूरी के फाइबर ऑप्टिक", "केवल लैंडलाइन फोन"], correct: 0, explanation: "ब्लूटूथ कम दूरी (Short-range) पर वायरलेस डेटा शेयरिंग के लिए उपयोग की जाती है।" },
+            { id: 30, tag: "", question: "कैश मेमोरी (Cache Memory) मुख्य रूप से किन दो के बीच गतिरोध दूर करती है?", options: ["सीपीयू और रैम", "हार्ड डिस्क और मॉनिटर", "कीबोर्ड और माउस", "रोम और प्रिंटर"], correct: 0, explanation: "कैश मेमोरी बहुत तेज होती है जो CPU और मुख्य मेमोरी (RAM) के बीच स्पीड के अंतर को कम करती है।" },
+            { id: 31, tag: "", question: "कंप्यूटर की भाषा में 'बग' (Bug) का क्या अर्थ है?", options: ["सॉफ्टवेयर या प्रोग्राम में त्रुटि (Error)", "एक प्रकार का कीड़ा", "हार्डवेयर की खराबी", "वायरस का नाम"], correct: 0, explanation: "प्रोग्रामिंग में किसी गलती या एरर को 'बग' कहा जाता है, और उसे ठीक करने को 'डीबगिंग' कहते हैं।" },
+            { id: 32, tag: "", question: "निम्नलिखित में से कौन-सा ओपन सोर्स सॉफ्टवेयर नहीं है?", options: ["माइक्रोसॉफ्ट ऑफिस", "लिनक्स", "फायरफॉक्स", "वीएलसी प्लेयर"], correct: 0, explanation: "माइक्रोसॉफ्ट ऑफिस एक प्रोप्राइटरी (कमर्शियल) सॉफ्टवेयर है, ओपन सोर्स नहीं।" },
+            { id: 33, tag: "", question: "इंटरनेट एक्सप्लोरर के स्थान पर माइक्रोसॉफ्ट द्वारा वर्तमान में कौन-सा नया ब्राउज़र लाया गया है?", options: ["माइक्रोसॉफ्ट एज", "नेटस्केप", "ओपेरा", "सफारी"], correct: 0, explanation: "माइक्रोसॉफ्ट ने आधुनिक विंडोज सिस्टम के लिए 'Microsoft Edge' ब्राउज़र पेश किया है।" },
+            { id: 34, tag: "", question: "डिजिटल सिग्नेचर (Digital Signature) मुख्य रूप से किसके लिए उपयोग होता है?", options: ["सुरक्षा और पहचान सत्यापित करने के लिए", "डिजाइनिंग के लिए", "गेम खेलने के लिए", "गति बढ़ाने के लिए"], correct: 0, explanation: "डिजिटल सिग्नेचर का उपयोग इलेक्ट्रॉनिक दस्तावेजों की प्रमाणिकता और सुरक्षा सुनिश्चित करने के लिए होता है।" },
+            { id: 35, tag: "", question: "कंप्यूटर नेटवर्क में 'गेटवे' (Gateway) का क्या काम है?", options: ["दो अलग-अलग नेटवर्क्स को आपस में जोड़ना", "केवल प्रिंट करना", "बिजली सप्लाई देना", "सुरक्षा हटाना"], correct: 0, explanation: "गेटवे अलग-अलग प्रोटोकॉल वाले नेटवर्कों के बीच ब्रिज या द्वार का काम करता है।" },
+            { id: 36, tag: "", question: "एक टेराबाइट (TB) में कितने गीगाबाइट (GB) होते हैं?", options: ["1024 GB", "1000 GB", "512 GB", "2048 GB"], correct: 0, explanation: "1 TB (टेराबाइट) = 1024 GB (गीगाबाइट) होते हैं।" },
+            { id: 37, tag: "", question: "एम.एस. वर्ड में नया पैराग्राफ शुरू करने के लिए कौन-सी की दबाई जाती है?", options: ["Enter", "Shift", "Tab", "Spacebar"], correct: 0, explanation: "नया पैराग्राफ शुरू करने के लिए Enter कुंजी दबाई जाती है।" },
+            { id: 38, tag: "", question: "निम्नलिखित में से कौन-सा एक आउटपुट डिवाइस है?", options: ["प्लॉटर", "माउस", "कीबोर्ड", "स्कैनर"], correct: 0, explanation: "प्लॉटर (Plotter) एक आउटपुट डिवाइस है जिसका उपयोग बड़े नक्शे या बैनर प्रिंट करने के लिए होता है।" },
+            { id: 39, tag: "", question: "कंप्यूटर में डेटा को सुरक्षित रखने के लिए क्या किया जाता है?", options: ["बैकअप (Backup)", "डिलीट", "फॉर्मेट", "क्रैश"], correct: 0, explanation: "डेटा के नुकसान से बचने के लिए उसकी कॉपी सुरक्षित रखना 'बैकअप' कहलाता है।" },
+            { id: 40, tag: "", question: "विंडोज ऑपरेटिंग सिस्टम को किस कंपनी ने विकसित किया है?", options: ["माइक्रोसॉफ्ट", "एप्पल", "गूगल", "आईबीएम"], correct: 0, explanation: "Windows OS को माइक्रोसॉफ्ट (Microsoft) कंपनी द्वारा विकसित किया गया है।" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
