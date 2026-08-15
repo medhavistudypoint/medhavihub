@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Computer Test Set 1</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS बैच जॉइन करें!");
+            window.location.href = "../../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Computer Test Set 1 Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../gs.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">COMPUTER SCIENCE - SET 1</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">30:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">40</span></span>
+                        <span class="subject-badge">कंप्यूटर ज्ञान (Computer Science)</span>
+                        <span id="lblQuestionTag" class="tag-badge" style="display:none;"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Computer Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 40</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../gs.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_computer_set_01"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "कंप्यूटर का पिता (Father of Computer) किसे कहा जाता है?", options: ["चार्ल्स बेबेज", "ब्लेज पास्कल", "एलन ट्यूरिंग", "बिल गेट्स"], correct: 0, explanation: "चार्ल्स बेबेज ने एनालिटिकल इंजन का आविष्कार किया था, इसलिए उन्हें कंप्यूटर का जनक कहा जाता है।" },
+            { id: 2, tag: "", question: "कंप्यूटर के विकास में सर्वाधिक योगदान किसका था?", options: ["चार्ल्स बेबेज", "ब्लेज पास्कल", "वॉन न्यूमैन", "जोसेफ जैकक्वार्ड"], correct: 2, explanation: "जॉन वॉन न्यूमैन ने आधुनिक कंप्यूटर के आर्किटेक्चर (Stored-program architecture) में सर्वाधिक योगदान दिया था।" },
+            { id: 3, tag: "", question: "भारत में निर्मित पहला कंप्यूटर कौन सा है?", options: ["परम", "सिद्धार्थ", "आदित्य", "प्रत्युश"], correct: 1, explanation: "सिद्धार्थ भारत में निर्मित पहला कंप्यूटर था, जिसे भारत इलेक्ट्रॉनिक्स लिमिटेड (BEL) द्वारा बनाया गया था।" },
+            { id: 4, tag: "", question: "सबसे पहला कंप्यूटर का नाम क्या था?", options: ["अॅटकेस", "ENIAC", "UNIVAC", "MARC I"], correct: 1, explanation: "ENIAC (Electronic Numerical Integrator and Computer) विश्व का पहला सामान्य उद्देश्य वाला इलेक्ट्रॉनिक डिजिटल कंप्यूटर था।" },
+            { id: 5, tag: "", question: "कंप्यूटर डेटा की सबसे छोटी इकाई कौन सी है?", options: ["बिट (Bit)", "बाइट (Byte)", "किलोबाइट (KB)", "मेगाबाइट (MB)"], correct: 0, explanation: "बिट (Binary Digit - 0 या 1) कंप्यूटर की सबसे छोटी इकाई होती है।" },
+            { id: 6, tag: "", question: "एक बाइट (Byte) में कितने बिट होते हैं?", options: ["4 बिट", "8 बिट", "16 बिट", "32 बिट"], correct: 1, explanation: "1 बाइट 8 बिट्स के बराबर होता है, जिसका उपयोग मेमोरी में डेटा मापने के लिए किया जाता है।" },
+            { id: 7, tag: "", question: "कंप्यूटर की मुख्य मेमोरी (Main Memory) होती है—", options: ["बाहरी", "भीतरी (Internal)", "सहायक", "उपर्युक्त सभी"], correct: 1, explanation: "रैम (RAM) और रोम (ROM) कंप्यूटर की मुख्य या भीतरी मेमोरी (Primary Memory) कहलाती हैं।" },
+            { id: 8, tag: "", question: "सीपीयू (CPU) के प्रमुख घटक कौन-से हैं?", options: ["कंट्रोल यूनिट", "एएलयू (ALU)", "मेमोरी", "उपर्युक्त सभी"], correct: 3, explanation: "सीपीयू के तीन मुख्य भाग होते हैं: कंट्रोल यूनिट (CU), अर्थमैटिक लॉजिक यूनिट (ALU) और रजिस्टर्स/मेमोरी।" },
+            { id: 9, tag: "", question: "निम्नलिखित में से कौन-सा आउटपुट डिवाइस नहीं है?", options: ["मॉनिटर", "प्रिंटर", "जॉयस्टिक", "स्पीकर"], correct: 2, explanation: "जॉयस्टिक एक इनपुट डिवाइस है जिसका उपयोग मुख्य रूप से वीडियो गेम खेलने के लिए किया जाता है।" },
+            { id: 10, tag: "", question: "कीबोर्ड किस प्रकार का डिवाइस है?", options: ["इनपुट डिवाइस", "आउटपुट डिवाइस", "स्टोरेज डिवाइस", "प्रोसेसिंग डिवाइस"], correct: 0, explanation: "कीबोर्ड एक प्राथमिक इनपुट डिवाइस है जिसकी मदद से डेटा और निर्देश कंप्यूटर में दर्ज किए जाते हैं।" },
+            { id: 11, tag: "", question: "एम.एस.-वर्ड (MS Word) किसका एक उदाहरण है?",options: ["ऑपरेटिंग सिस्टम", "एप्लीकेशन सॉफ्टवेयर", "कंपाइलर", "हार्डवेयर"], correct: 1, explanation: "MS Word एक एप्लीकेशन सॉफ्टवेयर है जिसका उपयोग डॉक्यूमेंट तैयार करने के लिए किया जाता है।" },
+            { id: 12, tag: "", question: "ऑपरेटिंग सिस्टम (OS) किस प्रकार का सॉफ्टवेयर है?", options: ["सिस्टम सॉफ्टवेयर", "एप्लीकेशन सॉफ्टवेयर", "यूटिलिटी सॉफ्टवेयर", "नेटवर्क सॉफ्टवेयर"], correct: 0, explanation: "ऑपरेटिंग सिस्टम एक मुख्य सिस्टम सॉफ्टवेयर है जो कंप्यूटर हार्डवेयर और यूजर के बीच इंटरफेस का काम करता है।" },
+            { id: 13, tag: "", question: "कंप्यूटर में रैम (RAM) का पूर्ण रूप क्या है?", options: ["Read Access Memory", "Random Access Memory", "Rapid Access Memory", "Remote Access Memory"], correct: 1, explanation: "RAM का अर्थ Random Access Memory है, जो एक वोलेटाइल (अस्थायी) मेमोरी है।" },
+            { id: 14, tag: "", question: "रोम (ROM) किस प्रकार की मेमोरी है?", options: ["अस्थायी (Volatile)", "स्थायी (Non-Volatile)", "कैश मेमोरी", "वर्चुअल मेमोरी"], correct: 1, explanation: "ROM एक नॉन-वोलेटाइल (स्थायी) मेमोरी है, जिसमें बिजली बंद होने पर भी डेटा सुरक्षित रहता है।" },
+            { id: 15, tag: "", question: "सीडी-रोम (CD-ROM) का क्या अर्थ है?", options: ["Compact Disc Read Only Memory", "Computer Disc Read Only Memory", "Compact Disk Rapid Operation Memory", "Compactable Data Read Only Memory"], correct: 0, explanation: "CD-ROM का पूर्ण रूप Compact Disc Read Only Memory होता है।" },
+            { id: 16, tag: "", question: "वेबसाइट के मुख्य पृष्ठ को क्या कहा जाता है?", options: ["होम पेज (Home Page)", "ब्राउज़र पेज", "सर्च पेज", "प्रथम पृष्ठ"], correct: 0, explanation: "किसी भी वेबसाइट के मुख्य या पहले पृष्ठ को होम पेज (Home Page) कहा जाता है।" },
+            { id: 17, tag: "", question: "इंटरनेट का जनक (Father of Internet) किसे कहा जाता है?", options: ["टिम बर्नर्स-ली", "विंट सर्फ", "चार्ल्स बेबेज", "बिल गेट्स"], correct: 1, explanation: "विंट सर्फ (Vint Cerf) को इंटरनेट का जनक माना जाता है, जबकि WWW का आविष्कार टिम बर्नर्स-ली ने किया था।" },
+            { id: 18, tag: "", question: "ईमेल (Email) के जन्मदाता किसे माना जाता है?", options: ["रे टॉमलिंसन", "बिल गेट्स", "स्टेव जॉब्स", "مارक जुकरबर्ग"], correct: 0, explanation: "रे टॉमलिंसन (Ray Tomlinson) को नेटवर्क ईमेल प्रणाली का आविष्कारक माना जाता है।" },
+            { id: 19, tag: "", question: "डब्ल्यूडब्ल्यूडब्ल्यू (WWW) का पूर्ण रूप क्या है?", options: ["World Wide Web", "World Wide Word", "Web Wide World", "World Web Wide"], correct: 0, explanation: "WWW का पूर्ण रूप World Wide Web है।" },
+            { id: 20, tag: "", question: "इंटरनेट पर भेजी जाने वाली सूचना को क्या कहते हैं?", options: ["पैकेट (Packet)", "फ्रेम", "सिग्नल", "डेटा ब्लॉक"], correct: 0, explanation: "इंटरनेट पर डेटा छोटे-छोटे हिस्सों में भेजा जाता है जिन्हें पैकेट्स (Packets) कहा जाता है।" },
+            { id: 21, tag: "", question: "कंप्यूटर वायरस (Computer Virus) असल में क्या होता है?", options: ["एक बैक्टीरिया", "एक खतरनाक प्रोग्राम या सॉफ्टवेयर", "हार्डवेयर की खराबी", "सिस्टम एरर"], correct: 1, explanation: "कंप्यूटर वायरस एक प्रकार का दुर्भावनापूर्ण सॉफ्टवेयर (Malicious Software) या प्रोग्राम होता है जो सिस्टम को नुकसान पहुँचाता है।" },
+            { id: 22, tag: "", question: "फायरवॉल (Firewall) का मुख्य उपयोग किस लिए किया जाता है?", options: ["सुरक्षा (Security)", "डेटा ट्रांसफर", "स्पीड बढ़ाना", "कूलिंग के लिए"], correct: 0, explanation: "फायरवॉल का उपयोग नेटवर्क को अनधिकृत पहुँच (Unauthorized access) और सुरक्षा खतरों से बचाने के लिए किया जाता है।" },
+            { id: 23, tag: "", question: "एम.एस. एक्सेल (MS Excel) में रो (Row) और कॉलम (Column) के मिलने से बनने वाले बॉक्स को क्या कहते हैं?", options: ["सेल (Cell)", "टेबल", "बॉक्स", "मैट्रिक्स"], correct: 0, explanation: "रो और कॉलम के प्रतिच्छेदन (Intersection) को सेल (Cell) कहा जाता है।" },
+            { id: 24, tag: "", question: "एम.एस. पावरपॉइंट में स्लाइड शो शुरू करने के लिए कौन-सी शॉर्टकट की दबाई जाती है?", options: ["F1", "F5", "F10", "Ctrl + N"], correct: 1, explanation: "पावरपॉइंट में शुरुआत से स्लाइड शो देखने के लिए F5 कुंजी का उपयोग किया जाता है।" },
+            { id: 25, tag: "", question: "कंप्यूटर को रीस्टार्ट करने की शॉर्टकट कुंजी या प्रक्रिया जब कंप्यूटर पहले से चालू हो, क्या कहलाती है?", options: ["कोल्ड बूटिंग", "वार्म बूटिंग", "हार्ड बूटिंग", "शटडाउन"], correct: 1, explanation: "चालू कंप्यूटर को रीस्टार्ट करना 'वार्म बूटिंग' (Warm Booting) कहलाता है।" },
+            { id: 26, tag: "", question: "बाइनरी नंबर सिस्टम में कितने अंक होते हैं?", options: ["2", "8", "10", "16"], correct: 0, explanation: "बाइनरी सिस्टम में केवल दो अंक 0 और 1 होते हैं।" },
+            { id: 27, tag: "", question: "एक गीगाबाइट (GB) में कितने मेगाबाइट (MB) होते हैं?", options: ["1024 KB", "1024 MB", "1024 GB", "512 MB"], correct: 1, explanation: "1 GB = 1024 MB (मेगाबाइट) होते हैं।" },
+            { id: 28, tag: "", question: "एलसीडी (LCD) का पूर्ण रूप क्या है?", options: ["Liquid Crystal Display", "Light Crystal Device", "Liquid Central Display", "Light Central Data"], correct: 0, explanation: "LCD का पूर्ण रूप Liquid Crystal Display होता है।" },
+            { id: 29, tag: "", question: "यूएसबी (USB) किस प्रकार का पोर्ट है?", options: ["Universal Serial Bus", "United Serial Bus", "Universal System Block", "Unique Serial Bus"], correct: 0, explanation: "USB का अर्थ Universal Serial Bus है, जिसका उपयोग पेरिफेरल उपकरणों को जोड़ने के लिए किया जाता है।" },
+            { id: 30, tag: "", question: "इंटरनेट ब्राउज़र का उदाहरण निम्नलिखित में से कौन सा है?", options: ["गूगल क्रोम", "माइक्रोसॉफ्ट वर्ड", "विंडोज 10", "एमएस पेंट"], correct: 0, explanation: "गूगल क्रोम (Google Chrome) एक लोकप्रिय वेब ब्राउज़र है।" },
+            { id: 31, tag: "", question: "एचटीटीपी (HTTP) का पूर्ण रूप क्या है?", options: ["Hyper Text Transfer Protocol", "Hyper Text Transmission Program", "Hyperlink Text Transfer Protocol", "Hyper Text Transfer Program"], correct: 0, explanation: "HTTP का पूर्ण रूप Hyper Text Transfer Protocol है।" },
+            { id: 32, tag: "", question: "किसी डॉक्यूमेंट को सेव करने के लिए कौन-सी शॉर्टकट की प्रयोग की जाती है?", options: ["Ctrl + C", "Ctrl + V", "Ctrl + S", "Ctrl + P"], correct: 2, explanation: "डॉक्यूमेंट को सुरक्षित (Save) करने के लिए Ctrl + S का उपयोग किया जाता है।" },
+            { id: 33, tag: "", question: "कट (Cut) करने के लिए कौन-सी शॉर्टकट की उपयोग होती है?", options: ["Ctrl + C", "Ctrl + X", "Ctrl + V", "Ctrl + Z"], correct: 1, explanation: "किसी टेक्स्ट या फाइल को कट करने के लिए Ctrl + X का उपयोग किया जाता है।" },
+            { id: 34, tag: "", question: "पेस्ट (Paste) करने के लिए शॉर्टकट की क्या है?", options: ["Ctrl + C", "Ctrl + V", "Ctrl + X", "Ctrl + A"], correct: 1, explanation: "कॉपी या कट किए गए डेटा को पेस्ट करने के लिए Ctrl + V दबाया जाता है।" },
+            { id: 35, tag: "", question: "अंडू (Undo) कमांड के लिए कौन-सी शॉर्टकट की होती है?", options: ["Ctrl + Z", "Ctrl + Y", "Ctrl + U", "Ctrl + R"], correct: 0, explanation: "अंडू करने के लिए Ctrl + Z शॉर्टकट की का उपयोग किया जाता है।" },
+            { id: 36, tag: "", question: "कंप्यूटर की भौतिक बनावट (Physical Structure) को क्या कहते हैं?", options: ["हार्डवेयर", "सॉफ्टवेयर", "फर्मवेयर", "ह्यूमनवेयर"], correct: 0, explanation: "कंप्यूटर के भौतिक और स्पर्श किए जाने वाले अंगों को हार्डवेयर कहा जाता है।" },
+            { id: 37, tag: "", question: "लिनक्स (Linux) किस प्रकार का ऑपरेटिंग सिस्टम है?", options: ["ओपन सोर्स", "प्रोप्राइटरी", "क्लोज्ड सोर्स", "सिंगल यूजर"], correct: 0, explanation: "लिनक्स एक ओपन सोर्स (Open Source) ऑपरेटिंग सिस्टम है जिसका उपयोग फ्री में किया जा सकता है।" },
+            { id: 38, tag: "", question: "डेटाबेस को प्रबंधित करने वाले सॉफ्टवेयर को क्या कहते हैं?", options: ["DBMS", "OS", "Compiler", "Assembler"], correct: 0, explanation: "DBMS (Database Management System) का उपयोग डेटाबेस को मैनेज करने के लिए होता है।" },
+            { id: 39, tag: "", question: "प्रोसेसर की गति को किसमें मापा जाता है?", options: ["हर्ट्ज़ (Hz)", "बाइट", "बीट्स प्रति सेकंड", "वॉट"], correct: 0, explanation: "सीपीयू या प्रोसेसर की क्लॉक स्पीड को मेगाहर्ट्ज़ (MHz) या गीगाहर्ट्ज़ (GHz) में मापा जाता है।" },
+            { id: 40, tag: "", question: "कंप्यूटर का मस्तिक (Brain) किसे कहा जाता है?", options: ["सीपीयू (CPU)", "मॉनिटर", "हार्ड डिस्क", "रम"], correct: 0, explanation: "CPU (Central Processing Unit) को कंप्यूटर का मस्तिष्क कहा जाता है क्योंकि यह सभी गणनाएं और नियंत्रण करता है।" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
+
