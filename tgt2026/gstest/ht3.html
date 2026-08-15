@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Indus Valley Civilization Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS बैच जॉइन करें!");
+            window.location.href = "../../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Indus Valley Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../gs.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">UPSC / UPPSC / RO-ARO / GS</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">35:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">48</span></span>
+                        <span class="subject-badge">सिंधु घाटी सभ्यता (Indus Valley Civilization)</span>
+                        <span id="lblQuestionTag" class="tag-badge" style="display:none;"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Indus Valley Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 48</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../gs.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_indus_valley_01"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "सिंधु सभ्यता के संदर्भ में निम्नलिखित कथनों पर विचार कीजिए:<br>1. यहाँ के लोग लोहे के प्रयोग से परिचित थे।<br>2. यहाँ की सामाजिक संरचना पूर्णतः समतावादी थी।<br>उपर्युक्त में से कौन-सा/से कथन सत्य है/हैं?", options: ["केवल 1", "केवल 2", "1 और 2 दोनों", "न तो 1 न ही 2"], correct: 1, explanation: "सिंधु घाटी सभ्यता एक कांस्य युगीन सभ्यता थी और यहाँ के लोग लोहे से परिचित नहीं थे।" },
+            { id: 2, tag: "", question: "हड़प्पा स्थलों के उत्खनन के संबंध में कौन-सा सुमेलित नहीं है?", options: ["हड़प्पा - दयाराम साहनी", "मोहनजोदड़ो - राखालदास बनर्जी", "चन्हूदड़ो - एन.जी. मजूमदार", "लोथल - आर.एस. बिष्ट"], correct: 3, explanation: "लोथल की खोज एस.आर. राव ने की थी, जबकि आर.एस. बिष्ट ने धौलावीरा की खोज की थी।" },
+            { id: 3, tag: "", question: "सिंधु सभ्यता के पतन के 'आर्य आक्रमण' सिद्धांत का प्रबल समर्थक कौन था?", options: ["मार्शल", "व्हीलर", "फेयरसर्विस", "के.यू.आर. कैनेडी"], correct: 1, explanation: "आर.ई.एम. व्हीलर ने आर्य आक्रमण के सिद्धांत का प्रबल समर्थन किया था।" },
+            { id: 4, tag: "", question: "'सेंधव सभ्यता' के किस स्थल से 'अश्व' (घोड़े) की मृण्मूर्ति (Terracotta figurine) प्राप्त हुई है?", options: ["लोथल", "सुरकोटदा", "बनावली", "रंगपुर"], correct: 2, explanation: "बनावली से घोड़े की मृण्मूर्ति प्राप्त हुई है, हालांकि सामान्यतः सिंधु सभ्यता में घोड़ा प्रमुख पशु नहीं था।" },
+            { id: 5, tag: "", question: "निम्नलिखित में से कौन-सा हड़प्पा कालीन स्थल 'प्राक-हड़प्पा' (Pre-Harappan) स्तर नहीं दर्शाता है?", options: ["कोटदीजी", "आमरी", "कालीबंगा", "रोपड़"], correct: 3, explanation: "रोपड़ से प्राक-हड़प्पा स्तर नहीं दर्शाया जाता है, जबकि अन्य तीनों से प्राक-हड़प्पा संस्कृति के साक्ष्य मिलते हैं।" },
+            { id: 6, tag: "", question: "हड़प्पा सभ्यता में 'अलंकृत ईंटों' का प्रयोग कहाँ किया गया था?", options: ["हड़प्पा", "मोहनजोदड़ो", "कालीबंगा", "लोथल"], correct: 2, explanation: "कालीबंगा एकमात्र ऐसा स्थल है जहाँ से फर्श के निर्माण में अलंकृत ईंटों का प्रयोग किया गया था।" },
+            { id: 7, tag: "", question: "सिंधु सभ्यता के किस नगर को 'सात बार उजड़ने और बसने' का साक्ष्य माना जाता है?", options: ["मोहनजोदड़ो", "हड़प्पा", "चन्हूदड़ो", "आलमगीरपुर"], correct: 0, explanation: "मोहनजोदड़ो के बारे में जॉन मार्शल ने माना कि बाढ़ के कारण यह नगर सात बार उजड़ा और बसा।" },
+            { id: 8, tag: "", question: "सिंधु सभ्यता में 'अधिशासी शक्ति' किसके हाथ में थी?", options: ["पुरोहित वर्ग", "व्यापारी वर्ग", "सैनिक वर्ग", "कोई स्पष्ट प्रमाण नहीं"], correct: 1, explanation: "इतिहासकारों के अनुसार सिंधु सभ्यता के शासन की बागडोर मुख्य रूप से व्यापारी वर्ग के हाथों में थी।" },
+            { id: 9, tag: "", question: "निम्नलिखित में से किस स्थान से 'हड़प्पा कालीन तांबे का रथ' प्राप्त हुआ है?", options: ["दायमाबाद", "हड़प्पा", "कुनाल", "राखीगढ़ी"], correct: 0, explanation: "महाराष्ट्र के गोदावरी घाटी स्थित दायमाबाद से तांबे का रथ प्राप्त हुआ है।" },
+            { id: 10, tag: "", question: "सेंधव सभ्यता में 'शव' को किस दिशा में सिर रखकर दफनाने की प्रथा थी?", options: ["पूर्व-पश्चिम", "उत्तर-दक्षिण", "दक्षिण-उत्तर", "पश्चिम-पूर्व"], correct: 1, explanation: "सामान्यतः शवों को उत्तर-दक्षिण दिशा में सिर उत्तर और पैर दक्षिण की ओर रखकर दफनाया जाता था।" },
+            { id: 11, tag: "", question: "धौलावीरा के संबंध में क्या सही नहीं है?", options: ["यह तीन भागों में विभाजित था।", "यहाँ से 'सूचना पट्ट' (Signboard) मिला है।", "यहाँ के निवासियों को जल संचयन की उन्नत तकनीक ज्ञात थी।", "यहाँ से 'हड़प्पा' जैसी ही दुर्ग प्रणाली मिली है।"], correct: 3, explanation: "धौलावीरा सामान्यतः दो भागों में बंटे अन्य नगरों के विपरीत तीन भागों (किला, मध्यम नगर, निचला नगर) में विभाजित था।" },
+            { id: 12, tag: "", question: "हड़प्पा वासियों का विदेशी व्यापार किन सभ्यताओं से था?", options: ["मेसोपोटामिया", "मिस्र", "ओमान", "उपर्युक्त सभी"], correct: 3, explanation: "हड़प्पा वासियों का व्यापार मेसोपोटामिया, मिस्र और ओमान जैसी समकालीन सभ्यताओं के साथ था।" },
+            { id: 13, tag: "", question: "सिंधु सभ्यता की 'मुद्राओं' पर किसका अंकन नहीं मिलता है?", options: ["कुबड़ वाला बैल", "हाथी", "घोड़ा", "बाग"], correct: 2, explanation: "सिंधु सभ्यता की मुहरों पर घोड़े के स्पष्ट अंकन नहीं मिलते हैं।" },
+            { id: 14, tag: "", question: "सिंधु सभ्यता की 'ग्रिड प्रणाली' (Grid System) का अनुसरण करने वाला नगर कौन सा था?", options: ["हड़प्पा", "मोहनजोदड़ो", "कालीबंगा", "उपर्युक्त सभी"], correct: 3, explanation: "हड़प्पा, मोहनजोदड़ो और कालीबंगा सभी नगर ग्रिड प्रणाली (एक-दूसरे को समकोण पर काटने वाली सड़कें) पर बसे थे।" },
+            { id: 15, tag: "", question: "हड़प्पा सभ्यता का 'विस्तार' किस नदी घाटी क्षेत्र में सर्वाधिक था?", options: ["सिंधु-झेलम", "सिंधु-सरस्वती", "रावी-व्यास", "नर्मदा-ताप्ती"], correct: 1, explanation: "हड़प्पा सभ्यता के अधिकांश स्थल सिंधु और प्राचीन सरस्वती (घग्गर) नदी घाटी क्षेत्र में खोजे गए हैं।" },
+            { id: 16, tag: "", question: "सिंधु सभ्यता के किस स्थल से 'मनका बनाने' की कार्यशाला के साथ 'बिल्ली का पीछा करते हुए कुत्ते' के पदचिह्न मिले हैं?", options: ["लोथल", "चन्हूदड़ो", "रंगपुर", "बनावली"], correct: 1, explanation: "चन्हूदड़ो एक औद्योगिक नगर था जहाँ मनके बनाने के कारखाने और कुत्ते-बिल्ली के पदचिह्नों वाली ईंटें मिली हैं।" },
+            { id: 17, tag: "", question: "'मेलुहा' शब्द का प्रयोग किसके लिए किया गया है?", options: ["मिस्र", "मेसोपोटामिया", "सिंधु क्षेत्र", "ईरान"], correct: 2, explanation: "मेसोपोटामिया के अभिलेखों में सिंधु क्षेत्र को 'मेलुहा' कहा गया है।" },
+            { id: 18, tag: "", question: "हड़प्पा कालीन शवाधानों में 'ताबूत' (Coffin) का साक्ष्य कहाँ से मिला है?", options: ["हड़प्पा", "मोहनजोदड़ो", "लोथल", "कालीबंगा"], correct: 0, explanation: "हड़प्पा के 'आर-37' कब्रिस्तान से लकड़ी के ताबूत में दफनाए जाने के प्रमाण मिले हैं।" },
+            { id: 19, tag: "", question: "किस सैंधव स्थल से 'मनका निर्माण' में प्रयुक्त 'सेलखड़ी' (Steatite) का सबसे बड़ा कारखाना मिला है?", options: ["चन्हूदड़ो", "बालाकोट", "लोथल", "धौलावीरा"], correct: 1, explanation: "बालाकोट सीप उद्योग और मनका निर्माण का प्रमुख केंद्र था।" },
+            { id: 20, tag: "", question: "हड़प्पा सभ्यता का कौन सा नगर 'दुर्गीकृत' (Fortified) नहीं था?", options: ["हड़प्पा", "मोहनजोदड़ो", "कालीबंगा", "चन्हूदड़ो"], correct: 3, explanation: "चन्हूदड़ो एकमात्र ऐसा नगर है जहाँ दुर्ग का अस्तित्व नहीं था।" },
+            { id: 21, tag: "", question: "सिंधु सभ्यता के लोगों की 'लिपि' के बारे में क्या सत्य है?", options: ["यह दाएं से बाएं लिखी जाती थी", "यह बाईं से दाएं लिखी जाती थी", "यह ऊपर से नीचे लिखी जाती थी", "यह दोनों दिशाओं में लिखी जाती थी"], correct: 0, explanation: "इसे 'बूस्ट्रोफेडन' शैली कहते हैं, जो पहली पंक्ति में दाएं से बाएं और दूसरी पंक्ति में बाएं से दाएं लिखी जाती थी।" },
+            { id: 22, tag: "", question: "'पशुपति शिव' की मोहर में कौन से पशु अंकित नहीं हैं?", options: ["हाथी", "बाग", "गेंडा", "घोड़ा"], correct: 3, explanation: "पशुपतिनाथ की मोहर में हाथी, बाघ, गैंडा और भैंसा अंकित हैं, घोड़ा नहीं।" },
+            { id: 23, tag: "", question: "सिंधु सभ्यता के किस स्थल से 'कपाल शल्य चिकित्सा' (Trepanation) के साक्ष्य मिले हैं?", options: ["कालीबंगा", "लोथल", "मोहनजोदड़ो", "हड़प्पा"], correct: 0, explanation: "कालीबंगा में एक बालक की खोपड़ी मिली है जिसमें छेद (सर्जरी) के निशान हैं।" },
+            { id: 24, tag: "", question: "'मातृदेवी' की मृण्मूर्ति (Terracotta) का सबसे अधिक प्रमाण किस स्थल से मिला है?", options: ["मोहनजोदड़ो", "हड़प्पा", "लोथल", "चन्हूदड़ो"], correct: 1, explanation: "हड़प्पा की खुदाई में भारी मात्रा में नारी मूर्तियाँ मिली हैं, जो मातृदेवी की उपासना को दर्शाती हैं।" },
+            { id: 25, tag: "", question: "किस हड़प्पा स्थल से 'शतरंज' जैसे खेल के साक्ष्य मिले हैं?", options: ["लोथल", "धौलावीरा", "हड़प्पा", "मोहनजोदड़ो"], correct: 0, explanation: "लोथल से शतरंज या पासे जैसा खेल बोर्ड मिला है।" },
+            { id: 26, tag: "", question: "'दीवारों के निर्माण' में 'जिप्सम' (Gypsum) का उपयोग किस स्थल पर हुआ है?", options: ["कालीबंगा", "लोथल", "मोहनजोदड़ो", "हड़प्पा"], correct: 2, explanation: "मोहनजोदड़ो के विशाल स्नानागार के जल को रिसने से रोकने के लिए ईंटों के बीच जिप्सम का प्रयोग किया गया था।" },
+            { id: 27, tag: "", question: "हड़प्पा सभ्यता के पतन के लिए 'बाढ़' (Flood) के सिद्धांत का समर्थन किसने किया था?", options: ["जॉन मार्शल", "एस.आर. राव", "ए. घोष", "एम.आर. साहनी"], correct: 0, explanation: "सर जॉन मार्शल ने मोहनजोदड़ो में बाढ़ को पतन का प्रमुख कारण माना था।" },
+            { id: 28, tag: "", question: "सिंधु सभ्यता में 'कपास' को यूनानी लोग किस नाम से पुकारते थे?", options: ["सिंडन", "हिंडन", "कपासा", "ऊन"], correct: 0, explanation: "यूनानी लोग कपास के लिए 'सिंडन' शब्द का प्रयोग करते थे, जो 'सिंध' शब्द से निकला है।" },
+            { id: 29, tag: "", question: "हड़प्पा सभ्यता में 'नापतौल' का मुख्य आधार क्या था?", options: ["16 का गुणज", "10 का गुणज", "12 का गुणज", "8 का गुणज"], correct: 0, explanation: "नापतौल की इकाइयां 16 के गुणज (16, 64, 160, 320, 640) में थीं।" },
+            { id: 30, tag: "", question: "किस स्थल से 'तांबे की कुल्हाड़ी' प्राप्त हुई है?", options: ["राखीगढ़ी", "रोजदी", "लोथल", "रंगपुर"], correct: 1, explanation: "रोजदी (गुजरात) से तांबे की कुल्हाड़ी के प्रमाण मिले हैं।" },
+            { id: 31, tag: "", question: "सिंधु सभ्यता के लोगों का 'प्रिय पशु' कौन सा था?", options: ["एक सींग वाला बैल", "कुत्ता", "बिल्ली", "घोड़ा"], correct: 0, explanation: "मुद्राओं पर सर्वाधिक अंकन 'एकशृंगी पशु' (Unicorn) का ही मिलता है।" },
+            { id: 32, tag: "", question: "हड़प्पा के लोगों को 'तुलन' (Scale) का ज्ञान किस धातु के पैमाने से था?", options: ["हाथी दांत", "सीप", "तांबा", "मिट्टी"], correct: 0, explanation: "लोथल से हाथी दांत का पैमाना (Ivory Scale) मिला है जो माप-तौल के लिए प्रयुक्त होता था।" },
+            { id: 33, tag: "", question: "सिंधु सभ्यता के लोग 'सुमेरिया' के साथ किस मार्ग से व्यापार करते थे?", options: ["समुद्री मार्ग", "स्थल मार्ग", "हवाई मार्ग", "इनमें से कोई नहीं"], correct: 0, explanation: "बहरीन (दिलमुन) मध्यस्थ के रूप में कार्य करता था और मेसोपोटामिया के साथ समुद्री व्यापार प्रमुख था।" },
+            { id: 34, tag: "", question: "'हड़प्पा' शब्द का उपयोग सबसे पहले किस विद्वान ने किया?", options: ["चार्ल्स मैसन", "जॉन मार्शल", "अलेक्जेंडर कनिंघम", "आर.ई.एम. व्हीलर"], correct: 0, explanation: "चार्ल्स मैसन ने 1826 में सबसे पहले इस स्थल का उल्लेख किया था।" },
+            { id: 35, tag: "", question: "'जुते हुए खेत' का आकार कैसा था?", options: ["वर्गाकार", "आयताकार", "ग्रिडनुमा", "कोई नहीं"], correct: 2, explanation: "कालीबंगा में जुते हुए खेत का प्रमाण 'ग्रिड-पैटर्न' (समकोण पर काटती रेखाएं) में मिला है।" },
+            { id: 36, tag: "", question: "किस स्थल से 'अनाज कूटने' का वृत्ताकार चबूतरा मिला है?", options: ["लोथल", "हड़प्पा", "मोहनजोदड़ो", "कालीबंगा"], correct: 1, explanation: "हड़प्पा में अन्नागार के पास वृत्ताकार चबूतरे मिले हैं जहाँ अनाज कूटा जाता था।" },
+            { id: 37, tag: "", question: "किस सैंधव स्थल से 'मनुष्य के साथ कुत्ते' को दफनाने का साक्ष्य है?", options: ["रोपड़", "सुरकोटदा", "धौलावीरा", "लोथल"], correct: 0, explanation: "रोपड़ में कब्र में मालिक के साथ पालतू कुत्ते को दफनाए जाने के प्रमाण मिले हैं।" },
+            { id: 38, tag: "", question: "सिंधु सभ्यता में 'धौलावीरा' क्यों प्रसिद्ध है?", options: ["उन्नत जल प्रबंधन", "व्यापार", "युद्ध", "नर्तकी मूर्ति"], correct: 0, explanation: "धौलावीरा अपनी उन्नत जल प्रबंधन और संरक्षण प्रणाली (विशाल जलाशयों) के लिए प्रसिद्ध है।" },
+            { id: 39, tag: "", question: "मोहनजोदड़ो का 'विशाल स्नानागार' किस जल स्रोत से भरा जाता था?", options: ["पास के कुएं से", "नदी से", "वर्षा जल से", "नहर से"], correct: 0, explanation: "स्नानागार के पास ही एक विशाल कुआँ मिला है जिससे इसमें जल भरा जाता था।" },
+            { id: 40, tag: "", question: "हड़प्पा सभ्यता का कौन सा स्थल 'मत्स्य पालन' (Fishing) का केंद्र था?", options: ["लोथल", "सुरकोटदा", "बालाकोट", "चन्हूदड़ो"], correct: 2, explanation: "बालाकोट समुद्र के किनारे स्थित था और मछली पकड़ना तथा सीप उद्योग यहाँ का मुख्य व्यवसाय था।" },
+            { id: 41, tag: "", question: "सिंधु वासियों के लिए 'पवित्र वृक्ष' कौन सा था?", options: ["पीपल", "बरगद", "आम", "नीम"], correct: 0, explanation: "मोहरों और मृदभांडों पर पीपल के वृक्ष के सर्वाधिक साक्ष्य मिलते हैं, जिससे यह पवित्र माना जाता था।" },
+            { id: 42, tag: "", question: "सिंधु सभ्यता के किस नगर में 'अग्नि वेदियों' की पंक्ति मिली है?", options: ["लोथल", "कालीबंगा", "बनावली", "राखीगढ़ी"], correct: 1, explanation: "कालीबंगा में एक चबूतरे पर 7 अग्नि वेदिकाएं (धार्मिक अनुष्ठान हेतु) पंक्ति में मिली हैं।" },
+            { id: 43, tag: "", question: "सिंधु वासियों का 'व्यापारिक संकुल' किस स्थल को कहा जाता है?", options: ["लोथल", "मोहनजोदड़ो", "हड़प्पा", "धौलावीरा"], correct: 0, explanation: "लोथल एक अंतरराष्ट्रीय गोदीवाला (Dockyard) वाला बंदरगाह था, जो व्यापार का प्रमुख केंद्र था।" },
+            { id: 44, tag: "", question: "हड़प्पा की 'शवाधान' प्रथा में 'कब्र' को क्या कहा गया है?", options: ["आर-37", "ए-बी", "सी-14", "टी-पॉट"], correct: 0, explanation: "हड़प्पा का मुख्य कब्रिस्तान 'आर-37' के नाम से जाना जाता है।" },
+            { id: 45, tag: "", question: "सिंधु सभ्यता में 'लोथल' की खुदाई किसने की?", options: ["एस.आर. राव", "राखालदास", "दयाराम साहनी", "जगपति जोशी"], correct: 0, explanation: "1957 में एस.आर. राव के निर्देशन में लोथल का उत्खनन किया गया था।" },
+            { id: 46, tag: "", question: "किस स्थल से 'चावल की भूसी' के साक्ष्य मिले हैं?", options: ["रंगपुर", "लोथल", "उपर्युक्त दोनों", "इनमें से कोई नहीं"], correct: 2, explanation: "रंगपुर और लोथल दोनों सैंधव स्थलों से चावल की भूसी के साक्ष्य प्राप्त हुए हैं।" },
+            { id: 47, tag: "", question: "'हड़प्पा' किस प्रकार की सभ्यता थी?", options: ["नगरीय", "ग्रामीण", "खानाबदोश", "अर्द्ध-नगरीय"], correct: 0, explanation: "हड़प्पा सभ्यता एक विकसित एवं उन्नत नगरीय सभ्यता थी।" },
+            { id: 48, tag: "", question: "हड़प्पा सभ्यता का सबसे बड़ा 'नगर' कौन सा है?", options: ["मोहनजोदड़ो", "हड़प्पा", "कालीबंगा", "लोथल"], correct: 0, explanation: "क्षेत्रफल की दृष्टि से मोहनजोदड़ो हड़प्पा सभ्यता का सबसे बड़ा नगर था।" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+  </html>
+
