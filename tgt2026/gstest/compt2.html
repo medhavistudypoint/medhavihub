@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medhavi Study Point - Computer Test Set 2</title>
+    <title>Medhavi Study Point - Online Test</title>
     <link rel="stylesheet" href="../../global-style.css?v=3.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -11,8 +11,8 @@
     <script>
         const userPlan = localStorage.getItem("user_plan");
         if (userPlan !== "FULL" && userPlan !== "GS") {
-            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS बैच जॉइन करें!");
-            window.location.href = "../../gs.html"; 
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
         }
     </script>
 </head>
@@ -28,12 +28,12 @@
 
     <!-- 1. लॉगिन गेट स्क्रीन -->
     <div id="boxLoginGate" class="login-card">
-        <h2>Medhavi Computer Test Set 2 Gate</h2>
+        <h2>Medhavi Study Point Test Gate</h2>
         <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
         <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
         <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
         <br><br>
-        <a href="../../gs.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
     </div>
 
     <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
@@ -41,18 +41,18 @@
         <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
                 <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
-                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">COMPUTER SCIENCE - SET 2</p>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
             </div>
-            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">30:00</div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
         </div>
 
         <div class="main-container">
             <div class="card-panel">
                 <div class="meta-row">
                     <div>
-                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">40</span></span>
-                        <span class="subject-badge">कंप्यूटर ज्ञान (Computer Science)</span>
-                        <span id="lblQuestionTag" class="tag-badge" style="display:none;"></span>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">कंप्यूटर हार्डवेयर</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
                     </div>
                 </div>
                 <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
@@ -75,10 +75,10 @@
     <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
     <div id="boxReportDashboard" class="report-view">
         <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
-            <div class="report-header-title">Medhavi Study Point — Computer Result Dashboard</div>
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
             <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
             <div class="grid-5-columns">
-                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 40</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
                 <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
                 <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
                 <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
@@ -86,58 +86,59 @@
             </div>
         </div>
         <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
-        <a href="../../gs.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
         <div id="boxReviewAnswersList"></div>
     </div>
 
     <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
     <script>
-        const QUIZ_KEY = "medhavi_paid_computer_set_02"; 
+        const QUIZ_KEY = "medhavi_ict_test_02"; 
 
         const dataset = [
-            { id: 1, tag: "", question: "माइक्रोसॉफ्ट (Microsoft) के संस्थापक कौन हैं?", options: ["बिल गेट्स और पॉल एलन", "स्टीव जॉब्स", "मार्क जुकरबर्ग", "लैरी पेज"], correct: 0, explanation: "माइक्रोसॉफ्ट की स्थापना 1975 में बिल गेट्स और पॉल एलन द्वारा की गई थी।" },
-            { id: 2, tag: "", question: "ओपन सोर्स ऑपरेटिंग सिस्टम का उदाहरण कौन सा है?", options: ["विंडोज", "मैक ओएस", "लिनक्स", "आईओएस"], correct: 2, explanation: "लिनक्स (Linux) एक ओपन सोर्स ऑपरेटिंग सिस्टम है।" },
-            { id: 3, tag: "", question: "कंप्यूटर में रैम (RAM) किस प्रकार की मेमोरी है?", options: ["स्थायी", "अस्थायी", "सहायक", "इनमें से कोई नहीं"], correct: 1, explanation: "रैम (RAM) एक वोलेटाइल या अस्थायी मेमोरी होती है।" },
-            { id: 4, tag: "", question: "एम.एस. एक्सेल (MS Excel) में डेटा को किस रूप में व्यवस्थित किया जाता है?", options: ["रो और कॉलम", "पैराग्राफ", "स्लाइड", "फोल्डर"], correct: 0, explanation: "एम.एस. एक्सेल में डेटा रो और कॉलम से बनी स्प्रेडशीट या टेबल के रूप में व्यवस्थित होता है।" },
-            { id: 5, tag: "", question: "इंटरनेट पर किसी भी फाइल को एक कंप्यूटर से दूसरे कंप्यूटर में ट्रांसफर करने के लिए किस प्रोटोकॉल का उपयोग होता है?", options: ["FTP", "HTTP", "SMTP", "TCP"], correct: 0, explanation: "FTP (File Transfer Protocol) का उपयोग इंटरनेट पर फाइल ट्रांसफर के लिए किया जाता है।" },
-            { id: 6, tag: "", question: "कंप्यूटर नेटवर्क में 'लोन लोकल एरिया नेटवर्क' (LAN) का पूर्ण रूप क्या है?", options: ["Local Area Network", "Large Area Network", "Local Access Network", "Light Area Network"], correct: 0, explanation: "LAN का पूर्ण रूप Local Area Network होता है।" },
-            { id: 7, tag: "", question: "वाइड एरिया नेटवर्क (WAN) का सबसे अच्छा उदाहरण क्या है?", options: ["इंटरनेट", "लोकल ऑफिस नेटवर्क", "ब्लूटूथ", "इन्ट्रानेट"], correct: 0, explanation: "इंटरनेट दुनिया का सबसे बड़ा वाइड एरिया नेटवर्क (WAN) है।" },
-            { id: 8, tag: "", question: "वाई-फाई (Wi-Fi) का पूर्ण रूप क्या होता है?", options: ["Wireless Fidelity", "Wired Fidelity", "Wireless Field", "Wired Fiber"], correct: 0, explanation: "Wi-Fi का पूर्ण रूप Wireless Fidelity होता है।" },
-            { id: 9, tag: "", question: "एम.एस. वर्ड में किसी टेक्स्ट को बोल्ड (Bold) करने के लिए कौन-सी शॉर्टकट की प्रयोग होती है?", options: ["Ctrl + B", "Ctrl + I", "Ctrl + U", "Ctrl + P"], correct: 0, explanation: "टेक्स्ट को बोल्ड करने के लिए Ctrl + B का उपयोग किया जाता है।" },
-            { id: 10, tag: "", question: "एम.एस. वर्ड में टेक्स्ट को अंडरलाइन करने के लिए शॉर्टकट की क्या है?", options: ["Ctrl + B", "Ctrl + I", "Ctrl + U", "Ctrl + S"], correct: 2, explanation: "टेक्स्ट के नीचे लाइन खींचने (Underline) के लिए Ctrl + U दबाया जाता है।" },
-            { id: 11, tag: "", question: "कंप्यूटर की स्थायी मेमोरी (Permanent Memory) किसे कहते हैं?", options: ["RAM", "ROM", "Cache", "Register"], correct: 1, explanation: "ROM (Read Only Memory) कंप्यूटर की स्थायी मेमोरी होती है।" },
-            { id: 12, tag: "", question: "निम्नलिखित में से कौन-सा एक हार्डवेयर का उदाहरण नहीं है?", options: ["माउस", "कीबोर्ड", "ऑपरेटिंग सिस्टम", "हार्ड डिस्क"], correct: 2, explanation: "ऑपरेटिंग सिस्टम एक सॉफ्टवेयर है, हार्डवेयर नहीं।" },
-            { id: 13, tag: "", question: "एम.एस. पावरपॉइंट (MS PowerPoint) मुख्य रूप से किसके लिए इस्तेमाल किया जाता है?", options: ["डेटाबेस बनाने के लिए", "प्रस्तुतिकरण (Presentation) के लिए", "गणितीय गणना के लिए", "ईमेल भेजने के लिए"], correct: 1, explanation: "एम.एस. पावरपॉइंट का उपयोग आकर्षक प्रेजेंटेशन या स्लाइड शो तैयार करने के लिए होता है।" },
-            { id: 14, tag: "", question: "कंप्यूटर में किसी शब्द की लंबाई किसमें मापी जाती है?", options: ["बाइट", "बिट", "मीटर", "हर्ट्ज"], correct: 1, explanation: "कंप्यूटर शब्द की लंबाई बिट्स (Bits) में मापी जाती है।" },
-            { id: 15, tag: "", question: "एक किलोबाइट (KB) में कितने बाइट होते हैं?", options: ["1000 बाइट", "1024 बाइट", "1048 बाइट", "512 बाइट"], correct: 1, explanation: "1 KB में 1024 बाइट्स होते हैं।" },
-            { id: 16, tag: "", question: "डिजिटल कंप्यूटर किस सिद्धांत पर कार्य करता है?", options: ["గणना (Counting / Logical)", "मापन", "विद्युत", "यांत्रिक"], correct: 0, explanation: "डिजिटल कंप्यूटर बाइनरी लॉजिक और गणना के सिद्धांत पर कार्य करता है।" },
-            { id: 17, tag: "", question: "सुपरकंप्यूटर (Supercomputer) की गति किसमें मापी जाती है?", options: ["फ्लॉप्स (FLOPS)", "हर्ट्ज", "बाइट प्रति सेकंड", "एमआईपीएस"], correct: 0, explanation: "सुपरकंप्यूटर की प्रोसेसिंग स्पीड फ्लॉप्स (Floating Point Operations Per Second) में मापी जाती है।" },
-            { id: 18, tag: "", question: "भारत का प्रथम सुपरकंप्यूटर कौन सा था?", options: ["परम 8000", "प्रत्युश", "मीहिर", "सिद्धार्थ"], correct: 0, explanation: "परम 8000 भारत का पहला सुपरकंप्यूटर था, जिसे C-DAC द्वारा विकसित किया गया था।" },
-            { id: 19, tag: "", question: "वेब पेज किस भाषा में लिखे जाते हैं?", options: ["HTML", "C++", "Java", "SQL"], correct: 0, explanation: "वेब पेजों के निर्माण के लिए HTML (HyperText Markup Language) का उपयोग किया जाता है।" },
-            { id: 20, tag: "", question: "इंटरनेट एड्रेस को क्या कहा जाता है?", options: ["IP Address", "MAC Address", "URL", "Domain"], correct: 0, explanation: "इंटरनेट पर हर डिवाइस की पहचान के लिए IP (Internet Protocol) एड्रेस का उपयोग होता है।" },
-            { id: 21, tag: "", question: "स्पैम (Spam) किससे संबंधित है?", options: ["अवांछित ईमेल (Unsolicited Email)", "कंप्यूटर वायरस", "सॉफ्टवेयर क्रैश", "हार्डवेयर खराबी"], correct: 0, explanation: "स्पैम अवांछित या कमर्शियल जंक ईमेल होते हैं।" },
-            { id: 22, tag: "", question: "कर्सर की मौजूदा स्थिति से बाईं ओर के अक्षर को मिटाने के लिए किस कुंजी का प्रयोग होता है?", options: ["Backspace", "Delete", "Enter", "Spacebar"], correct: 0, explanation: "बाईं ओर के कैरेक्टर को हटाने के लिए Backspace की का उपयोग किया जाता है।" },
-            { id: 23, tag: "", question: "कंप्यूटर की आईसी (IC) चिप्स सामान्यतः किसकी बनी होती हैं?", options: ["सिलिकॉन", "कॉपर", "एल्युमिनियम", "सोना"], correct: 0, explanation: "इंटीग्रेटेड सर्किट (IC) चिप्स सिलिकॉन की बनी होती हैं।" },
-            { id: 24, tag: "", question: "कीबोर्ड में फंक्शन कुंजियों (Function Keys) की कुल संख्या कितनी होती है?", options: ["10", "12", "14", "16"], correct: 1, explanation: "कीबोर्ड में F1 से F12 तक कुल 12 फंक्शन कुंजियाँ होती हैं।" },
-            { id: 25, tag: "", question: "निम्नलिखित में से कौन-सा इनपुट डिवाइस का उदाहरण है?", options: ["प्लॉटर", "स्कैनर", "प्रिन्टर", "स्पीकर"], correct: 1, explanation: "स्कैनर एक इनपुट डिवाइस है जिसकी मदद से फिजिकल डॉक्यूमेंट को डिजिटल रूप में कंप्यूटर में डाला जाता है।" },
-            { id: 26, tag: "", question: "टीसीपी/आईपी (TCP/IP) का संबंध किससे है?", options: ["नेटवर्किंग", "डेटाबेस", "ऑपरेटिंग सिस्टम", "हार्डवेयर"], correct: 0, explanation: "TCP/IP इंटरनेट का एक महत्वपूर्ण कम्युनिकेशन प्रोटोकॉल सूट है।" },
-            { id: 27, tag: "", question: "बायोस (BIOS) का पूर्ण रूप क्या है?", options: ["Basic Input Output System", "Binary Input Output System", "Basic Integrated Operating System", "Built-in Input Output Source"], correct: 0, explanation: "BIOS का पूर्ण रूप Basic Input Output System है।" },
-            { id: 28, tag: "", question: "कंप्यूटर भाषा 'जावा' (Java) का आविष्कार किसने किया था?", options: ["सन माइक्रोसिस्टम्स", "माइक्रोसॉफ्ट", "आईबीएम", "गूगल"], correct: 0, explanation: "जावा भाषा को जेम्स गोसलिंग द्वारा सन माइक्रोसिस्टम्स में विकसित किया गया था।" },
-            { id: 29, tag: "", question: "एम.एस. वर्ड में नई फाइल (Document) खोलने की शॉर्टकट की क्या है?", options: ["Ctrl + N", "Ctrl + O", "Ctrl + S", "Ctrl + W"], correct: 0, explanation: "नई फाइल या डॉक्यूमेंट खोलने के लिए Ctrl + N का उपयोग किया जाता है।" },
-            { id: 30, tag: "", question: "किसी फाइल या फोल्डर को हमेशा के लिए डिलीट (Permanently Delete) करने के लिए कौन-सी की-कॉम्बिनेशन दबाई जाती है?", options: ["Shift + Delete", "Ctrl + Delete", "Alt + Delete", "Tab + Delete"], correct: 1, explanation: "Shift + Delete दबाने से फाइल रीसायकल बिन में जाए बिना सीधे परमानेंट डिलीट हो जाती है।" },
-            { id: 31, tag: "", question: "निम्नलिखित में से कौन-सा स्टोरेज डिवाइस नहीं है?", options: ["हार्ड डिस्क", "ड्राइव", "माउस", "फ्लैश ड्राइव"], correct: 2, explanation: "माउस एक इनपुट डिवाइस है, स्टोरेज डिवाइस नहीं।" },
-            { id: 32, tag: "", question: "कंप्यूटर की प्रथम पीढ़ी (First Generation) में किसका प्रयोग किया जाता था?", options: ["वैद्युत ट्यूब (Vacuum Tubes)", "ट्रांजिस्टर", "आईसी (IC)", "माइक्रोप्रोसेसर"], correct: 0, explanation: "प्रथम पीढ़ी के कंप्यूटरों में वैक्यूम ट्यूब्स (निर्वात नलियों) का प्रयोग होता था।" },
-            { id: 33, tag: "", question: "द्वितीय पीढ़ी के कंप्यूटरों में किसका प्रयोग शुरू हुआ?", options: ["ट्रांजिस्टर", "वैक्यूम ट्यूब", "आईसी", "वीएलएसआई"], correct: 0, explanation: "द्वितीय पीढ़ी में वैक्यूम ट्यूब की जगह ट्रांजिस्टर का उपयोग किया गया।" },
-            { id: 34, tag: "", question: "तृतीय पीढ़ी के कंप्यूटरों में मुख्य रूप से क्या इस्तेमाल हुआ?", options: ["इंटीग्रेटेड सर्किट (IC)", "ट्रांजिस्टर", "माइक्रोप्रोसेसर", "वैक्यूम ट्यूब"], correct: 0, explanation: "तृतीय पीढ़ी के कंप्यूटरों में IC (Integrated Circuit) चिप्स का उपयोग किया गया था।" },
-            { id: 35, tag: "", question: "चतुर्थ पीढ़ी के कंप्यूटरों का मुख्य आधार क्या था?", options: ["माइक्रोप्रोसेसर (Microprocessor)", "ट्रांजिस्टर", "वैक्यूम ट्यूब", "निर्वात नली"], correct: 0, explanation: "चतुर्थ पीढ़ी में VLSI तकनीक पर आधारित माइक्रोप्रोसेसर का उपयोग किया गया।" },
-            { id: 36, tag: "", question: "पेन ड्राइव (Pen Drive) मुख्य रूप से किस प्रकार की स्टोरेज डिवाइस है?", options: ["फ्लैश मेमोरी डिवाइस", "मैग्नेटिक डिस्क", "ऑप्टिकल डिस्क", "मैग्नेटिक टेप"], correct: 0, explanation: "पेन ड्राइव एक पोर्टेबल फ्लैश मेमोरी स्टोरेज डिवाइस है।" },
-            { id: 37, tag: "", question: "डेटाबेस में रो (Row) को तकनीकी रूप से क्या कहा जाता है?", options: ["ट्यूपल (Tuple)", "एट्रीब्यूट", "फिल्ड", "टेबल"], correct: 0, explanation: "रिलेशनल डेटाबेस में टेबल की रो (Row) को ट्यूपल कहा जाता है।" },
-            { id: 38, tag: "", question: "कंप्यूटर बूटिंग के लिए किस मेमोरी की आवश्यकता होती है?", options: ["ROM", "RAM", "Cache", "Register"], correct: 0, explanation: "कंप्यूटर को बूट करने के लिए ROM में स्टोर निर्देशों (BIOS) की जरूरत होती है।" },
-            { id: 39, tag: "", question: "एक्सेल में फार्मूले की शुरुआत किस चिह्न से होती है?", options: ["=", "+", "-", "#"], correct: 0, explanation: "एम.एस. एक्सेल में किसी भी फॉर्मूले की शुरुआत हमेशा बराबर (=) के चिह्न से होती है।" },
-            { id: 40, tag: "", question: "इंटरनेट एक्सप्लोरर क्या है?", options: ["वेब ब्राउज़र", "ऑपरेटिंग सिस्टम", "सर्च इंजन", "वायरस"], correct: 0, explanation: "इंटरनेट एक्सप्लोरर एक पुराना वेब ब्राउज़र है जिसे माइक्रोसॉफ्ट द्वारा विकसित किया गया था।" }
+            { id: 1, tag: "", question: "कंप्यूटर का 'मस्तिष्क' (Brain of Computer) किसे कहा जाता है?", options: ["RAM", "CPU (Central Processing Unit)", "हार्ड डिस्क", "मदरबोर्ड"], correct: 1, explanation: "CPU कंप्यूटर के सभी प्राथमिक कार्यों, निर्देशों के निष्पादन और अन्य सभी घटकों के समन्वय व नियंत्रण का कार्य करता है।" },
+            { id: 2, tag: "", question: "CPU के तीन मुख्य बुनियादी घटक कौन-से हैं?", options: ["Control Unit, ALU, Registers", "RAM, ROM, Hard Disk", "Monitor, Keyboard, Mouse", "ALU, Input Unit, Output Unit"], correct: 0, explanation: "CPU आंतरिक रूप से तीन प्रमुख भागों से मिलकर बनता है: Arithmetic Logic Unit (गणितीय व तार्किक कार्य), Control Unit (निर्देशों का नियंत्रण) और Registers (अत्यंत तीव्र आंतरिक मेमोरी)।" },
+            { id: 3, tag: "", question: "CPU का कौन-सा भाग निर्देशों को प्राप्त (Fetch), डिकोड (Decode) और अन्य घटकों को सिग्नल भेजकर निष्पादित (Execute) करने का प्रबंधन करता है?", options: ["ALU", "Control Unit (CU)", "Cache Memory", "Primary Memory"], correct: 1, explanation: "Control Unit कंप्यूटर का 'ट्रैफिक पुलिस/तंत्रिका तंत्र' कहलाता है।<br>यह स्वयं प्रोसेसिंग नहीं करता, बल्कि डेटा प्रवाह और हार्डवेयर के कार्यों को समयबद्ध सिग्नल देकर निर्देशित करता है।" },
+            { id: 4, tag: "", question: "कंप्यूटर में सभी मुख्य आंतरिक घटक (CPU, RAM, विस्तार कार्ड आदि) जिस मुख्य सर्किट बोर्ड से जुड़े होते हैं, उसे क्या कहते हैं?", options: ["कंट्रोल बोर्ड", "मदरबोर्ड (Motherboard)", "एक्सपेंशन स्लॉट", "सिस्टम केस"], correct: 1, explanation: "मदरबोर्ड मुख्य प्रिंटेड सर्किट बोर्ड (PCB) है जो कंप्यूटर के प्रोसेसर, मेमोरी, स्टोरेज और अन्य सभी सहायक उपकरणों को आपस में संचार की सुविधा देता है।<br>इसे 'मेनबोर्ड' या 'सिस्टम बोर्ड' भी कहते हैं।" },
+            { id: 5, tag: "", question: "कंप्यूटर के आंतरिक घटकों के बीच डेटा और निर्देशों को ले जाने वाले समानांतर तारों/पथों के समूह को क्या कहा जाता है?", options: ["केबल", "सिस्टम बस (System Bus)", "पोर्ट", "रजिस्टर"], correct: 1, explanation: "कंप्यूटर में इलेक्ट्रॉनिक सिग्नलों के ट्रांसमिशन पाथ को 'बस' (Bus) कहा जाता है।<br>इसके मुख्य भाग डेटा बस, एड्रेस बस और कंट्रोल बस होते हैं।" },
+            { id: 6, tag: "", question: "कौन-सी बस एकदिशात्मक (Unidirectional) होती है और CPU द्वारा मेमोरी लोकेशन का पता भेजने के लिए उपयोग की जाती है?", options: ["Data Bus", "Address Bus", "Control Bus", "Power Bus"], correct: 1, explanation: "Address Bus एकदिशात्मक होती है, क्योंकि CPU हमेशा मेमोरी या I/O डिवाइस को उस लोकेशन का एड्रेस भेजता है जहाँ से डेटा पढ़ना या लिखना होता है।" },
+            { id: 7, tag: "", question: "डेटा बस (Data Bus) की चौड़ाई (Width - उदा. 32-bit या 64-bit) क्या निर्धारित करती है?", options: ["कंप्यूटर का भौतिक वजन", "एक चक्र में स्थानांतरित होने वाले डेटा की मात्रा", "मॉनिटर का रिज़ॉल्यूशन", "हार्ड डिस्क की कुल क्षमता"], correct: 1, explanation: "64-बिट डेटा बस एक क्लॉक साइकिल में एक साथ 64 बिट्स (8 बाइट्स) डेटा ले जा सकती है, जिससे सिस्टम की डेटा ट्रांसफर गति बढ़ जाती है।" },
+            { id: 8, tag: "", question: "कंप्यूटर में सबसे तीव्र गति वाली मेमोरी कौन-सी है?", options: ["RAM", "Cache Memory", "CPU Registers (रजिस्टर्स)", "SSD"], correct: 2, explanation: "रजिस्टर्स सीधे CPU कोर के अंदर स्थित अत्यंत छोटे मेमोरी लोकेशन होते हैं, इसलिए इनकी डेटा एक्सेस गति सबसे तेज (नैनोसेकंड के अंश में) होती है।" },
+            { id: 9, tag: "", question: "'Program Counter' (PC) रजिस्टर का प्राथमिक कार्य क्या होता है?", options: ["गणितीय गणनाओं के परिणाम को स्टोर करना", "निष्पादित होने वाले अगले निर्देश का मेमोरी एड्रेस रखना", "एरर की पहचान करना", "बिजली आपूर्ति को नियंत्रित करना"], correct: 1, explanation: "Program Counter हमेशा उस अगले निर्देश (Instruction) के मेमोरी एड्रेस को होल्ड करता है जिसे CPU द्वारा फेच किया जाना है।" },
+            { id: 10, tag: "", question: "Accumulator (AC) रजिस्टर का मुख्य कार्य क्या है?", options: ["प्रोग्राम लोड करना", "ALU द्वारा किए गए तात्कालिक अंकगणितीय/तार्किक परिणामों को अस्थायी रूप से रखना", "पासवर्ड स्टोर करना", "सिस्टम क्लॉक को रीसेट करना"], correct: 1, explanation: "ALU जब कोई गणना (जैसे जोड़ या घटाव) करता है, तो मध्यवर्ती या अंतिम परिणाम सबसे पहले Accumulator रजिस्टर में संग्रहित होता है।" },
+            { id: 11, tag: "", question: "CPU और मुख्य मेमोरी (RAM) के बीच गति के अंतर (Speed Mismatch) को कम करने के लिए किस मेमोरी का प्रयोग किया जाता है?", options: ["वर्चुअल मेमोरी", "कैश मेमोरी (Cache Memory)", "ROM", "मैग्नेटिक टेप"], correct: 1, explanation: "CPU की गति RAM की तुलना में बहुत तेज होती है।<br>कैश मेमोरी बार-बार उपयोग होने वाले डेटा को स्टोर रखती है ताकि CPU को बार-बार RAM तक न जाना पड़े।" },
+            { id: 12, tag: "", question: "कैश मेमोरी मुख्य रूप से किस तकनीक पर आधारित होती है?", options: ["DRAM (Dynamic RAM)", "SRAM (Static RAM)", "Flash Memory", "EEPROM"], correct: 1, explanation: "SRAM को बार-बार रिफ्रेश करने की आवश्यकता नहीं होती और यह अत्यधिक तेज होती है, इसलिए इसका उपयोग कैश मेमोरी बनाने में किया जाता है।" },
+            { id: 13, tag: "", question: "कंप्यूटर को चालू (Boot) करते समय सबसे पहले चलने वाला बेसिक प्रोग्राम किस चिप में स्थाई रूप से स्टोर होता है?", options: ["RAM", "Cache", "ROM (Read-Only Memory)", "Hard Drive"], correct: 2, explanation: "मदरबोर्ड पर स्थित ROM चिप में BIOS (Basic Input/Output System) या UEFI फर्मवेयर स्थाई रूप से पहले से राइट (Burned) रहता है।" },
+            { id: 14, tag: "", question: "BIOS द्वारा कंप्यूटर चालू होने पर सभी हार्डवेयर घटकों की कार्यक्षमता जाँचने की प्रक्रिया को क्या कहते हैं?", options: ["Bootstrapping", "POST (Power-On Self-Test)", "Cold Booting", "Paging"], correct: 1, explanation: "POST एक डायग्नोस्टिक परीक्षण प्रक्रिया है जो यह सुनिश्चित करती है कि कीबोर्ड, रैम, डिस्क ड्राइव और अन्य हार्डवेयर ठीक से काम कर रहे हैं या नहीं।" },
+            { id: 15, tag: "", question: "हार्डवेयर और सॉफ्टवेयर के बीच का वह बुनियादी कोड, जो चिप में स्थाई रूप से दर्ज रहता है, क्या कहलाता है?", options: ["शेयरवेयर", "फर्मवेयर (Firmware)", "फ्रीवेयर", "मिडलवेयर"], correct: 1, explanation: "फर्मवेयर हार्डवेयर डिवाइस की ROM में प्रोग्राम किया गया एक स्थायी सॉफ्टवेयर होता है जो उस हार्डवेयर को नियंत्रित करने के बुनियादी निर्देश प्रदान करता है (उदा. BIOS)।" },
+            { id: 16, tag: "", question: "कंप्यूटर की मुख्य मेमोरी 'RAM' किस प्रकार की मेमोरी है?", options: ["Non-Volatile (अनश्वर/स्थाई)", "Volatile (परिवर्तनशील/अस्थाई)", "केवल रीड-ओनली", "ऑप्टिकल मेमोरी"], correct: 1, explanation: "RAM एक वोलेटाइल मेमोरी है, जिसका अर्थ है कि कंप्यूटर की बिजली बंद होते ही इसमें मौजूद सारा डेटा तुरंत नष्ट हो जाता है।" },
+            { id: 17, tag: "", question: "DRAM (Dynamic RAM) को सामान्य संचालन में लगातार किसकी आवश्यकता होती है?", options: ["फॉर्मेटिंग की", "पीरियोडिक रिफ्रेशिंग (Periodic Refreshing) की", "बैकअप की", "एंटीवायरस स्कैन की"], correct: 1, explanation: "DRAM में डेटा कैपेसिटर और ट्रांजिस्टर में स्टोर होता है।<br>कैपेसिटर का चार्ज धीरे-धीरे लीक होता है, इसलिए डेटा बनाए रखने के लिए इसे प्रति सेकंड हजारों बार रिफ्रेश करना पड़ता है।" },
+            { id: 18, tag: "", question: "CMOS बैटरी का मदरबोर्ड पर प्राथमिक कार्य क्या होता है?", options: ["CPU को ठंडा रखना", "कंप्यूटर बंद होने पर भी सिस्टम की तारीख, समय और BIOS सेटिंग्स को सुरक्षित रखना", "मॉनिटर को पावर देना", "इंटरनेट की गति बढ़ाना"], correct: 1, explanation: "Complementary Metal-Oxide Semiconductor (CMOS) चिप को निरंतर कम पावर चाहिए होती है, जो मदरबोर्ड पर लगी सिक्का-नुमा CMOS बैटरी प्रदान करती है।" },
+            { id: 19, tag: "", question: "कंप्यूटर के मुख्य भागों को स्थिर DC विद्युत आपूर्ति देने वाले घटक का क्या नाम है?", options: ["UPS", "SMPS (Switched-Mode Power Supply)", "इनवर्टर", "ट्रांसफार्मर"], correct: 1, explanation: "SMPS घर की मुख्य AC वोल्टेज (220V) को कंप्यूटर के आंतरिक सर्किट के लिए आवश्यक कम वोल्टेज DC (+3.3V, +5V, +12V) में परिवर्तित करता है।" },
+            { id: 20, tag: "", question: "CPU के अत्यधिक गर्म होने पर उसे ठंडा रखने के लिए प्रोसेसर के ऊपर क्या लगाया जाता है?", options: ["साउंड कार्ड", "हीट सिंक और कूलिंग फैन (Heat Sink & Cooling Fan)", "मॉडेम", "नेटवर्क कार्ड"], correct: 1, explanation: "हीट सिंक (एल्युमिनियम या तांबे का बना ब्लॉक) CPU से गर्मी को सोखता है और उसके ऊपर लगा पंखा उस ऊष्मा को बाहर निकालता है।" },
+            { id: 21, tag: "", question: "CPU इंस्ट्रक्शन साइकिल (Instruction Cycle) के सही चरणों का क्रम क्या है?", options: ["Execute → Fetch → Decode → Store", "Fetch → Decode → Execute → Store", "Decode → Fetch → Store → Execute", "Store → Execute → Decode → Fetch"], correct: 1, explanation: "CPU पहले मेमोरी से निर्देश को लाता है (Fetch), फिर उसका अर्थ समझता है (Decode), उसके बाद गणना/क्रिया करता है (Execute), और अंत में परिणाम मेमोरी में लिखता है (Store)।" },
+            { id: 22, tag: "", question: "'ओवरक्लॉकिंग' (Overclocking) शब्दावली किससे संबंधित है?", options: ["कंप्यूटर घड़ी का समय बदलना", "CPU या GPU को उसकी निर्धारित फैक्ट्री गति से तेज गति पर चलाना", "इंटरनेट बैंडविड्थ बढ़ाना", "एंटीवायरस अपडेट करना"], correct: 1, explanation: "ओवरक्लॉकिंग एक ऐसी प्रक्रिया है जिसमें प्रोसेसर की क्लॉक फ्रीक्वेंसी को निर्माता द्वारा तय सीमा से अधिक बढ़ाया जाता है ताकि उच्च प्रदर्शन प्राप्त हो सके।" },
+            { id: 23, tag: "", question: "किसी प्रोसेसर में जब दो या दो से अधिक स्वतंत्र प्रोसेसिंग यूनिट्स (Cores) एक ही डाई पर होते हैं, तो उसे क्या कहा जाता है?", options: ["सिंगल-कोर प्रोसेसर", "मल्टी-कोर प्रोसेसर (उदा. Dual-Core, Quad-Core, Octa-Core)", "एनालॉग प्रोसेसर", "माइक्रो-कंट्रोलर"], correct: 1, explanation: "मल्टी-कोर प्रोसेसर एक साथ समानांतर (Parallel) रूप से कई प्रोग्राम या थ्रेड्स को निष्पादित करने में सक्षम होते हैं, जिससे मल्टीटास्किंग आसान हो जाती है।" },
+            { id: 24, tag: "", question: "कंप्यूटर मदरबोर्ड में अतिरिक्त ग्राफिक्स कार्ड, साउंड कार्ड या नेटवर्क कार्ड जोड़ने के लिए किन स्लॉट्स का उपयोग होता है?", options: ["USB Port", "Expansion Slots (उदा. PCIe स्लॉट)", "SATA Port", "VGA Port"], correct: 1, explanation: "Peripheral Component Interconnect Express (PCIe) स्लॉट्स मदरबोर्ड पर समर्पित स्लॉट होते हैं जो हाई-स्पीड एक्सपेंशन कार्ड्स को जोड़ने के काम आते हैं।" },
+            { id: 25, tag: "", question: "हार्ड डिस्क ड्राइव (HDD) और सॉलिड स्टेट ड्राइव (SSD) को मदरबोर्ड से जोड़ने के लिए प्रयुक्त आधुनिक डेटा इंटरफेस कौन-सा है?", options: ["IDE/PATA", "SATA (Serial Advanced Technology Attachment)", "PS/2", "HDMI"], correct: 1, explanation: "SATA इंटरफेस पुराने PATA (Ribbon Cable) की तुलना में बहुत तेज गति से स्टोरेज ड्राइव और मदरबोर्ड के मध्य डेटा का आदान-प्रदान करता है।" },
+            { id: 26, tag: "", question: "फ्लैश मेमोरी (Flash Memory) तकनीक किस प्रकार की ROM का उन्नत रूप है?", options: ["PROM", "EPROM", "EEPROM (Electrically Erasable Programmable ROM)", "Mask ROM"], correct: 2, explanation: "फ्लैश मेमोरी (पेन ड्राइव, SSD, मेमोरी कार्ड) EEPROM का एक उन्नत रूप है, जिसमें डेटा को विद्युत संकेतों द्वारा ब्लॉक स्तर पर आसानी से मिटाया और दोबारा लिखा जा सकता है।" },
+            { id: 27, tag: "", question: "कंप्यूटर मॉनिटर या प्रोजेक्टर को डिजिटल वीडियो और ऑडियो दोनों सिग्नलों के साथ जोड़ने वाला आधुनिक पोर्ट कौन-सा है?", options: ["VGA", "DVI", "HDMI (High-Definition Multimedia Interface)", "Serial Port"], correct: 2, explanation: "VGA केवल एनालॉग वीडियो भेजता था, जबकि HDMI एक ही केबल से अनकंप्रेस्ड डिजिटल वीडियो और मल्टी-चैनल ऑडियो दोनों सिग्नलों को प्रसारित करता है।" },
+            { id: 28, tag: "", question: "'वर्चुअल मेमोरी' (Virtual Memory) की अवधारणा क्या है?", options: ["बहुत तेज गति की RAM", "हार्ड डिस्क का वह स्थान जिसे ऑपरेटिंग सिस्टम अपर्याप्त RAM की स्थिति में अतिरिक्त RAM की तरह उपयोग करता है", "क्लाउड पर मौजूद मेमोरी", "केवल बैकअप मेमोरी"], correct: 1, explanation: "जब वास्तविक भौतिक RAM भर जाती है, तो OS हार्ड डिस्क/SSD पर एक 'पेजिंग फाइल' या 'स्वैप स्पेस' बनाता है जो वर्चुअल मेमोरी की तरह काम करता है।" },
+            { id: 29, tag: "", question: "CPU के प्रदर्शन को बढ़ाने वाली तकनीक 'पाइपलाइनिंग' (Pipelining) का क्या अर्थ है?", options: ["एक निर्देश समाप्त होने के बाद ही दूसरा शुरू करना", "एक निर्देश के पूरा होने से पहले ही अगले निर्देश के निष्पादन के चरण शुरू कर देना", "डेटा को पाइप से भेजना", "मेमोरी को साफ़ करना"], correct: 1, explanation: "पाइपलाइनिंग में CPU एक साथ अलग-अलग निर्देशों के विभिन्न चरणों (Fetch, Decode, Execute) पर कार्य करता है, जिससे प्रति सेकंड अधिक निर्देश प्रोसेस होते हैं।" },
+            { id: 30, tag: "", question: "मदरबोर्ड के चिपसेट में 'Northbridge' (अब प्रोसेसर में एकीकृत) का मुख्य कार्य क्या होता था?", options: ["धीमी गति के USB और ऑडियो को नियंत्रित करना", "तेज गति वाले घटकों (CPU, RAM और ग्राफ़िक्स कार्ड) के बीच डेटा प्रवाह का प्रबंधन करना", "बिजली की बचत करना", "केवल BIOS लोड करना"], correct: 1, explanation: "परंपरागत चिपसेट में Northbridge हाई-स्पीड घटकों को CPU से जोड़ता था, जबकि Southbridge धीमी गति वाले I/O पोर्ट और ड्राइव्स को संभालता था।" },
+            { id: 31, tag: "", question: "ग्राफ़िक्स प्रोसेसिंग यूनिट (GPU) का मुख्य हार्डवेयर कार्य क्या है?", options: ["केवल टेक्स्ट टाइप करना", "समानांतर गणनाओं द्वारा 3D ग्राफिक्स, वीडियो रेंडरिंग और जटिल इमेज प्रोसेसिंग को तीव्र करना", "हार्ड डिस्क में फाइलें सेव करना", "इंटरनेट कनेक्शन बनाना"], correct: 1, explanation: "GPU में हजारों छोटे कोर होते हैं जो इमेज, वीडियो फ्रेम और AI एल्गोरिदम की समानांतर (Parallel) गणितीय गणनाओं को प्रोसेस करने के लिए अनुकूलित होते हैं।" },
+            { id: 32, tag: "", question: "कंप्यूटर में USB का पूर्ण रूप क्या है?", options: ["Unique Serial Bus", "Universal Serial Bus", "United System Bus", "Universal Storage Block"], correct: 1, explanation: "USB एक मानक प्लग-एंड-प्ले इंटरफेस है जिसका उपयोग कंप्यूटर से कीबोर्ड, माउस, प्रिंटर, फ्लैश ड्राइव आदि को जोड़ने के लिए किया जाता है।" },
+            { id: 33, tag: "", question: "कंप्यूटर हार्डवेयर में 'Plug and Play' (PnP) का क्या अर्थ है?", options: ["डिवाइस को केवल गेम खेलने के लिए उपयोग करना", "बिना किसी जटिल मैनुअल कॉन्फ़िगरेशन या रीस्टार्ट के डिवाइस को जोड़ते ही OS द्वारा स्वतः पहचान कर काम शुरू करना", "डिवाइस को बिजली के बिना चलाना", "केवल ऑडियो डिवाइस जोड़ना"], correct: 1, explanation: "PnP तकनीक कंप्यूटर को किसी नए हार्डवेयर के कनेक्ट होते ही उसके आवश्यक ड्राइवर को लोड करने और तुरंत उपयोग योग्य बनाने की सुविधा देती है।" },
+            { id: 34, tag: "", question: "मेमोरी पदानुक्रम (Memory Hierarchy) के अनुसार, सबसे धीमी लेकिन सबसे अधिक भंडारण क्षमता वाली मेमोरी कौन-सी है?", options: ["L1 Cache", "Main Memory (RAM)", "Secondary/Tertiary Storage (HDD/Magnetic Tape)", "Registers"], correct: 2, explanation: "मेमोरी पदानुक्रम में ऊपर से नीचे जाने पर गति घटती है, प्रति-बिट लागत घटती है, लेकिन कुल भंडारण क्षमता बढ़ती है।" },
+            { id: 35, tag: "", question: "'L1, L2, L3' शब्द कंप्यूटर के किस हार्डवेयर घटक से संबंधित हैं?", options: ["हार्ड डिस्क के विभाजन", "विभिन्न स्तरों की कैश मेमोरी (Cache Memory Levels)", "USB पोर्ट के प्रकार", "मॉनिटर की ब्राइटनेस"], correct: 1, explanation: "L1 सबसे छोटी और सबसे तेज कैश (प्रोसेसर कोर के अंदर), L2 थोड़ी बड़ी, और L3 साझा (Shared) कैश मेमोरी होती है जो मदरबोर्ड/प्रोसेसर डाई पर स्थित होती है।" },
+            { id: 36, tag: "", question: "हार्डवेयर डिवाइस को CPU का ध्यान तुरंत अपनी ओर आकर्षित करने के लिए भेजे जाने वाले सिग्नल को क्या कहते हैं?", options: ["Polling", "Interrupt (इंटरप्ट)", "Semaphore", "Token"], correct: 1, explanation: "जब किसी इनपुट डिवाइस (उदा. कीबोर्ड की दबाना) या सिस्टम एरर को CPU के तत्काल ध्यान की आवश्यकता होती है, तो वह एक 'हार्डवेयर इंटरप्ट' सिग्नल भेजता है।" },
+            { id: 37, tag: "", question: "DMA (Direct Memory Access) नियंत्रक का प्राथमिक लाभ क्या है?", options: ["CPU की गति को दोगुना करना", "हाई-स्पीड I/O डिवाइसों को CPU को व्यस्त किए बिना सीधे RAM से डेटा ट्रांसफर करने की अनुमति देना", "इंटरनेट सुरक्षित बनाना", "कंप्यूटर को वायरस से बचाना"], correct: 1, explanation: "DMA कंट्रोलर हार्ड डिस्क या नेटवर्क कार्ड को RAM के साथ सीधे डेटा साझा करने देता है, जिससे CPU अन्य गणनाओं के लिए पूरी तरह स्वतंत्र रहता है।" },
+            { id: 38, tag: "", question: "निम्नलिखित में से कौन-सा घटक पूरी तरह से एक 'हार्डवेयर' का उदाहरण है?", options: ["ऑपरेटिंग सिस्टम", "कंपाइलर", "नेटवर्क इंटरफेस कार्ड (NIC)", "वेब ब्राउज़र"], correct: 2, explanation: "NIC (LAN Card) एक भौतिक इलेक्ट्रॉनिक सर्किट बोर्ड है जो कंप्यूटर को वायर्ड या वायरलेस नेटवर्क से जोड़ता है, जबकि शेष तीनों सॉफ्टवेयर हैं।" },
+            { id: 39, tag: "", question: "प्रोसेसर की वह विशेषता जो उसे एक ही समय में दो अलग-अलग थ्रेड्स को एक सिंगल कोर पर निष्पादित करने की अनुमति देती है, क्या कहलाती है?", options: ["Hyper-Threading (हाइपर-थ्रेडिंग)", "Multi-booting", "Disk Defragmentation", "Spooling"], correct: 0, explanation: "इंटेल द्वारा विकसित हाइपर-थ्रेडिंग तकनीक एक भौतिक CPU कोर को ऑपरेटिंग सिस्टम के सामने दो वर्चुअल/लॉजिकल कोर के रूप में प्रस्तुत करती है।" },
+            { id: 40, tag: "", question: "कंप्यूटर में 'फॉर्म फैक्टर' (Form Factor) शब्द का क्या अर्थ होता है?", options: ["सॉफ्टवेयर का साइज", "मदरबोर्ड, पावर सप्लाई या कैबिनेट का भौतिक आकार, लेआउट और ज्यामितीय संरचना", "इंटरनेट की डाउनलोडिंग गति", "स्क्रीन का रिफ्रेश रेट"], correct: 1, explanation: "फॉर्म फैक्टर (जैसे ATX, Micro-ATX, Mini-ITX) मदरबोर्ड के मानकीकृत भौतिक आयामों, पेंचों के स्थान और पोर्ट लेआउट को दर्शाता है।" }
         ];
     </script>
 
     <script src="../../global-quiz.js?v=3.0"></script>
 </body>
 </html>
+             
