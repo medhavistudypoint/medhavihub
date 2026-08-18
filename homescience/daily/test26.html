@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ सही किया गया बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">40</span></span>
+                        <span class="subject-badge">उपचारात्मक पोषण (Therapeutic Nutrition)</span>
+                        <!-- 🌟 यहाँ डायनेमिक टैग दिखेगा -->
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 40</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ सही किया गया डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_therapeutic_nutrition_40q"; 
+
+        // 2. 40 प्रश्नों का डेटासेट (उपचारात्मक पोषण एवं नैदानिक आहारिकी)
+        const dataset = [
+            { id: 1, tag: "NCERT", question: "उपचारात्मक आहार (Therapeutic Diet) का प्राथमिक उद्देश्य क्या है?", options: ["रोगी की पोषण स्थिति को बनाए रखना या सुधारना", "रोग की स्थिति के अनुसार सामान्य आहार में संशोधन करना", "संभावित पोषक तत्वों की कमी को रोकना", "उपरोक्त सभी"], correct: 3 },
+            { id: 2, tag: "NCERT", question: "NCERT के अनुसार 'नैदानिक पोषण' (Clinical Nutrition) का संबंध मुख्य रूप से किससे है?", options: ["केवल स्वस्थ व्यक्तियों के आहार से", "बीमारियों की रोकथाम और बीमारी की स्थिति में रोगियों के पोषण प्रबंधन से", "खाद्य उत्पादन की तकनीकों से", "बाजार में भोजन की बिक्री से"], correct: 1 },
+            { id: 3, tag: "Diet Therapy", question: "सामान्य आहार (Regular Diet) को उपचारात्मक आहार में बदलते समय निम्न में से किस प्रकार का संशोधन किया जा सकता है?", options: ["केवल बनावट (Texture/Consistency)", "केवल ऊर्जा और पोषक तत्वों की मात्रा", "केवल भोजन देने का मार्ग (Feeding route)", "बनावट, पोषक तत्व तथा भोजन देने का तरीका आदि में संशोधन"], correct: 3 },
+            { id: 4, tag: "Diet Consistency", question: "पूर्ण द्रव आहार (Full Fluid Diet) में निम्न में से कौन-सा खाद्य पदार्थ सम्मिलित किया जा सकता है?", options: ["पतला सूप और दूध", "ककड़ी और सलाद", "पूरी और पराठा", "तले हुए चिप्स"], correct: 0 },
+            { id: 5, tag: "Diet Consistency", question: "स्वच्छ द्रव आहार (Clear Liquid Diet) मुख्य रूप से कब निर्धारित किया जाता है?", options: ["दीर्घकालिक वजन बढ़ाने के लिए", "सर्जरी के तुरंत बाद या तीव्र जठरांत्र संबंधी गड़बड़ी में", "मधुमेह के दीर्घकालिक नियंत्रण में", "उच्च रक्तचाप में"], correct: 1 },
+            { id: 6, tag: "Diet Consistency", question: "स्वच्छ द्रव आहार (Clear Fluid Diet) का मुख्य अवगुण (Limitation) क्या है?", options: ["यह आसानी से पच जाता है", "यह पोषण की दृष्टि से अपूर्ण होता है और लंबे समय तक नहीं दिया जा सकता", "यह इलेक्ट्रोलाइट संतुलन बनाए रखता है", "यह तरल पदार्थ की आपूर्ति करता है"], correct: 1 },
+            { id: 7, tag: "Diet Consistency", question: "कोमल आहार (Soft Diet) की प्रमुख विशेषता क्या है?", options: ["यह अत्यधिक मसालेदार और रेशेदार होता है", "यह आसानी से चबाने योग्य, सुपाच्य और कम रेशे वाला होता है", "इसमें केवल कच्ची सब्जियां शामिल होती हैं", "यह पूरी तरह से तरल होता है"], correct: 1 },
+            { id: 8, tag: "Feeding Routes", question: "जब रोगी मुंह से भोजन ग्रहण करने में असमर्थ हो परंतु जठरांत्र मार्ग (GI tract) कार्यशील हो, तो भोजन देने की कौन-सी विधि अपनाई जाती है?", options: ["अंतःशिरा पोषण (Parenteral Nutrition)", "नलिका द्वारा पोषण (Enteral Nutrition / Tube Feeding)", "साधारण ठोस आहार", "उपवास"], correct: 1 },
+            { id: 9, tag: "Feeding Routes", question: "नासिका-जठर नली (Nasogastric Tube) द्वारा भोजन किस अंग में सीधे पहुँचाया जाता है?", options: ["आमाशय (Stomach)", "मलाशय (Rectum)", "फेफड़े (Lungs)", "यकृत (Liver)"], correct: 0 },
+            { id: 10, tag: "Feeding Routes", question: "जब किसी रोगी का पाचन तंत्र पूरी तरह अकार्यक्षम हो, तो सीधे रक्तप्रवाह में पोषक तत्व पहुँचाने की विधि को क्या कहते हैं?", options: ["Enteral Feeding", "Parenteral Nutrition (Intravenous)", "Oral Rehydration", "Gastrostomy"], correct: 1 },
+            { id: 11, tag: "Fever & Infection", question: "तीव्र ज्वर (Acute Fever जैसे टाइफाइड) की स्थिति में बेसल मेटाबॉलिक रेट (BMR) पर क्या प्रभाव पड़ता है?", options: ["BMR घट जाता है", "BMR अपरिवर्तित रहता है", "BMR बढ़ जाता है", "BMR शून्य हो जाता है"], correct: 2 },
+            { id: 12, tag: "Fever & Infection", question: "शरीर के तापमान में प्रत्येक 1°F की वृद्धि होने पर BMR में लगभग कितने प्रतिशत की वृद्धि होती है?", options: ["2%", "7%", "15%", "25%"], correct: 1 },
+            { id: 13, tag: "Fever & Infection", question: "टाइफाइड और तपेदिक (Tuberculosis) जैसे ज्वर में आहार किस प्रकार का होना चाहिए?", options: ["उच्च कैलोरी एवं उच्च प्रोटीन युक्त", "कम कैलोरी एवं कम प्रोटीन युक्त", "उच्च वसा एवं कम कार्बोहाइड्रेट", "शून्य तरल आहार"], correct: 0 },
+            { id: 14, tag: "GIT Disorders", question: "पेप्टिक अल्सर (Peptic Ulcer) के रोगी के आहार में किन पदार्थों से पूर्णतः परहेज करना चाहिए?", options: ["उबले आलू और दूध", "मसालेदार भोजन, शराब, कैफीन और तली-भुनी चीजें", "दलिया और खिचड़ी", "पर्याप्त पानी"], correct: 1 },
+            { id: 15, tag: "GIT Disorders", question: "अल्सरेटिव कोलाइटिस या तीव्र दस्त (Diarrhoea) के दौरान किस प्रकार का आहार अनुशंसित किया जाता है?", options: ["उच्च रेशा आहार (High Fibre Diet)", "कम रेशा/अवशेष आहार (Low Residue/Fibre Diet)", "कच्चा सलाद और साबुत अनाज", "अत्यधिक चिकनाई युक्त भोजन"], correct: 1 },
+            { id: 16, tag: "GIT Disorders", question: "कब्ज (Constipation) के प्रबंधन के लिए आहार में किसकी मात्रा बढ़ानी चाहिए?", options: ["आहारीय रेशा (Dietary Fibre) और तरल पदार्थ", "परिष्कृत आटा (मैदा)", "पनीर और मक्खन", "चीनी और मिठाइयाँ"], correct: 0 },
+            { id: 17, tag: "Metabolic Disorders", question: "सीलिएक रोग (Celiac Disease) से पीड़ित रोगी को किस प्रोटीन से पूर्णतः मुक्त आहार (Gluten-Free Diet) दिया जाना चाहिए?", options: ["केसीन (Casein)", "ग्लूटेन (Gluten)", "एल्ब्यूमिन (Albumin)", "ग्लोब्युलिन (Globulin)"], correct: 1 },
+            { id: 18, tag: "Metabolic Disorders", question: "सीलिएक रोग में किस अनाज का सेवन पूर्णतः वर्जित होता है?", options: ["गेहूं, जौ और राई", "चावल", "मक्का", "सोयाबीन"], correct: 0 },
+            { id: 19, tag: "Diabetes Mellitus", question: "मधुमेह (Diabetes Mellitus) में रक्त शर्करा के स्तर को नियंत्रित करने के लिए कौन-सा कार्बोहाइड्रेट आहार में शामिल करना चाहिए?", options: ["सरल शर्करा (Simple sugars)", "जटिल कार्बोहाइड्रेट और घुलनशील रेशा (Complex carbs & soluble fibre)", "ग्लूकोज पाउडर", "कन्फेक्शनरी उत्पाद"], correct: 1 },
+            { id: 20, tag: "Diabetes Mellitus", question: "ग्लाइसेमिक इंडेक्स (Glycemic Index - GI) क्या दर्शाता है?", options: ["भोजन में मौजूद वसा की मात्रा", "कार्बोहाइड्रेट युक्त भोजन खाने के बाद रक्त में ग्लूकोज बढ़ने की दर", "भोजन में प्रोटीन की गुणवत्ता", "भोजन का कैलोरी मान"], correct: 1 },
+            { id: 21, tag: "Diabetes Mellitus", question: "मधुमेह के रोगी के लिए निम्न में से कौन-सा खाद्य पदार्थ सबसे उपयुक्त माना जाता है?", options: ["कम ग्लाइसेमिक इंडेक्स (Low GI) वाले खाद्य पदार्थ", "उच्च ग्लाइसेमिक इंडेक्स (High GI) वाले खाद्य पदार्थ", "मैदा और चीनी", "तले हुए खाद्य पदार्थ"], correct: 0 },
+            { id: 22, tag: "CVD", question: "एथेरोस्क्लेरोसिस (Atherosclerosis) और हृदय रोगों में आहार में किसकी मात्रा को कम करना आवश्यक है?", options: ["संतृप्त वसा (Saturated fat) और कोलेस्ट्रॉल", "मोनोअनसैचुरेटेड फैटी एसिड (MUFA)", "पॉलीअनसैचुरेटेड फैटी एसिड (PUFA)", "आहारीय रेशा"], correct: 0 },
+            { id: 23, tag: "Hypertension", question: "उच्च रक्तचाप (Hypertension) के प्रबंधन के लिए किस खनिज का प्रतिबंध (Restriction) सबसे महत्वपूर्ण है?", options: ["पोटेशियम", "सोडियम", "कैल्शियम", "मैग्नीशियम"], correct: 1 },
+            { id: 24, tag: "Hypertension", question: "DASH डाइट का पूर्ण रूप क्या है?", options: ["Dietary Approaches to Stop Hypertension", "Daily Assessment of Standard Health", "Diet And Sodium Health", "Dietary Advice for Sugar Handling"], correct: 0 },
+            { id: 25, tag: "Hypertension", question: "DASH आहार में किन पोषक तत्वों की प्रचुरता पर बल दिया जाता है?", options: ["सोडियम और संतृप्त वसा", "पोटेशियम, मैग्नीशियम, कैल्शियम और आहारीय रेशा", "ट्रांस फैट और चीनी", "प्रोटीन और कोलेस्ट्रॉल"], correct: 1 },
+            { id: 26, tag: "Renal Disease", question: "गुर्दे की विफलता (Chronic Kidney Disease) में जब ग्लोमेरुलर फिल्ट्रेशन रेट (GFR) कम हो जाता है, तो किस पोषक तत्व का सेवन सीमित किया जाता है?", options: ["प्रोटीन", "कार्बोहाइड्रेट", "विटामिन सी", "विटामिन ए"], correct: 0 },
+            { id: 27, tag: "Renal Disease", question: "डायलिसिस पर निर्भर गुर्दे के रोगी के लिए आहार संबंधी कौन-सी आवश्यकता बढ़ जाती है?", options: ["सोडियम", "उच्च जैविक मूल्य वाला प्रोटीन (High Biological Value Protein)", "फास्फोरस", "पोटेशियम"], correct: 1 },
+            { id: 28, tag: "Renal Disease", question: "वृक्क विफलता (Kidney Disease) में ओलिगुरिया (कम मूत्र स्राव) होने पर किन खनिजों और तरल पर नियंत्रण आवश्यक है?", options: ["सोडियम, पोटेशियम और जल", "केवल विटामिन D", "केवल वसा", "केवल ग्लूकोज"], correct: 0 },
+            { id: 29, tag: "Liver Disease", question: "यकृत सिरोसिस (Liver Cirrhosis) के साथ हेपेटिक एन्सेफैलोपैथी (Hepatic Encephalopathy) की स्थिति में आहार में क्या संशोधन किया जाता है?", options: ["प्रोटीन की मात्रा को अस्थायी रूप से कम/नियंत्रित करना", "प्रोटीन की मात्रा बहुत अधिक बढ़ाना", "वसा की मात्रा बहुत बढ़ाना", "जल का सेवन असीमित करना"], correct: 0 },
+            { id: 30, tag: "Liver Disease", question: "तीव्र हेपेटाइटिस (Acute Viral Hepatitis) में रोगी को किस प्रकार का आहार दिया जाना चाहिए?", options: ["अत्यधिक वसायुक्त और तला-भुना", "उच्च कार्बोहाइड्रेट, मध्यम प्रोटीन और कम वसा युक्त सुपाच्य आहार", "शून्य कार्बोहाइड्रेट आहार", "केवल ठोस मांस"], correct: 1 },
+            { id: 31, tag: "Weight Management", question: "मोटापे (Obesity) के आहार प्रबंधन में प्राथमिक लक्ष्य क्या होता है?", options: ["सकारात्मक ऊर्जा संतुलन (Positive energy balance)", "नकारात्मक ऊर्जा संतुलन (Negative energy balance)", "प्रोटीन का पूर्ण उन्मूलन", "तरल पदार्थों का पूर्ण प्रतिबंध"], correct: 1 },
+            { id: 32, tag: "Weight Management", question: "अल्पपोषण और अत्यधिक वजन घटने (Underweight/Emaciation) की स्थिति में कैसा आहार दिया जाता है?", options: ["कम कैलोरी और कम प्रोटीन", "उच्च कैलोरी और उच्च प्रोटीन युक्त आहार", "कम वसा और उच्च रेशा", "शून्य वसा आहार"], correct: 1 },
+            { id: 33, tag: "Burns & Trauma", question: "गंभीर रूप से जले हुए (Severe Burns) रोगियों में ऊतकों के पुनर्निर्माण और घाव भरने के लिए किसकी अत्यधिक आवश्यकता होती है?", options: ["उच्च प्रोटीन, जिंक और विटामिन C", "कम कैलोरी और कम प्रोटीन", "केवल संतृप्त वसा", "उच्च सोडियम मात्र"], correct: 0 },
+            { id: 34, tag: "Gout", question: "गठिया/गाउट (Gout) रोग में किस चयापचयी उत्पाद के जमाव के कारण जोड़ों में दर्द होता है?", options: ["लैक्टिक एसिड", "यूरिक एसिड (Uric acid)", "एसिटिक एसिड", "सिट्रिक एसिड"], correct: 1 },
+            { id: 35, tag: "Gout", question: "गाउट (Gout) के रोगी के आहार में किस प्रकार के खाद्य पदार्थों का प्रतिबंध होना चाहिए?", options: ["उच्च प्यूरिन युक्त खाद्य पदार्थ (High Purine foods जैसे ऑर्गन मीट, यीस्ट)", "दूध और दही", "चावल और गेहूं", "हरी पत्तेदार सब्जियां"], correct: 0 },
+            { id: 36, tag: "NCERT", question: "NCERT के अनुसार एक नैदानिक पोषण विशेषज्ञ (Clinical Dietitian) का मुख्य कार्य क्या है?", options: ["रोगी की पोषण स्थिति का आकलन करना और उपयुक्त आहार योजना बनाना", "डॉक्टर और रोगी के बीच पोषण परामर्श (Counselling) देना", "विभिन्न रोगों में खाद्य असहिष्णुता और पोषक आवश्यकताओं का प्रबंधन करना", "उपरोक्त सभी"], correct: 3 },
+            { id: 37, tag: "Allergy", question: "भोजन असहिष्णुता (Food Intolerance) और खाद्य एलर्जी (Food Allergy) में मुख्य अंतर क्या है?", options: ["खाद्य एलर्जी में प्रतिरक्षा प्रणाली (Immune system) शामिल होती है, जबकि असहिष्णुता में नहीं", "दोनों में कोई अंतर नहीं है", "असहिष्णुता हमेशा जानलेवा होती है", "एलर्जी केवल बच्चों में होती है"], correct: 0 },
+            { id: 38, tag: "Metabolic", question: "लैक्टोज असहिष्णुता (Lactose Intolerance) किस एंजाइम की कमी के कारण होती है?", options: ["पेप्सिन", "लैक्टेज (Lactase)", "एमाइलेज", "लाइपेस"], correct: 1 },
+            { id: 39, tag: "Nutrition Assessment", question: "उपचारात्मक आहार योजना (Diet Planning) तैयार करने से पूर्व रोगी का क्या किया जाना आवश्यक है?", options: ["पोषण मूल्यांकन (Nutritional Assessment - ABCD)", "केवल सामाजिक स्थिति का अवलोकन", "केवल आर्थिक स्थिति का विश्लेषण", "केवल नाड़ी परीक्षण"], correct: 0 },
+            { id: 40, tag: "NCERT", question: "आहार चिकित्सा (Diet Therapy) का स्वर्णिम नियम क्या है?", options: ["रोगी के सामान्य आहार में न्यूनतम संभव परिवर्तन करते हुए उपचारात्मक आवश्यकता पूरी करना", "रोगी का पूरा भोजन पूरी तरह बदल देना", "रोगी को केवल तरल पदार्थों पर रखना", "दवाइयों के स्थान पर केवल भोजन पर निर्भर रहना"], correct: 0 }
+        ];
+    </script>
+
+    <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
