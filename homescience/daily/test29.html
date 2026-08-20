@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ सही किया गया बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">40</span></span>
+                        <span class="subject-badge">गृह विज्ञान (जठरांत्र संबंधी रोगों में आहार)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 40</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ सही किया गया डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_homescience_git_nutrition_40q"; 
+
+        // 2. 40 प्रश्नों का डेटासेट (जठरांत्र संबंधी रोगों में आहार)
+        const dataset = [
+            { id: 1, question: "जठरांत्र संबंधी रोगों में कम मात्रा में भोजन बार-बार देने का प्रमुख उद्देश्य क्या है?<br><i>What is the main purpose of providing small, frequent meals in gastrointestinal disorders?</i>", options: ["पाचन तंत्र पर एक समय में पड़ने वाला भार कम करना / To reduce the digestive load at one time", "पेट में अम्ल का निर्माण पूरी तरह रोकना / To completely stop gastric acid secretion", "आहार में प्रोटीन को समाप्त करना / To eliminate protein from the diet", "आंतों की गति को पूर्णतः रोकना / To completely stop intestinal motility"], correct: 0 },
+            { id: 2, question: "गैस्ट्राइटिस में भोजन संबंधी निम्नलिखित में से कौन-सा विकल्प सबसे अधिक उपयुक्त है?<br><i>Which of the following dietary choices is most appropriate in gastritis?</i>", options: ["तीखे मसाले और बहुत गर्म भोजन / Highly spicy and very hot foods", "अत्यधिक तले हुए खाद्य पदार्थ / Deep-fried foods", "कम मसाले वाला, आसानी से पचने योग्य भोजन / Mildly seasoned, easily digestible food", "लंबे समय तक उपवास / Prolonged fasting"], correct: 2 },
+            { id: 3, question: "पेप्टिक अल्सर में अत्यधिक भोजन प्रतिबंध लगाने की अपेक्षा कौन-सा दृष्टिकोण अधिक उचित है?<br><i>Which approach is more appropriate in peptic ulcer disease than imposing excessive dietary restrictions?</i>", options: ["केवल तरल आहार देना / Providing only a liquid diet", "रोगी की सहनशीलता के अनुसार संतुलित भोजन देना / Providing a balanced diet according to tolerance", "सभी प्रोटीन खाद्य पदार्थों को हटाना / Eliminating all protein foods", "सभी कार्बोहाइड्रेट को हटाना / Eliminating all carbohydrates"], correct: 1 },
+            { id: 4, question: "दस्त की स्थिति में निर्जलीकरण रोकने के लिए मौखिक पुनर्जलीकरण घोल का प्रमुख लाभ क्या है?<br><i>What is the major benefit of oral rehydration solution in preventing dehydration during diarrhea?</i>", options: ["यह केवल प्रोटीन की पूर्ति करता है / It supplies only protein", "यह आंत में जल और इलेक्ट्रोलाइट के अवशोषण को बढ़ाता है / It enhances intestinal absorption of water and electrolytes", "यह आंतों की सभी गतियों को रोक देता है / It completely stops intestinal motility", "यह मल में उपस्थित सभी सूक्ष्मजीवों को नष्ट कर देता है / It destroys all microorganisms in stool"], correct: 1 },
+            { id: 5, question: "दस्त के दौरान निम्नलिखित में से किस खाद्य पदार्थ को सामान्यतः बेहतर सहन किया जा सकता है?<br><i>Which of the following foods is generally better tolerated during diarrhea?</i>", options: ["बहुत तला हुआ भोजन / Deep-fried food", "अत्यधिक मसालेदार सब्जी / Highly spicy vegetable preparation", "बहुत अधिक वसा वाला भोजन / Very high-fat food", "केला और नरम पका हुआ चावल / Banana and soft cooked rice"], correct: 3 },
+            { id: 6, question: "कब्ज में आहार फाइबर बढ़ाने का सबसे उपयुक्त तरीका कौन-सा है?<br><i>Which is the most appropriate way to increase dietary fiber in constipation?</i>", options: ["अचानक बहुत अधिक चोकर देना / Suddenly giving a very large amount of bran", "फाइबर बढ़ाने के साथ पर्याप्त तरल देना / Increasing fiber along with adequate fluid", "केवल परिष्कृत अनाज देना / Providing only refined cereals", "सभी फलों को बंद करना / Eliminating all fruits"], correct: 1 },
+            { id: 7, question: "अल्सरेटिव कोलाइटिस के सक्रिय चरण में निम्नलिखित में से कौन-सा आहार परिवर्तन अधिक उपयुक्त हो सकता है?<br><i>Which dietary modification may be more appropriate during the active phase of ulcerative colitis?</i>", options: ["रोगी की सहनशीलता के अनुसार कम-अवशेष आहार / Low-residue diet according to tolerance", "अत्यधिक कच्ची सब्जियाँ / Large amounts of raw vegetables", "बहुत अधिक अघुलनशील फाइबर / Very high insoluble fiber", "केवल वसायुक्त भोजन / Only fatty foods"], correct: 0 },
+            { id: 8, question: "क्रोहन रोग में पोषण संबंधी समस्या का एक महत्वपूर्ण कारण क्या है?<br><i>What is an important nutritional concern in Crohn's disease?</i>", options: ["केवल अत्यधिक भूख लगना / Excessive appetite only", "केवल अधिक जल अवशोषण / Excessive water absorption only", "सूजन, कम सेवन और पोषक तत्वों के खराब अवशोषण का संयोजन / A combination of inflammation, reduced intake and malabsorption", "केवल अत्यधिक कैल्शियम अवशोषण / Excessive calcium absorption only"], correct: 2 },
+            { id: 9, question: "सीलिएक रोग में आहार उपचार का मूल सिद्धांत क्या है?<br><i>What is the fundamental dietary principle in the management of celiac disease?</i>", options: ["सभी वसा को समाप्त करना / Eliminating all fats", "ग्लूटेन युक्त अनाजों से पूर्ण परहेज / Complete avoidance of gluten-containing cereals", "केवल दूध का सेवन / Consuming only milk", "सभी फलों को बंद करना / Eliminating all fruits"], correct: 1 },
+            { id: 10, question: "सीलिएक रोग में छोटी आंत की क्षति के कारण निम्नलिखित में से किस समस्या का जोखिम बढ़ सकता है?<br><i>Which problem may increase due to small intestinal damage in celiac disease?</i>", options: ["पोषक तत्वों का कुअवशोषण / Malabsorption of nutrients", "केवल अत्यधिक वसा संश्लेषण / Excessive fat synthesis only", "केवल रक्तचाप बढ़ना / Only increased blood pressure", "केवल शरीर का तापमान बढ़ना / Only increased body temperature"], correct: 0 },
+            { id: 11, question: "लैक्टोज असहिष्णुता में लक्षण उत्पन्न होने का मुख्य कारण क्या है?<br><i>What is the primary cause of symptoms in lactose intolerance?</i>", options: ["लैक्टोज का अत्यधिक संश्लेषण / Excessive synthesis of lactose", "लैक्टेज एंजाइम की अपर्याप्तता / Insufficient lactase enzyme activity", "प्रोटीन का अत्यधिक अवशोषण / Excessive protein absorption", "पित्त लवणों की अधिकता / Excess bile salts"], correct: 1 },
+            { id: 12, question: "लैक्टोज असहिष्णु व्यक्ति में कैल्शियम की पर्याप्तता बनाए रखने के लिए कौन-सा विकल्प अधिक उपयुक्त है?<br><i>Which option is more appropriate for maintaining calcium adequacy in a person with lactose intolerance?</i>", options: ["सभी कैल्शियम स्रोत बंद करना / Eliminating all calcium sources", "केवल चाय पर निर्भर रहना / Depending only on tea", "सहन किए जाने वाले कम-लैक्टोज या लैक्टोज-मुक्त उत्पाद तथा अन्य कैल्शियम स्रोत / Tolerated low-lactose or lactose-free dairy products and other calcium sources", "केवल वसा का सेवन बढ़ाना / Increasing fat intake only"], correct: 2 },
+            { id: 13, question: "गैस्ट्रोइसोफेजियल रिफ्लक्स में सोने से ठीक पहले भारी भोजन करने से समस्या क्यों बढ़ सकती है?<br><i>Why can a heavy meal immediately before bedtime worsen gastroesophageal reflux?</i>", options: ["इससे पेट खाली होने में समय बढ़ सकता है और रिफ्लक्स की संभावना बढ़ सकती है / It may delay gastric emptying and increase reflux tendency", "इससे छोटी आंत में पित्त का निर्माण बंद हो जाता है / It stops bile production in the small intestine", "इससे लार का निर्माण पूरी तरह बंद हो जाता है / It completely stops salivary secretion", "इससे रक्त में प्रोटीन अचानक समाप्त हो जाता है / It suddenly eliminates protein from blood"], correct: 0 },
+            { id: 14, question: "गैस्ट्रोइसोफेजियल रिफ्लक्स में निम्नलिखित में से किस भोजन से कुछ रोगियों में लक्षण बढ़ सकते हैं?<br><i>Which food may aggravate symptoms in some patients with gastroesophageal reflux?</i>", options: ["कम वसा वाला दलिया / Low-fat porridge", "सादा चावल / Plain rice", "अत्यधिक वसा वाला भोजन / High-fat meal", "सामान्य मात्रा में पानी / Moderate water intake"], correct: 2 },
+            { id: 15, question: "पित्ताशय संबंधी रोगों में वसा सीमित करने का मुख्य पोषण संबंधी कारण क्या है?<br><i>What is the main nutritional rationale for restricting fat in gallbladder disorders?</i>", options: ["वसा सभी विटामिनों को नष्ट करती है / Fat destroys all vitamins", "वसा के पाचन के लिए पित्त की आवश्यकता होती है / Fat digestion requires bile", "वसा शरीर में अवशोषित नहीं होती / Fat is not absorbed by the body", "वसा केवल आंतों में पानी बढ़ाती है / Fat only increases water in the intestine"], correct: 1 },
+            { id: 16, question: "अग्न्याशय की बहिःस्रावी अपर्याप्तता में वसा के कुअवशोषण से निम्नलिखित में से कौन-सी स्थिति हो सकती है?<br><i>What may result from fat malabsorption in pancreatic exocrine insufficiency?</i>", options: ["केवल हाइपरग्लाइसीमिया / Hyperglycemia only", "केवल आयरन का अत्यधिक अवशोषण / Excessive iron absorption only", "स्टीटोरिया और वसा में घुलनशील विटामिनों की कमी / Steatorrhea and deficiency of fat-soluble vitamins", "केवल सोडियम की अधिकता / Excess sodium only"], correct: 2 },
+            { id: 17, question: "स्टीटोरिया में मल की कौन-सी विशेषता सबसे अधिक संकेतक है?<br><i>Which stool characteristic is most suggestive of steatorrhea?</i>", options: ["बहुत कठोर और सूखा मल / Very hard and dry stool", "चिकना, तैलीय और दुर्गंधयुक्त मल / Greasy, oily and foul-smelling stool", "केवल काला मल / Only black stool", "केवल कम मात्रा में मल / Only small-volume stool"], correct: 1 },
+            { id: 18, question: "डंपिंग सिंड्रोम में भोजन के बाद होने वाले लक्षणों को कम करने के लिए कौन-सा उपाय अधिक उपयुक्त है?<br><i>Which measure is more appropriate for reducing post-meal symptoms in dumping syndrome?</i>", options: ["भोजन के साथ बहुत अधिक तरल लेना / Taking large amounts of fluid with meals", "एक बार में बहुत अधिक सरल शर्करा लेना / Taking large amounts of simple sugars at once", "छोटे-छोटे भोजन और भोजन से अलग समय पर तरल लेना / Small frequent meals with fluids taken separately from meals", "पूरे दिन उपवास करना / Fasting throughout the day"], correct: 2 },
+            { id: 19, question: "डंपिंग सिंड्रोम में अत्यधिक सरल शर्करा से बचने का प्रमुख कारण क्या है?<br><i>Why should excessive simple sugars be avoided in dumping syndrome?</i>", options: ["वे पेट में प्रोटीन का पाचन रोकते हैं / They stop protein digestion in the stomach", "वे तेजी से अवशोषित होकर परासरणीय भार बढ़ा सकते हैं / They are rapidly absorbed and may increase osmotic load", "वे पित्त निर्माण रोकते हैं / They stop bile production", "वे कैल्शियम को पूर्णतः नष्ट करते हैं / They completely destroy calcium"], correct: 1 },
+            { id: 20, question: "जठरांत्र संबंधी रोग में पर्याप्त प्रोटीन देने का प्रमुख उद्देश्य क्या है?<br><i>What is the major purpose of providing adequate protein in gastrointestinal disorders?</i>", options: ["ऊतक मरम्मत और शरीर की पोषण स्थिति बनाए रखना / Tissue repair and maintenance of nutritional status", "पाचन एंजाइमों को पूरी तरह रोकना / Completely inhibiting digestive enzymes", "आंतों की गति को समाप्त करना / Eliminating intestinal motility", "शरीर में जल की कमी करना / Reducing body water"], correct: 0 },
+            { id: 21, question: "गैस्ट्रिक अल्सर में कॉफी या कैफीनयुक्त पेय के संबंध में सबसे उपयुक्त दृष्टिकोण क्या है?<br><i>What is the most appropriate approach regarding coffee or caffeinated beverages in gastric ulcer?</i>", options: ["सभी रोगियों को अनिवार्य रूप से बड़ी मात्रा में देना / Give large amounts to all patients", "रोगी में लक्षण उत्पन्न करने पर सीमित करना / Limit them if they aggravate symptoms", "इन्हें अल्सर का निश्चित उपचार मानना / Consider them a definitive treatment", "इन्हें प्रोटीन का प्रमुख स्रोत मानना / Consider them the main protein source"], correct: 1 },
+            { id: 22, question: "तीव्र दस्त के दौरान केवल पानी की तुलना में संतुलित मौखिक पुनर्जलीकरण घोल अधिक प्रभावी क्यों होता है?<br><i>Why is a balanced oral rehydration solution more effective than plain water during acute diarrhea?</i>", options: ["इसमें केवल वसा होती है / It contains only fat", "इसमें सोडियम और ग्लूकोज सहित आवश्यक इलेक्ट्रोलाइट होते हैं / It contains essential electrolytes including sodium and glucose", "यह आंतों को स्थायी रूप से बंद कर देता है / It permanently shuts down the intestines", "यह सभी जीवाणुओं को नष्ट करता है / It destroys all bacteria"], correct: 1 },
+            { id: 23, question: "कब्ज से पीड़ित व्यक्ति में फाइबर की मात्रा अचानक बहुत अधिक बढ़ाने पर कौन-सी समस्या हो सकती है?<br><i>What problem may occur if fiber intake is increased too rapidly in constipation?</i>", options: ["गैस और पेट फूलना / Gas and bloating", "रक्त में प्रोटीन का तत्काल बढ़ना / Immediate rise in blood protein", "पित्त निर्माण का पूर्ण अवरोध / Complete blockage of bile production", "शरीर का तापमान अचानक कम होना / Sudden fall in body temperature"], correct: 0 },
+            { id: 24, question: "आहार में घुलनशील फाइबर का जठरांत्र संबंधी प्रभाव किससे सबसे अच्छी तरह समझाया जा सकता है?<br><i>Which best explains the gastrointestinal effect of soluble dietary fiber?</i>", options: ["यह हमेशा पाचन तंत्र से बिना किसी परिवर्तन के निकल जाता है / It always passes unchanged through the digestive tract", "यह जल ग्रहण करके जेल जैसी संरचना बना सकता है / It can absorb water and form a gel-like structure", "यह सभी पाचन एंजाइमों को नष्ट कर देता है / It destroys all digestive enzymes", "यह केवल प्रोटीन का अवशोषण बढ़ाता है / It only increases protein absorption"], correct: 1 },
+            { id: 25, question: "सीलिएक रोग में ग्लूटेन-मुक्त आहार अपनाने के बाद भी पोषण की निगरानी क्यों आवश्यक है?<br><i>Why is nutritional monitoring necessary even after adopting a gluten-free diet in celiac disease?</i>", options: ["क्योंकि ग्लूटेन-मुक्त सभी खाद्य पदार्थ पोषण की दृष्टि से पूर्ण होते हैं / Because all gluten-free foods are nutritionally complete", "क्योंकि केवल वसा की कमी होती है / Because only fat deficiency occurs", "क्योंकि गलत तरीके से चुने गए ग्लूटेन-मुक्त आहार में फाइबर, आयरन आदि कम हो सकते हैं / Poorly selected gluten-free diets may be low in fiber, iron and other nutrients", "क्योंकि शरीर ग्लूकोज को अवशोषित नहीं कर सकता / Because the body cannot absorb glucose"], correct: 2 },
+            { id: 26, question: "गैस्ट्रोइसोफेजियल रिफ्लक्स में वजन अधिक होने वाले व्यक्ति के लिए वजन प्रबंधन की सलाह क्यों उपयोगी हो सकती है?<br><i>Why may weight management be beneficial for an overweight person with gastroesophageal reflux?</i>", options: ["इससे पेट पर दबाव कम हो सकता है / It may reduce abdominal pressure", "इससे पाचन एंजाइम पूरी तरह समाप्त हो जाते हैं / It completely eliminates digestive enzymes", "इससे पित्त का निर्माण रुक जाता है / It stops bile production", "इससे भोजन की आवश्यकता समाप्त हो जाती है / It eliminates the need for food"], correct: 0 },
+             { id: 27, question: "अग्नाशयशोथ के तीव्र चरण में वसा संबंधी आहार प्रबंधन का प्रमुख उद्देश्य क्या है?<br><i>What is a major objective of dietary fat management during acute pancreatitis?</i>", options: ["वसा का अत्यधिक सेवन बढ़ाना / Increasing excessive fat intake", "अग्न्याशय पर पाचन संबंधी भार को नियंत्रित करना / Controlling the digestive burden on the pancreas", "सभी कार्बोहाइड्रेट को समाप्त करना / Eliminating all carbohydrates", "केवल प्रोटीन समाप्त करना / Eliminating only protein"], correct: 1 },
+            { id: 28, question: "लैक्टोज असहिष्णुता में दही कुछ व्यक्तियों द्वारा दूध की अपेक्षा बेहतर क्यों सहन किया जा सकता है?<br><i>Why may yogurt be better tolerated than milk by some people with lactose intolerance?</i>", options: ["दही में कोई कैल्शियम नहीं होता / Yogurt contains no calcium", "दही में लैक्टोज बिल्कुल नहीं होता / Yogurt contains absolutely no lactose", "किण्वन प्रक्रिया तथा जीवित जीवाणु लैक्टोज के पाचन में सहायता कर सकते हैं / Fermentation and live cultures may help with lactose digestion", "दही में केवल वसा होती है / Yogurt contains only fat"], correct: 2 },
+            { id: 29, question: "पेप्टिक अल्सर रोगी के लिए भोजन के समय का निर्धारण करते समय सबसे उचित सिद्धांत क्या है?<br><i>What is the most appropriate principle when planning meal timing for a patient with peptic ulcer disease?</i>", options: ["लंबे समय तक अनिवार्य उपवास / Mandatory prolonged fasting", "रोगी की सहनशीलता के अनुसार नियमित भोजन / Regular meals according to individual tolerance", "केवल दिन में एक बार भोजन / Eating only once daily", "हर भोजन में अत्यधिक मात्रा / Very large meals at each sitting"], correct: 1 },
+            { id: 30, question: "अल्सरेटिव कोलाइटिस में लंबे समय तक दस्त रहने पर निम्नलिखित में से किसकी निगरानी विशेष रूप से महत्वपूर्ण हो सकती है?<br><i>Which should be particularly monitored during prolonged diarrhea in ulcerative colitis?</i>", options: ["केवल वसा का सेवन / Fat intake only", "केवल विटामिन C / Vitamin C only", "जल और इलेक्ट्रोलाइट संतुलन तथा पोषण स्थिति / Fluid-electrolyte balance and nutritional status", "केवल सुक्रोज सेवन / Sucrose intake only"], correct: 2 },
+            { id: 31, question: "क्रोहन रोग में छोटी आंत प्रभावित होने पर विटामिन B12 की कमी का जोखिम किस कारण से बढ़ सकता है?<br><i>Why can the risk of vitamin B12 deficiency increase when the small intestine is affected in Crohn's disease?</i>", options: ["विटामिन B12 का अवशोषण प्रभावित हो सकता है / Vitamin B12 absorption may be impaired", "B12 केवल त्वचा में बनता है / B12 is produced only in the skin", "B12 का संबंध आंत से नहीं है / B12 has no relation to the intestine", "B12 केवल वसा से बनता है / B12 is produced only from fat"], correct: 0 },
+            { id: 32, question: "स्टीटोरिया के साथ निम्नलिखित में से किस विटामिन समूह की कमी का विशेष जोखिम रहता है?<br><i>Which group of vitamins is particularly at risk of deficiency with steatorrhea?</i>", options: ["केवल विटामिन C / Vitamin C only", "विटामिन A, D, E और K / Vitamins A, D, E and K", "केवल विटामिन B1 / Vitamin B1 only", "केवल फोलेट / Folate only"], correct: 1 },
+            { id: 33, question: "गैस्ट्राइटिस में भोजन की बनावट के संदर्भ में कौन-सा विकल्प अधिक उपयुक्त है?<br><i>Which option is more appropriate regarding food texture in gastritis?</i>", options: ["बहुत कठोर और अत्यधिक रेशेदार भोजन / Very hard and highly fibrous food", "बहुत अधिक तला हुआ भोजन / Highly fried food", "रोगी की सहनशीलता के अनुसार नरम और आसानी से पचने वाला भोजन / Soft and easily digestible food according to tolerance", "केवल कच्चा भोजन / Only raw foods"], correct: 2 },
+            { id: 34, question: "दस्त के दौरान भोजन पूरी तरह बंद कर देने की अपेक्षा उपयुक्त पोषण जारी रखना क्यों महत्वपूर्ण है?<br><i>Why is continuing appropriate nutrition important rather than completely stopping food during diarrhea?</i>", options: ["इससे शरीर को ऊर्जा और ऊतक मरम्मत के लिए पोषक तत्व मिलते रहते हैं / It continues to provide nutrients for energy and tissue repair", "इससे दस्त का कारण हमेशा तुरंत समाप्त हो जाता है / It always immediately eliminates the cause of diarrhea", "इससे सभी रोगाणु नष्ट हो जाते हैं / It destroys all pathogens", "इससे पानी की आवश्यकता समाप्त हो जाती है / It eliminates the need for water"], correct: 0 },
+            { id: 35, question: "जठरांत्र संबंधी रोगी के लिए भोजन योजना बनाते समय सबसे महत्वपूर्ण व्यक्तिगत कारक कौन-सा है?<br><i>Which is an important individual factor when planning a diet for a gastrointestinal patient?</i>", options: ["सभी रोगियों को बिल्कुल समान आहार देना / Giving exactly the same diet to all patients", "केवल रोग का नाम देखना / Considering only the disease name", "केवल कैलोरी की गणना करना / Calculating calories only", "रोग की अवस्था, लक्षण, सहनशीलता और पोषण स्थिति / Disease stage, symptoms, tolerance and nutritional status"], correct: 3 },
+            { id: 36, question: "निम्नलिखित में से कौन-सा संयोजन लैक्टोज असहिष्णुता की अधिक विशिष्ट विशेषता है?<br><i>Which combination is more characteristic of lactose intolerance?</i>", options: ["दूध के बाद पेट फूलना, गैस और दस्त / Bloating, gas and diarrhea after milk", "केवल त्वचा पर लाल चकत्ते / Skin rash only", "केवल उच्च रक्तचाप / High blood pressure only", "केवल अत्यधिक भूख / Excessive hunger only"], correct: 0 },
+            { id: 37, question: "गैस्ट्रोइसोफेजियल रिफ्लक्स में भोजन के बाद तुरंत लेटने से बचने का प्रमुख कारण क्या है?<br><i>What is the main reason to avoid lying down immediately after meals in gastroesophageal reflux?</i>", options: ["इससे रक्त में कैल्शियम तुरंत कम होता है / It immediately lowers blood calcium", "इससे पेट की सामग्री के अन्ननली में वापस आने की संभावना बढ़ सकती है / It may increase the likelihood of gastric contents moving back into the esophagus", "इससे यकृत का आकार बढ़ जाता है / It enlarges the liver", "इससे प्रोटीन का अवशोषण बंद हो जाता है / It stops protein absorption"], correct: 1 },
+            { id: 38, question: "उपचारात्मक आहार में 'कम-अवशेष आहार' का मुख्य उद्देश्य क्या है?<br><i>What is the main purpose of a low-residue diet in therapeutic nutrition?</i>", options: ["सभी पोषक तत्व समाप्त करना / Eliminating all nutrients", "केवल वसा बढ़ाना / Increasing only fat", "मल की मात्रा और आंतों पर यांत्रिक भार को कम करना / Reducing stool bulk and mechanical load on the intestine", "केवल प्रोटीन बढ़ाना / Increasing only protein"], correct: 2 },
+            { id: 39, question: "जठरांत्र संबंधी रोगों में पर्याप्त तरल देने का निर्णय लेते समय केवल पानी की मात्रा देखना पर्याप्त क्यों नहीं है?<br><i>Why is considering only the amount of water insufficient when determining fluid needs in gastrointestinal disorders?</i>", options: ["क्योंकि ऊर्जा और इलेक्ट्रोलाइट की आवश्यकता भी रोग की स्थिति के अनुसार बदल सकती है / Because energy and electrolyte needs may also vary with the condition", "क्योंकि पानी कभी अवशोषित नहीं होता / Because water is never absorbed", "क्योंकि सभी रोगियों को केवल दूध चाहिए / Because all patients need only milk", "क्योंकि तरल का पोषण से कोई संबंध नहीं है / Because fluids have no nutritional relevance"], correct: 0 },
+            { id: 40, question: "उपचारात्मक पोषण में जठरांत्र संबंधी रोगी के लिए सबसे उपयुक्त आहार योजना की पहचान किस आधार पर की जानी चाहिए?<br><i>On what basis should the most appropriate therapeutic diet for a gastrointestinal patient be identified?</i>", options: ["केवल इंटरनेट पर उपलब्ध सामान्य आहार सूची / A general diet list available on the internet", "केवल रोगी की पसंद / Only the patient's preference", "केवल रोग के नाम / Only the name of the disease", "रोग की अवस्था, चिकित्सकीय उपचार, लक्षण, पोषण आवश्यकता और व्यक्तिगत सहनशीलता / Disease stage, medical treatment, symptoms, nutritional needs and individual tolerance"], correct: 3 }
+        ];
+    </script>
+
+    <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>                                                                                                                                                                                                   
