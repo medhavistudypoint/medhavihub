@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ सही किया गया बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">40</span></span>
+                        <span class="subject-badge">गृह विज्ञान (ज्वर, मोटापा एवं अल्पभार)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 40</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ सही किया गया डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_free_test_d30"; 
+
+        // 2. 40 प्रश्नों का डेटासेट (PDF से सत्यापित)
+        const dataset = [
+            { id: 1, question: "बुखार के समय प्रत्येक 1° फॉरेनहाइट तापमान में वृद्धि के लिए, शरीर का आधारीय चयापचयी दर बढ़ता है:<br><i>For every 1°F rise in body temperature during fever, the Basal Metabolic Rate (BMR) increases by:</i>", options: ["10%", "7%", "20%", "25%"], correct: 1 },
+            { id: 2, question: "पाँच वर्ष के बच्चे को तेज़ बुखार है और उसे निगलने में तकलीफ हो रही है, टॉर्च से देखने पर उसका हलक सफेद नजर आता है। यह लक्षण किसका संकेत है?<br><i>A 5-year-old child has high fever and difficulty swallowing; on examination with a torch, a white/greyish patch is seen in the throat. This symptom indicates:</i>", options: ["इन्फ्लूएंजा / Influenza", "निमोनिया / Pneumonia", "व्हूपिंग कफ / Whooping Cough", "डिफ्थीरिया / Diphtheria"], correct: 3 },
+            { id: 3, question: "निम्न में से कौन-सी बीमारी ओरल-फीकल रूट से फैलती है?<br><i>Which of the following diseases is transmitted via the oral-faecal route?</i>", options: ["टी. बी. / Tuberculosis", "ट्रेकोमा / Trachoma", "मियादी बुखार / Typhoid Fever", "टीनिएसिस् / Taeniasis"], correct: 2 },
+            { id: 4, question: "बुखार की अवस्था में मरीज का भोजन .... का होना चाहिये -<br><i>During fever, the patient's diet should be:</i>", options: ["कम प्रोटीन / Low protein", "अधिक कैलोरी / High calorie", "दोनों (a) व (b) / Both (a) and (b)", "उपर्युक्त में से कोई नहीं / None of the above"], correct: 1 },
+            { id: 5, question: "सामान्यतया शरीर का तापक्रम होता है-<br><i>The normal body temperature is generally:</i>", options: ["98.4°C", "98.3°C", "100°C", "इनमें से कोई नहीं / None of these"], correct: 3 },
+            { id: 6, question: "लम्बी अवधि के बुखार में ऊर्जा की आवश्यकता होती है:<br><i>In long-duration (chronic) fever, the energy requirement increases by:</i>", options: ["50 से 100 प्रतिशत / 50 to 100 percent", "5 से 10 प्रतिशत / 5 to 10 percent", "15 से 20 प्रतिशत / 15 to 20 percent", "इनमें से सभी / All of these"], correct: 0 },
+            { id: 7, question: "ज्वर के प्रभाव से श्वसन दर:<br><i>Due to the effect of fever, the respiration rate:</i>", options: ["घटती है / Decreases", "बढ़ती है / Increases", "कोई प्रभाव नहीं पड़ता / Remains unaffected", "धीरे-धीरे घटती है / Gradually decreases"], correct: 1 },
+            { id: 8, question: "टाइफाइड किस माध्यम से फैलता है?<br><i>Typhoid spreads through which mode of transmission?</i>", options: ["स्पर्श / Touch (Contact)", "वायु / Air", "जल और आहार / Contaminated food and water", "वैयक्तिक स्वच्छता में कमी / Lack of personal hygiene"], correct: 2 },
+            { id: 9, question: "ज्वर के दौरान देना चाहिए -<br><i>During fever, the food served should be:</i>", options: ["तले हुए और खास्ता खाद्य-पदार्थ / Fried and crispy foods", "मसालेदार खाद्य-पदार्थ / Spicy foods", "वह खाद्य जो सहजता से उपलब्ध हो / Easily available food", "सरलता से पचने वाला खाद्य / Easily digestible food"], correct: 3 },
+            { id: 10, question: "ज्वर की विकृति-क्रियात्मक (Pathophysiological) अवस्था में अंतर्जात पाइरोजेन के संदर्भ में सही कथनों का चयन करें:<br><i>With reference to endogenous pyrogens in fever pathophysiology, select the correct statements:</i><br><br>1. IL-1 और TNF-α हाइपोथैलेमस में PGE2 के संश्लेषण को उत्तेजित करते हैं।<br>2. PGE2 थर्मोरेगुलेटरी सेट-पॉइंट को उच्च स्तर पर रीसेट करता है।<br>3. तापमान वृद्धि के कारण ऊतक प्रोटीन अपचय तीव्र होकर नकारात्मक नाइट्रोजन संतुलन बनाता है।<br>4. ज्वर में यकृत द्वारा ग्लाइकोजन का संचय तीव्र हो जाता है।", options: ["केवल 1, 2 और 4 / Only 1, 2 and 4", "केवल 1, 2 और 3 / Only 1, 2 and 3", "केवल 2 और 4 / Only 2 and 4", "1, 2, 3 और 4 / 1, 2, 3 and 4"], correct: 1 },
+            { id: 11, question: "सूची-I को सूची-II से सुमेलित कीजिए:<br><i>Match List-I with List-II:</i><br><br><b>सूची-I (ज्वर का प्रकार / Type of Fever)</b><br>(A) आंतरायिक ज्वर / Intermittent Fever<br>(B) सतत ज्वर / Continuous Fever<br>(C) रेमिटेंट ज्वर / Remittent Fever<br>(D) हेक्टिक ज्वर / Hectic Fever<br><br><b>सूची-II (नैदानिक लक्षण / Clinical Feature)</b><br>1. 24 घंटे में 2°F से अधिक उतार-चढ़ाव किंतु कभी सामान्य नहीं<br>2. व्यापक दैनिक उतार-चढ़ाव व प्रचुर स्वेदन (सेप्सिस)<br>3. तापमान दिन के निश्चित अंतराल में सामान्य पर लौटता है<br>4. 24 घंटे में तापमान में 1°F से कम उतार-चढ़ाव", options: ["A-3, B-4, C-1, D-2", "A-4, B-3, C-2, D-1", "A-3, B-1, C-4, D-2", "A-2, B-4, C-1, D-3"], correct: 0 },
+            { id: 12, question: "<b>अभिकथन (A):</b> आंत्र ज्वर (Typhoid) के तीव्र चरण में अघुलनशील रेशा (Insoluble Fiber) पूर्णतः वर्जित होता है।<br><i>Assertion (A): Insoluble dietary fiber is strictly contraindicated in acute stages of Typhoid.</i><br><br><b>कारण (R):</b> यह आंत के पेयर्स पैचेज (Peyer's Patches) में घर्षण कर आंतों में छिद्र (Perforation) और आंतरिक रक्तस्राव का जोखिम उत्पन्न करता है।<br><i>Reason (R): It causes mechanical irritation over ulcerated Peyer's patches, increasing the risk of intestinal perforation and haemorrhage.</i>", options: ["(A) और (R) दोनों सही हैं, और (R), (A) की सही व्याख्या है / Both (A) and (R) are correct, and (R) is the correct explanation of (A)", "(A) और (R) दोनों सही हैं, परन्तु (R), (A) की सही व्याख्या नहीं है / Both (A) and (R) are correct, but (R) is not the correct explanation of (A)", "(A) सही है, परन्तु (R) गलत है / (A) is correct, but (R) is incorrect", "(A) गलत है, परन्तु (R) सही है / (A) is incorrect, but (R) is correct"], correct: 0 },
+            { id: 13, question: "तपेदिक (Tuberculosis) जैसे दीर्घकालिक ज्वर में 1.5-2.0 g/kg प्रोटीन देने का प्राथमिक उद्देश्य क्या है?<br><i>What is the primary clinical objective of prescribing 1.5-2.0 g/kg protein in chronic fevers like Tuberculosis?</i>", options: ["यूरिया संश्लेषण को पूर्णतः रोकना / To completely arrest urea synthesis", "ऊतक अपचय (Tissue catabolism) की क्षतिपूर्ति एवं सीरम एल्ब्यूमिन बनाए रखना / To compensate for tissue breakdown and maintain serum albumin levels", "आंतों में लाइपेज एंजाइम के उत्पादन को तीव्र करना / To accelerate intestinal lipase production", "शरीर के तापमान को रासायनिक रूप से कम करना / To chemically lower core body temperature"], correct: 1 },
+            { id: 14, question: "ज्वर की किस अवस्था में कंपकंपी (Shivering) द्वारा शरीर में ऊष्मा का तीव्र उत्पादन होता है?<br><i>During which stage of fever does intense heat production occur through shivering?</i>", options: ["फास्टिजियम / Fastigium", "डिफरवेसेंस / Defervescence", "ऑनसेट/कोल्ड स्टेज / Onset (Cold stage)", "क्राइसिस फेज / Crisis phase"], correct: 2 },
+            { id: 15, question: "तीव्र प्रोटीन क्षरण (Severe Protein Catabolism) के कारण ज्वर में मूत्र द्वारा किन तत्वों का निष्कासन बढ़ जाता है?<br><i>Due to extensive cellular breakdown in high fever, increased urinary excretion of which elements occurs?</i>", options: ["कैल्शियम एवं लौह / Calcium and Iron", "पोटैशियम, नाइट्रोजन एवं सल्फर / Potassium, Nitrogen, and Sulphur", "केवल आयोडीन / Only Iodine", "सोडियम एवं क्लोराइड / Sodium and Chloride"], correct: 1 },
+            { id: 16, question: "दीर्घकालिक संक्रमण में 'एनीमिया ऑफ क्रोनिक डिजीज' (ACD) का मुख्य आणविक कारण क्या है?<br><i>What is the primary molecular mediator of 'Anemia of Chronic Disease' seen in long-standing infections?</i>", options: ["हेप्सिडिन (Hepcidin) का उच्च स्तर, जो फेरोपोर्टिन को बाधित करता है / Elevated Hepcidin levels, which block the iron exporter ferroportin", "गैस्ट्रिक इंट्रिन्सिक फैक्टर का पूर्ण विनाश / Complete loss of gastric intrinsic factor", "विटामिन C का तीव्र अवशोषण / Excessive absorption of Vitamin C", "एरिथ्रोपोइटिन का अनियंत्रित अतिस्राव / Uncontrolled oversecretion of erythropoietin"], correct: 0 },
+            { id: 17, question: "विडाल परीक्षण (Widal Test) में किन एंटीजनों के प्रति सीरम एंटीबॉडी टाइटर मापा जाता है?<br><i>The Widal agglutination test detects serum antibodies against which antigens of Salmonella enterica?</i>", options: ["केवल कैप्सुलर Vi-एंटीजन / Capsular Vi-antigen only", "सोमैटिक 'O' एवं फ्लैजेलर 'H' एंटीजन / Somatic 'O' and Flagellar 'H' antigens", "एक्सोटॉक्सिन-A एवं B / Exotoxins A and B", "कोर सेलवॉल K-एंटीजन / Core cell-wall K-antigen"], correct: 1 },
+            { id: 18, question: "आंतों के तीव्र ज्वर में 'कम अवशेषी आहार' (Low Residue Diet) का सर्वोत्तम उदाहरण कौन-सा है?<br><i>Which menu represents the best therapeutic 'Low Residue Diet' in acute gastrointestinal fever?</i>", options: ["चोकरयुक्त रोटी, हरी पत्तेदार सब्जी व सलाद / Whole-wheat flatbread, leafy vegetables, and raw salad", "साबूदाना खीर, छाना हुआ सेब का रस एवं मूंग दाल का पानी / Sago pudding, strained clear apple juice, and strained moong broth", "भुने हुए चने व सूखे मेवे / Roasted grams and dry nuts", "साबुत मकई व अंकुरित अनाज / Whole corn and sprouted legumes"], correct: 1 },
+            { id: 19, question: "मलेरिया ज्वर में आरबीसी (RBC) टूटने से निकलने वाला कौन-सा टॉक्सिन कंपकंपी और ज्वर का कारण बनता है?<br><i>Which toxic byproduct released upon the rupture of erythrocytic schizonts in Malaria triggers paroxysms of chills and fever?</i>", options: ["हीमोजोइन / Haemozoin", "बिलिरुबिन / Bilirubin", "हेपरिन / Heparin", "लैक्टिक एसिड / Lactic acid"], correct: 0 },
+            { id: 20, question: "ज्वर में 2500-3000 mL तरल पदार्थ देने के चिकित्सीय उद्देश्य हैं:<br><i>The therapeutic rationale for administering 2500-3000 mL fluids daily during pyrexia includes:</i><br><br>1. त्वचा व फेफड़ों से होने वाले अदृश्य जल हास की भरपाई<br>2. अपचयी नाइट्रोजन अपशिष्टों का वृक्कीय निष्कासन सुगम करना<br>3. ऑलिगुरिया एवं इलेक्ट्रोलाइट सांद्रता रोकना", options: ["केवल 1 और 2 / Only 1 and 2", "केवल 2 और 3 / Only 2 and 3", "केवल 1 और 3 / Only 1 and 3", "1, 2 और 3 / 1, 2, and 3"], correct: 3 },
+            { id: 21, question: "सार्कोपेनिक मोटापे से दृश्यता हानि पतली मांसपेशियों की द्रव्यमान हानि-<br><i>Sarcopenic obesity characterized by loss of skeletal muscle mass along with fat gain is typically observed in:</i>", options: ["मोटा-बालक / Obese child", "मोटे-किशोर / Obese adolescent", "मोटे-वयस्क / Obese adult", "मोटे-वृद्ध व्यक्ति / Obese elderly person"], correct: 3 },
+            { id: 22, question: "<b>अभिकथन (A):</b> अधिक ऊर्जा का सेवन और शारीरिक व्यायाम की कमी का परिणाम स्थूलता और हृदय रोग हैं।<br><i>Assertion (A): Excess energy intake combined with lack of physical exercise results in obesity and cardiovascular disease.</i><br><br><b>कारण (R):</b> अभ्रमणशील जीवन शैली और अधिक ऊर्जा वाले खाद्य पदार्थों की वजह से उपकर्षक (डीजेनेरेटिव) रोग होते हैं।<br><i>Reason (R): Sedentary lifestyles and energy-dense food choices predispose individuals to degenerative metabolic disorders.</i>", options: ["(A) और (R) दोनों सही हैं, परन्तु (R), (A) की सही व्याख्या नहीं है / Both (A) and (R) are correct, but (R) is not the correct explanation of (A)", "(A) सही है और (R) गलत है / (A) is correct and (R) is incorrect", "(A) और (R) दोनों सही हैं, और (R), (A) की सही व्याख्या है / Both (A) and (R) are correct, and (R) is the correct explanation of (A)", "(A) और (R) दोनों गलत हैं / Both (A) and (R) are incorrect"], correct: 2 },
+            { id: 23, question: "व्यक्ति का सामान्य वजन से .... प्रतिशत अधिक वजन मोटापा कहलाता है।<br><i>Body weight exceeding the ideal body weight (IBW) by ...... percent or more is defined as obesity:</i>", options: ["10", "20", "5", "15"], correct: 1 },
+            { id: 24, question: "सूची-I में दिए शारीरिक वज़न को सूची-II में दिए पोषण स्तर से मिलाएं:<br><i>Match the body weight deviation in List-I with the nutritional status in List-II:</i><br><br><b>सूची-I (IBW विचलन)</b><br>(A) IBW से 20% से अधिक<br>(B) IBW से 10-20% अधिक<br>(C) IBW से 10% अधिक से 10% कम<br>(D) IBW से 10-20% कम<br><br><b>सूची-II (पोषण स्तर)</b><br>(i) न्यून वजन<br>(ii) गम्भीर न्यून वजन<br>(iii) स्थूलकाय (ओबीस)<br>(iv) सामान्य वज़न<br>(v) मोटापा (Overweight)", options: ["(A)-(iii), (B)-(iv), (C)-(v), (D)-(i)", "(A)-(iii), (B)-(v), (C)-(iv), (D)-(i)", "(A)-(iii), (B)-(iv), (C)-(v), (D)-(ii)", "(A)-(iii), (B)-(v), (C)-(iv), (D)-(ii)"], correct: 1 },
+            { id: 25, question: "एक मोटे व्यक्ति के आहार में सम्मिलित किया जाना चाहिए।<br><i>.... should be included in the dietary regimen of an obese individual:</i>", options: ["गार्लिक (लहसुन) ब्रेड / Garlic bread", "बनाना (केले की) पुडिंग / Banana pudding", "मैकरोनी सलाद / Macaroni pasta salad", "वेजिटेबल (सब्जियों का) सलाद / Fresh vegetable salad"], correct: 3 },
+            { id: 26, question: "मोटापे का कारण है-<br><i>Obesity is caused by:</i>", options: ["कम व्यायाम / Low physical activity", "अधिक खाना / Hyperphagia (Overeating)", "दोनों (a) व (b) / Both (a) and (b)", "कम खाना / Inadequate intake"], correct: 2 },
+            { id: 27, question: "बी.एम.आई. एक व्यक्ति के बारे में बताता है-<br><i>Body Mass Index (BMI) provides an assessment of an individual's:</i>", options: ["मोटापा / Adiposity / Obesity", "ऊँचाई / Height", "हृदय चाप / Blood pressure", "व्यक्तित्व / Personality"], correct: 0 },
+            { id: 28, question: "वसा कोशिकाओं (Adipocytes) के आकार एवं संख्या में वृद्धि के आधार पर सही कथन चुनें:<br><i>Select the correct statement regarding cellularity in obesity:</i>", options: ["हाइपरप्लास्टिक मोटापे में केवल वसा कोशिकाओं का आकार बढ़ता है / Hyperplastic obesity involves an increase in cell size only", "बाल्यावस्था में विकसित मोटापा मुख्य रूप से हाइपरप्लास्टिक (संख्यात्मक वृद्धि) होता है, जिसे वयस्कावस्था में घटाना कठिन होता है / Childhood-onset obesity is predominantly hyperplastic (increase in cell number), making weight management harder later", "वयस्क अवस्था का मोटापा केवल हाइपरप्लास्टिक होता है / Adult-onset obesity is strictly hyperplastic in nature", "हाइपरट्रॉफिक मोटापे में वसा कोशिकाओं की संख्या निरंतर बढ़ती रहती है / Hypertrophic obesity is characterized by continuous cell division"], correct: 1 },
+            { id: 29, question: "भूख और तृप्ति (Satiety) के हार्मोनल नियंत्रण के संदर्भ में कौन-सा युग्म गलत सुमेलित है?<br><i>Which pairing regarding the neuroendocrine regulation of appetite is incorrectly matched?</i>", options: ["घ्रेलिन (Ghrelin) → आमाशय द्वारा स्रावित ऑरेक्सिजेनिक (भूख वर्धक) हार्मोन / Secreted by stomach; potent orexigenic peptide", "लेप्टिन (Leptin) → एडिपोसाइट्स द्वारा स्रावित एनोरेक्सिजेनिक (तृप्ति) हार्मोन / Secreted by adipocytes; anorexigenic satiety signal", "न्यूरोपेप्टाइड Y (NPY) → हाइपोथैलेमस द्वारा स्रावित शक्तिशाली भूख दमनकारी / Hypothalamic peptide; potent appetite suppressant", "PYY 3-36 → आंतों द्वारा स्रावित भोजन उपरांत तृप्ति कारक / Secreted by gut L-cells; postprandial satiety mediator"], correct: 2 },
+            { id: 30, question: "विसरल वसा (Visceral Fat / Android Obesity) क्यों सबक्यूटेनियस वसा की तुलना में अधिक चयापचयी रूप से घातक है?<br><i>Why is visceral adiposity (android fat) metabolically more hazardous than subcutaneous fat?</i>", options: ["यह सीधे पोर्टल तंत्र में मुक्त वसीय अम्ल (FFAs) और TNF-α स्रावित कर यकृत इंसुलिन प्रतिरोध उत्पन्न करती है / It releases FFAs and TNF-α directly into the portal circulation, inducing hepatic insulin resistance", "इसमें लिपोलाइटिक रिसेप्टर्स अनुपस्थित होते हैं / It lacks lipolytic beta-adrenergic receptors", "यह एडिपोनेक्टिन का अत्यधिक उत्पादन करती है / It secretes exceptionally high concentrations of adiponectin", "यह शरीर के आधारीय चयापचय (BMR) को शून्य कर देती है / It completely shuts down basal metabolic rate"], correct: 0 },
+            { id: 31, question: "सूची-I को सूची-II से सुमेलित कीजिए:<br><i>Match List-I with List-II:</i><br><br><b>सूची-I (पैमाना / Anthropometric Index)</b><br>(A) एशियाई वयस्क BMI मोटापा श्रेणी-1 / Obese Class I<br>(B) केंद्रीय मोटापा कमर घेरा / Waist Circumference<br>(C) कमर-से-ऊँचाई अनुपात / Waist-to-Height Ratio<br>(D) क्रोनिक एनर्जी डेफिशिएंसी / Chronic Underweight<br><br><b>सूची-II (एशियाई नैदानिक सीमा / Asian Cut-off)</b><br>1. ≥ 90 cm (पुरुष / M), ≥ 80 cm (महिला / F)<br>2. ≥ 25.0 kg/m²<br>3. < 18.5 kg/m²<br>4. > 0.5 (कार्डियो-मेटाबॉलिक जोखिम / Risk index)", options: ["A-2, B-1, C-4, D-3", "A-1, B-2, C-3, D-4", "A-2, B-4, C-1, D-3", "A-3, B-1, C-4, D-2"], correct: 0 },
+            { id: 32, question: "<b>अभिकथन (A):</b> गंभीर रूप से अल्पभार/कुपोषित रोगी को अचानक उच्च कार्बोहाइड्रेट आहार देने पर 'रीफीडिंग सिंड्रोम' (Refeeding Syndrome) हो सकता है।<br><i>Assertion (A): Rapid re-introduction of high-carbohydrate feeding in severely underweight individuals can trigger fatal Refeeding Syndrome.</i><br><br><b>कारण (R):</b> तीव्र इंसुलिन स्राव फॉस्फेट, पोटैशियम और मैग्नीशियम को बाह्यकोशिकीय से अंतःकोशिकीय द्रव में खींच लेता है, जिससे प्राणघातक हाइपोफॉस्फेटेमिया हो जाता है।<br><i>Reason (R): Surge in insulin secretion drives phosphate, potassium, and magnesium into the intracellular compartment, causing severe hypophosphatemia.</i>", options: ["(A) सही है, परन्तु (R) गलत है / (A) is correct, but (R) is incorrect", "(A) और (R) दोनों सही हैं, परन्तु (R), (A) की सही व्याख्या नहीं है / Both (A) and (R) are correct, but (R) is not the correct explanation of (A)", "(A) और (R) दोनों सही हैं, और (R), (A) की सही व्याख्या है / Both (A) and (R) are correct, and (R) is the correct explanation of (A)", "(A) और (R) दोनों गलत हैं / Both (A) and (R) are incorrect"], correct: 2 },
+            { id: 33, question: "मोटापे में प्रयुक्त 'अति निम्न कैलोरी आहार' (VLCD) की नैदानिक परिभाषा क्या है?<br><i>What is the clinical definition of a 'Very Low Calorie Diet' (VLCD) used in clinical bariatric protocols?</i>", options: ["दैनिक ऊर्जा < 800 kcal/day जिसमें उच्च जैविक मूल्य प्रोटीन व इलेक्ट्रोलाइट्स शामिल हों / Intake < 800 kcal/day providing high biological value protein with essential electrolytes", "दैनिक ऊर्जा 1200-1500 kcal/day / Energy limited to 1200-1500 kcal/day", "शून्य वसा व 90% कार्बोहाइड्रेट युक्त आहार / Fat-free diet with 90% carbohydrate content", "केवल जल उपवास (Water-only fast) / Total starvation diet"], correct: 0 },
+            { id: 34, question: "भूरे वसा ऊतक (Brown Adipose Tissue - BAT) की थर्मोजेनिक क्षमता का कारण क्या है?<br><i>What molecular feature accounts for the non-shivering thermogenic capacity of Brown Adipose Tissue (BAT)?</i>", options: ["अनकपलिंग प्रोटीन-1 (UCP-1 / Thermogenin) जो ATP निर्माण के बिना प्रोटॉन प्रवणता को ऊष्मा में बदलता है / Presence of Uncoupling Protein-1 (UCP-1) that dissipates the proton gradient as heat", "माइटोकॉन्ड्रिया की पूर्ण अनुपस्थिति / Total absence of mitochondria", "ट्राइग्लिसराइड्स का स्थायी भंडारण / Inability to hydrolyze stored triglycerides", "ग्लूकोकोर्टिकोइड रिसेप्टर्स की अधिकता / Overexpression of mineralocorticoid receptors"], correct: 0 },
+            { id: 35, question: "गंभीर प्रोटीन-ऊर्जा कुपोषण (PEM) में कौन-सा लक्षण केवल क्वाशिओरकोर को मरास्मस से अलग करता है?<br><i>In severe Protein-Energy Malnutrition (PEM), which clinical feature pathognomonically differentiates Kwashiorkor from Marasmus?</i>", options: ["गंभीर पेशीय क्षय / Severe muscle wasting", "हाइपोएल्ब्यूमिनेमिया जनित सामान्यीकृत एडिमा (Oedema) व फ्लैग साइन बाल / Generalized pitting oedema due to severe hypoalbuminemia with flag-sign dyspigmentation of hair", "अत्यधिक क्षीणता (Extreme emaciation) / Loss of buccal fat pad", "सामान्य से कम वजन / Body weight <60% of expected"], correct: 1 },
+            { id: 36, question: "एंटी-ओबेसिटी औषधि 'ऑर्लिस्टैट' (Orlistat) शरीर में किस प्रकार कार्य करती है?<br><i>What is the pharmacological mechanism of action of the anti-obesity drug Orlistat?</i>", options: ["केंद्रीय तंत्रिका तंत्र पर NPY को ब्लॉक करना / Centrally acting as an NPY-receptor antagonist", "गैस्ट्रिक व पैन्क्रियाटिक लाइपेज को रोककर आहारीय वसा का ~30% अवशोषण बाधित करना / Inhibiting gastric and pancreatic lipases to reduce dietary fat absorption by ~30%", "थायरॉक्सिन हार्मोन के स्तर को दोगुना करना / Increasing baseline thyroxine synthesis", "आंतों में ग्लूकोज ट्रांसपोर्टर (SGLT-1) को नष्ट करना / Inactivating intestinal SGLT-1 carriers"], correct: 1 },
+            { id: 37, question: "गंभीर अल्पभार के रोगी का ऊर्जा घनत्व (Energy Density) बढ़ाने हेतु सबसे वैज्ञानिक आहार दृष्टिकोण क्या है?<br><i>What is the most scientifically sound dietary approach to enhance energy density for a severely underweight patient?</i>", options: ["अघुलनशील रेशे और जल की मात्रा बढ़ाना / Increasing insoluble dietary fiber and bulk water intake", "भोजन का आयतन बढ़ाए बिना MCT तेल, घी, नट्स पेस्ट, माल्टेड अनाज और मिल्क सॉलिड्स शामिल करना / Incorporating MCT oils, nut pastes, malted grains, and concentrated milk solids without increasing meal volume", "केवल साधारण शर्करा और एयरेटेड ड्रिंक्स देना / Relying exclusively on refined sugars and carbonated beverages", "आहार से सभी प्रकार की प्रोटीन को हटाना / Eliminating protein to ease hepatic workload"], correct: 1 },
+            { id: 38, question: "'मेटाबॉलिकली ओबीस नॉर्मल वेट' (MONW) व्यक्ति किसे कहा जाता है?<br><i>Who is clinically categorized under the phenotype 'Metabolically Obese Normal Weight' (MONW)?</i>", options: ["सामान्य BMI (<23 kg/m²) होने पर भी अत्यधिक विसरल वसा, इंसुलिन प्रतिरोध एवं डिस्लिपिडेमिया से ग्रसित व्यक्ति / Individuals with normal BMI (<23 kg/m²) who exhibit excess visceral fat, insulin resistance, and atherogenic dyslipidemia", "अत्यधिक मांसपेशियों वाले एथलीट जिनका BMI अधिक हो / Muscular athletes with high BMI but low body fat percentage", "केवल एडिमा से ग्रस्त कुपोषित बच्चे / Underweight children presenting with nutritional oedema", "पूर्णतः स्वस्थ सामान्य व्यक्ति / Normal weight individuals with high insulin sensitivity"], correct: 0 },
+            { id: 39, question: "आहारीय रेशा (Dietary Fiber) किन क्रियाविधियों द्वारा मोटापे के प्रबंधन में मदद करता है?<br><i>Dietary fiber aids in obesity management through which physiological mechanisms?</i><br><br>1. घुलनशील रेशा श्यान जेल बनाकर गैस्ट्रिक खाली होने की दर धीमी करता है।<br>2. यह शॉर्ट-चेन फैटी एसिड (SCFAs) के उत्पादन द्वारा PYY व GLP-1 हार्मोन स्राव बढ़ाता है।<br>3. यह भोजन के ग्लाइसेमिक रिस्पॉन्स को कम कर इंसुलिन स्पाइक को घटाता है।", options: ["केवल 1 और 2 / Only 1 and 2", "केवल 2 और 3 / Only 2 and 3", "केवल 1 और 3 / Only 1 and 3", "1, 2 और 3 / 1, 2, and 3"], correct: 3 },
+            { id: 40, question: "ब्रोकस इंडेक्स (Broca's Index) के अनुसार एक वयस्क पुरुष के आदर्श शारीरिक भार (IBW in kg) का सूत्र क्या है?<br><i>According to Broca's Index, what is the formula to calculate Ideal Body Weight (IBW in kg) for adult males?</i>", options: ["Height (cm) - 100", "Height (cm) - 105", "[Height (m)]² × 20", "Height (inches) × 2.54"], correct: 0 }
+        ];
+    </script>
+
+    <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
