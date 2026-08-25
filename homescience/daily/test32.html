@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ सही किया गया बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">40</span></span>
+                        <span class="subject-badge">गृह विज्ञान (Home Science)</span>
+                        <!-- 🌟 यहाँ डायनेमिक टैग दिखेगा -->
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 40</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ सही किया गया डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_free_test_d32"; 
+
+        // 2. 40 प्रश्नों का डेटासेट (बिना टैग और स्पष्ट व्याख्या के साथ)
+        const dataset = [
+            { id: 1, tag: "", question: "क्रॉनिक किडनी डिजीज में आहार नियोजन का सबसे महत्वपूर्ण उद्देश्य क्या है?<br>What is the most important objective of dietary planning in chronic kidney disease?", options: ["गुर्दे पर चयापचयी भार कम करना और पोषण स्थिति बनाए रखना", "सभी पोषक तत्वों को पूरी तरह समाप्त करना", "केवल ऊर्जा का सेवन बढ़ाना", "शरीर से सभी खनिजों को निकालना"], correct: 0 },
+            { id: 2, tag: "", question: "क्रॉनिक किडनी डिजीज के ऐसे रोगी में, जो डायलिसिस पर नहीं है, प्रोटीन की मात्रा निर्धारित करते समय कौन-सा कारक सबसे अधिक महत्वपूर्ण है?<br>Which factor is most important when determining protein intake in a non-dialysis chronic kidney disease patient?", options: ["केवल रोगी की आयु", "केवल शरीर का तापमान", "किडनी डिजीज की अवस्था, पोषण स्थिति और चिकित्सकीय स्थिति", "केवल भोजन की पसंद"], correct: 2 },
+            { id: 3, tag: "", question: "किडनी की कार्यक्षमता कम होने पर प्रोटीन के चयापचय से उत्पन्न नाइट्रोजनयुक्त अपशिष्ट पदार्थों का क्या होता है?<br>What happens to nitrogenous waste products from protein metabolism when kidney function declines?", options: ["उनका निर्माण पूरी तरह बंद हो जाता है", "उनका उत्सर्जन कम हो सकता है और वे रक्त में जमा हो सकते हैं", "वे केवल त्वचा द्वारा बाहर निकलते हैं", "वे तुरंत ग्लूकोज में परिवर्तित हो जाते हैं"], correct: 1 },
+            { id: 4, tag: "", question: "डायलिसिस पर रहने वाले रोगी की प्रोटीन आवश्यकता सामान्यतः प्रीडायलिसिस रोगी की तुलना में क्यों बढ़ सकती है?<br>Why may protein requirements generally be higher in a patient receiving dialysis compared with a pre-dialysis patient?", options: ["डायलिसिस के दौरान कुछ अमीनो अम्ल और प्रोटीन का नुकसान हो सकता है", "डायलिसिस शरीर में प्रोटीन का निर्माण बंद कर देता है", "डायलिसिस से सभी कार्बोहाइड्रेट नष्ट हो जाते हैं", "डायलिसिस के बाद वसा का अवशोषण पूरी तरह रुक जाता है"], correct: 0 },
+            { id: 5, tag: "", question: "किडनी रोग में पर्याप्त ऊर्जा देना क्यों आवश्यक है?<br>Why is adequate energy intake important in kidney disease?", options: ["ऊर्जा की कमी होने पर शरीर ऊर्जा के लिए प्रोटीन का अधिक उपयोग कर सकता है", "ऊर्जा का प्रोटीन चयापचय से कोई संबंध नहीं है", "ऊर्जा देने से गुर्दे की बीमारी तुरंत समाप्त हो जाती है", "ऊर्जा केवल शरीर का तापमान बढ़ाती है"], correct: 0 },
+            { id: 6, tag: "", question: "किडनी रोग में सोडियम का अत्यधिक सेवन विशेष रूप से किस समस्या को बढ़ा सकता है?<br>Excessive sodium intake in kidney disease may particularly worsen which problem?", options: ["उच्च रक्तचाप और द्रव प्रतिधारण", "रक्त में हीमोग्लोबिन का अत्यधिक बढ़ना", "शरीर में विटामिन C का निर्माण", "प्रोटीन का पूर्ण अवशोषण"], correct: 0 },
+            { id: 7, tag: "", question: "किडनी रोगी के लिए नमक की मात्रा कम करने का सबसे व्यावहारिक तरीका कौन-सा है?<br>Which is the most practical way to reduce salt intake in a kidney patient?", options: ["भोजन में नमक की मात्रा कम करने के साथ पैकेज्ड और अत्यधिक नमकीन खाद्य पदार्थ सीमित करना", "केवल पानी पीना और भोजन छोड़ देना", "सभी फलों को बंद करना", "नमक की जगह अचार का उपयोग करना"], correct: 0 },
+            { id: 8, tag: "", question: "किडनी रोग में पोटैशियम को सीमित करने की आवश्यकता मुख्यतः कब हो सकती है?<br>When may potassium restriction be particularly necessary in kidney disease?", options: ["जब रक्त में पोटैशियम का स्तर बढ़ा हुआ हो या हाइपरपोटैसीमिया का जोखिम हो", "हर किडनी रोगी में बिना किसी जाँच के", "केवल स्वस्थ व्यक्तियों में", "जब रक्त में कैल्शियम बढ़ा हो"], correct: 0 },
+            { id: 9, tag: "", question: "निम्नलिखित में से कौन-सा खाद्य पदार्थ पोटैशियम की दृष्टि से अपेक्षाकृत अधिक माना जाता है?<br>Which of the following foods is considered relatively high in potassium?", options: ["केला", "परिष्कृत चावल", "चीनी", "सामान्य वनस्पति तेल"], correct: 0 },
+            { id: 10, tag: "", question: "सब्जियों की 'लीचिंग' या भिगोकर/उबालकर पानी निकालने की प्रक्रिया का उपयोग किडनी आहार में मुख्यतः किस उद्देश्य से किया जा सकता है?<br>For what purpose may leaching or soaking and boiling vegetables be used in a renal diet?", options: ["कुछ पोटैशियम को कम करने में सहायता के लिए", "सभी प्रोटीन को नष्ट करने के लिए", "खाद्य पदार्थ में कैलोरी समाप्त करने के लिए", "विटामिनों को पूरी तरह बढ़ाने के लिए"], correct: 0 },
+            { id: 11, tag: "", question: "क्रॉनिक किडनी डिजीज में फॉस्फोरस का रक्त स्तर बढ़ने पर कौन-सी समस्या उत्पन्न हो सकती है?<br>What problem may occur when blood phosphorus levels rise in chronic kidney disease?", options: ["हड्डियों और खनिज चयापचय में असंतुलन", "शरीर में विटामिन C का अत्यधिक निर्माण", "रक्त में ग्लूकोज का हमेशा कम होना", "पाचन एंजाइमों का पूर्ण अभाव"], correct: 0 },
+            { id: 12, tag: "", question: "किडनी रोग में फॉस्फोरस सीमित करते समय केवल प्राकृतिक खाद्य पदार्थों पर ध्यान देना पर्याप्त क्यों नहीं है?<br>Why is focusing only on natural foods insufficient when restricting phosphorus in kidney disease?", options: ["कुछ प्रसंस्कृत खाद्य पदार्थों में फॉस्फेट योजक भी होते हैं", "प्राकृतिक खाद्य पदार्थों में कभी फॉस्फोरस नहीं होता", "फॉस्फोरस केवल पानी में पाया जाता है", "फॉस्फोरस केवल फलों में होता है"], correct: 0 },
+            { id: 13, tag: "", question: "क्रॉनिक किडनी डिजीज में फॉस्फोरस और कैल्शियम के असंतुलन का दीर्घकालिक प्रभाव किस तंत्र से संबंधित है?<br>Long-term effects of phosphorus and calcium imbalance in chronic kidney disease are related to which mechanism?", options: ["खनिज-हड्डी विकार और द्वितीयक हाइपरपैराथायरॉयडिज्म", "केवल पाचन रस की कमी", "केवल शरीर में ग्लूकोज का बढ़ना", "केवल वसा का कुअवशोषण"], correct: 0 },
+            { id: 14, tag: "", question: "किडनी रोगी में तरल पदार्थ की मात्रा निर्धारित करते समय सबसे उपयुक्त आधार क्या है?<br>What is the most appropriate basis for determining fluid intake in a kidney patient?", options: ["सभी रोगियों के लिए समान मात्रा", "केवल मौसम", "मूत्र उत्पादन, द्रव स्थिति, सूजन और चिकित्सकीय स्थिति", "केवल रोगी की प्यास"], correct: 2 },
+            { id: 15, tag: "", question: "डायलिसिस रोगी में दैनिक वजन की निगरानी क्यों उपयोगी है?<br>Why is daily weight monitoring useful in a dialysis patient?", options: ["अचानक वजन परिवर्तन से द्रव संचय का संकेत मिल सकता है", "इससे प्रोटीन की मात्रा सीधे ज्ञात होती है", "इससे रक्त में पोटैशियम का स्तर पता चलता है", "इससे हीमोग्लोबिन स्वतः मापा जाता है"], correct: 0 },
+            { id: 16, tag: "", question: "हीमोडायलिसिस रोगी में 'इंटरडायलिटिक वजन बढ़ना' मुख्यतः किससे संबंधित होता है?<br>Interdialytic weight gain in a hemodialysis patient is mainly related to what?", options: ["डायलिसिस सत्रों के बीच शरीर में जमा हुए द्रव से", "केवल मांसपेशियों की वृद्धि से", "केवल शरीर में वसा बनने से", "केवल हड्डियों के वजन से"], correct: 0 },
+            { id: 17, tag: "", question: "किडनी रोगी में उच्च सोडियम आहार से प्यास क्यों बढ़ सकती है?<br>Why can a high-sodium diet increase thirst in a kidney patient?", options: ["सोडियम शरीर के द्रव संतुलन और परासरणीयता को प्रभावित करता है", "सोडियम सीधे प्रोटीन को नष्ट करता है", "सोडियम पाचन एंजाइमों को समाप्त करता है", "सोडियम विटामिन D को नष्ट करता है"], correct: 0 },
+            { id: 18, tag: "", question: "किडनी रोगी के लिए 'कम सोडियम' आहार में स्वाद बनाए रखने का बेहतर तरीका कौन-सा है?<br>Which is a better way to maintain flavor in a low-sodium renal diet?", options: ["अधिक अचार और नमकीन डालना", "नींबू, जड़ी-बूटियों और उपयुक्त मसालों का उपयोग करना", "हर भोजन में अतिरिक्त नमक डालना", "भोजन में नमक की जगह सोया सॉस अधिक डालना"], correct: 1 },
+            { id: 19, tag: "", question: "किडनी रोग में पोटैशियम युक्त 'नमक के विकल्प' का उपयोग बिना सलाह के क्यों नहीं करना चाहिए?<br>Why should potassium-containing salt substitutes not be used without professional advice in kidney disease?", options: ["उनमें पोटैशियम हो सकता है, जिससे हाइपरपोटैसीमिया का जोखिम बढ़ सकता है", "वे हमेशा कैल्शियम की कमी करते हैं", "वे प्रोटीन को पूरी तरह नष्ट करते हैं", "वे सभी रोगियों में रक्तचाप बढ़ाते हैं"], correct: 0 },
+            { id: 20, tag: "", question: "नेफ्रोटिक सिंड्रोम में अत्यधिक प्रोटीन सेवन को सामान्यतः स्वतः उचित क्यों नहीं माना जाता?<br>Why is excessive protein intake not automatically considered appropriate in nephrotic syndrome?", options: ["अत्यधिक प्रोटीन हमेशा मूत्र में प्रोटीन की हानि को समाप्त करता है", "प्रोटीन की मात्रा रोगी की स्थिति और किडनी की कार्यक्षमता के अनुसार निर्धारित की जाती है", "प्रोटीन का किडनी से कोई संबंध नहीं है", "सभी नेफ्रोटिक रोगियों को प्रोटीन बिल्कुल नहीं देना चाहिए"], correct: 1 },
+            { id: 21, tag: "", question: "नेफ्रोटिक सिंड्रोम में सूजन के आहार प्रबंधन में कौन-सा उपाय विशेष रूप से महत्वपूर्ण हो सकता है?<br>Which dietary measure may be particularly important in managing edema in nephrotic syndrome?", options: ["सोडियम का उचित प्रतिबंध", "असीमित नमकीन खाद्य पदार्थ", "अत्यधिक अचार", "भोजन पूरी तरह बंद करना"], correct: 0 },
+            { id: 22, tag: "", question: "किडनी रोग में उच्च जैविक मूल्य वाले प्रोटीन का चयन क्यों उपयोगी हो सकता है?<br>Why can selecting high-biological-value protein be useful in kidney disease?", options: ["कम मात्रा में भी आवश्यक अमीनो अम्लों की बेहतर पूर्ति में सहायता कर सकता है", "इससे प्रोटीन की आवश्यकता शून्य हो जाती है", "इससे सभी अपशिष्ट पदार्थ समाप्त हो जाते हैं", "इससे शरीर में पानी की आवश्यकता समाप्त हो जाती है"], correct: 0 },
+            { id: 23, tag: "", question: "ग्लोमेरुलर निस्यंदन दर में कमी का आहार नियोजन से क्या संबंध है?<br>What is the relevance of reduced glomerular filtration rate to dietary planning?", options: ["इससे किडनी की कार्यक्षमता की अवस्था का आकलन करने में सहायता मिलती है और आहार आवश्यकताएँ प्रभावित हो सकती हैं", "इससे केवल भोजन का स्वाद निर्धारित होता है", "इसका पोषण से कोई संबंध नहीं है", "इससे केवल शरीर का तापमान पता चलता है"], correct: 0 },
+            { id: 24, tag: "", question: "यूरीमिया की स्थिति में आहार का कौन-सा उद्देश्य सबसे अधिक प्रासंगिक है?<br>Which dietary objective is most relevant in uremia?", options: ["नाइट्रोजनयुक्त अपशिष्ट के संचय को कम करने में सहायता करना और पर्याप्त पोषण बनाए रखना", "प्रोटीन का असीमित सेवन कराना", "सभी ऊर्जा स्रोत बंद करना", "केवल पानी का सेवन कराना"], correct: 0 },
+            { id: 25, tag: "", question: "किडनी रोगी में एनीमिया होने का एक महत्वपूर्ण कारण क्या हो सकता है?<br>What can be an important cause of anemia in a kidney patient?", options: ["एरिथ्रोपोइटिन उत्पादन में कमी", "केवल विटामिन C की अधिकता", "केवल पानी का अधिक सेवन", "केवल आहार में वसा की कमी"], correct: 0 },
+            { id: 26, tag: "", question: "किडनी रोग में आयरन की आवश्यकता का आकलन केवल हीमोग्लोबिन देखकर क्यों नहीं किया जाना चाहिए?<br>Why should iron status in kidney disease not be assessed using hemoglobin alone?", options: ["आ आयरन की स्थिति जानने के लिए अन्य प्रयोगशाला संकेतकों और चिकित्सकीय स्थिति का भी मूल्यांकन आवश्यक हो सकता है", "हीमोग्लोबिन का रक्त से कोई संबंध नहीं है", "आ आयरन केवल हड्डियों में पाया जाता है", "सभी किडनी रोगियों में आयरन की कमी निश्चित होती है"], correct: 0 },
+            { id: 27, tag: "", question: "किडनी रोग में फॉस्फेट योजकों से बचने के लिए खाद्य लेबल पढ़ते समय कौन-सा शब्द विशेष ध्यान देने योग्य है?<br>Which term should be watched for on food labels to help avoid phosphate additives in kidney disease?", options: ["फॉस्फेट", "एस्कॉर्बिक अम्ल", "राइबोफ्लेविन", "टोकोफेरॉल"], correct: 0 },
+            { id: 28, tag: "", question: "किडनी रोग में अत्यधिक प्रसंस्कृत खाद्य पदार्थों को सीमित करने का एक प्रमुख कारण क्या है?<br>What is one major reason to limit highly processed foods in kidney disease?", options: ["उनमें सोडियम और फॉस्फेट जैसे योजक अधिक हो सकते हैं", "उनमें कभी कैलोरी नहीं होती", "वे हमेशा पोटैशियम-मुक्त होते हैं", "वे सभी आवश्यक पोषक तत्वों का आदर्श स्रोत होते हैं"], correct: 0 },
+            { id: 29, tag: "", question: "पोटैशियम की अधिकता वाले किडनी रोगी में निम्नलिखित में से कौन-सा लक्षण गंभीर स्थिति का संकेत हो सकता है?<br>Which symptom may indicate a serious condition in a kidney patient with high potassium?", options: ["हृदय की धड़कन में असामान्यता", "केवल हल्की भूख", "केवल बालों का बढ़ना", "केवल त्वचा का शुष्क होना"], correct: 0 },
+            { id: 30, tag: "", question: "किडनी रोग में पोटैशियम नियंत्रण के लिए भोजन चुनते समय सबसे वैज्ञानिक दृष्टिकोण क्या है?<br>What is the most scientific approach when selecting foods for potassium control in kidney disease?", options: ["सभी फलों और सब्जियों को बंद कर देना", "रक्त पोटैशियम स्तर, रोग की अवस्था और व्यक्तिगत आहार को ध्यान में रखना", "केवल केला बंद कर देना", "केवल दूध बंद कर देना"], correct: 1 },
+            { id: 31, tag: "", question: "किडनी रोग में कैलोरी की पर्याप्तता बनाए रखने के लिए वसा का उपयोग किस प्रकार किया जा सकता है?<br>How can fat be used to maintain adequate energy intake in kidney disease?", options: ["उपयुक्त मात्रा में असंतृप्त वसा का उपयोग ऊर्जा बढ़ाने के लिए किया जा सकता है", "सभी वसा को हमेशा पूरी तरह बंद करना चाहिए", "केवल ट्रांस वसा का उपयोग करना चाहिए", "वसा का ऊर्जा से कोई संबंध नहीं है"], correct: 0 },
+            { id: 32, tag: "", question: "किडनी रोगी में उच्च रक्तचाप के नियंत्रण के लिए आहार का कौन-सा घटक विशेष महत्व रखता है?<br>Which dietary component is particularly important for blood pressure control in a kidney patient?", options: ["सोडियम", "विटामिन C", "विटामिन B12", "सुक्रोज"], correct: 0 },
+            { id: 33, tag: "", question: "डायलिसिस रोगी में भोजन की योजना बनाते समय डायलिसिस के समय को ध्यान में रखना क्यों उपयोगी है?<br>Why is it useful to consider dialysis timing when planning meals for a dialysis patient?", options: ["भोजन, दवा, ऊर्जा और पोषक तत्वों की योजना को उपचार के समय के साथ बेहतर ढंग से समायोजित किया जा सकता है", "डायलिसिस का भोजन से कोई संबंध नहीं होता", "इससे सभी खाद्य पदार्थ पोटैशियम-मुक्त हो जाते हैं", "इससे प्रोटीन की आवश्यकता समाप्त हो जाती है"], correct: 0 },
+            { id: 34, tag: "", question: "किडनी रोग में अत्यधिक तरल सेवन से किस स्थिति का खतरा बढ़ सकता है, यदि गुर्दे अतिरिक्त पानी बाहर न निकाल पा रहे हों?<br>What condition may be worsened by excessive fluid intake when the kidneys cannot excrete excess water?", options: ["द्रव अधिभार और सूजन", "केवल विटामिन की कमी", "केवल प्रोटीन का अवशोषण", "केवल कब्ज"], correct: 0 },
+            { id: 35, tag: "", question: "किडनी रोगी में 'सूखी वजन' की अवधारणा किससे संबंधित है?<br>What does the concept of 'dry weight' refer to in a kidney patient?", options: ["अतिरिक्त द्रव हटाने के बाद अनुमानित उचित शरीर भार", "केवल शरीर की वसा का भार", "केवल हड्डियों का भार", "भोजन के बाद का तत्काल वजन"], correct: 0 },
+            { id: 36, tag: "", question: "किडनी रोग में आहार विशेषज्ञ द्वारा रोगी के भोजन की योजना व्यक्तिगत बनाने का सबसे महत्वपूर्ण कारण क्या है?<br>What is the most important reason for individualizing the diet plan in kidney disease?", options: ["किडनी रोग की अवस्था और पोषक तत्वों की आवश्यकताएँ व्यक्ति-व्यक्ति में अलग हो सकती हैं", "सभी रोगियों की पोषण आवश्यकता समान होती है", "केवल भोजन का स्वाद बदलना होता है", "केवल भोजन का रंग बदलना होता है"], correct: 0 },
+            { id: 37, tag: "", question: "किडनी रोगी में प्रोटीन की मात्रा बहुत अधिक सीमित कर देने से कौन-सी पोषण संबंधी समस्या उत्पन्न हो सकती है?<br>What nutritional problem may occur if protein is restricted excessively in a kidney patient?", options: ["प्रोटीन-ऊर्जा कुपोषण", "केवल हाइपरपोटैसीमिया", "केवल फॉस्फोरस की अधिकता", "केवल जल प्रतिधारण"], correct: 0 },
+            { id: 38, tag: "", question: "किडनी रोग में पोषण स्थिति की निगरानी के लिए निम्नलिखित में से कौन-सा दृष्टिकोण सबसे उपयुक्त है?<br>Which approach is most appropriate for monitoring nutritional status in kidney disease?", options: ["केवल वजन देखना", "केवल सीरम प्रोटीन देखना", "आहार सेवन, वजन में परिवर्तन, शारीरिक संकेत और प्रयोगशाला मानकों का संयुक्त मूल्यांकन", "केवल रोगी की भूख पूछना"], correct: 2 },
+            { id: 39, tag: "", question: "किडनी रोगी के लिए भोजन योजना बनाते समय निम्नलिखित में से कौन-सा संयोजन सबसे अधिक उपयुक्त है?<br>Which combination is most appropriate when planning a diet for a kidney patient?", options: ["केवल प्रोटीन पर ध्यान देना", "केवल पोटैशियम पर ध्यान देना", "प्रोटीन, सोडियम, पोटैशियम, फॉस्फोरस, ऊर्जा और तरल की आवश्यकता का समग्र मूल्यांकन", "सभी फलों और सब्जियों को बंद करना"], correct: 2 },
+            { id: 40, tag: "", question: "एक क्रॉनिक किडनी डिजीज रोगी में रक्त पोटैशियम सामान्य है, लेकिन रक्तचाप और सूजन नियंत्रित नहीं हैं। ऐसे रोगी के आहार में किस परिवर्तन को प्राथमिकता देना अधिक तर्कसंगत होगा?<br>A chronic kidney disease patient has normal blood potassium but uncontrolled blood pressure and edema. Which dietary change would be most logical to prioritize?", options: ["बिना कारण सभी फलों को बंद करना", "सोडियम सेवन और द्रव प्रबंधन का चिकित्सकीय स्थिति के अनुसार पुनर्मूल्यांकन", "प्रोटीन को पूर्णतः समाप्त करना", "पोटैशियम का अत्यधिक प्रतिबंध करना"], correct: 1 }
+        ];
+    </script>
+
+    <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
