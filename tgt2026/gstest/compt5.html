@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">मेमोरी एवं डेटा स्टोरेज</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_ict_test_05"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "कंप्यूटर मेमोरी में डेटा की सबसे छोटी बुनियादी इकाई (Smallest Basic Unit) क्या है?", options: ["बाइट (Byte)", "बिट (Bit)", "निबल (Nibble)", "किलोबाइट (KB)"], correct: 1, explanation: "Bit का पूर्ण रूप 'Binary Digit' होता है।<br>यह कंप्यूटर मेमोरी की सबसे छोटी इकाई है जो केवल 0 या 1 का मान दर्शाती है।" },
+            { id: 2, tag: "", question: "4 बिट्स (4 Bits) के समूह को कंप्यूटर शब्दावली में क्या कहा जाता है?", options: ["1 बाइट", "1 निबल (Nibble)", "1 वर्ड", "1 ब्लॉक"], correct: 1, explanation: "4 लगातार बिट्स के समूह को 'निबल' (Nibble) कहा जाता है।<br>यह आधे बाइट (Half Byte) के बराबर होता है।" },
+            { id: 3, tag: "", question: "एक बाइट (1 Byte) में कुल कितने बिट्स होते हैं?", options: ["4 बिट्स", "8 बिट्स", "16 बिट्स", "32 बिट्स"], correct: 1, explanation: "1 बाइट में कुल 8 बिट्स होते हैं।<br>यह सामान्यतः एक एकल अक्षर, अंक या वर्ण (Character) को एनकोड करने के लिए प्रयुक्त मानक इकाई है।" },
+            { id: 4, tag: "", question: "1 किलोबाइट (1 KB) में कुल कितने बाइट्स होते हैं?", options: ["1000 बाइट्स", "1024 बाइट्स", "1048 बाइट्स", "512 बाइट्स"], correct: 1, explanation: "कंप्यूटर बाइनरी आधार (2^10) पर कार्य करता है।<br>अतः 1 KB = 2^10 = 1024 बाइट्स होता है।" },
+            { id: 5, tag: "", question: "1 मेगाबाइट (1 MB) निम्नलिखित में से किसके बराबर होता है?", options: ["1024 KB", "1000 KB", "1024 Bytes", "1024 GB"], correct: 0, explanation: "1 MB = 1024 KB (किलोबाइट) होता है।<br>यदि इसे बाइट्स में बदलें तो यह 1024 x 1024 = 10,48,576 बाइट्स के बराबर होता है।" },
+            { id: 6, tag: "", question: "डेटा मापन इकाइयों का सबसे छोटे से सबसे बड़े का सही आरोही क्रम (Ascending Order) कौन-सा है?", options: ["Bit < Byte < KB < MB < GB < TB", "Bit < Nibble < MB < KB < GB < TB", "Byte < Bit < KB < MB < TB < GB", "KB < MB < GB < PB < TB < EB"], correct: 0, explanation: "डेटा इकाइयों का सही मानक क्रम है: Bit → Nibble (4 Bits) → Byte (8 Bits) → KB → MB → GB → TB → PB → EB → ZB → YB।" },
+            { id: 7, tag: "", question: "1 टेराबाइट (1 TB) में कितने गीगाबाइट (GB) होते हैं?", options: ["100 GB", "512 GB", "1000 GB", "1024 GB"], correct: 3, explanation: "1 TB = 1024 GB (गीगाबाइट) होता है।<br>आधुनिक हार्ड डिस्क और पर्सनल कंप्यूटर स्टोरेज क्षमता को मापने में इसका सर्वाधिक उपयोग होता है।" },
+            { id: 8, tag: "", question: "1 पेटाबाइट (1 PB) किसके समतुल्य होता है?", options: ["1024 TB", "1024 GB", "1024 EB", "1024 MB"], correct: 0, explanation: "1 PB (Petabyte) = 1024 TB (Terabyte) होता है।<br>बड़े डेटा केंद्रों, सुपरकंप्यूटरों और क्लाउड स्टोरेज में डेटा इसी पैमाने पर मापा जाता है।" },
+            { id: 9, tag: "", question: "निम्नलिखित में से कौन-सा स्टोरेज उपकरण 'सीक्वेंशियल एक्सेस' (Sequential Access) का उदाहरण है?", options: ["हार्ड डिस्क", "मैग्नेटिक टेप (Magnetic Tape)", "पेन ड्राइव", "डीवीडी (DVD)"], correct: 1, explanation: "मैग्नेटिक टेप में डेटा को क्रमिक रूप से (एक के बाद एक) ही पढ़ा जा सकता है।<br>वांछित डेटा तक पहुँचने के लिए पहले के सभी डेटा को आगे या पीछे रिवाइंड करना पड़ता है।" },
+            { id: 10, tag: "", question: "हार्ड डिस्क ड्राइव (HDD) और SSD किस प्रकार के एक्सेस मेथड (Direct/Random Access) पर कार्य करते हैं?", options: ["केवल सीक्वेंशियल एक्सेस", "डायरेक्ट / रैंडम एक्सेस (Direct Access)", "मैनुअल एक्सेस", "सीरियल एक्सेस"], correct: 1, explanation: "डायरेक्ट/रैंडम एक्सेस में स्टोरेज माध्यम के किसी भी ब्लॉक या सेक्टर से सीधे डेटा को बिना पूर्ववर्ती डेटा पढ़े पढ़ा या लिखा जा सकता है।" },
+            { id: 11, tag: "", question: "हार्ड डिस्क की वृत्ताकार चुंबकीय प्लेटों को क्या कहा जाता है?", options: ["ट्रैक", "प्लेटर (Platters)", "सेक्टर", "सिलेंडर"], correct: 1, explanation: "हार्ड डिस्क के अंदर एल्युमिनियम या कांच की बनी चुंबकीय कोटिंग वाली गोल घूमने वाली डिस्क को 'प्लेटर' (Platter) कहा जाता है।" },
+            { id: 12, tag: "", question: "हार्ड डिस्क के प्लेटर पर बने संकेंद्रित वृत्तों (Concentric Circles) को क्या कहा जाता है?", options: ["सेक्टर्स", "ट्रैक्स (Tracks)", "क्लस्टर्स", "ब्लॉक्स"], correct: 1, explanation: "हार्ड डिस्क का प्रत्येक प्लेटर कई संकेंद्रित गोलों में बंटा होता है जिन्हें 'ट्रैक्स' कहते हैं।<br>प्रत्येक ट्रैक आगे छोटे-छोटे 'सेक्टर्स' में विभाजित होता है।" },
+            { id: 13, tag: "", question: "हार्ड डिस्क के किसी ट्रैक का सबसे छोटा भौतिक भाग, जिसमें मानक रूप से 512 बाइट्स या 4KB डेटा रहता है, क्या कहलाता है?", options: ["ट्रैक", "सेक्टर (Sector)", "सिलेंडर", "स्पिंडल"], correct: 1, explanation: "सेक्टर (Sector) ट्रैक का वह सबसे छोटा विभाजन है जिस पर हार्ड डिस्क कंट्रोलर डेटा राइट करता है।<br>कई सेक्टर्स मिलकर एक 'क्लस्टर' बनाते हैं।" },
+            { id: 14, tag: "", question: "हार्ड डिस्क के रीड/राइट हेड को वांछित ट्रैक तक पहुँचने में लगने वाले समय को क्या कहते हैं?", options: ["सीक टाइम (Seek Time)", "लेटेंसी टाइम (Latency Time)", "ट्रांसफर टाइम", "एक्सेस टाइम"], correct: 0, explanation: "सीक टाइम (Seek Time) वह समय है जो हार्ड डिस्क के मैकेनिकल हेड को सही ट्रैक तक पहुँचने में लगता है।<br>इसके बाद सही सेक्टर के हेड के नीचे आने का समय 'लेटेंसी टाइम' कहलाता है।" },
+            { id: 15, tag: "", question: "हार्ड डिस्क के घूमने की गति (Rotation Speed) को किस इकाई में मापा जाता है?", options: ["DPI", "RPM (Revolutions Per Minute)", "PPM", "GHz"], correct: 1, explanation: "हार्ड डिस्क के स्पिंडल मोटर की घूर्णन गति को RPM में मापा जाता है।<br>डेस्कटॉप HDD सामान्यतः 5400 RPM या 7200 RPM की गति से घूमते हैं।" },
+            { id: 16, tag: "", question: "मानक 3.5 इंच की फ्लॉपी डिस्क (Floppy Disk) की कुल भंडारण क्षमता कितनी होती थी?", options: ["700 MB", "1.44 MB", "4.7 GB", "128 KB"], correct: 1, explanation: "3.5 इंच की हाई-डेंसिटी फ्लॉपी डिस्क की मानक क्षमता 1.44 MB होती थी।<br>यह पुराने समय में डेटा ट्रांसफर और बूट डिस्क के रूप में व्यापक रूप से प्रयुक्त होती थी।" },
+            { id: 17, tag: "", question: "ऑप्टिकल डिस्क (CD/DVD/Blu-ray) पर डेटा लिखने और पढ़ने के लिए किस तकनीक का प्रयोग किया जाता है?", options: ["चुंबकीय सुई", "लेजर बीम (Laser Beam)", "विद्युत धारा", "रेडियो तरंगें"], correct: 1, explanation: "ऑप्टिकल डिस्क पर डेटा को सूक्ष्म गड्ढों (Pits) और सपाट सतहों (Lands) के रूप में लेजर लाइट द्वारा बर्न (Write) और रीड किया जाता है।" },
+            { id: 18, tag: "", question: "एक मानक कॉम्पैक्ट डिस्क (CD-ROM) की सामान्य डेटा भंडारण क्षमता कितनी होती है?", options: ["1.44 MB", "700 MB (लगभग 650-700 MB)", "4.7 GB", "25 GB"], correct: 1, explanation: "एक मानक CD की स्टोरेज क्षमता 700 MB (या 80 मिनट का ऑडियो) होती है।<br>इसमें डेटा पढ़ने हेतु लाल इन्फ्रारेड लेजर (780 nm तरंगदैर्ध्य) का उपयोग होता है।" },
+            { id: 19, tag: "", question: "CD-R और CD-RW में मुख्य अंतर क्या होता है?", options: ["CD-R केवल रीड-ओनली है जबकि CD-RW में डेटा बार-बार लिखा और मिटाया जा सकता है", "CD-R में अधिक डेटा आता है", "CD-RW चुंबकीय होती है", "कोई अंतर नहीं है"], correct: 0, explanation: "CD-R (Compact Disc-Recordable) में डेटा केवल एक बार बर्न (WORM - Write Once Read Many) किया जा सकता है।<br>CD-RW (Re-Writable) में विशेष फेज-चेंज मिश्रधातु के कारण डेटा को कई बार मिटाकर दोबारा लिखा जा सकता है।" },
+            { id: 20, tag: "", question: "एक मानक सिंगल-लेयर डीवीडी (DVD - Digital Versatile Disc) की सामान्य भंडारण क्षमता कितनी होती है?", options: ["700 MB", "4.7 GB", "8.5 GB", "25 GB"], correct: 1, explanation: "सिंगल-लेयर DVD की क्षमता 4.7 GB होती है।<br>डबल-लेयर DVD की क्षमता लगभग 8.5 GB होती है।" },
+            { id: 21, tag: "", question: "ब्लू-रे डिस्क (Blu-ray Disc) में डेटा पढ़ने और लिखने के लिए किस रंग की लेजर बीम का प्रयोग किया जाता है?", options: ["लाल लेजर", "नीली-बैंगनी (Blue-Violet) लेजर", "हरी लेजर", "पीली लेजर"], correct: 1, explanation: "ब्लू-रे डिस्क में 405 nm की नीली-बैंगनी लेजर का उपयोग होता है।<br>कम तरंगदैर्ध्य होने के कारण यह बहुत सूक्ष्म स्पॉट्स पर डेटा राइट करती है, जिससे इसकी क्षमता बढ़ जाती है।" },
+            { id: 22, tag: "", question: "एक सिंगल-लेयर ब्लू-रे डिस्क (Blu-ray Disc) की सामान्य भंडारण क्षमता कितनी होती है?", options: ["4.7 GB", "25 GB", "50 GB", "100 GB"], correct: 1, explanation: "सिंगल-लेयर ब्लू-रे डिस्क की क्षमता 25 GB होती है।<br>डबल-लेयर ब्लू-रे डिस्क की क्षमता 50 GB तक होती है, जो HD वीडियो स्टोर करने हेतु उपयुक्त है।" },
+            { id: 23, tag: "", question: "SSD का पूर्ण रूप क्या है, जो पारंपरिक हार्ड डिस्क का आधुनिक और तीव्र विकल्प है?", options: ["Solid State Drive", "System Storage Device", "Static Silicon Disk", "Serial Storage Drive"], correct: 0, explanation: "SSD का पूरा नाम Solid State Drive है।<br>इसमें कोई घूमने वाला यांत्रिक भाग नहीं होता, बल्कि यह सेमीकंडक्टर NAND फ्लैश मेमोरी पर आधारित होती है।" },
+            { id: 24, tag: "", question: "पारंपरिक HDD की तुलना में SSD (Solid State Drive) का मुख्य लाभ क्या है?", options: ["अधिक शोर करना", "अत्यधिक तेज डेटा ट्रांसफर गति और कोई गतिशील पुर्जा (Moving Parts) न होना", "सस्ता होना", "अधिक बिजली खपत"], correct: 1, explanation: "SSD में कोई घूमने वाला प्लेटर या हेड नहीं होता, इसलिए यह बहुत शांत, शॉक-रेसिस्टेंट, ऊर्जा-कुशल और HDD की तुलना में कई गुना तेज गति देती है।" },
+            { id: 25, tag: "", question: "पेन ड्राइव, मेमोरी कार्ड और SSD में किस प्रकार की गैर-परिवर्तनशील (Non-Volatile) मेमोरी तकनीक का उपयोग होता है?", options: ["DRAM", "NAND फ्लैश मेमोरी (NAND Flash Memory)", "SRAM", "मैग्नेटिक कोर"], correct: 1, explanation: "पेन ड्राइव (Thumb Drive) और SSD में इलेक्ट्रॉनिक फ्लोटिंग-गेट ट्रांजिस्टर आधारित NAND फ्लैश मेमोरी का प्रयोग होता है।<br>यह बिजली बंद होने पर भी डेटा को सुरक्षित बनाए रखती है।" },
+            { id: 26, tag: "", question: "कंप्यूटर की मुख्य मेमोरी (RAM) को किस श्रेणी में वर्गीकृत किया जाता है?", options: ["सेकेंडरी स्टोरेज", "प्राइमरी / मेन मेमोरी (Primary Memory)", "टर्शियरी मेमोरी", "ऑफलाइन स्टोरेज"], correct: 1, explanation: "RAM और ROM प्राथमिक (Primary) मेमोरी हैं।<br>CPU केवल प्राथमिक मेमोरी में मौजूद निर्देशों और डेटा को ही सीधे एक्सेस कर सकता है।" },
+            { id: 27, tag: "", question: "ऐसी स्टोरेज मीडिया जिसे सिस्टम चालू रहते हुए कभी भी हटाया और जोड़ा जा सकता है, क्या कहलाती है?", options: ["फिक्स्ड स्टोरेज", "रिमूवेबल स्टोरेज (Removable Storage)", "प्राइमरी स्टोरेज", "इंटरनल कैश"], correct: 1, explanation: "रिमूवेबल स्टोरेज डिवाइस (जैसे USB फ्लैश ड्राइव, एक्सटर्नल HDD, SD कार्ड) को पोर्टेबल उपयोग और डेटा बैकअप के लिए आसानी से अलग किया जा सकता है।" },
+            { id: 28, tag: "", question: "WORM का मेमोरी और स्टोरेज के संदर्भ में सही पूर्ण रूप क्या है?", options: ["Write Once, Read Many", "Wireless Optical Read Memory", "Write Only, Random Memory", "Wide Operation Read Module"], correct: 0, explanation: "WORM का अर्थ 'Write Once, Read Many' है।<br>इसका तात्पर्य ऐसे स्टोरेज माध्यमों (जैसे CD-R) से है जहाँ डेटा केवल एक बार लिखा जा सकता है और अनगिनत बार पढ़ा जा सकता है।" },
+            { id: 29, tag: "", question: "डेटा लॉस से बचने के लिए कई भौतिक हार्ड डिस्क्स को मिलाकर एक लॉजिकल ड्राइव बनाने की तकनीक क्या कहलाती है?", options: ["RAID (Redundant Array of Independent Disks)", "BIOS", "DMA", "SATA"], correct: 0, explanation: "RAID तकनीक में डेटा को कई डिस्क ड्राइव्स में विभाजित या मिरर (Mirror) किया जाता है।<br>इससे डेटा ट्रांसफर स्पीड बढ़ती है और एक डिस्क खराब होने पर भी बैकअप सुरक्षित रहता है।" },
+            { id: 30, tag: "", question: "क्लाउड स्टोरेज (Cloud Storage) का प्राथमिक लाभ क्या है?", options: ["केवल ऑफलाइन चलना", "इंटरनेट के माध्यम से किसी भी स्थान और डिवाइस से डेटा का सुरक्षित एक्सेस व बैकअप", "हार्डवेयर का भारी होना", "कंप्यूटर की स्पीड धीमी करना"], correct: 1, explanation: "क्लाउड स्टोरेज (उदा. Google Drive, Microsoft OneDrive, Dropbox) में डेटा रिमोट सर्वर पर सुरक्षित रहता है।<br>उपयोगकर्ता इंटरनेट कनेक्शन के जरिए कभी भी डेटा एक्सेस कर सकता है।" },
+            { id: 31, tag: "", question: "मेमोरी एक्सेस समय (Access Time) का क्या तात्पर्य है?", options: ["कंप्यूटर चालू होने का समय", "मेमोरी को रिक्वेस्ट मिलने के बाद डेटा उपलब्ध कराने में लगा समय", "हार्ड डिस्क फॉर्मेटिंग का समय", "फाइल डाउनलोडिंग गति"], correct: 1, explanation: "एक्सेस समय वह अंतराल है जो CPU द्वारा मेमोरी को रीड/राइट कमांड देने और डेटा के वास्तव में ट्रांसफर होने के बीच लगता है।<br>यह नैनोसेकंड (ns) या मिलीसेकंड (ms) में मापा जाता है।" },
+            { id: 32, tag: "", question: "निम्नलिखित में से कौन-सी मेमोरी सबसे महंगी और सबसे कम एक्सेस समय वाली है?", options: ["रजिस्टर और L1 कैश (Registers & L1 Cache)", "RAM", "SSD", "हार्ड डिस्क"], correct: 0, explanation: "रजिस्टर और L1 कैश मेमोरी सीधे CPU के अंदर स्थित होती हैं।<br>इनकी प्रति-बाइट निर्माण लागत सर्वाधिक होती है और इनका डेटा एक्सेस समय सबसे कम (अत्यधिक तीव्र) होता है।" },
+            { id: 33, tag: "", question: "NVMe का पूर्ण रूप क्या है, जो अल्ट्रा-फास्ट SSDs के लिए प्रयुक्त संचार प्रोटोकॉल है?", options: ["Non-Volatile Memory Express", "New Virtual Memory Engine", "Network Video Memory Extension", "Null Vector Main Element"], correct: 0, explanation: "NVMe का पूरा नाम Non-Volatile Memory Express है।<br>यह PCIe बस का उपयोग करके पारंपरिक SATA SSDs की तुलना में डेटा ट्रांसफर गति को कई गुना बढ़ा देता है।" },
+            { id: 34, tag: "", question: "कंप्यूटर की वह स्टोरेज जो बिजली (Power) जाने पर भी अपने अंदर संग्रहीत डेटा को कभी नहीं खोती, क्या कहलाती है?", options: ["वोलेटाइल स्टोरेज", "नॉन-वोलेटाइल स्टोरेज (Non-Volatile Storage)", "डायनामिक रैम", "अस्थायी मेमोरी"], correct: 1, explanation: "नॉन-वोलेटाइल स्टोरेज (जैसे ROM, HDD, SSD, पेन ड्राइव) में डेटा स्थायी रूप से सुरक्षित रहता है और बिजली बंद होने पर नष्ट नहीं होता।" },
+            { id: 35, tag: "", question: "1 एग्ज़ाबाइट (1 EB) निम्नलिखित में से किसके बराबर होता है?", options: ["1024 PB", "1024 TB", "1024 ZB", "1024 MB"], correct: 0, explanation: "1 EB (Exabyte) = 1024 PB (Petabyte) होता है।<br>यह वैश्विक इंटरनेट डेटा और बड़े बिग डेटा एनालिटिक्स को मापने का विशाल पैमाना है।" },
+            { id: 36, tag: "", question: "1 ज़ेटाबाइट (1 ZB) में कितने एग्ज़ाबाइट (EB) होते हैं?", options: ["1024 EB", "512 EB", "100 EB", "1024 PB"], correct: 0, explanation: "1 ZB (Zettabyte) = 1024 EB (Exabyte) होता है।<br>इसके बाद की सबसे बड़ी मानक इकाई योटाबाइट (1 YB = 1024 ZB) होती है।" },
+            { id: 37, tag: "", question: "कंप्यूटर में किसी कैरेक्टर (अक्षर) को एनकोड करने के लिए मानक ASCII कोड कितने बिट्स का उपयोग करता है?", options: ["7 या 8 बिट्स", "16 बिट्स", "32 बिट्स", "64 बिट्स"], correct: 0, explanation: "मूल ASCII (American Standard Code for Information Interchange) 7-बिट कोड था जिसमें 128 वर्ण होते थे।<br>विस्तारित Extended ASCII 8-बिट (1 बाइट) का होता है जिसमें 256 वर्ण होते हैं।" },
+            { id: 38, tag: "", question: "यूनिकोड (Unicode - UTF-16/UTF-8) का प्राथमिक उद्देश्य क्या है?", options: ["कंप्यूटर की स्पीड बढ़ाना", "दुनिया की सभी भाषाओं के अक्षरों और प्रतीकों को एक सार्वभौमिक मानक कोड प्रदान करना", "केवल अंग्रेजी टेक्स्ट लिखना", "हार्ड डिस्क को साफ करना"], correct: 1, explanation: "ASCII केवल सीमित वर्णों को संभाल सकता था।<br>यूनिकोड दुनिया की सभी भाषाओं (हिंदी, चीनी, अरबी आदि) के हर अक्षर को एक अद्वितीय संख्यात्मक कोड प्रदान करता है।" },
+            { id: 39, tag: "", question: "डेटा बैकअप (Backup) लेने का प्राथमिक उद्देश्य क्या होता है?", options: ["कंप्यूटर को नया बनाना", "मूल डेटा के खराब, नष्ट या चोरी होने की स्थिति में उसे पुनः प्राप्त (Restore) करना", "इंटरनेट डेटा बचाना", "हार्ड डिस्क का आकार बढ़ाना"], correct: 1, explanation: "बैकअप का अर्थ मूल फाइलों की एक अतिरिक्त प्रतिलिपि किसी सुरक्षित सेकेंडरी या क्लाउड स्टोरेज पर रखना है।<br>यह सिस्टम क्रैश या वायरस हमले के समय डेटा रिकवरी सुनिश्चित करता है।" },
+            { id: 40, tag: "", question: "निम्नलिखित में से कौन-सा स्टोरेज पदानुक्रम (Memory Hierarchy) का सबसे निचला और सबसे धीमा स्तर है?", options: ["कैश मेमोरी", "मेन मेमोरी (RAM)", "टर्शियरी/ऑफलाइन आर्काइवल स्टोरेज (उदा. मैग्नेटिक टेप)", "CPU रजिस्टर्स"], correct: 2, explanation: "मेमोरी पिरामिड के शीर्ष पर सबसे तेज CPU रजिस्टर्स और कैश मेमोरी होती हैं।<br>सबसे निचले पायदान पर भारी मात्रा में डेटा लंबे समय तक सुरक्षित रखने वाले धीमे मैग्नेटिक टेप और आर्काइव स्टोरेज होते हैं।" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
