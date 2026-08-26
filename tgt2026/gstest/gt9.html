@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">भारत का भूगोल — टेस्ट 9: बहुउद्देशीय नदी घाटी परियोजनाएं</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">बहुउद्देशीय नदी घाटी परियोजनाएं (Test 09)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_geo_test_09"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "सरदार सरोवर परियोजना से लाभान्वित होने वाले राज्य हैं-", options: ["(a) गुजरात, महाराष्ट्र, मध्य प्रदेश एवं राजस्थान", "(b) आंध्र प्रदेश, मध्य प्रदेश, गुजरात एवं महाराष्ट्र", "(c) ओडिशा, मध्य प्रदेश, गुजरात एवं महाराष्ट्र", "(d) मध्य प्रदेश, गुजरात, कर्नाटक एवं महाराष्ट्र"], correct: 0, explanation: "सरदार सरोवर परियोजना का निर्माण गुजरात राज्य में नर्मदा नदी पर किया गया है। इस बहुउद्देशीय परियोजना से चार राज्य—गुजरात, राजस्थान, महाराष्ट्र एवं मध्य प्रदेश लाभान्वित होते हैं।" },
+            { id: 2, tag: "", question: "सरदार सरोवर बांध किस नदी पर बनाया गया है?", options: ["(a) नर्मदा", "(b) चंबल", "(c) सतलज", "(d) महानदी"], correct: 0, explanation: "सरदार सरोवर बांध गुजरात के नर्मदा जिले में केवड़िया के पास नर्मदा नदी पर बनाया गया एक विशाल कंक्रीट ग्रेविटी बांध है।" },
+            { id: 3, tag: "", question: "सरदार सरोवर से सर्वाधिक लाभ किस राज्य को मिलता है?", options: ["(a) गुजरात", "(b) ओडिशा", "(c) मध्य प्रदेश", "(d) राजस्थान"], correct: 2, explanation: "सरदार सरोवर बांध से उत्पादित जल एवं विद्युत का सर्वाधिक हिस्सा (लगभग 65.18% जल और 57% बिजली) मध्य प्रदेश को प्राप्त होता है। इसलिए इससे सर्वाधिक लाभ मध्य प्रदेश को मिलता है।" },
+            { id: 4, tag: "", question: "निम्नलिखित में से कौन सरदार सरोवर परियोजना के विरोध में प्रमुख रूप से जुड़ी हैं?", options: ["(a) योगेन्द्र मकवाना", "(b) केशूभाई पटेल", "(c) छगन भुजबल", "(d) मेधा पाटकर"], correct: 3, explanation: "सामाजिक कार्यकर्ता मेधा पाटकर ने बड़े बांधों से होने वाले विस्थापन और पर्यावरणीय नुकसान के खिलाफ वर्ष 1989 में 'नर्मदा बचाओ आंदोलन' (NBA) का नेतृत्व किया था।" },
+            { id: 5, tag: "", question: "निम्न में से कौन-सा बांध नर्मदा नदी पर नहीं है?", options: ["(a) बरगी", "(b) ओंकारेश्वर", "(c) इंदिरा सागर", "(d) बाण सागर"], correct: 3, explanation: "बाण सागर बांध मध्य प्रदेश के शहडोल जिले में 'सोन नदी' पर स्थित है, जबकि बरगी, ओंकारेश्वर और इंदिरा सागर बांध नर्मदा नदी पर बने हैं।" },
+            { id: 6, tag: "", question: "इंदिरा सागर बांध किस नदी पर स्थित है?", options: ["(a) ताप्ती", "(b) नर्मदा", "(c) कृष्णा", "(d) कावेरी"], correct: 1, explanation: "इंदिरा सागर बांध मध्य प्रदेश के खंडवा जिले में नर्मदा नगर में नर्मदा नदी पर स्थित एक प्रमुख बहुउद्देशीय परियोजना है।" },
+            { id: 7, tag: "", question: "ओंकारेश्वर परियोजना निम्नलिखित नदियों में से किस एक से संबद्ध है?", options: ["(a) चंबल", "(b) नर्मदा", "(c) ताप्ती", "(d) भीमा"], correct: 1, explanation: "ओंकारेश्वर जलविद्युत एवं सिंचाई परियोजना मध्य प्रदेश के खंडवा जिले में मांधाता (ओंकारेश्वर) के पास नर्मदा नदी पर स्थित है।" },
+            { id: 8, tag: "", question: "नर्मदा बचाओ आंदोलन किस बांध की ऊंचाई बढ़ाने के निर्णय का विरोध कर रहा था?", options: ["(a) इंदिरा सागर", "(b) सरदार सरोवर", "(c) गांधी सागर", "(d) उपर्युक्त में से कोई नहीं"], correct: 1, explanation: "नर्मदा बचाओ आंदोलन सरदार सरोवर बांध की ऊंचाई बढ़ाने का मुख्य रूप से विरोध कर रहा था क्योंकि इससे डूब क्षेत्र बढ़ने और आदिवासियों के विस्थापन का खतरा था।" },
+            { id: 9, tag: "", question: "भाखड़ा नांगल एक संयुक्त परियोजना है-", options: ["(a) हरियाणा-पंजाब-राजस्थान की", "(b) हरियाणा-पंजाब-दिल्ली की", "(c) हिमाचल प्रदेश-हरियाणा-पंजाब की", "(d) पंजाब-दिल्ली-राजस्थान की"], correct: 0, explanation: "भाखड़ा नांगल बहुउद्देशीय परियोजना सतलज नदी पर स्थित पंजाब, हरियाणा और राजस्थान राज्यों का संयुक्त उपक्रम है।" },
+            { id: 10, tag: "", question: "निम्नांकित में से कौन भारत का सबसे पुराना जल-शक्ति उत्पादन केंद्र है?", options: ["(a) मयूराक्षी", "(b) मचकुंड", "(c) पल्लीवासर", "(d) शिवसमुद्रम"], correct: 3, explanation: "दिए गए विकल्पों में शिवसमुद्रम (1902 ई., कावेरी नदी, कर्नाटक) सबसे पुराना है। भारत में सर्वप्रथम जलविद्युत संयंत्र 1897 ई. में सिद्रापोंग (दार्जिलिंग, प. बंगाल) में स्थापित हुआ था।" },
+            { id: 11, tag: "", question: "शिवसमुद्रम जलविद्युत परियोजना स्थित है-", options: ["(a) तमिलनाडु में", "(b) केरल में", "(c) आंध्र प्रदेश में", "(d) कर्नाटक में"], correct: 3, explanation: "शिवसमुद्रम जलविद्युत परियोजना कर्नाटक राज्य के मांड्या जिले में कावेरी नदी पर स्थित है।" },
+            { id: 12, tag: "", question: "भारत के किस राज्य में नागार्जुन सागर परियोजना है?", options: ["(a) आंध्र प्रदेश/तेलंगाना", "(b) मध्य प्रदेश", "(c) उत्तर प्रदेश", "(d) तमिलनाडु"], correct: 0, explanation: "नागार्जुन सागर परियोजना कृष्णा नदी पर स्थित है। वर्तमान में इसका विस्तार आंध्र प्रदेश (गुंटूर) और तेलंगाना (नलगोंडा) दोनों राज्यों में है।" },
+            { id: 13, tag: "", question: "नागार्जुन सागर परियोजना जिस नदी पर अवस्थित है, वह है-", options: ["(a) भद्रा", "(b) भीमा", "(c) गोदावरी", "(d) कृष्णा"], correct: 3, explanation: "नागार्जुन सागर बांध कृष्णा नदी पर निर्मित एक विशाल चिनाई वाला बांध है।" },
+            { id: 14, tag: "", question: "हीराकुड बांध कौन-सी नदी पर बनाया गया है?", options: ["(a) शिवनाथ", "(b) नर्मदा", "(c) महानदी", "(d) सोन"], correct: 2, explanation: "हीराकुड बांध ओडिशा के संबलपुर जिले में महानदी पर निर्मित विश्व का सबसे लंबा मिट्टी का बांध (लगभग 25.8 किमी कुल लंबाई) है।" },
+            { id: 15, tag: "", question: "चंबल नदी पर कौन-सा बांध निर्मित है?", options: ["(a) इंदिरा सागर", "(b) सरदार सरोवर", "(c) गांधी सागर", "(d) भाखड़ा बांध"], correct: 2, explanation: "चंबल परियोजना के तहत चंबल नदी पर तीन प्रमुख बांध बनाए गए हैं—गांधी सागर बांध (मध्य प्रदेश), राणा प्रताप सागर बांध और जवाहर सागर बांध (राजस्थान)।" },
+            { id: 16, tag: "", question: "टिहरी बांध उत्तराखंड प्रदेश में किस नदी पर निर्मित किया गया है?", options: ["(a) भागीरथी नदी पर", "(b) रामगंगा नदी पर", "(c) अलकनंदा नदी पर", "(d) भिलांगना नदी पर"], correct: 0, explanation: "टिहरी बांध उत्तराखंड के टिहरी गढ़वाल में भागीरथी और भिलांगना नदियों के संगम के पास भागीरथी नदी पर बनाया गया भारत का सबसे ऊंचा (260.5 मीटर) बांध है।" },
+            { id: 17, tag: "", question: "मैथॉन, बेलपहाड़ी एवं तिलैया बांध किस नदी पर बनाए गए हैं?", options: ["(a) दामोदर", "(b) बराकर", "(c) कोनार", "(d) बोकारो"], correct: 1, explanation: "दामोदर घाटी परियोजना (DVC) के प्रथम चरण में दामोदर की सहायक नदी 'बराकर' पर मैथॉन, तिलैया और बेलपहाड़ी बांध बनाए गए हैं।" },
+            { id: 18, tag: "", question: "दामोदर घाटी निगम (DVC) की स्थापना कब हुई थी?", options: ["(a) 1945", "(b) 1946", "(c) 1947", "(d) 1948"], correct: 3, explanation: "दामोदर घाटी निगम (DVC) की स्थापना 7 जुलाई 1948 को दामोदर घाटी निगम अधिनियम, 1948 के तहत स्वतंत्र भारत की पहली बहुउद्देशीय नदी घाटी परियोजना के रूप में हुई थी।" },
+            { id: 19, tag: "", question: "भारत में सबसे पुराना जलविद्युत स्टेशन कौन-सा है?", options: ["(a) खोपोली", "(b) पाइकारा", "(c) मेट्टूर", "(d) सिद्राबाग (सिद्रापोंग)"], correct: 3, explanation: "भारत में प्रथम जलविद्युत संयंत्र 1897 में पश्चिम बंगाल के दार्जिलिंग के निकट सिद्राबाग (सिद्रापोंग) में स्थापित किया गया था।" },
+            { id: 20, tag: "", question: "कालागढ़ बांध किस नदी पर बना हुआ है?", options: ["(a) यमुना पर", "(b) शारदा पर", "(c) गंगा पर", "(d) रामगंगा पर"], correct: 3, explanation: "कालागढ़ बांध (रामगंगा बांध) उत्तराखंड के पौड़ी गढ़वाल जिले में रामगंगा नदी पर जिम कॉर्बेट राष्ट्रीय उद्यान के पास स्थित है।" },
+            { id: 21, tag: "", question: "तवा परियोजना कहां से संबंधित है?", options: ["(a) बालाघाट", "(b) बस्तर", "(c) होशंगाबाद", "(d) मंडला"], correct: 2, explanation: "तवा सिंचाई परियोजना मध्य प्रदेश के होशंगाबाद (नर्मदापुरम) जिले में नर्मदा की सहायक तवा नदी पर स्थित है।" },
+            { id: 22, tag: "", question: "मेजा बांध का निर्माण हुआ है-", options: ["(a) कोठारी नदी पर", "(b) मानसी नदी पर", "(c) पार्वती नदी पर", "(d) खारी नदी पर"], correct: 0, explanation: "मेजा बांध राजस्थान के भीलवाड़ा जिले के मांडलगढ़ कस्बे के पास कोठारी नदी पर बनाया गया है।" },
+            { id: 23, tag: "", question: "तुलबुल परियोजना का संबंध किस नदी से है?", options: ["(a) व्यास नदी से", "(b) रावी नदी से", "(c) झेलम नदी से", "(d) सतलज नदी से"], correct: 2, explanation: "तुलबुल नौवहन परियोजना (वूलर बैराज) जम्मू और कश्मीर में झेलम नदी के मुहाने (वूलर झील) पर स्थित है।" },
+            { id: 24, tag: "", question: "बगलिहार पॉवर प्रोजेक्ट भारत द्वारा जिस नदी पर बनाया गया है, वह है-", options: ["(a) झेलम नदी", "(b) सिंधु नदी", "(c) चिनाब नदी", "(d) सतलज नदी"], correct: 2, explanation: "बगलिहार जलविद्युत परियोजना जम्मू और कश्मीर के रामबन (डोडा) जिले में चिनाब नदी पर निर्मित रन-ऑफ-द-रिवर परियोजना है।" },
+            { id: 25, tag: "", question: "तपोवन और विष्णुगढ़ जलविद्युत परियोजनाएं कहां अवस्थित हैं?", options: ["(a) मध्य प्रदेश", "(b) उत्तर प्रदेश", "(c) उत्तराखंड", "(d) राजस्थान"], correct: 2, explanation: "तपोवन विष्णुगढ़ जलविद्युत परियोजना (NTPC) उत्तराखंड के चमोली जिले में धौलीगंगा नदी पर स्थित है।" },
+            { id: 26, tag: "", question: "महाकाली संधि भारत और किस देश के मध्य हुई है?", options: ["(a) पाकिस्तान", "(b) नेपाल", "(c) बांग्लादेश", "(d) श्रीलंका"], correct: 1, explanation: "महाकाली संधि भारत और नेपाल के बीच फरवरी 1996 में शारदा/महाकाली नदी के जल उपयोग और पंचेश्वर बहुउद्देशीय परियोजना के विकास हेतु हुई थी।" },
+            { id: 27, tag: "", question: "तीस्ता लो डैम प्रोजेक्ट-तृतीय, तीस्ता नदी पर किस राज्य में स्थित है?", options: ["(a) असम में", "(b) पश्चिम बंगाल में", "(c) नगालैंड में", "(d) मेघालय में"], correct: 1, explanation: "तीस्ता लो डैम प्रोजेक्ट 3 और 4 पश्चिम बंगाल के दार्जिलिंग जिले में तीस्ता नदी पर स्थित हैं, जबकि तीस्ता-V सिक्किम में है।" },
+            { id: 28, tag: "", question: "'दुलहस्ती हाइड्रो पॉवर स्टेशन' किस नदी पर अवस्थित है?", options: ["(a) व्यास", "(b) चिनाब", "(c) रावी", "(d) सतलज"], correct: 1, explanation: "दुलहस्ती जलविद्युत स्टेशन जम्मू और कश्मीर के किश्तवाड़ जिले में चिनाब नदी पर स्थित 390 MW की परियोजना है।" },
+            { id: 29, tag: "", question: "'गोविंद वल्लभ सागर' जलाशय स्थित है-", options: ["(a) उत्तराखंड", "(b) उत्तर प्रदेश", "(c) बिहार", "(d) ओडिशा"], correct: 1, explanation: "गोविंद वल्लभ पंत सागर उत्तर प्रदेश के सोनभद्र जिले में रिहंद नदी पर रिहंद बांध के पीछे बना भारत का सबसे बड़ा मानव निर्मित जलाशय है।" },
+            { id: 30, tag: "", question: "मलम्पुझा बांध किस नदी पर अवस्थित है?", options: ["(a) भरतपुझा", "(b) कोरापुझा", "(c) मलम्पुझा", "(d) पम्बा"], correct: 2, explanation: "मलम्पुझा बांध केरल राज्य के पालक्कड़ जिले में भरतपुझा की सहायक मलम्पुझा नदी पर स्थित है।" },
+            { id: 31, tag: "", question: "सिंगरौली लघु जलविद्युत परियोजना अवस्थित है-", options: ["(a) मध्य प्रदेश", "(b) बिहार", "(c) छत्तीसगढ़", "(d) उत्तर प्रदेश"], correct: 3, explanation: "सिंगरौली लघु जलविद्युत परियोजना उत्तर प्रदेश के सोनभद्र जिले में रिहंद जलाशय के पास स्थित है।" },
+            { id: 32, tag: "", question: "महात्मा गांधी 'जल विद्युत उत्पादन प्लांट' कहां स्थित है?", options: ["(a) जोग प्रपात", "(b) शिवसमुद्रम", "(c) गोकाक", "(d) इनमें से कोई नहीं"], correct: 0, explanation: "महात्मा गांधी जलविद्युत प्लांट कर्नाटक के शिमोगा जिले में जोग प्रपात (शरावती नदी) पर स्थित है।" },
+            { id: 33, tag: "", question: "भारत में सबसे लंबा बांध है-", options: ["(a) भाखड़ा बांध", "(b) नागार्जुन सागर बांध", "(c) हीराकुड बांध", "(d) कोसी बांध"], correct: 2, explanation: "ओडिशा में महानदी पर बना हीराकुड बांध भारत का सबसे लंबा बांध है। इसके मुख्य बांध की लंबाई 4.8 किमी तथा कुल लंबाई 25.8 किमी है।" },
+            { id: 34, tag: "", question: "मेट्टूर बांध किस नदी पर बांधा गया है?", options: ["(a) गावनी", "(b) कावेरी", "(c) हेमवती", "(d) पालार"], correct: 1, explanation: "मेट्टूर बांध तमिलनाडु के सलेम जिले में कावेरी नदी पर स्थित राज्य का सबसे बड़ा और पुराना बांध है।" },
+            { id: 35, tag: "", question: "रिहंद बांध किस राज्य में स्थित है?", options: ["(a) उत्तर प्रदेश", "(b) मध्य प्रदेश", "(c) राजस्थान", "(d) पंजाब"], correct: 0, explanation: "रिहंद बांध उत्तर प्रदेश के सोनभद्र जिले में पिपरी नामक स्थान पर सोन की सहायक रिहंद नदी पर स्थित है।" },
+            { id: 36, tag: "", question: "थीन बांध (रणजीत सागर बांध) निम्नलिखित में से किस नदी पर स्थित है?", options: ["(a) सतलज", "(b) व्यास", "(c) रावी", "(d) अलकनंदा"], correct: 2, explanation: "थीन बांध (जिसे रणजीत सागर बांध भी कहा जाता है) पंजाब और जम्मू-कश्मीर की सीमा पर रावी नदी पर निर्मित है।" },
+            { id: 37, tag: "", question: "सलाल परियोजना निम्नलिखित में से किस नदी पर है?", options: ["(a) चिनाब", "(b) रावी", "(c) सतलज", "(d) झेलम"], correct: 0, explanation: "सलाल जलविद्युत परियोजना जम्मू और कश्मीर के रियासी जिले में चिनाब नदी पर स्थित एक प्रमुख रन-ऑफ-द-रिवर प्रोजेक्ट है।" },
+            { id: 38, tag: "", question: "उरी (Uri) पनबिजली परियोजना अवस्थित है-", options: ["(a) जम्मू एवं कश्मीर में", "(b) हिमाचल प्रदेश में", "(c) उत्तर प्रदेश में", "(d) हरियाणा में"], correct: 0, explanation: "उरी जलविद्युत परियोजना जम्मू और कश्मीर के बारामुला जिले में नियंत्रण रेखा (LoC) के निकट झेलम नदी पर स्थित है।" },
+            { id: 39, tag: "", question: "कर्नाटक में स्थित बहुप्रयोजन नदी घाटी परियोजना का नाम बताइए-", options: ["(a) दामोदर", "(b) भाखड़ा", "(c) तुंगभद्रा", "(d) कोसी"], correct: 2, explanation: "तुंगभद्रा परियोजना कर्नाटक और आंध्र प्रदेश का संयुक्त उपक्रम है जो कृष्णा की सहायक तुंगभद्रा नदी पर होसपेट (कर्नाटक) में स्थित है।" },
+            { id: 40, tag: "", question: "केरल में इडुक्की परियोजना किस नदी पर है?", options: ["(a) पम्बा", "(b) कुडांह", "(c) पेरियार", "(d) काबिनी"], correct: 2, explanation: "इडुक्की जलविद्युत परियोजना केरल में पेरियार नदी पर दो ग्रेनाइट पहाड़ियों (कुरावन और कुराथी) के बीच बना एशिया का सबसे बड़ा आर्च (चाप) बांध है।" },
+            { { id: 41, tag: "", question: "सूची-I (परियोजना) को सूची-II (अवस्थिति/नदी) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (परियोजना)</th><th style='padding:8px;'>सूची-II (नदी)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) भाखड़ा</td><td style='padding:6px;'>1. कृष्णा</td></tr><tr><td style='padding:6px;'>(B) हीराकुड</td><td style='padding:6px;'>2. पेरियार</td></tr><tr><td style='padding:6px;'>(C) इडुक्की</td><td style='padding:6px;'>3. महानदी</td></tr><tr><td style='padding:6px;'>(D) नागार्जुन सागर</td><td style='padding:6px;'>4. सतलज</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-1, B-2, C-3, D-4", "(b) A-4, B-3, C-2, D-1", "(c) A-3, B-4, C-1, D-2", "(d) A-4, B-1, C-3, D-2"], correct: 1, explanation: "सही सुमेलन निम्नवत है:<br>• भाखड़ा — सतलज नदी<br>• हीराकुड — महानदी<br>• इडुक्की — पेरियार नदी<br>• नागार्जुन सागर — कृष्णा नदी" },
+            { id: 42, tag: "", question: "सूची-I (बहु-उद्देशीय परियोजनाएं) को सूची-II (नदियां) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (परियोजना)</th><th style='padding:8px;'>सूची-II (नदी)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) इडुक्की</td><td style='padding:6px;'>1. बेतवा</td></tr><tr><td style='padding:6px;'>(B) माताटीला</td><td style='padding:6px;'>2. गोदावरी</td></tr><tr><td style='padding:6px;'>(C) नागार्जुन सागर</td><td style='padding:6px;'>3. कृष्णा</td></tr><tr><td style='padding:6px;'>(D) पोचम्पाद</td><td style='padding:6px;'>4. पेरियार</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-4, B-2, C-3, D-1", "(b) A-2, B-1, C-4, D-3", "(c) A-4, B-1, C-3, D-2", "(d) A-1, B-3, C-4, D-2"], correct: 2, explanation: "सही सुमेलन निम्नवत है:<br>• इडुक्की — पेरियार नदी (केरल)<br>• माताटीला — बेतवा नदी (उ.प्र./म.प्र.)<br>• नागार्जुन सागर — कृष्णा नदी (आंध्र/तेलंगाना)<br>• पोचम्पाद (श्रीराम सागर) — गोदावरी नदी (तेलंगाना)" },
+            { id: 43, tag: "", question: "सूची-I (बांध) को सूची-II (राज्य) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (बांध)</th><th style='padding:8px;'>सूची-II (राज्य)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) मेट्टूर</td><td style='padding:6px;'>1. तमिलनाडु</td></tr><tr><td style='padding:6px;'>(B) मयूराक्षी</td><td style='padding:6px;'>2. आंध्र प्रदेश</td></tr><tr><td style='padding:6px;'>(C) नागार्जुन सागर</td><td style='padding:6px;'>3. पश्चिम बंगाल</td></tr><tr><td style='padding:6px;'>(D) हीराकुड</td><td style='padding:6px;'>4. ओडिशा</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-1, B-3, C-2, D-4", "(b) A-2, B-4, C-3, D-1", "(c) A-4, B-3, C-1, D-2", "(d) A-3, B-1, C-4, D-2"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• मेट्टूर — तमिलनाडु (कावेरी नदी)<br>• मयूराक्षी — पश्चिम बंगाल (मयूराक्षी नदी)<br>• नागार्जुन सागर — आंध्र प्रदेश/तेलंगाना (कृष्णा नदी)<br>• हीराकुड — ओडिशा (महानदी)" },
+            { id: 44, tag: "", question: "सूची-I (नदी घाटी योजना) को सूची-II (नदी) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (योजना)</th><th style='padding:8px;'>सूची-II (नदी)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) शिवसमुद्रम</td><td style='padding:6px;'>1. कावेरी</td></tr><tr><td style='padding:6px;'>(B) नागार्जुन सागर</td><td style='padding:6px;'>2. कृष्णा</td></tr><tr><td style='padding:6px;'>(C) जायकवाड़ी</td><td style='padding:6px;'>3. गोदावरी</td></tr><tr><td style='padding:6px;'>(D) टिहरी</td><td style='padding:6px;'>4. भागीरथी</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-1, B-2, C-3, D-4", "(b) A-1, B-2, C-4, D-3", "(c) A-1, B-3, C-2, D-4", "(d) A-1, B-4, C-3, D-2"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• शिवसमुद्रम — कावेरी नदी<br>• नागार्जुन सागर — कृष्णा नदी<br>• जायकवाड़ी — गोदावरी नदी<br>• टिहरी — भागीरथी नदी" },
+            { id: 45, tag: "", question: "सूची-I (नदी) को सूची-II (बांध) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (नदी)</th><th style='padding:8px;'>सूची-II (बांध)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) कावेरी</td><td style='padding:6px;'>1. अलमट्टी</td></tr><tr><td style='padding:6px;'>(B) कृष्णा</td><td style='padding:6px;'>2. मेट्टूर</td></tr><tr><td style='padding:6px;'>(C) नर्मदा</td><td style='padding:6px;'>3. गांधी सागर</td></tr><tr><td style='padding:6px;'>(D) चंबल</td><td style='padding:6px;'>4. सरदार सरोवर</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-1, B-4, C-2, D-3", "(b) A-2, B-1, C-4, D-3", "(c) A-2, B-1, C-3, D-4", "(d) A-1, B-3, C-4, D-2"], correct: 1, explanation: "सही सुमेलन निम्नवत है:<br>• कावेरी — मेट्टूर बांध<br>• कृष्णा — अलमट्टी बांध<br>• नर्मदा — सरदार सरोवर बांध<br>• चंबल — गांधी सागर बांध" },
+            { id: 46, tag: "", question: "अभिकथन (A): दामोदर घाटी कॉर्पोरेशन के विकास के पूर्व दामोदर नदी पश्चिम बंगाल में 'दुख की नदी' मानी जाती थी।<br>कारण (R): दामोदर अपने ऊपरी भाग में तीव्रता से प्रवाहित होती है तथा निचले भाग में इसका बहाव बहुत धीमा हो जाता है।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं तथा (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "दामोदर नदी ऊपरी छोटानागपुर पठार से तीव्र ढाल पर भारी जल लेकर बहती है और निचले मैदानी भाग में ढाल कम होने से भीषण बाढ़ लाती थी। DVC के तहत बांध बनाकर इस बाढ़ को नियंत्रित किया गया। अतः दोनों सही हैं और व्याख्या भी सही है।" },
+            { id: 47, tag: "", question: "निम्नलिखित कथनों पर विचार कीजिए तथा नीचे दिए गए कूट से सही उत्तर का चयन कीजिए:<br>1. रिहंद बांध सोन नदी की एक सहायक नदी पर है।<br>2. हीराकुड बांध महानदी पर है।<br>3. तुंगभद्रा परियोजना आंध्र प्रदेश एवं कर्नाटक का संयुक्त उपक्रम है।<br>4. मैथान बांध दामोदर नदी की सहायक नदी बराकर पर है।<br><br>कूट:", options: ["(a) 1, 2 और 3 सही हैं।", "(b) 1, 2 और 4 सही हैं।", "(c) 1, 3 और 4 सही हैं।", "(d) 1, 2, 3 और 4 सही हैं।"], correct: 3, explanation: "दिए गए चारों कथन सत्य हैं:<br>1. रिहंद बांध सोन की सहायक रिहंद नदी पर है।<br>2. हीराकुड बांध महानदी पर ओडिशा में है।<br>3. तुंगभद्रा आंध्र प्रदेश और कर्नाटक की संयुक्त परियोजना है।<br>4. मैथान बांध बराकर नदी पर स्थित है।" },
+            { id: 48, tag: "", question: "सिंचाई परियोजनाओं के संबंध में निम्नलिखित युग्मों पर विचार कीजिए:<br>1. दमनगंगा : गुजरात<br>2. गिरना : महाराष्ट्र<br>3. पाम्बा : केरल<br><br>उपर्युक्त में से कौन-से युग्म सही सुमेलित हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) 1, 2 और 3"], correct: 3, explanation: "तीनों युग्म सही सुमेलित हैं:<br>1. दमनगंगा परियोजना दक्षिणी गुजरात के वलसाड जिले में दमनगंगा नदी पर है।<br>2. गिरना परियोजना महाराष्ट्र के जलगांव जिले में गिरना नदी पर है।<br>3. पाम्बा परियोजना केरल के पथनामथिट्टा जिले में पाम्बा नदी पर है।" },
+            { id: 49, tag: "", question: "सूची-I (बांध) को सूची-II (प्रदेश) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (बांध)</th><th style='padding:8px;'>सूची-II (प्रदेश)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) फरक्का</td><td style='padding:6px;'>1. पश्चिम बंगाल</td></tr><tr><td style='padding:6px;'>(B) घाटप्रभा</td><td style='padding:6px;'>2. ओडिशा</td></tr><tr><td style='padding:6px;'>(C) हीराकुड</td><td style='padding:6px;'>3. गुजरात</td></tr><tr><td style='padding:6px;'>(D) काकरापार</td><td style='padding:6px;'>4. कर्नाटक</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-1, B-4, C-2, D-3", "(b) A-2, B-4, C-3, D-1", "(c) A-4, B-3, C-1, D-2", "(d) A-1, B-2, C-4, D-3"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• फरक्का बैराज — पश्चिम बंगाल (गंगा नदी)<br>• घाटप्रभा — कर्नाटक (घाटप्रभा नदी)<br>• हीराकुड — ओडिशा (महानदी)<br>• काकरापार — गुजरात (ताप्ती नदी)" },
+            { id: 50, tag: "", question: "सूची-I (परियोजना) को सूची-II (नदी) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (परियोजना)</th><th style='padding:8px;'>सूची-II (नदी)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) हीराकुंड बांध</td><td style='padding:6px;'>I. व्यास</td></tr><tr><td style='padding:6px;'>(B) थीन बांध</td><td style='padding:6px;'>II. चिनाब</td></tr><tr><td style='padding:6px;'>(C) सलाल परियोजना</td><td style='padding:6px;'>III. रावी</td></tr><tr><td style='padding:6px;'>(D) पोंग बांध</td><td style='padding:6px;'>IV. महानदी</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-III, B-IV, C-II, D-I", "(b) A-IV, B-I, C-II, D-III", "(c) A-IV, B-II, C-I, D-III", "(d) A-IV, B-III, C-II, D-I"], correct: 3, explanation: "सही सुमेलन निम्नवत है:<br>• हीराकुंड बांध — महानदी (IV)<br>• थीन बांध — रावी नदी (III)<br>• सलाल परियोजना — चिनाब नदी (II)<br>• पोंग बांध — व्यास नदी (I)" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
