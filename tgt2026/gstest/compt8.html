@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">सोशल मीडिया एवं डिजिटल संचार</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_ict_test_08"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "उपयोगकर्ताओं द्वारा स्वयं सामग्री बनाने (User-Generated Content), साझा करने और सामाजिक नेटवर्क बनाने वाले वेब आधारित मंच क्या कहलाते हैं?", options: ["सर्च इंजन", "सोशल मीडिया (Social Media)", "वेब सर्वर", "ऑपरेटिंग सिस्टम"], correct: 1, explanation: "सोशल मीडिया इंटरनेट आधारित इंटरैक्टिव प्लेटफॉर्म हैं जो उपयोगकर्ताओं को विचार, जानकारी, तस्वीरें और वीडियो साझा करने और ऑनलाइन समुदाय बनाने की सुविधा देते हैं।" },
+            { id: 2, tag: "", question: "व्यावसायिक नेटवर्किंग, करियर विकास और नौकरी खोजने (Job Search) के लिए समर्पित सबसे प्रमुख सोशल मीडिया प्लेटफॉर्म कौन-सा है?", options: ["Instagram", "LinkedIn (लिंक्डइन)", "Snapchat", "Pinterest"], correct: 1, explanation: "LinkedIn एक प्रोफेशनल सोशल नेटवर्किंग प्लेटफॉर्म है जिसकी स्थापना 2002 में रीड हॉफमैन ने की थी।<br>यह पेशेवरों को रिज्यूम बनाने, जॉब खोजने और बिजनेस नेटवर्क स्थापित करने में मदद करता है।" },
+            { id: 3, tag: "", question: "माइक्रोब्लॉगिंग (Microblogging) का सबसे प्रमुख और लोकप्रिय वैश्विक उदाहरण कौन-सा प्लेटफॉर्म है?", options: ["X (पूर्व में Twitter)", "Facebook", "WordPress", "YouTube"], correct: 0, explanation: "X (पूर्व में Twitter) एक माइक्रोब्लॉगिंग सेवा है जहाँ उपयोगकर्ता सीमित वर्णों (Character Limit) के छोटे संदेश, जिन्हें ट्वीट्स/पोस्ट कहा जाता है, साझा करते हैं।" },
+            { id: 4, tag: "", question: "सोशल मीडिया पर किसी विशिष्ट विषय या ट्रेंडिंग टॉपिक को टैग और ट्रैक करने के लिए किस प्रतीक का उपयोग किया जाता है?", options: ["@", "# (Hashtag)", "$", "&"], correct: 1, explanation: "हैशटैग (#) किसी शब्द या बिना स्पेस वाले वाक्यांश से पहले लगाकर उसे एक क्लिक करने योग्य विषय-श्रेणी में बदल देता है, जिससे उस विषय से संबंधित सभी पोस्ट एक जगह खोजी जा सकती हैं।" },
+            { id: 5, tag: "", question: "सोशल मीडिया पोस्ट में किसी विशिष्ट उपयोगकर्ता को प्रत्यक्ष रूप से टैग या मेंशन (Mention) करने के लिए किस चिन्ह का प्रयोग होता है?", options: ["#", "@ (At the rate)", "*", "!"], correct: 1, explanation: "'@' चिन्ह के साथ यूजरनेम लिखने पर उस व्यक्ति को नोटिफिकेशन प्राप्त होता है और उसकी प्रोफाइल का सीधा लिंक पोस्ट में जुड़ जाता है।" },
+            { id: 6, tag: "", question: "वेब 2.0 (Web 2.0) की मुख्य विशेषता निम्नलिखित में से क्या है?", options: ["केवल स्थिर और पठनीय वेबपेज (Read-Only)", "उपयोगकर्ता सहभागिता, इंटरैक्टिविटी और सोशल वेब (Read-Write Web)", "कृत्रिम बुद्धिमत्ता आधारित विकेंद्रीकरण", "हार्डवेयर रहित कंप्यूटिंग"], correct: 1, explanation: "वेब 1.0 केवल सूचना पढ़ने (Static) के लिए था, जबकि वेब 2.0 सोशल मीडिया, ब्लॉग्स, विकी और यूट्यूब जैसे प्लेटफॉर्म्स के माध्यम से यूजर इंटरैक्शन और सामग्री निर्माण पर केंद्रित है।" },
+            { id: 7, tag: "", question: "सिमेंटिक वेब (Semantic Web) और विकेंद्रीकृत ब्लॉकचेन तकनीकों पर आधारित आगामी इंटरनेट पीढ़ी को क्या कहा जाता है?", options: ["Web 1.0", "Web 2.0", "Web 3.0 (वेब 3.0)", "Web 4G"], correct: 2, explanation: "वेब 3.0 स्मार्ट डेटा, कृत्रिम बुद्धिमत्ता (AI), विकेंद्रीकृत सर्वर (Decentralization) और सिमेंटिक समझ पर आधारित अगली पीढ़ी का इंटरनेट है।" },
+            { id: 8, tag: "", question: "ऑनलाइन डायरी या सूचनात्मक लेखों के नियमित संकलन के रूप में बनाए गए वेबपेज को क्या कहा जाता है?", options: ["पॉडकास्ट", "ब्लॉग (Blog - Weblog)", "व्लॉग", "ई-कॉमर्स"], correct: 1, explanation: "ब्लॉग 'Weblog' का संक्षिप्त रूप है।<br>यह एक ऐसी वेबसाइट या ऑनलाइन जर्नल है जहाँ लेखक नियमित रूप से किसी विषय पर विचार, लेख या ट्यूटोरियल प्रकाशित करता है।" },
+            { id: 9, tag: "", question: "वीडियो प्रारूप में नियमित रूप से अपनी दिनचर्या, यात्रा या ज्ञान साझा करने वाले डिजिटल माध्यम को क्या कहते हैं?", options: ["Blog", "Vlog (Video Blog)", "Podcast", "Webinar"], correct: 1, explanation: "Vlog (Video Blog) वीडियो के माध्यम से ब्लॉगिंग करने की विधा है, जो YouTube और Facebook जैसे वीडियो प्लेटफॉर्म्स पर अत्यधिक लोकप्रिय है।" },
+            { id: 10, tag: "", question: "इंटरनेट के माध्यम से प्रसारित होने वाली डिजिटल ऑडियो रिकॉर्डिंग (वार्ता, साक्षात्कार या व्याख्यान) श्रृंखला क्या कहलाती है?", options: ["Vlog", "पॉडकास्ट (Podcast)", "RSS", "इन्फोग्राफिक"], correct: 1, explanation: "Podcast एक डिजिटल ऑडियो फाइल श्रृंखला है जिसे उपयोगकर्ता इंटरनेट से डाउनलोड करके या ऑनलाइन स्ट्रीमिंग (जैसे Spotify, Apple Podcasts) पर कभी भी सुन सकता है।" },
+            { id: 11, tag: "", question: "ब्लॉग और वेबसाइटों पर नई प्रकाशित सामग्री का स्वचालित अपडेट और सारांश प्राप्त करने की XML-आधारित तकनीक क्या कहलाती है?", options: ["HTML", "RSS फीड (Rich Site Summary / Really Simple Syndication)", "FTP", "DNS"], correct: 1, explanation: "RSS (Really Simple Syndication) उपयोगकर्ताओं को अपनी पसंदीदा वेबसाइटों और ब्लॉग्स के नवीनतम अपडेट्स को बिना वेबसाइट खोले सीधे RSS रीडर में पढ़ने की सुविधा देता है।" },
+            { id: 12, tag: "", question: "इंटरनेट पर उपयोगकर्ताओं के बीच वास्तविक समय में टेक्स्ट संदेशों, तस्वीरों और फाइलों के त्वरित आदान-प्रदान को क्या कहते हैं?", options: ["ईमेल", "इंस्टेंट मैसेजिंग (Instant Messaging - IM)", "ब्लॉगिंग", "सर्चिंग"], correct: 1, explanation: "इंस्टेंट मैसेजिंग (जैसे WhatsApp, Telegram, Signal) में संदेश भेजने और प्राप्त करने के बीच कोई देरी नहीं होती; यह रीयल-टाइम में चैट करने की सुविधा देता है।" },
+            { id: 13, tag: "", question: "मैसेजिंग ऐप में 'एंड-टू-एंड एन्क्रिप्शन' (End-to-End Encryption - E2EE) का प्राथमिक सुरक्षा उद्देश्य क्या है?", options: ["मैसेज को जल्दी भेजना", "केवल प्रेषक और प्राप्तकर्ता ही संदेश पढ़ सकते हैं, यहाँ तक कि सेवा प्रदाता कंपनी या सर्वर भी नहीं", "मैसेज का बैकअप बनाना", "स्पेलिंग चेक करना"], correct: 1, explanation: "E2EE में डेटा प्रेषक के डिवाइस पर एन्क्रिप्ट होता है और केवल प्राप्तकर्ता के डिवाइस पर डिक्रिप्ट होता है।<br>रास्ते में कोई भी मध्यस्थ, इंटरनेट प्रदाता या हैकर संदेश को नहीं पढ़ सकता।" },
+            { id: 14, tag: "", question: "इंटरनेट पर ऑनलाइन संगोष्ठी, कार्यशाला या शैक्षणिक व्याख्यान के लाइव प्रसारण को क्या कहा जाता है?", options: ["पॉडकास्ट", "वेबिनार (Webinar - Web Seminar)", "व्लॉग", "मल्टीकास्ट"], correct: 1, explanation: "Webinar 'Web' और 'Seminar' शब्दों से मिलकर बना है।<br>यह वीडियो कॉन्फ्रेंसिंग सॉफ्टवेयर के माध्यम से आयोजित एक इंटरैक्टिव ऑनलाइन सम्मेलन या शिक्षण सत्र होता है।" },
+            { id: 15, tag: "", question: "व्यावसायिक टीमों के मध्य कार्य प्रबंधन, चैनल आधारित चैट और कॉर्पोरेट सहयोग के लिए सर्वाधिक प्रयुक्त डिजिटल टूल कौन-सा है?", options: ["Snapchat", "Slack (स्लैक)", "TikTok", "Pinterest"], correct: 1, explanation: "Slack और Microsoft Teams आधुनिक कार्यस्थलों में प्रोजेक्ट ट्रैकिंग, टीम संचार और फाइल शेयरिंग के लिए उपयोग किए जाने वाले अग्रणी सहयोग (Collaboration) उपकरण हैं।" },
+            { id: 16, tag: "", question: "इंटरनेट और ऑनलाइन संचार के दौरान शिष्टाचार और सभ्य आचरण के पालन के नियमों को क्या कहा जाता है?", options: ["साइबर लॉ", "नेटिकेट (Netiquette - Network Etiquette)", "प्रोटोकॉल", "डिजिटल राइट्स"], correct: 1, explanation: "Netiquette 'Network' और 'Etiquette' का मिश्रण है।<br>यह ऑनलाइन चैट, ईमेल और सोशल मीडिया पर सम्मानजनक भाषा, दूसरों की निजता का सम्मान और अभद्र टिप्पणी न करने की आचार संहिता है।" },
+            { id: 17, tag: "", question: "इंटरनेट पर किसी व्यक्ति द्वारा की गई ऑनलाइन गतिविधियों, सर्च, कमेंट्स और विजिट की गई साइटों के पीछे छूटे डिजिटल रिकॉर्ड को क्या कहते हैं?", options: ["डिजिटल सिग्नेचर", "डिजिटल फुटप्रिंट (Digital Footprint)", "कैश मेमोरी", "मैलवेयर"], correct: 1, explanation: "डिजिटल फुटप्रिंट वह डेटा ट्रेस (अभिलेख) है जो इंटरनेट का उपयोग करते समय किसी व्यक्ति के पीछे छूट जाता है।<br>इसमें ब्राउज़िंग हिस्ट्री, सोशल मीडिया पोस्ट, ऑनलाइन खरीदारी और लोकेशन डेटा शामिल होता है।" },
+            { id: 18, tag: "", question: "सोशल मीडिया पर जानबूझकर भड़काऊ, अपमानजनक या विषय से भटकाने वाले कमेंट करके दूसरों को उकसाने की गतिविधि क्या कहलाती है?", options: ["फ़िशिंग", "ट्रोलिंग (Trolling)", "स्पूफिंग", "डीबगिंग"], correct: 1, explanation: "इंटरनेट ट्रोलिंग ऑनलाइन समुदायों में अशांति फैलाने, विवाद खड़ा करने या उपयोगकर्ताओं को मानसिक रूप से परेशान करने के उद्देश्य से की जाने वाली नकारात्मक टिप्पणी है।" },
+            { id: 19, tag: "", question: "डिजिटल माध्यमों (सोशल मीडिया, चैट) का उपयोग करके किसी व्यक्ति को बार-बार डराना, धमकाना या प्रताड़ित करना क्या कहलाता है?", options: ["साइबरबुलिंग (Cyberbullying)", "हैकिंग", "स्पैमिंग", "क्रैकिंग"], correct: 0, explanation: "साइबरबुलिंग डिजिटल उपकरणों के माध्यम से किसी को लक्षित कर अपमानित करने, धमकी देने या झूठी अफवाहें फैलाने का साइबर अपराध है।" },
+            { id: 20, tag: "", question: "वेबसाइटों या वीडियो पर केवल व्यूज और क्लिक्स बढ़ाने के लिए भ्रामक और सनसनीखेज शीर्षकों का उपयोग करना क्या कहलाता है?", options: ["क्लिकबेट (Clickbait)", "सर्च इंजन", "बैकलिंक", "मेटा टैग"], correct: 0, explanation: "Clickbait ऐसी ऑनलाइन सामग्री या हेडलाइन है जो यूजर की जिज्ञासा जगाकर उसे क्लिक करने पर मजबूर करती है, भले ही अंदर की सामग्री शीर्षक से मेल न खाती हो।" },
+            { id: 21, tag: "", question: "विश्व का सबसे बड़ा ऑनलाइन वीडियो शेयरिंग और स्ट्रीमिंग प्लेटफॉर्म 'YouTube' किस वर्ष लॉन्च किया गया था?", options: ["2001", "2005", "2008", "2010"], correct: 1, explanation: "YouTube की स्थापना फरवरी 2005 में चाड हर्ले, स्टीव चेन और जावेद करीम ने की थी।<br>नवंबर 2006 में Google ने इसे अधिग्रहित कर लिया था।" },
+            { id: 22, tag: "", question: "YouTube पर अपलोड किया गया दुनिया का सबसे पहला वीडियो कौन-सा था?", options: ["Hello World", "Me at the zoo", "First Video", "Welcome to YouTube"], correct: 1, explanation: "23 अप्रैल 2005 को सह-संस्थापक जावेद करीम द्वारा सैन डिएगो चिड़ियाघर में रिकॉर्ड किया गया 'Me at the zoo' यूट्यूब का पहला वीडियो था।" },
+            { id: 23, tag: "", question: "विचारों, छवियों और प्रेरणादायक प्रोजेक्ट्स को 'पिन' और 'बोर्ड' के रूप में व्यवस्थित करने वाला विजुअल सोशल नेटवर्क कौन-सा है?", options: ["Pinterest (पिंटरेस्ट)", "Reddit", "Tumblr", "Threads"], correct: 0, explanation: "Pinterest एक विजुअल डिस्कवरी इंजन और सोशल बुकमार्किंग साइट है जहाँ उपयोगकर्ता रेसिपी, फैशन, डिजाइन और अध्ययन सामग्री के चित्रों को पिन करके बोर्ड बनाते हैं।" },
+            { id: 24, tag: "", question: "'इंटरनेट का मुखपृष्ठ' (Front Page of the Internet) कहलाने वाला विशाल सोशल न्यूज एग्रीगेशन और चर्चा मंच कौन-सा है?", options: ["Reddit (रेडिट)", "Quora", "Medium", "Flickr"], correct: 0, explanation: "Reddit एक सोशल कम्युनिटी प्लेटफॉर्म है जो 'Subreddits' (विषय-वार मंचों) में विभाजित है, जहाँ उपयोगकर्ता सामग्री पोस्ट करते हैं और अपवोट/डाउनवोट द्वारा रेटिंग देते हैं।" },
+            { id: 25, tag: "", question: "उपयोगकर्ताओं द्वारा पूछे गए प्रश्नों और विशेषज्ञों द्वारा दिए गए उत्तरों पर केंद्रित ज्ञान-साझाकरण सोशल प्लेटफॉर्म कौन-सा है?", options: ["Quora (कोरा)", "Pinterest", "TikTok", "Snapchat"], correct: 0, explanation: "Quora एक प्रश्न-उत्तर (Q&A) आधारित सोशल नॉलेज प्लेटफॉर्म है जहाँ दुनिया भर के लोग विभिन्न विषयों पर सवाल पूछते हैं और विस्तृत उत्तर साझा करते हैं।" },
+            { id: 26, tag: "", question: "सोशल मीडिया पर किसी सामग्री (पोस्ट, फोटो, वीडियो) का बहुत कम समय में अत्यधिक तेजी से लाखों लोगों तक फैल जाना क्या कहलाता है?", options: ["वायरल होना (Viral Content)", "स्पैमिंग", "बूटिंग", "कैशिंग"], correct: 0, explanation: "जब कोई सामग्री अत्यधिक शेयर और फॉरवर्ड होकर इंटरनेट पर तेजी से व्यापक दर्शकों तक पहुँचती है, तो उसे 'वायरल' होना कहते हैं।" },
+            { id: 27, tag: "", question: "सोशल मीडिया पर बड़ी संख्या में फॉलोअर्स रखने वाले और लोगों की राय व क्रय निर्णयों को प्रभावित करने वाले व्यक्तित्व क्या कहलाते हैं?", options: ["वेबमास्टर", "इन्फ्लुएंसर (Social Media Influencer)", "सिस्टम एडमिन", "प्रोग्रामर"], correct: 1, explanation: "सोशल मीडिया इन्फ्लुएंसर्स विशिष्ट क्षेत्रों (जैसे शिक्षा, तकनीक, फिटनेस) में अपनी विश्वसनीयता और दर्शकों के आधार पर ब्रांड प्रमोशन और जनमत को प्रभावित करते हैं।" },
+            { id: 28, tag: "", question: "ओपन-सोर्स और विश्व में सर्वाधिक प्रयुक्त होने वाला 'कंटेंट मैनेजमेंट सिस्टम' (CMS) कौन-सा है, जिस पर 40% से अधिक वेबसाइटें/ब्लॉग बने हैं?", options: ["WordPress (वर्डप्रेस)", "Blogger", "Drupal", "Joomla"], correct: 0, explanation: "WordPress एक शक्तिशाली और ओपन-सोर्स CMS है जो बिना गहन कोडिंग ज्ञान के भी ब्लॉग्स, पोर्टल्स और पेशेवर वेबसाइटें बनाने की सुविधा देता है।" },
+            { id: 29, tag: "", question: "गूगल द्वारा प्रदान की जाने वाली मुफ्त और आसान ब्लॉग निर्माण सेवा का क्या नाम है?", options: ["Medium", "Blogger (ब्लॉगर / Blogspot)", "Wix", "Squarespace"], correct: 1, explanation: "Blogger गूगल की एक फ्री ब्लॉगिंग सेवा है जो शुरुआती लेखकों को 'blogspot.com' सब-डोमेन पर मुफ्त ब्लॉग बनाने और चलाने की अनुमति देती है।" },
+            { id: 30, tag: "", question: "वीडियो कॉन्फ्रेंसिंग सॉफ्टवेयर (जैसे Zoom/Google Meet) में मुख्य मीटिंग रूम से अलग छोटे-छोटे समूह चर्चा कक्ष बनाने की सुविधा क्या कहलाती है?", options: ["वेटिंग रूम", "ब्रेकआउट रूम्स (Breakout Rooms)", "लॉबी", "चैनल"], correct: 1, explanation: "Breakout Rooms मुख्य मीटिंग को छोटे समूहों में विभाजित करने की सुविधा देते हैं, जिसका व्यापक उपयोग ऑनलाइन शिक्षण और समूह कार्यशालाओं में होता है।" },
+            { id: 31, tag: "", question: "वीडियो मीटिंग के दौरान अपने कंप्यूटर की स्क्रीन या प्रेजेंटेशन को सभी प्रतिभागियों को लाइव दिखाने की सुविधा क्या कहलाती है?", options: ["स्क्रीन शेयरिंग (Screen Sharing)", "मिररिंग", "कास्टिंग", "स्ट्रीमिंग"], correct: 0, explanation: "स्क्रीन शेयरिंग के माध्यम से होस्ट या प्रतिभागी अपनी स्क्रीन पर चल रहे PPT, दस्तावेज, सॉफ्टवेयर या वीडियो को अन्य सभी से लाइव साझा कर सकते हैं।" },
+            { id: 32, tag: "", question: "Zoom मीटिंग में अनपेक्षित और अनधिकृत लोगों द्वारा अचानक घुसकर अश्लील या विघटनकारी सामग्री प्रदर्शित करने के साइबर हमले को क्या कहते हैं?", options: ["फ़िशिंग", "ज़ूमबॉम्बिंग (Zoombombing)", "स्पूफिंग", "ट्रोजन"], correct: 1, explanation: "Zoombombing असुरक्षित या सार्वजनिक लिंक वाली वीडियो कॉन्फ्रेंसिंग मीटिंग्स में अनाधिकृत घुसपैठ करके बैठक को बाधित करने का कृत्य है।" },
+            { id: 33, tag: "", question: "गूगल की निःशुल्क क्लाउड-आधारित हाई-डेफिनिशन वीडियो कॉन्फ्रेंसिंग सेवा का क्या नाम है?", options: ["Google Meet", "Google Hangouts", "Google Duo", "Google Classroom"], correct: 0, explanation: "Google Meet गूगल वर्कस्पेस का मुख्य एंटरप्राइज-ग्रेड वीडियो कॉन्फ्रेंसिंग टूल है जो सीधे वेब ब्राउज़र और जीमेल से संचालित होता है।" },
+            { id: 34, tag: "", question: "ओपन-सोर्स और प्राइवेसी-फोकस्ड मैसेजिंग ऐप कौन-सा है, जिसकी सिफारिश साइबर सुरक्षा विशेषज्ञ सबसे सुरक्षित संचार के लिए करते हैं?", options: ["Signal (सिग्नल)", "WeChat", "Viber", "Line"], correct: 0, explanation: "Signal एक गैर-लाभकारी फाउंडेशन द्वारा संचालित ऐप है जो उन्नत सिग्नल प्रोटोकॉल के साथ मजबूत एंड-टू-एंड एन्क्रिप्शन प्रदान करता है और कोई यूजर मेटाडेटा स्टोर नहीं करता।" },
+            { id: 35, tag: "", question: "टेलीग्राम (Telegram) ऐप की वह अनूठी विशेषता क्या है जिसमें भेजे गए संदेश निर्धारित समय बाद दोनों सिरों से स्वतः नष्ट (Auto-Delete) हो जाते हैं?", options: ["ब्रॉडकास्ट चैनल", "सीक्रेट चैट (Secret Chat)", "पब्लिक ग्रुप", "क्लाउड स्टोरेज"], correct: 1, explanation: "Telegram Secret Chat में एंड-टू-एंड एन्क्रिप्शन होता है और इसमें 'सेल्फ-डिस्ट्रक्ट टाइमर' सेट किया जा सकता है जो पढ़ने के बाद संदेश को मिटा देता है।" },
+            { id: 36, tag: "", question: "सोशल मीडिया पर बिना सोचे-समझे केवल अनजाने में गलत या असत्य जानकारी साझा करना क्या कहलाता है?", options: ["डिसइन्फॉर्मेशन", "मिसइन्फॉर्मेशन (Misinformation)", "मैलवेयर", "रैंसमवेयर"], correct: 1, explanation: "Misinformation गलत जानकारी का प्रसार है जहाँ व्यक्ति का उद्देश्य नुकसान पहुँचाना नहीं होता, जबकि Disinformation दुर्भावनापूर्ण इरादे से जानबूझकर फैलाई गई झूठी खबर है।" },
+            { id: 37, tag: "", question: "सोशल नेटवर्किंग में उपयोगकर्ता की प्राथमिकताओं और व्यवहार के आधार पर सामग्री को फ़िल्टर कर केवल उसकी पसंद की चीजें ही दिखाने से बनी वैचारिक संकीर्णता क्या कहलाती है?", options: ["फ़िल्टर बबल / इको चैंबर (Filter Bubble / Echo Chamber)", "बैंडविड्थ थ्रॉटलिंग", "सर्च इंडेक्स", "नेट न्यूट्रैलिटी"], correct: 0, explanation: "Echo Chamber/Filter Bubble में एल्गोरिदम यूजर को केवल उसके विचारों से मेल खाने वाली पोस्ट दिखाता है, जिससे वह विरोधी दृष्टिकोण से पूरी तरह कट जाता है।" },
+            { id: 38, tag: "", question: "बिना किसी पूर्व सूचना के उपयोगकर्ताओं द्वारा अस्थायी रूप से 24 घंटे के लिए पोस्ट की जाने वाली तस्वीरें/वीडियो क्या कहलाती हैं?", options: ["स्टोरीज (Stories / Status)", "रील्स", "पोस्ट", "आर्काइव"], correct: 0, explanation: "Snapchat द्वारा शुरू किया गया 'Stories' फीचर अब Instagram, WhatsApp और Facebook पर भी उपलब्ध है, जो 24 घंटे बाद स्वतः गायब हो जाता है।" },
+            { id: 39, tag: "", question: "मेटा (Meta) द्वारा ट्विटर (X) के प्रतिस्पर्धी के रूप में इंस्टाग्राम से एकीकृत करके लॉन्च किया गया टेक्स्ट-आधारित सोशल ऐप कौन-सा है?", options: ["Threads (थ्रेड्स)", "Mastodon", "Bluesky", "Clubhouse"], correct: 0, explanation: "मेटा ने जुलाई 2023 में 'Threads' लॉन्च किया, जो टेक्स्ट वार्तालाप और माइक्रोब्लॉगिंग के लिए सीधे इंस्टाग्राम अकाउंट से जुड़ा मंच है।" },
+            { id: 40, tag: "", question: "विकेंद्रीकृत और ओपन-सोर्स फेडरेटेड सोशल नेटवर्क (Fediverse) का प्रमुख उदाहरण कौन-सा माइक्रोब्लॉगिंग प्लेटफॉर्म है?", options: ["Mastodon (मास्टोडन)", "Facebook", "TikTok", "LinkedIn"], correct: 0, explanation: "Mastodon किसी एक केंद्रीय कंपनी के स्वामित्व में नहीं है; यह स्वतंत्र सर्वरों (Instances) के नेटवर्क से बना एक ओपन-सोर्स फेडरेटेड सोशल प्लेटफॉर्म है।" },
+            { id: 41, tag: "", question: "ऑडियो-ओनली सोशल नेटवर्किंग ऐप, जिसने लाइव वॉयस चैट रूम्स की अवधारणा को लोकप्रिय बनाया, कौन-सा है?", options: ["Clubhouse (क्लबहाउस)", "Spotify", "SoundCloud", "Discord"], correct: 0, explanation: "Clubhouse एक सोशल ऑडियो ऐप है जहाँ उपयोगकर्ता विभिन्न वर्चुअल रूम्स में बिना वीडियो या टेक्स्ट के केवल आवाज के जरिए लाइव चर्चाओं में भाग लेते हैं।" },
+            { id: 42, tag: "", question: "गेमर्स और विभिन्न ऑनलाइन समुदायों के बीच वॉयस, वीडियो और टेक्स्ट चैट के लिए सर्वाधिक प्रयुक्त सहयोग ऐप कौन-सा है?", options: ["Discord (डिस्कॉर्ड)", "Skype", "Viber", "Zoom"], correct: 0, explanation: "Discord सर्वर-आधारित संचार मंच है जो गेमिंग, कोडिंग और अध्ययन समूहों के लिए कम-विलंबता (Low Latency) वॉयस चैनल्स प्रदान करता है।" },
+            { id: 43, tag: "", question: "इंटरनेट पर किसी व्यक्ति की सहमति के बिना उसकी निजी जानकारी (जैसे घर का पता, फोन नंबर) को सार्वजनिक रूप से लीक करना क्या कहलाता है?", options: ["डॉक्सिंग (Doxxing)", "फ़िशिंग", "स्पूफिंग", "क्रैकिंग"], correct: 0, explanation: "Doxxing एक दुर्भावनापूर्ण ऑनलाइन कृत्य है जिसमें किसी व्यक्ति को परेशान करने या धमकाने के उद्देश्य से उसकी निजी जानकारी इंटरनेट पर उजागर कर दी जाती है।" },
+            { id: 44, tag: "", question: "मेटावर्स (Metaverse) की आधुनिक संकल्पना में सोशल इंटरेक्शन किस तकनीक पर आधारित है?", options: ["वर्चुअल रियलिटी (VR) एवं ऑगमेंटेड रियलिटी (AR)", "केवल टेक्स्ट एसएमएस", "2D वेबपेज", "डायल-अप नेटवर्क"], correct: 0, explanation: "Metaverse एक 3D इमर्सिव आभासी दुनिया है जहाँ लोग VR हेडसेट्स और AR ग्लास के माध्यम से अवतारों के रूप में सामाजिक और व्यावसायिक रूप से जुड़ते हैं।" },
+            { id: 45, tag: "", question: "सोशल मीडिया मार्केटिंग में 'FOMO' का सही पूर्ण रूप क्या है?", options: ["Fear Of Missing Out", "Frequency Of Media Output", "Future Online Market Order", "Fast Option Mobile Operation"], correct: 0, explanation: "FOMO (Fear Of Missing Out) एक मनोवैज्ञानिक स्थिति है जहाँ उपयोगकर्ता किसी ट्रेंड, इवेंट या अपडेट से छूट जाने के डर से बार-बार सोशल मीडिया चेक करता है।" },
+            { id: 46, tag: "", question: "किसी ब्लॉग या वेबसाइट पर पाठकों द्वारा छोड़े गए स्पैम कमेंट्स को स्वतः रोकने के लिए किस टूल का उपयोग होता है?", options: ["Akismet / CAPTCHA", "CSS", "FTP", "DNS"], correct: 0, explanation: "CAPTCHA और Akismet जैसे प्लग-इन्स बॉट्स द्वारा ब्लॉग कमेंट सेक्शन में स्वचालित विज्ञापन और मैलवेयर लिंक डालने से रोकते हैं।" },
+            { id: 47, tag: "", question: "सोशल मीडिया प्लेटफॉर्म्स पर व्यावसायिक विज्ञापनों में प्रयुक्त 'CPC' का पूर्ण रूप क्या है?", options: ["Cost Per Click", "Common Protocol Code", "Central Processing Charge", "Click Per Customer"], correct: 0, explanation: "Cost Per Click (CPC) एक डिजिटल विज्ञापन मॉडल है जिसमें विज्ञापनदाता को अपनी वेबसाइट लिंक पर आने वाले प्रत्येक क्लिक के आधार पर भुगतान करना होता है।" },
+            { id: 48, tag: "", question: "संक्षिप्त और आकर्षक लेख लिखने वाले लेखकों और विचारकों के लिए लोकप्रिय आधुनिक पब्लिशिंग प्लेटफॉर्म कौन-सा है?", options: ["Medium (मीडियम)", "Excel", "Photoshop", "Notepad"], correct: 0, explanation: "Medium एक खुला ऑनलाइन पब्लिशिंग प्लेटफॉर्म है जहाँ पत्रकार, विशेषज्ञ और स्वतंत्र लेखक उच्च-गुणवत्ता वाले लेख और विचार साझा करते हैं।" },
+            { id: 49, tag: "", question: "व्हाट्सएप पर किसी ग्रुप में अधिकतम कितने सदस्यों को एक साथ जोड़ा जा सकता है (आधुनिक अपडेट के अनुसार)?", options: ["256", "512", "1024", "2048"], correct: 2, explanation: "WhatsApp ने समय के साथ ग्रुप लिमिट बढ़ाते हुए अब प्रति ग्रुप अधिकतम 1024 सदस्यों को जोड़ने की सुविधा प्रदान की है।" },
+            { id: 50, tag: "", question: "टेलीग्राम ऐप में असीमित (Unlimited) दर्शकों तक संदेश और अध्ययन सामग्री प्रसारित करने वाले फीचर को क्या कहते हैं?", options: ["ब्रॉडकास्ट चैनल (Telegram Channels)", "सीक्रेट ग्रुप", "फोरम", "थ्रेड"], correct: 0, explanation: "Telegram Channels एक-तरफा (One-Way) प्रसारण मंच हैं जहाँ एडमिन असीमित संख्या में सब्सक्राइबर्स को नोट्स, वीडियो और सूचनाएं भेज सकता है।" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
