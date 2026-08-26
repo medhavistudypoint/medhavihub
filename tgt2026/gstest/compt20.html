@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">ICT एवं शैक्षिक प्रौद्योगिकी (महा-मॉक)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_ict_test_20"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "चार्ल्स बैबेज द्वारा 1837 में परिकल्पित वह यांत्रिक गणना इंजन कौन-सा था जिसे आधुनिक सामान्य डिजिटल कंप्यूटर का पूर्वज माना जाता है?", options: ["डिफरेंस इंजन", "एनालिटिकल इंजन (Analytical Engine)", "पास्कलाइन", "टैबलेटिंग मशीन"], correct: 1, explanation: "Analytical Engine में आधुनिक कंप्यूटर की तरह इनपुट (पंच कार्ड), प्रोसेसिंग (Mill), स्टोरेज (Store) और आउटपुट (प्रिंटर/प्लॉटर) की बुनियादी इकाइयां शामिल थीं।<br>यही कारण है कि चार्ल्स बैबेज को 'कंप्यूटर का जनक' कहा जाता है।" },
+            { id: 2, tag: "", question: "कंप्यूटर की किस पीढ़ी में पहली बार 'माइक्रोप्रोसेसर' (VLSI तकनीक) का प्रयोग शुरू हुआ, जिसने पर्सनल कंप्यूटर (PC) क्रांति को जन्म दिया?", options: ["प्रथम पीढ़ी", "द्वितीय पीढ़ी", "तृतीय पीढ़ी", "चतुर्थ पीढ़ी (Fourth Generation)"], correct: 3, explanation: "चतुर्थ पीढ़ी (1971 से वर्तमान) में LSI और VLSI तकनीक द्वारा एक ही सिलिकॉन चिप पर पूरे CPU को 'माइक्रोप्रोसेसर' (उदा. Intel 4004) के रूप में समाहित कर दिया गया।" },
+            { id: 3, tag: "", question: "CPU का कौन-सा आंतरिक रजिस्टर निष्पादित होने वाले अगले निर्देश (Next Instruction) का मेमोरी एड्रेस सुरक्षित रखता है?", options: ["Accumulator", "Program Counter (PC - प्रोग्राम काउंटर)", "Memory Data Register", "Instruction Register"], correct: 1, explanation: "Program Counter (PC) रजिस्टर हमेशा उस अगले निर्देश का मेमोरी पता रखता है जिसे CPU द्वारा निष्पादित करने हेतु फेच (Fetch) किया जाना है।" },
+            { id: 4, tag: "", question: "कंप्यूटर चालू होते ही हार्डवेयर की कार्यक्षमता जाँचने वाले 'POST' प्रोग्राम का पूर्ण रूप क्या है?", options: ["Power-On Self-Test", "Program Operating System Tool", "Primary Optical Storage Terminal", "Private Online System Transfer"], correct: 0, explanation: "POST (Power-On Self-Test) रोम-बायोस (ROM-BIOS) द्वारा कंप्यूटर चालू होते ही चलाया जाने वाला पहला डायग्नोस्टिक परीक्षण है जो यह सुनिश्चित करता है कि कीबोर्ड, रैम, हार्ड ड्राइव आदि सुचारु रूप से कार्य कर रहे हैं।" },
+            { id: 5, tag: "", question: "डेटा मापन इकाइयों में 1 गीगाबाइट (1 GB) निम्नलिखित में से किसके बराबर होता है?", options: ["1024 बाइट्स", "1024 KB", "1024 MB (मेगाबाइट)", "1024 TB"], correct: 2, explanation: "1 GB = 1024 MB होता है।<br>बाइनरी पदानुक्रम में: 1 Byte (8 Bits) $\rightarrow$ 1 KB (1024 Bytes) $\rightarrow$ 1 MB (1024 KB) $\rightarrow$ 1 GB (1024 MB) $\rightarrow$ 1 TB (1024 GB) $\rightarrow$ 1 PB (1024 TB)।" },
+            { id: 6, tag: "", question: "हार्ड डिस्क ड्राइव (HDD) की तुलना में सॉलिड स्टेट ड्राइव (SSD) का सबसे प्रमुख तकनीकी लाभ क्या है?", options: ["इसमें कोई गतिशील यांत्रिक भाग (No Moving Parts) न होने के कारण अत्यधिक तेज डेटा ट्रांसफर गति और विश्वसनीयता", "यह वजन में बहुत भारी होती है", "यह अत्यधिक शोर करती है", "यह चुंबकीय टेप पर चलती है"], correct: 0, explanation: "SSD में घूमने वाले मैग्नेटिक प्लेटर्स के बजाय सेमीकंडक्टर NAND फ्लैश मेमोरी का उपयोग होता है, जिससे इसका डेटा एक्सेस टाइम बहुत कम होता है और यह शॉक-रेसिस्टेंट होती है।" },
+            { id: 7, tag: "", question: "वेबसाइटों के URL (Uniform Resource Locator) जैसे 'https://www.example.com/index.html' में 'https' क्या दर्शाता है?", options: ["डोमेन नाम", "प्रोटोकॉल (Protocol)", "फाइल पाथ", "शीर्ष स्तर डोमेन"], correct: 1, explanation: "URL के आरंभ में लिखा 'https' ट्रांसफर प्रोटोकॉल को दर्शाता है, 'www.example.com' डोमेन नाम है, और '/index.html' सर्वर पर फाइल का सटीक पाथ (स्थान) है।" },
+            { id: 8, tag: "", question: "कंप्यूटर नेटवर्क में भौतिक पता (MAC Address) कितने बिट्स का होता है और इसे किस प्रारूप में लिखा जाता है?", options: ["32 बिट्स (दशमलव में)", "48 बिट्स (12 हेक्साडेसिमल अंकों में)", "64 बिट्स (बाइनरी में)", "128 बिट्स (ऑक्टल में)"], correct: 1, explanation: "MAC (Media Access Control) एड्रेस नेटवर्क इंटरफेस कार्ड (NIC) पर निर्माता द्वारा स्थायी रूप से दर्ज 48-बिट (6 बाइट्स) का हार्डवेयर पता होता है, जिसे हेक्साडेसिमल प्रारूप (उदा. 00:1A:2B:3C:4D:5E) में लिखा जाता है।" },
+            { id: 9, tag: "", question: "OSI मॉडल की किस परत (Layer) पर डेटा पैकेटों की रूटिंग (Routing) और तार्किक IP एड्रेसिंग का कार्य संपन्न होता है?", options: ["Physical Layer", "Data Link Layer", "Network Layer (लेयर 3)", "Transport Layer"], correct: 2, explanation: "नेटवर्क लेयर (Layer 3) पर राउटर कार्य करता है, जो डेटा पैकेटों को स्रोत से गंतव्य तक भेजने के लिए सबसे कुशल और छोटा मार्ग (Best Path) निर्धारित करता है।" },
+            { id: 10, tag: "", question: "इंटरनेट पर मानव-पठनीय डोमेन नाम (जैसे www.google.com) को संख्यात्मक IP एड्रेस में अनुवादित करने वाली प्रणाली कौन-सी है?", options: ["DHCP", "DNS (Domain Name System)", "ARP", "NAT"], correct: 1, explanation: "DNS इंटरनेट की 'फोनबुक' कहलाता है जो अल्फान्यूमेरिक वेबसाइट नामों को कंप्यूटर के समझने योग्य बाइनरी/संख्यात्मक IP पते में बदलता है।" },
+            { id: 11, tag: "", question: "ईमेल संदेश भेजते समय 'Bcc' फील्ड का प्राथमिक उपयोग क्या होता है?", options: ["संदेश को तुरंत हटाना", "इसमें दर्ज ईमेल पते अन्य किसी भी प्राप्तकर्ता (To या Cc) को दिखाई नहीं देते (Blind Carbon Copy)", "केवल फाइल अटैच करना", "स्पेलिंग चेक करना"], correct: 1, explanation: "Bcc (Blind Carbon Copy) में रखे गए सभी ईमेल पते पूर्णतः गोपनीय रहते हैं, जिससे प्राप्तकर्ताओं की निजता सुरक्षित रहती है।" },
+            { id: 12, tag: "", question: "वेबसाइटों द्वारा उपयोगकर्ता के ब्राउज़र में प्राथमिकताएं, लॉगिन सत्र और शॉपिंग कार्ट विवरण सहेजने वाली छोटी टेक्स्ट फाइल क्या कहलाती है?", options: ["कैश", "कुकी (Cookie)", "प्लग-इन", "इतिहास"], correct: 1, explanation: "Cookies वेब सर्वर द्वारा यूजर के स्थानीय कंप्यूटर पर स्टोर की जाने वाली डेटा फाइलें हैं जो यूजर की प्राथमिकताओं और प्रमाणीकरण सत्र को ट्रैक रखती हैं।" },
+            { id: 13, tag: "", question: "कंप्यूटर की फाइलों को जटिल क्रिप्टोग्राफी द्वारा लॉक करके उन्हें खोलने के बदले क्रिप्टोकरेंसी में फिरौती मांगने वाला मैलवेयर क्या कहलाता है?", options: ["स्पाइवेयर", "रैंसमवेयर (Ransomware - जैसे WannaCry)", "एडवेयर", "वर्म"], correct: 1, explanation: "Ransomware उपयोगकर्ता के डेटा को एन्क्रिप्ट करके बंधक बना लेता है और डिक्रिप्शन की (Key) देने के बदले फिरौती की मांग करता है।" },
+            { id: 14, tag: "", question: "उपयोगकर्ता द्वारा कीबोर्ड पर दबाए गए प्रत्येक बटन (Keystrokes) को गुप्त रूप से रिकॉर्ड करके पासवर्ड चुराने वाला दुर्भावनापूर्ण टूल क्या कहलाता है?", options: ["की-लॉगर (Keylogger)", "रूटकिट", "ट्रोजन", "स्पूलर"], correct: 0, explanation: "Keylogger एक प्रकार का स्पाइवेयर है जो टाइप किए गए संवेदनशील पासवर्ड, पिन और कार्ड नंबरों को चुपके से रिकॉर्ड कर लेता है।" },
+            { id: 15, tag: "", question: "लक्ष्य सर्वर या वेबसाइट पर एक साथ लाखों फर्जी अनुरोध भेजकर उसे ओवरलोड और क्रैश कर देने वाला साइबर हमला क्या कहलाता है?", options: ["फ़िशिंग", "DDoS हमला (Distributed Denial of Service)", "स्पूफिंग", "स्निफिंग"], correct: 1, explanation: "DDoS हमले में बॉटनेट (संक्रमित कंप्यूटरों के नेटवर्क) के जरिए सर्वर पर ट्रैफिक की बाढ़ ला दी जाती है, जिससे वास्तविक उपयोगकर्ताओं के लिए सेवा बाधित हो जाती है।" },
+            { id: 16, tag: "", question: "भारतीय सूचना प्रौद्योगिकी अधिनियम (IT Act 2000) की किस धारा को 2015 में सुप्रीम कोर्ट ने 'श्रेया सिंघल मामले' में असंवैधानिक मानकर निरस्त कर दिया था?", options: ["धारा 66A (Section 66A)", "धारा 66C", "धारा 66F", "धारा 43"], correct: 0, explanation: "धारा 66A सोशल मीडिया पर आक्रामक या आपत्तिजनक संदेश भेजने पर जेल का प्रावधान करती थी, जिसे वाक् एवं अभिव्यक्ति की स्वतंत्रता का हनन मानकर रद्द कर दिया गया।" },
+            { id: 17, tag: "", question: "भारत की संप्रभुता, एकता या सुरक्षा को खतरे में डालने वाले 'साइबर आतंकवाद' (Cyber Terrorism) के लिए IT Act की धारा 66F में क्या अधिकतम सजा निर्धारित है?", options: ["3 वर्ष का कारावास", "7 वर्ष का कारावास", "आजीवन कारावास (Life Imprisonment)", "केवल ₹50,000 जुर्माना"], correct: 2, explanation: "धारा 66F के तहत देश के महत्वपूर्ण बुनियादी ढांचों पर हमला करने या साइबर आतंकवाद फैलाने पर अधिकतम आजीवन कारावास की कठोर सजा का प्रावधान है।" },
+            { id: 18, tag: "", question: "MS Word में किसी एक ही मुख्य प्रारूप पत्र को एक्सेल डेटाबेस के आधार पर सैकड़ों छात्रों के अलग-अलग नामों और पतों के साथ तैयार करने की सुविधा क्या कहलाती है?", options: ["हाइपरलिंक", "मेल मर्ज (Mail Merge)", "मैक्रो", "ट्रैक चेंजेस"], correct: 1, explanation: "Mail Merge एक मुख्य दस्तावेज को डेटा स्रोत (Excel Sheet) से जोड़कर एक ही क्लिक में सैकड़ों व्यक्तिगत पत्र या प्रवेश पत्र तैयार कर देता है।" },
+            { id: 19, tag: "", question: "MS Excel में किसी सेल के अंदर गणितीय सूत्र लगाते समय सेल रेफरेंस को लॉक (स्थिर) करने के लिए किस चिन्ह का प्रयोग किया जाता है?", options: ["#", "$ (डॉलर का चिन्ह - Absolute Referencing)", "%", "&"], correct: 1, explanation: "'$' चिन्ह (जैसे `$A$1`) एब्सोल्यूट सेल रेफरेंसिंग करता है, जिससे फॉर्मूले को अन्य सेलों में कॉपी करने पर भी वह निर्दिष्ट सेल पता नहीं बदलता।" },
+            { id: 20, tag: "", question: "MS PowerPoint में पूरी प्रेजेंटेशन की सभी स्लाइडों के लिए एक समान बैकग्राउंड, फॉन्ट और लोगो का केंद्रीय नियंत्रण करने वाली मास्टर स्लाइड क्या कहलाती है?", options: ["टाइटल स्लाइड", "स्लाइड मास्टर (Slide Master)", "नोट्स मास्टर", "हैंडआउट"], correct: 1, explanation: "Slide Master प्रेजेंटेशन की शीर्ष स्लाइड होती है; इसमें किया गया कोई भी बदलाव बाकी सभी स्लाइडों पर स्वतः एक समान रूप से लागू हो जाता है।" },
+            { id: 21, tag: "", question: "पारंपरिक कक्षा शिक्षण और ऑनलाइन डिजिटल शिक्षण विधियों के संतुलित संयोजन को क्या कहा जाता है?", options: ["डिस्टेंस लर्निंग", "ब्लेंडेड लर्निंग / हाइब्रिड अधिगम (Blended Learning)", "वर्चुअल लर्निंग", "पैसिव लर्निंग"], correct: 1, explanation: "Blended Learning में भौतिक कक्षा के प्रत्यक्ष शिक्षक मार्गदर्शन और ऑनलाइन ई-लर्निंग टूल्स (वीडियो, क्विज़) को एक साथ संयोजित किया जाता है।" },
+            { id: 22, tag: "", question: "वह शिक्षण प्रतिमान जिसमें छात्र बुनियादी पाठ्य सामग्री घर पर वीडियो/डिजिटल नोट्स से पहले ही पढ़ लेते हैं और कक्षा के समय का उपयोग समस्याओं को सुलझाने में करते हैं, क्या कहलाता है?", options: ["पारंपरिक कक्षा", "फ्लिप्ड क्लासरूम (Flipped Classroom)", "डिस्टेंस क्लास", "लेक्चर मेथड"], correct: 1, explanation: "Flipped Classroom पारंपरिक व्यवस्था को उलट देता है: सिद्धांत घर पर ऑनलाइन पढ़ा जाता है और व्यावहारिक कार्य/अभ्यास स्कूल में शिक्षक के सामने किया जाता है।" },
+            { id: 23, tag: "", question: "शिक्षण में तकनीकी एकीकरण के 'SAMR' मॉडल में 'R' का सही अर्थ क्या है जो तकनीक के उच्चतम स्तर को दर्शाता है?", options: ["Repetition", "Redefinition (पुनर्परिभाषा - नए अभूतपूर्व कार्यों का सृजन)", "Research", "Review"], correct: 1, explanation: "SAMR मॉडल के 4 स्तर हैं: Substitution $\rightarrow$ Augmentation $\rightarrow$ Modification $\rightarrow$ Redefinition (पुनर्परिभाषा: ऐसे नए कार्यों का निर्माण जो तकनीक के बिना असंभव थे)।" },
+            { id: 24, tag: "", question: "प्रभावी तकनीकी शिक्षण के लिए शिक्षक के तीन मुख्य ज्ञान क्षेत्रों (Content, Pedagogy, Technology) को जोड़ने वाला ढांचा क्या कहलाता है?", options: ["SAMR", "TPACK (Technological Pedagogical Content Knowledge)", "ADDIE", "UDL"], correct: 1, explanation: "मिश्रा और कोहलर (2006) द्वारा विकसित TPACK ढांचा विषयवस्तु (CK), शिक्षण पद्धति (PK) और डिजिटल तकनीक (TK) के एकीकृत ज्ञान पर बल देता है।" },
+            { id: 25, tag: "", question: "एडगर डेल (Edgar Dale) के 'अनुभव शंकु' (Cone of Experience) में सबसे नीचे आधार पर स्थित सर्वाधिक मूर्त और प्रभावी अधिगम अनुभव कौन-सा है?", options: ["शाब्दिक प्रतीक", "प्रत्यक्ष प्रयोजनपूर्ण अनुभव (Direct Purposeful Experiences)", "दृश्य प्रतीक", "टेलीविजन"], correct: 1, explanation: "अनुभव शंकु के आधार पर प्रत्यक्ष वास्तविक अनुभव (करके सीखना) सबसे मूर्त होता है, जबकि शीर्ष पर शाब्दिक प्रतीक (शब्द/व्याख्यान) सबसे अमूर्त होते हैं।" },
+            { id: 26, tag: "", question: "बी.एफ. स्किनर के क्रिया-प्रसूत अनुबंधन (Operant Conditioning) पर आधारित छोटे पदों और तात्कालिक प्रतिपुष्टि वाला स्व-अधिगम उपागम क्या कहलाता है?", options: ["रेखीय अभिक्रमित अनुदेशन (Linear Programmed Instruction)", "शाखीय अनुदेशन", "व्याख्यान विधि", "ड्रिल विधि"], correct: 0, explanation: "Linear Programming छोटे पदों (Small Steps), सक्रिय अनुक्रिया, तात्कालिक फीडबैक और स्व-गति के सिद्धांतों पर आधारित स्किनर का रेखीय मॉडल है।" },
+            { id: 27, tag: "", question: "नॉर्मन ए. क्राउडर द्वारा विकसित 'शाखीय अभिक्रमित अनुदेशन' में छात्र द्वारा गलत उत्तर देने पर उसे कहाँ भेजा जाता है?", options: ["अगले अध्याय पर", "उपचारात्मक फ्रेम पर (Remedial Frame)", "शुरुआत में", "परीक्षा से बाहर"], correct: 1, explanation: "शाखीय अभिक्रमित अनुदेशन बहुविकल्पीय प्रश्नों पर आधारित होता है और त्रुटि होने पर छात्र को उसकी गलती समझाने वाले उपचारात्मक (Remedial) फ्रेम पर भेजता है।" },
+            { id: 28, tag: "", question: "डेविड आसुबेल (David Ausubel) द्वारा प्रतिपादित शिक्षण प्रतिमान का क्या नाम है जो नए ज्ञान को पूर्व ज्ञान से जोड़ने के लिए रूपरेखा देता है?", options: ["अग्रिम आयोजक प्रतिमान (Advance Organizer Model)", "पृच्छा प्रशिक्षण", "आगमनात्मक प्रतिमान", "संप्रत्यय लब्धि"], correct: 0, explanation: "Advance Organizer Model अमूर्त मौखिक सामग्री को छात्र के पूर्व संज्ञानात्मक ढांचे से जोड़कर अर्थपूर्ण अधिगम (Meaningful Learning) कराता है।" },
+            { id: 29, tag: "", question: "डेविड बर्लो (David Berlo - 1960) के प्रसिद्ध 'SMCR' संचार मॉडल के चार प्रमुख घटक कौन-से हैं?", options: ["Source → Message → Channel → Receiver", "System, Memory, CPU, RAM", "Software, Media, Control, Result", "Student, Master, Class, Room"], correct: 0, explanation: "Berlo's SMCR मॉडल स्रोत (Source), संदेश (Message), माध्यम (Channel) और प्राप्तकर्ता (Receiver) के संचार कौशल और पृष्ठभूमि के प्रभाव को स्पष्ट करता है।" },
+            { id: 30, tag: "", question: "NCERT द्वारा भारतीय परिस्थितियों के लिए मानकीकृत 'सूक्ष्म शिक्षण चक्र' (Micro-teaching Cycle) की कुल समयावधि कितनी होती है?", options: ["20 मिनट", "36 मिनट (36 Minutes)", "45 मिनट", "60 मिनट"], correct: 1, explanation: "36 मिनट का NCERT चक्र: शिक्षण (6 मिनट) $\rightarrow$ फीडबैक (6 मिनट) $\rightarrow$ पुनः योजना (12 मिनट) $\rightarrow$ पुनः शिक्षण (6 मिनट) $\rightarrow$ पुनः फीडबैक (6 मिनट)।" },
+            { id: 31, tag: "", question: "कक्षा कक्ष में शिक्षक और छात्रों के बीच होने वाले मौखिक व्यवहार का विश्लेषण करने वाली 'फ्लैंडर्स की प्रणाली' (FIACS) में कुल कितनी श्रेणियां होती हैं?", options: ["7 श्रेणियां", "10 श्रेणियां (10 Category System)", "12 श्रेणियां", "5 श्रेणियां"], correct: 1, explanation: "FIACS में 10 श्रेणियां होती हैं: 1-7 शिक्षक वार्ता (Teacher Talk), 8-9 छात्र वार्ता (Pupil Talk), और 10 मौन या विभ्रांति (Silence/Confusion)।" },
+            { id: 32, tag: "", question: "भारत सरकार के प्रमुख एकीकृत ऑनलाइन शिक्षण पोर्टल 'SWAYAM' का सही पूर्ण रूप क्या है?", options: ["Study Webs of Active-Learning for Young Aspiring Minds", "School Web for Academic Youth", "Scientific Web for Advanced Youth", "System of Web Access for Minds"], correct: 0, explanation: "SWAYAM कक्षा 9 से स्नातकोत्तर तक के सभी विषयों के उच्च स्तरीय ऑनलाइन पाठ्यक्रम निःशुल्क उपलब्ध कराने वाला भारत का राष्ट्रीय MOOCs पोर्टल है।" },
+            { id: 33, tag: "", question: "SWAYAM और MOOCs पाठ्यक्रमों के निर्माण के लिए भारत सरकार द्वारा स्वीकृत '4-क्वाड्रेंट' दृष्टिकोण में कौन-सा शामिल नहीं है?", options: ["ई-ट्यूटोरियल (वीडियो व्याख्यान)", "ई-कंटेंट (डिजिटल पीडीएफ)", "स्व-मूल्यांकन (क्विज़/टेस्ट)", "मुद्रित डाक सामग्री (Postal Material)"], correct: 3, explanation: "4-क्वाड्रेंट हैं: Quadrant-I (e-Tutorial Video), Quadrant-II (e-Content PDF), Quadrant-III (Self-Assessment Quizzes), और Quadrant-IV (Discussion Forum)।" },
+            { id: 34, tag: "", question: "इंजीनियरिंग, प्रौद्योगिकी और कोर विज्ञान विषयों के उन्नत वीडियो पाठ्यक्रमों के लिए SWAYAM का मुख्य राष्ट्रीय समन्वयक (National Coordinator) कौन है?", options: ["UGC", "NPTEL (National Programme on Technology Enhanced Learning)", "CEC", "NCERT"], correct: 1, explanation: "NPTEL (IITs और IISc की संयुक्त पहल) इंजीनियरिंग और बुनियादी विज्ञान के उच्च-स्तरीय ऑनलाइन पाठ्यक्रमों का राष्ट्रीय समन्वयक है।" },
+            { id: 35, tag: "", question: "24x7 उच्च-गुणवत्ता वाले शैक्षिक टीवी चैनलों का प्रसारण करने वाली भारत सरकार की डीटीएच (DTH) पहल कौन-सी है जो GSAT-15 उपग्रह का उपयोग करती है?", options: ["SWAYAM PRABHA (स्वयं प्रभा)", "ज्ञान दर्शन", "दूरदर्शन विद्या", "ई-ज्ञानकोश"], correct: 0, explanation: "SWAYAM PRABHA 24x7 चलने वाले DTH शैक्षिक चैनलों का समूह है जो BISAG-N गांधीनगर से GSAT-15 उपग्रह के माध्यम से प्रसारित होता है।" },
+            { id: 36, tag: "", question: "स्कूली शिक्षा के लिए भारत सरकार के 'एक राष्ट्र, एक डिजिटल प्लेटफॉर्म' के रूप में विकसित राष्ट्रीय पोर्टल कौन-सा है जिसमें QR-कोड युक्त पाठ्यपुस्तकें हैं?", options: ["DIKSHA (Digital Infrastructure for Knowledge Sharing)", "e-Pathshala", "SWAYAM", "PRAGYATA"], correct: 0, explanation: "DIKSHA स्कूली छात्रों और शिक्षकों के लिए 30+ भाषाओं में कक्षा 1 से 12वीं तक की डिजिटल सामग्री और एनर्जाइज्ड टेक्स्टबुक्स (QR Code) प्रदान करने वाला राष्ट्रीय मंच है।" },
+            { id: 37, tag: "", question: "भारतीय विश्वविद्यालयों द्वारा स्वीकृत सभी पीएचडी (Ph.D.) शोध प्रबंधों (Theses) का राष्ट्रीय डिजिटल इलेक्ट्रॉनिक भंडार कौन-सा है?", options: ["शोधगंगा (Shodhganga)", "शोधगंगोत्री", "ई-शोधसिंधु", "विद्वान"], correct: 0, explanation: "INFLIBNET द्वारा संचालित Shodhganga भारतीय विश्वविद्यालयों के 4.5 लाख से अधिक पूर्ण-पाठ (Full-text) पीएचडी शोध प्रबंधों का खुला डिजिटल भंडार है।" },
+            { id: 38, tag: "", question: "इंजीनियरिंग और विज्ञान के छात्रों को ऑनलाइन वेब ब्राउज़र के जरिए सिमुलेटेड प्रैक्टिकल प्रयोग करने की सुविधा देने वाला राष्ट्रीय प्रोजेक्ट कौन-सा है?", options: ["Virtual Labs (वर्चुअल लैब्स)", "FOSSEE", "Spoken Tutorial", "e-Yantra"], correct: 0, explanation: "Virtual Labs NMEICT मिशन के तहत 12 प्रमुख संस्थानों द्वारा विकसित साझा मंच है जो दूरस्थ रूप से इंजीनियरिंग प्रयोगों के सिमुलेशन प्रदान करता है।" },
+            { id: 39, tag: "", question: "विभिन्न भारतीय क्षेत्रीय भाषाओं में 10-10 मिनट के छोटे ऑडियो-वीडियो ट्यूटोरियल्स द्वारा ओपन-सोर्स सॉफ्टवेयर सिखाने वाली IIT बॉम्बे की प्रसिद्ध पहल कौन-सी है?", options: ["Spoken Tutorial (स्पोकन ट्यूटोरियल)", "FOSSEE", "NPTEL", "DIKSHA"], correct: 0, explanation: "Spoken Tutorial स्व-अधिगम आधारित 10-मिनट के डब किए गए ऑडियो-वीडियो ट्यूटोरियल्स के माध्यम से C, C++, Python, Linux आदि क्षेत्रीय भाषाओं में सिखाता है।" },
+            { id: 40, tag: "", question: "डेविड विले द्वारा प्रतिपादित मुक्त शैक्षिक संसाधनों (OER) के '5R' सिद्धांतों में कौन-सा शामिल है?", options: ["Retain, Reuse, Revise, Remix, Redistribute", "Read, Write, Run, Repeat, Return", "Record, Review, Report, Redesign, Reset", "Receive, React, Remember, Recall, Reproduce"], correct: 0, explanation: "OER के 5R सिद्धांत हैं: Retain (सहेजना), Reuse (पुनः उपयोग), Revise (संशोधन), Remix (मिश्रण), और Redistribute (पुनर्वितरण)।" },
+            { id: 41, tag: "", question: "क्रिएटिव कॉमन्स का सबसे खुला और उदार लाइसेंस कौन-सा है जो केवल मूल लेखक को श्रेय (Attribution) देने की शर्त पर सभी उपयोगों की अनुमति देता है?", options: ["CC BY", "CC BY-NC-ND", "CC BY-SA", "Copyright"], correct: 0, explanation: "'CC BY' (Attribution) दूसरों को सामग्री को वितरित करने, रीमिक्स करने और व्यावसायिक उपयोग करने की पूरी छूट देता है, बशर्ते मूल लेखक को श्रेय दिया जाए।" },
+            { id: 42, tag: "", question: "स्मार्ट कक्षाओं में डिजिटल बोर्ड की स्क्रीन पर किसी भौतिक पुस्तक या वास्तविक 3D वस्तु को लाइव ज़ूम करके दिखाने वाला कैमरा उपकरण क्या कहलाता है?", options: ["विजुअलाइज़र / डॉक्यूमेंट कैमरा (Visualizer / Document Camera)", "स्कैनर", "बायोमेट्रिक रीडर", "प्लॉटर"], correct: 0, explanation: "Visualizer (Document Camera) मेज पर रखी किसी भी वास्तविक वस्तु, हस्तलिखित नोट्स या वैज्ञानिक नमूने को बड़े डिजिटल बोर्ड पर लाइव दिखाता है।" },
+            { id: 43, tag: "", question: "भारत में प्राथमिक से लेकर 12वीं तक के सभी स्कूलों के बुनियादी ढांचे, शिक्षकों और छात्रों का राष्ट्रीय डेटा एकत्र करने वाला आधिकारिक पोर्टल कौन-सा है?", options: ["UDISE+ (Unified District Information System for Education Plus)", "AISHE", "Shodhganga", "SAMARTH"], correct: 0, explanation: "UDISE+ शिक्षा मंत्रालय द्वारा संचालित दुनिया की सबसे बड़ी स्कूल प्रबंधन सूचना प्रणालियों में से एक है जो 15 लाख+ स्कूलों का डेटा संभालती है।" },
+            { id: 44, tag: "", question: "NEP 2020 के तहत छात्रों के ऑनलाइन और ऑफलाइन अर्जित क्रेडिट्स को डिजिटल रूप से स्टोर करने वाली राष्ट्रीय व्यवस्था क्या कहलाती है?", options: ["ABC (Academic Bank of Credits)", "National Credit Pool", "Digital Vault", "e-Transcript"], correct: 0, explanation: "Academic Bank of Credits (ABC) छात्र की विशिष्ट आईडी से जुड़ी डिजिटल रिपॉजिटरी है जो 'मल्टीपल एंट्री और एग्जिट' की सुविधा देती है।" },
+            { id: 45, tag: "", question: "भारत में 24x7 तत्काल मोबाइल बैंकिंग और QR कोड आधारित रीयल-टाइम फंड ट्रांसफर प्रणाली 'UPI' का पूर्ण रूप क्या है?", options: ["Unified Payments Interface", "Universal Payment Integration", "Unique Public Interface", "Unified Processing Index"], correct: 0, explanation: "UPI (Unified Payments Interface) NPCI द्वारा 2016 में विकसित भारत की विश्व-प्रसिद्ध रीयल-टाइम भुगतान प्रणाली है।" },
+            { id: 46, tag: "", question: "ग्रामीण भारत में बिना डेबिट कार्ड के केवल आधार संख्या और फिंगरप्रिंट बायोमेट्रिक से पैसे निकालने वाली प्रणाली क्या कहलाती है?", options: ["AEPS (Aadhaar Enabled Payment System)", "UPI", "IMPS", "RTGS"], correct: 0, explanation: "AEPS माइक्रो-एटीएम और बैंक मित्रों के माध्यम से केवल आधार प्रमाणीकरण और बायोमेट्रिक से बैंकिंग लेन-देन की सुविधा देती है।" },
+            { id: 47, tag: "", question: "दैनिक उपयोग की भौतिक वस्तुओं (जैसे फ्रिज, एसी, कार) में सेंसर लगाकर उन्हें इंटरनेट से जोड़ने और स्वचालित डेटा साझा करने की तकनीक क्या कहलाती है?", options: ["IoT (Internet of Things)", "क्लाउड कंप्यूटिंग", "मेटावर्स", "होलोग्राम"], correct: 0, explanation: "IoT (Internet of Things) भौतिक उपकरणों का एक इंटरनेट-सक्षम नेटवर्क है जो बिना मानवीय हस्तक्षेप के डेटा एकत्र और साझा करते हैं।" },
+            { id: 48, tag: "", question: "डेटा को ब्लॉकचेन पर सुरक्षित रूप से दर्ज कर शर्तों के पूरा होने पर बिना किसी बिचौलिए के स्वतः निष्पादित होने वाले डिजिटल कोड को क्या कहते हैं?", options: ["स्मार्ट कॉन्ट्रैक्ट्स (Smart Contracts)", "डिजिटल सिग्नेचर", "स्प्रेडशीट", "पासवर्ड"], correct: 0, explanation: "Smart Contracts ब्लॉकचेन पर स्थित स्व-निष्पादित कंप्यूटर प्रोग्राम हैं जो पूर्व-निर्धारित शर्तें पूरी होने पर अनुबंध को स्वतः लागू कर देते हैं।" },
+            { id: 49, tag: "", question: "वास्तविक दुनिया के कैमरे के दृश्य के ऊपर डिजिटल 3D छवियों या सूचनाओं को ओवरले (सुपरइम्पोज़) करने की इमर्सिव तकनीक क्या कहलाती है?", options: ["ऑगमेंटेड रियलिटी (Augmented Reality - AR)", "वर्चुअल रियलिटी (VR)", "क्वांटम रियलिटी", "डिजिटल ट्विन"], correct: 0, explanation: "AR (Augmented Reality - जैसे Pokémon GO या Google Lens) वास्तविक दुनिया के ऊपर डिजिटल 3D तत्वों को जोड़कर दृश्य अनुभव को समृद्ध बनाती है।" },
+            { id: 50, tag: "", question: "क्लासिक कंप्यूटर के 'बिट्स' (0 या 1) के विपरीत सुपरपोजिशन सिद्धांत के आधार पर एक ही समय में 0 और 1 दोनों अवस्थाओं में कार्य करने वाली क्वांटम कंप्यूटर की बुनियादी इकाई क्या है?", options: ["क्यूबिट्स (Qubits - Quantum Bits)", "बाइट्स", "निबल्स", "पिक्सल्स"], correct: 0, explanation: "Qubits क्वांटम यांत्रिकी के 'Superposition' और 'Entanglement' गुणों का उपयोग करते हैं, जिससे क्वांटम कंप्यूटर जटिल वैज्ञानिक गणनाएं अत्यंत तीव्र गति से हल करते हैं।" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
