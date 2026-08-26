@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">ईमेल, ब्राउज़र एवं सर्च इंजन</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_ict_test_07"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "ईमेल प्रणाली में प्रयुक्त ईमेल पते (Email Address) को दो भागों में विभाजित करने वाला मानक प्रतीक कौन-सा है?", options: ["#", "@ (At the rate)", "$", "%"], correct: 1, explanation: "रे टॉमलिंसन ने 1971 में यूजरनेम और डोमेन नाम को अलग करने के लिए '@' चिन्ह चुना था।<br>जैसे 'username@domain.com' में '@' से पहले का भाग यूजरनेम और बाद का भाग डोमेन नाम होता है।" },
+            { id: 2, tag: "", question: "'ईमेल का जनक' (Father of Email) किसे माना जाता है?", options: ["टिम बर्नर्स ली", "रे टॉमलिंसन (Ray Tomlinson)", "विंट सर्फ", "मार्टिन कूपर"], correct: 1, explanation: "रे टॉमलिंसन (Ray Tomlinson) ने 1971 में ARPANET पर पहला नेटवर्क ईमेल सिस्टम विकसित किया था।<br>इन्होंने ही ईमेल पते के प्रारूप का मानकीकरण किया था।" },
+            { id: 3, tag: "", question: "ईमेल भेजते समय 'Cc' फील्ड का सही पूर्ण रूप क्या है?", options: ["Carbon Copy", "Central Copy", "Command Copy", "Common Copy"], correct: 0, explanation: "Cc का पूरा नाम Carbon Copy है।<br>इसमें जोड़े गए सभी ईमेल प्राप्तकर्ताओं को संदेश की प्रति मिलती है और सभी प्राप्तकर्ता एक-दूसरे का ईमेल पता स्पष्ट रूप से देख सकते हैं।" },
+            { id: 4, tag: "", question: "ईमेल में 'Bcc' फील्ड की मुख्य कार्यप्रणाली क्या होती है?", options: ["यह मेल को तुरंत डिलीट कर देता है", "इसमें दर्ज प्राप्तकर्ताओं के ईमेल पते अन्य किसी भी प्राप्तकर्ता को दिखाई नहीं देते", "यह केवल फाइल अटैच करता है", "यह पासवर्ड सुरक्षित करता है"], correct: 1, explanation: "Bcc का पूरा नाम Blind Carbon Copy है।<br>Bcc में रखे गए ईमेल पते पूरी तरह गोपनीय रहते हैं; To या Cc वाले किसी भी व्यक्ति को यह पता नहीं चलता कि यह मेल Bcc वाले को भी भेजी गई है।" },
+            { id: 5, tag: "", question: "अनचाहे, थोक में भेजे जाने वाले व्यावसायिक और प्रचार संबंधी ईमेल (Unsolicited Bulk Emails) क्या कहलाते हैं?", options: ["इनबॉक्स", "स्पैम (Spam / Junk)", "ड्राफ्ट", "ट्रैश"], correct: 1, explanation: "स्पैम को 'जंक मेल' भी कहा जाता है।<br>ये विज्ञापन या दुर्भावनापूर्ण उद्देश्यों से लाखों उपयोगकर्ताओं को एक साथ भेजे जाने वाले अवांछित ईमेल होते हैं।" },
+            { id: 6, tag: "", question: "अवैध रूप से उपयोगकर्ता के बैंक विवरण, पासवर्ड या संवेदनशील डेटा चुराने के लिए भेजे गए फर्जी ईमेल को क्या कहते हैं?", options: ["स्पूलिंग", "फ़िशिंग (Phishing)", "कुकीज़", "टॉगल"], correct: 1, explanation: "फ़िशिंग एक प्रकार का सोशल इंजीनियरिंग साइबर हमला है।<br>इसमें हमलावर किसी विश्वसनीय संस्था (जैसे बैंक) का रूप धरकर फर्जी ईमेल भेजता है ताकि यूजर से संवेदनशील पासवर्ड और पिन हासिल किए जा सकें।" },
+            { id: 7, tag: "", question: "लिखकर तैयार किए गए परंतु अभी तक न भेजे गए ईमेल स्वतः किस फोल्डर में सुरक्षित हो जाते हैं?", options: ["Inbox", "Drafts (ड्राफ्ट्स)", "Sent", "Outbox"], correct: 1, explanation: "ड्राफ्ट्स (Drafts) फोल्डर में वे सभी अधूरे या सुरक्षित किए गए ईमेल रहते हैं जिन्हें यूजर ने कंपोज़ किया है लेकिन अभी सेंड नहीं किया है।" },
+            { id: 8, tag: "", question: "ईमेल भेजने पर यदि नेटवर्क समस्या के कारण मेल तुरंत डिलीवर न हो पाए, तो वह अस्थायी रूप से कहाँ रहता है?", options: ["Drafts", "Outbox (आउटबॉक्स)", "Trash", "Spam"], correct: 1, explanation: "Outbox वह अस्थायी कतार (Queue) है जहाँ वे ईमेल रुकते हैं जो भेजे जाने की प्रक्रिया में हैं लेकिन सर्वर तक पूरी तरह पहुँचे नहीं हैं।" },
+            { id: 9, tag: "", question: "हटाए गए (Deleted) ईमेल स्थायी रूप से नष्ट होने से पहले 30 दिनों तक किस फोल्डर में सुरक्षित रहते हैं?", options: ["Archive", "Trash / Bin (ट्रैश)", "Spam", "Drafts"], correct: 1, explanation: "ट्रैश या रीसायकल बिन फोल्डर में डिलीट किए गए ईमेल 30 दिनों तक रहते हैं, जहाँ से उन्हें पुनः इनबॉक्स में रिस्टोर किया जा सकता है।" },
+            { id: 10, tag: "", question: "ईमेल के साथ गैर-टेक्स्ट फाइलों जैसे चित्र, ऑडियो, वीडियो या PDF दस्तावेजों को जोड़ने की तकनीक क्या कहलाती है?", options: ["Hyperlink", "MIME (Multipurpose Internet Mail Extensions)", "ASCII", "Telnet"], correct: 1, explanation: "MIME का पूरा नाम Multipurpose Internet Mail Extensions है।<br>यह मानक प्रोटोकॉल ईमेल प्रणाली को केवल सादे टेक्स्ट के बजाय बाइनरी फाइलों (इमेज, ऑडियो, वीडियो) को अटैचमेंट के रूप में भेजने की क्षमता प्रदान करता है।" },
+            { id: 11, tag: "", question: "Gmail में एक एकल ईमेल के साथ अधिकतम कितनी साइज की फाइल अटैचमेंट के रूप में भेजी जा सकती है?", options: ["10 MB", "25 MB", "50 MB", "100 MB"], correct: 1, explanation: "Gmail में प्रत्यक्ष फाइल अटैचमेंट की अधिकतम मानक सीमा 25 MB है।<br>25 MB से बड़ी फाइलों को भेजने के लिए गूगल ड्राइव (Google Drive) लिंक का उपयोग किया जाता है।" },
+            { id: 12, tag: "", question: "इंटरनेट पर वेबपेजों को देखने और नेविगेट करने के लिए प्रयुक्त क्लाइंट सॉफ्टवेयर क्या कहलाता है?", options: ["वेब सर्वर", "वेब ब्राउज़र (Web Browser)", "सर्च इंजन", "ऑपरेटिंग सिस्टम"], correct: 1, explanation: "वेब ब्राउज़र एक एप्लीकेशन सॉफ्टवेयर है जो वेब सर्वर से HTML, CSS और जावास्क्रिप्ट फाइलों को डाउनलोड करके उन्हें स्क्रीन पर मानव पठनीय दृश्य पृष्ठ के रूप में प्रस्तुत (Render) करता है।" },
+            { id: 13, tag: "", question: "विश्व का पहला ग्राफिकल वेब ब्राउज़र (First Graphical Web Browser) कौन-सा था, जिसे 1993 में मार्क एंड्रीसन ने बनाया था?", options: ["WorldWideWeb", "मोज़ेक (Mosaic)", "Netscape Navigator", "Internet Explorer"], correct: 1, explanation: "NCSA Mosaic 1993 में विकसित पहला लोकप्रिय ग्राफिकल वेब ब्राउज़र था जो टेक्स्ट के साथ-साथ सीधे पेज पर चित्र (Images) प्रदर्शित कर सकता था।" },
+            { id: 14, tag: "", question: "निम्नलिखित में से कौन-सा एक ओपन-सोर्स वेब ब्राउज़र है जिसे मोज़िला फाउंडेशन द्वारा विकसित किया गया है?", options: ["Safari", "Mozilla Firefox (मोज़िला फ़ायरफ़ॉक्स)", "Edge", "Opera"], correct: 1, explanation: "Mozilla Firefox एक स्वतंत्र, गैर-लाभकारी और ओपन-सोर्स वेब ब्राउज़र है जो अपनी गोपनीयता (Privacy) और सुरक्षा फीचर्स के लिए जाना जाता है।" },
+            { id: 15, tag: "", question: "Apple के macOS और iOS उपकरणों में डिफॉल्ट रूप से आने वाला वेब ब्राउज़र कौन-सा है?", options: ["Chrome", "Safari (सफारी)", "Firefox", "Edge"], correct: 1, explanation: "सफारी (Safari) एप्पल कॉर्पोरेशन द्वारा अपने ऑपरेटिंग सिस्टम्स (macOS, iOS, iPadOS) के लिए विकसित इन-हाउस मानक वेब ब्राउज़र है।" },
+            { id: 16, tag: "", question: "Microsoft Windows 10 और 11 में 'Internet Explorer' के स्थान पर शामिल किया गया आधुनिक ब्राउज़र कौन-सा है?", options: ["Microsoft Edge", "Bing", "Cortana", "Outlook"], correct: 0, explanation: "Microsoft Edge क्रोमियम (Chromium) इंजन पर आधारित माइक्रोसॉफ्ट का आधुनिक ब्राउज़र है, जिसने पुराने इंटरनेट एक्सप्लोरर को पूरी तरह रिप्लेस किया है।" },
+            { id: 17, tag: "", question: "टेक्स्ट-ओनली वेब ब्राउज़र (Text-Only Browser) का प्रसिद्ध उदाहरण कौन-सा है, जो बिना किसी ग्राफिक्स के केवल टेक्स्ट लोड करता है?", options: ["Lynx (लिंक्स)", "Chrome", "Safari", "Opera"], correct: 0, explanation: "Lynx एक कमांड-लाइन आधारित टेक्स्ट-ओनली वेब ब्राउज़र है।<br>यह लिनक्स और यूनिक्स टर्मिनल पर बिना किसी इमेज या सीएसएस के अत्यधिक तीव्र गति से केवल टेक्स्ट लोड करता है।" },
+            { id: 18, tag: "", question: "वेबसाइटों द्वारा यूजर की प्राथमिकताओं, लॉगिन सत्र और कार्ट विवरण को ब्राउज़र में सुरक्षित रखने वाली छोटी टेक्स्ट फाइल क्या कहलाती है?", options: ["Cache", "कुकी (Cookie)", "इतिहास (History)", "प्लग-इन"], correct: 1, explanation: "कुकीज़ (Cookies) वेब सर्वर द्वारा यूजर के कंप्यूटर पर स्टोर की जाने वाली छोटी डेटा फाइलें होती हैं।<br>ये यूजर की पहचान, सर्च प्रेफरेंस और ऑटो-लॉगिन सेशन को ट्रैक और सेव रखती हैं।" },
+            { id: 19, tag: "", question: "वेब ब्राउज़र द्वारा वेबपेज की छवियों और फाइलों को स्थानीय डिस्क पर सुरक्षित रखने की प्रक्रिया, ताकि अगली बार पेज जल्दी खुले, क्या कहलाती है?", options: ["कुकीज़", "कैश (Browser Cache)", "बुकमार्क", "प्रॉक्सी"], correct: 1, explanation: "ब्राउज़र कैश (Cache) वेबसाइटों के स्थिर घटकों (जैसे लोगो, इमेजिस, स्टाइलशीट्स) को स्थानीय मेमोरी में स्टोर कर लेता है, जिससे दोबारा साइट खोलने पर बैंडविड्थ बचती है और लोडिंग तेज होती है।" },
+            { id: 20, tag: "", question: "ब्राउज़र का 'गुप्त मोड' (Incognito / Private Browsing Mode) क्या सुनिश्चित करता है?", options: ["यह पूरी तरह अदृश्य और हैकर-प्रूफ बनाता है", "यह ब्राउज़िंग इतिहास, कुकीज़ और फॉर्म डेटा को स्थानीय कंप्यूटर पर सुरक्षित नहीं करता", "यह इंटरनेट की स्पीड दोगुनी करता है", "यह मुफ्त इंटरनेट देता है"], correct: 1, explanation: "इनकॉग्निटो मोड सेशन समाप्त होते ही ब्राउज़िंग हिस्ट्री, कुकीज़ और साइट डेटा को ऑटो-डिलीट कर देता है, जिससे एक ही डिवाइस का उपयोग करने वाले अन्य लोगों को गतिविधि का पता नहीं चलता।" },
+            { id: 21, tag: "", question: "वेबसाइटों के किसी पसंदीदा वेबपेज के URL को भविष्य में त्वरित एक्सेस हेतु ब्राउज़र में सुरक्षित करना क्या कहलाता है?", options: ["History", "बुकमार्किंग (Bookmarking / Favorites)", "डाउनलोडिंग", "कैशिंग"], correct: 1, explanation: "बुकमार्क (Ctrl + D) सुविधा के माध्यम से उपयोगकर्ता किसी भी महत्वपूर्ण वेब लिंक को ब्राउज़र के बुकमार्क बार में नाम के साथ सुरक्षित कर सकता है।" },
+            { id: 22, tag: "", question: "इंटरनेट पर अरबों वेबपेजों में से उपयोगकर्ता के कीवर्ड के आधार पर जानकारी खोजने वाला सॉफ्टवेयर सिस्टम क्या कहलाता है?", options: ["वेब ब्राउज़र", "सर्च इंजन (Search Engine)", "वेब सर्वर", "फायरवॉल"], correct: 1, explanation: "सर्च इंजन (जैसे Google, Bing, Yahoo) एक विशेष एल्गोरिदम आधारित सिस्टम है जो डेटाबेस से यूजर के सर्च कीवर्ड से मेल खाने वाले प्रासंगिक वेबपेजों की सूची प्रस्तुत करता है।" },
+            { id: 23, tag: "", question: "सर्च इंजन का वह स्वचालित बॉट (Bot) जो इंटरनेट पर नए और अपडेटेड वेबपेजों को लगातार खोजता रहता है, क्या कहलाता है?", options: ["कंपाइलर", "वेब क्रॉलर / स्पाइडर (Web Crawler / Spider)", "इंटरप्रेटर", "ड्राइवर"], correct: 1, explanation: "वेब क्रॉलर (उदा. Googlebot) स्वचालित प्रोग्राम हैं जो एक हाइपरलिंक से दूसरे हाइपरलिंक पर जाकर दुनिया भर की वेबसाइटों के डेटा को स्कैन और इकट्ठा करते हैं।" },
+            { id: 24, tag: "", question: "क्रॉल किए गए वेबपेजों के शब्दों और सामग्री को सर्च इंजन के विशाल डेटाबेस में व्यवस्थित और वर्गीकृत करने की प्रक्रिया क्या कहलाती है?", options: ["Crawling", "इंडेक्सिंग (Indexing)", "Ranking", "Rendering"], correct: 1, explanation: "इंडेक्सिंग वह प्रक्रिया है जिसमें सर्च इंजन वेबपेजों के टेक्स्ट और मेटाडेटा का विश्लेषण करके उन्हें एक विशाल केंद्रीय कैटलॉग (Index Database) में व्यवस्थित करता है।" },
+            { id: 25, tag: "", question: "गूगल सर्च इंजन की स्थापना 1998 में स्टैनफोर्ड विश्वविद्यालय के किन दो शोधार्थियों ने की थी?", options: ["लैरी पेज और सर्गेई ब्रिन (Larry Page & Sergey Brin)", "स्टीव जॉब्स और वोज्नियाक", "बिल गेट्स और पॉल एलन", "मार्क जुकरबर्ग और एडुआर्डो"], correct: 0, explanation: "लैरी पेज और सर्गेई ब्रिन ने 1998 में पेजरैंक (PageRank) एल्गोरिदम पर आधारित 'गूगल' की स्थापना की थी, जो आज दुनिया का सबसे बड़ा सर्च इंजन है।" },
+            { id: 26, tag: "", question: "Microsoft कॉर्पोरेशन द्वारा संचालित आधिकारिक सर्च इंजन का क्या नाम है?", options: ["Yahoo", "Bing (बिंग)", "Baidu", "DuckDuckGo"], correct: 1, explanation: "बिंग (Bing) माइक्रोसॉफ्ट का प्रमुख सर्च इंजन है, जिसे 2009 में पुराने 'Live Search' के उन्नत संस्करण के रूप में लॉन्च किया गया था।" },
+            { id: 27, tag: "", question: "चीन में सर्वाधिक उपयोग किया जाने वाला प्रमुख स्थानीय सर्च इंजन कौन-सा है?", options: ["Google", "Baidu (बायडू)", "Yandex", "Bing"], correct: 1, explanation: "बायडू (Baidu) चीन का सबसे बड़ा चीनी-भाषा सर्च इंजन और तकनीकी मंच है।" },
+            { id: 28, tag: "", question: "रूस और रूसी-भाषी देशों में सबसे लोकप्रिय और व्यापक रूप से प्रयुक्त सर्च इंजन कौन-सा है?", options: ["Yandex (यांडेक्स)", "Google", "Naver", "Yahoo"], correct: 0, explanation: "Yandex रूस की सबसे बड़ी इंटरनेट कंपनी और प्रमुख सर्च इंजन है जो स्थानीय रूसी भाषा सर्च में अग्रणी है।" },
+            { id: 29, tag: "", question: "उपयोगकर्ता की व्यक्तिगत जानकारी और सर्च हिस्ट्री को बिल्कुल भी ट्रैक न करने वाला गोपनीयता-केंद्रित सर्च इंजन कौन-सा है?", options: ["DuckDuckGo (डकडकगो)", "Google", "Bing", "Yahoo"], correct: 0, explanation: "DuckDuckGo एक प्राइवेसी-फोकस्ड सर्च इंजन है जो यूजर की IP एड्रेस या सर्च हिस्ट्री को स्टोर नहीं करता और सभी को निष्पक्ष सर्च परिणाम दिखाता है।" },
+            { id: 30, tag: "", question: "गूगल सर्च में किसी विशिष्ट वाक्यांश (Exact Phrase) को खोजने के लिए किस सर्च ऑपरेटर का उपयोग किया जाता है?", options: ["तारांकन (*)", "उद्धरण चिन्ह (\" \")", "माइनस (-)", "प्लस (+)"], correct: 1, explanation: "कोटेशन मार्क्स (\" \") के अंदर लिखे गए शब्द समूह को सर्च इंजन एक सटीक और अखंड वाक्यांश मानकर केवल उन्हीं पेजों को खोजता है जिनमें वे शब्द उसी क्रम में मौजूद हों।" },
+            { id: 31, tag: "", question: "गूगल सर्च में किसी विशिष्ट शब्द को खोज परिणामों से बाहर (Exclude) करने के लिए किस प्रतीक का प्रयोग किया जाता है?", options: ["ऋण / माइनस (-)", "हैश (#)", "एंड (@)", "टिल्ड (~)"], correct: 0, explanation: "माइनस (-) चिन्ह किसी कीवर्ड को सर्च से हटाने के लिए उपयोग होता है; जैसे 'UPSC -optional' सर्च करने पर बिना 'optional' शब्द वाले पेज ही दिखाई देंगे।" },
+            { id: 32, tag: "", question: "किसी विशिष्ट वेबसाइट के भीतर ही सामग्री खोजने के लिए सही गूगल सर्च सिंटेक्स क्या है?", options: ["site:example.com keyword", "inurl:keyword", "filetype:keyword", "link:example.com"], correct: 0, explanation: "'site:' ऑपरेटर सर्च इंजन को केवल उसी निर्दिष्ट डोमेन नाम के भीतर दी गई सामग्री को खोजने का निर्देश देता है।" },
+            { id: 33, tag: "", question: "केवल विशिष्ट फाइल फॉर्मेट (जैसे केवल PDF या PPT) खोजने के लिए किस सर्च ऑपरेटर का प्रयोग किया जाता है?", options: ["format:", "filetype: (उदा. filetype:pdf)", "doc:", "ext:"], correct: 1, explanation: "'filetype:' ऑपरेटर का उपयोग करके सीधे वांछित एक्सटेंशन वाली फाइलें खोजी जा सकती हैं (जैसे 'ICT Notes filetype:pdf')।" },
+            { id: 34, tag: "", question: "वेबपेज पर मौजूद वह टेक्स्ट या इमेज जिस पर क्लिक करते ही नया वेबपेज खुल जाता है, क्या कहलाता है?", options: ["एंकर", "हाइपरलिंक (Hyperlink)", "मेटा टैग", "हैशटैग"], correct: 1, explanation: "हाइपरलिंक वेब का मूल आधार है।<br>यह HTML में `<a>` (Anchor) टैग द्वारा बनाया जाता है और विभिन्न वेबपेजों को आपस में जोड़ता है।" },
+            { id: 35, tag: "", question: "HTML का पूर्ण रूप क्या है, जो वेबपेज की संरचना बनाने की मानक मार्कअप भाषा है?", options: ["Hypertext Markup Language", "Hyperlink Text Making Language", "High Tech Modern Language", "Hyper Tool Management Layout"], correct: 0, explanation: "HTML (Hypertext Markup Language) वेबपेजों के बुनियादी ढांचे, पैराग्राफ, हेडिंग, टेबल और लिंक्स को कोड करने की सार्वभौमिक मार्कअप भाषा है।" },
+            { id: 36, tag: "", question: "वेबपेज के रंग, लेआउट, फॉन्ट और दृश्य सजावट (Styling) को नियंत्रित करने वाली तकनीकी भाषा कौन-सी है?", options: ["HTML", "CSS (Cascading Style Sheets)", "PHP", "SQL"], correct: 1, explanation: "CSS (Cascading Style Sheets) वेब डिजाइनिंग में स्टाइलिंग भाषा है जो HTML द्वारा बनाए गए ढांचे को आकर्षक और रिस्पॉन्सिव रूप देती है।" },
+            { id: 37, tag: "", question: "वेबपेज को इंटरएक्टिव (इंटरएक्शन, एनिमेशन और डायनामिक व्यवहार) बनाने वाली लोकप्रिय क्लाइंट-साइड स्क्रिप्टिंग भाषा कौन-सी है?", options: ["CSS", "JavaScript (जावास्क्रिप्ट)", "HTML", "XML"], correct: 1, explanation: "जावास्क्रिप्ट ब्राउज़र के अंदर चलती है और वेबपेजों में यूजर इंटरएक्शन, फॉर्म वैलिडेशन, पॉपअप्स और डायनामिक एनिमेशन जोड़ती है।" },
+            { id: 38, tag: "", question: "किसी वेबसाइट के मुख्य/आरंभिक पृष्ठ को तकनीकी रूप से क्या कहा जाता है?", options: ["लैंडिंग पेज", "होम पेज (Home Page)", "मास्टर पेज", "इंडेक्स व्यू"], correct: 1, explanation: "होम पेज किसी भी वेबसाइट का डिफॉल्ट मुख्य पृष्ठ होता है (जैसे index.html), जो साइट के अन्य सभी अनुभागों के लिंक प्रदान करता है।" },
+            { id: 39, tag: "", question: "इंटरनेट पर वेब सर्वर द्वारा क्लाइंट को भेजा जाने वाला 'HTTP 404' स्टेटस कोड क्या दर्शाता है?", options: ["सर्वर पूरी तरह क्रैश हो गया", "पेज नहीं मिला (Page Not Found)", "अनधिकृत एक्सेस", "सफलतापूर्वक लोड हुआ"], correct: 1, explanation: "HTTP 404 Not Found एक मानक एरर कोड है जो बताता है कि ब्राउज़र सर्वर से सफलतापूर्वक जुड़ गया है लेकिन अनुरोधित वेबपेज सर्वर पर मौजूद नहीं है।" },
+            { id: 40, tag: "", question: "HTTP स्टेटस कोड '500' का क्या अर्थ होता है?", options: ["Internal Server Error (सर्वर आंतरिक त्रुटि)", "OK Success", "Forbidden", "Bad Gateway"], correct: 0, explanation: "HTTP 500 Internal Server Error एक सामान्य सर्वर-साइड एरर है, जो यह दर्शाता है कि सर्वर में आंतरिक समस्या के कारण अनुरोध पूरा नहीं हो सका।" },
+            { id: 41, tag: "", question: "इंटरनेट पर सामान्य सर्च इंजनों (जैसे गूगल) द्वारा इंडेक्स न किया गया गुप्त और गैर-सार्वजनिक वेब क्षेत्र क्या कहलाता है?", options: ["सरफेस वेब", "डीप वेब (Deep Web)", "डार्क वेब", "लोकल वेब"], correct: 1, explanation: "डीप वेब इंटरनेट का वह विशाल (90%+) हिस्सा है जो पासवर्ड से सुरक्षित डेटाबेस, बैंकिंग रिकॉर्ड्स, सरकारी पोर्टल्स और प्राइवेट पेजों से बना है जिसे सामान्य सर्च इंजन इंडेक्स नहीं कर सकते।" },
+            { id: 42, tag: "", question: "डीप वेब का वह विशेष एन्क्रिप्टेड हिस्सा जिसे केवल 'Tor Browser' जैसे विशेष सॉफ्टवेयर से ही खोला जा सकता है, क्या कहलाता है?", options: ["सरफेस वेब", "डार्क वेब (Dark Web)", "वाइड वेब", "रूट वेब"], correct: 1, explanation: "डार्क वेब प्याज रूटिंग (Onion Routing) पर आधारित अत्यधिक एन्क्रिप्टेड और गुमनाम नेटवर्क है, जिसे केवल .onion डोमेन और टॉर ब्राउज़र के जरिए एक्सेस किया जा सकता है।" },
+            { id: 43, tag: "", question: "वेब ब्राउज़र की कार्यक्षमता बढ़ाने के लिए उसमें जोड़े जाने वाले छोटे सहायक सॉफ्टवेयर मॉड्यूल्स क्या कहलाते हैं?", options: ["ड्राइवर्स", "ब्राउज़र एक्सटेंशन / ऐड-ऑन (Extensions / Add-ons)", "कुकीज़", "कर्नेल"], correct: 1, explanation: "एक्सटेंशन (जैसे एड-ब्लॉकर, ग्रामर-चेकर) वेब ब्राउज़र में अतिरिक्त सुविधाएं और कस्टमाइजेशन जोड़ने के लिए इंस्टॉल किए जाते हैं।" },
+            { id: 44, tag: "", question: "इंटरनेट एक्सप्लोरर को आधिकारिक रूप से किस वर्ष पूरी तरह रिटायर और बंद कर दिया गया?", options: ["2015", "2022", "2020", "2024"], correct: 1, explanation: "माइक्रोसॉफ्ट ने 27 वर्षों की सेवा के बाद 15 जून 2022 को इंटरनेट एक्सप्लोरर को पूरी तरह बंद कर दिया और इसके उपयोगकर्ताओं को Microsoft Edge पर शिफ्ट कर दिया।" },
+            { id: 45, tag: "", question: "सर्च इंजन ऑप्टिमाइजेशन (SEO) का प्राथमिक उद्देश्य क्या होता है?", options: ["वेबसाइट को वायरस से बचाना", "सर्च इंजन के खोज परिणामों में वेबसाइट की रैंकिंग और विजिबिलिटी में सुधार करना", "वेबसाइट का आकार छोटा करना", "कंप्यूटर बंद करना"], correct: 1, explanation: "SEO उन तकनीकों और रणनीतियों का समूह है जिनके माध्यम से किसी वेबसाइट को सर्च इंजन रिजल्ट पेजों (SERP) पर शीर्ष स्थानों पर लाया जाता है।" },
+            { id: 46, tag: "", question: "गूगल क्रोम ब्राउज़र में किसी नए वेबपेज को बुकमार्क करने की मानक कीबोर्ड शॉर्टकट की क्या है?", options: ["Ctrl + B", "Ctrl + D", "Ctrl + Shift + B", "Ctrl + J"], correct: 1, explanation: "Ctrl + D वर्तमान में खुले हुए वेबपेज को तुरंत बुकमार्क करने का सार्वभौमिक शॉर्टकट है।" },
+            { id: 47, tag: "", question: "ब्राउज़र में डाउनलोड हिस्ट्री (Downloads List) खोलने के लिए किस शॉर्टकट कुंजी का उपयोग होता है?", options: ["Ctrl + D", "Ctrl + J", "Ctrl + H", "Ctrl + N"], correct: 1, explanation: "Ctrl + J शॉर्टकट से ब्राउज़र में डाउनलोड्स मैनेजर टैब खुलता है, जबकि Ctrl + H से ब्राउज़िंग इतिहास (History) खुलता है।" },
+            { id: 48, tag: "", question: "सर्च इंजन में 'SERP' का सही पूर्ण रूप क्या है?", options: ["Search Engine Results Page", "System Error Recovery Protocol", "Secure Email Routing Process", "Software Engineering Research Program"], correct: 0, explanation: "SERP (Search Engine Results Page) वह वेबपेज है जो सर्च इंजन द्वारा यूजर के कीवर्ड खोजने के बाद परिणामों के रूप में प्रदर्शित किया जाता है।" },
+            { id: 49, tag: "", question: "ब्राउज़र द्वारा किसी वेबपेज को कैश मेमोरी को अनदेखा करते हुए सर्वर से पूर्णतः नया रीलोड (Hard Refresh) करने का शॉर्टकट क्या है?", options: ["F5", "Ctrl + F5 (या Ctrl + Shift + R)", "Alt + F4", "Ctrl + R"], correct: 1, explanation: "Ctrl + F5 ब्राउज़र को स्थानीय कैश को बायपास करके वेब सर्वर से पूरी तरह से नई फाइलें और कोड डाउनलोड करने के लिए बाध्य करता है।" },
+            { id: 50, tag: "", question: "ईमेल संदेश के अंत में स्वचालित रूप से जुड़ने वाले प्रेषक के नाम, पद और संपर्क विवरण के ब्लॉक को क्या कहते हैं?", options: ["सब्जेक्ट", "ईमेल सिग्नेचर (Email Signature)", "हेडर", "अटैचमेंट"], correct: 1, explanation: "ईमेल सिग्नेचर प्रेषक द्वारा पहले से निर्धारित टेक्स्ट ब्लॉक होता है जो हर भेजे जाने वाले ईमेल के अंत में स्वतः जुड़कर पेशेवर पहचान प्रस्तुत करता है।" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
