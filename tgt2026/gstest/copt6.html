@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">इंटरनेट एवं नेटवर्क शब्दावली</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_ict_test_06"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "कंप्यूटर नेटवर्क में दो या दो से अधिक कंप्यूटरों के बीच डेटा संचार को नियंत्रित करने वाले नियमों के समूह को क्या कहा जाता है?", options: ["टोपोलॉजी", "प्रोटोकॉल (Protocol)", "बैंडविड्थ", "सबनेट"], correct: 1, explanation: "प्रोटोकॉल (Protocol) डिजिटल संचार के औपचारिक नियमों, मानकों और प्रक्रियाओं का समूह है।<br>यह तय करता है कि नेटवर्क पर डेटा कैसे स्वरूपित (Format), प्रेषित, प्राप्त और सत्यापित किया जाएगा।" },
+            { id: 2, tag: "", question: "सीमित भौगोलिक क्षेत्र (जैसे एक कमरा, भवन या स्कूल परिसर) में स्थापित नेटवर्क को क्या कहा जाता है?", options: ["WAN", "MAN", "LAN (Local Area Network)", "PAN"], correct: 2, explanation: "LAN (Local Area Network) आमतौर पर 1 से 2 किलोमीटर के दायरे में स्थित कंप्यूटरों को जोड़ता है।<br>इसमें डेटा ट्रांसमिशन की गति अत्यधिक तीव्र (10 Mbps से 10 Gbps) होती है और इसमें ईथरनेट या वाई-फाई का उपयोग होता है।" },
+            { id: 3, tag: "", question: "एक ही शहर या महानगर के विभिन्न कार्यालयों और शाखाओं को आपस में जोड़ने वाला नेटवर्क क्या कहलाता है?", options: ["LAN", "MAN (Metropolitan Area Network)", "WAN", "PAN"], correct: 1, explanation: "MAN (Metropolitan Area Network) का भौगोलिक विस्तार पूरे शहर या कस्बे (लगभग 5 से 50 किमी) में होता है।<br>केबल टीवी नेटवर्क और किसी शहर में बैंक शाखाओं का अंतर-संयोजन MAN के प्रमुख उदाहरण हैं।" },
+            { id: 4, tag: "", question: "संपूर्ण देश, महाद्वीप या पूरे विश्व में फैले विशाल भौगोलिक नेटवर्क को क्या कहा जाता है?", options: ["LAN", "CAN", "WAN (Wide Area Network)", "SAN"], correct: 2, explanation: "WAN (Wide Area Network) असीमित भौगोलिक दूरी को कवर करता है।<br>इंटरनेट दुनिया का सबसे बड़ा सार्वजनिक WAN नेटवर्क है, जो उपग्रह, माइक्रोवेव और अंडरसी ऑप्टिकल फाइबर केबलों से जुड़ा है।" },
+            { id: 5, tag: "", question: "ब्लूटूथ (Bluetooth) तकनीक द्वारा किसी व्यक्ति के 10 मीटर के दायरे में स्थापित निजी नेटवर्क क्या कहलाता है?", options: ["PAN (Personal Area Network)", "LAN", "MAN", "VPN"], correct: 0, explanation: "PAN (Personal Area Network) एक व्यक्ति के निजी उपकरणों (स्मार्टफोन, लैपटॉप, वायरलेस ईयरबड्स) के बीच लगभग 10 मीटर की दूरी में वायरलेस डेटा संचार स्थापित करता है।" },
+            { id: 6, tag: "", question: "किसी विश्वविद्यालय, कॉलेज या मिलिट्री बेस के विभिन्न भवनों के LANs को जोड़ने वाला नेटवर्क क्या कहलाता है?", options: ["PAN", "CAN (Campus Area Network)", "WAN", "SAN"], correct: 1, explanation: "CAN (Campus Area Network) एक विशिष्ट भौगोलिक परिसर (जैसे विश्वविद्यालय कैंपस) के भीतर कई LAN नेटवर्कों का समूह होता है।<br>यह आकार में LAN से बड़ा लेकिन MAN से छोटा होता है।" },
+            { id: 7, tag: "", question: "नेटवर्क में कंप्यूटरों और केबलों की भौतिक या तार्किक व्यवस्था (Physical/Logical Layout) को क्या कहते हैं?", options: ["नेटवर्क टोपोलॉजी (Network Topology)", "नेटवर्क आर्किटेक्चर", "रूटिंग", "स्विचिंग"], correct: 0, explanation: "नेटवर्क टोपोलॉजी वह संरचना या ज्यामितीय खाका है जिसके अनुसार नेटवर्क के विभिन्न नोड्स (कंप्यूटर, सर्वर) आपस में संचार लिंक द्वारा जुड़े होते हैं।" },
+            { id: 8, tag: "", question: "किस टोपोलॉजी में सभी कंप्यूटर एक केंद्रीय उपकरण (Hub या Switch) से अलग-अलग केबल द्वारा जुड़े होते हैं?", options: ["बस टोपोलॉजी", "स्टार टोपोलॉजी (Star Topology)", "रिंग टोपोलॉजी", "मेश टोपोलॉजी"], correct: 1, explanation: "स्टार टोपोलॉजी में प्रत्येक नोड सीधे केंद्रीय स्विच/हब से जुड़ा होता है।<br>इसमें एक केबल के खराब होने से केवल वही कंप्यूटर प्रभावित होता है, पूरा नेटवर्क नहीं रुकता।" },
+            { id: 9, tag: "", question: "किस टोपोलॉजी में सभी नोड्स एक ही मुख्य एकल केबल (Backbone Cable) से जुड़े होते हैं और सिरों पर टर्मिनेटर लगे होते हैं?", options: ["स्टार टोपोलॉजी", "बस टोपोलॉजी (Bus Topology)", "रिंग टोपोलॉजी", "मेश टोपोलॉजी"], correct: 1, explanation: "बस टोपोलॉजी में एक सीधी बैकबोन केबल होती है।<br>इस टोपोलॉजी का मुख्य दोष यह है कि यदि मुख्य बैकबोन केबल कहीं से भी टूट जाए तो पूरा नेटवर्क पूरी तरह बंद हो जाता है।" },
+            { id: 10, tag: "", question: "प्रत्येक कंप्यूटर अपने निकटवर्ती दो कंप्यूटरों से जुड़कर एक बंद लूप बनाता है, यह किस टोपोलॉजी का लक्षण है?", options: ["स्टार", "रिंग टोपोलॉजी (Ring Topology)", "बस", "ट्री"], correct: 1, explanation: "रिंग टोपोलॉजी में डेटा एक ही दिशा (Unidirectional) में टोकन (Token Passing विधि) के रूप में यात्रा करता है।<br>यदि रिंग का कोई भी एक नोड या कनेक्शन टूट जाए तो संचार बाधित हो जाता है।" },
+            { id: 11, tag: "", question: "वह कौन-सी टोपोलॉजी है जिसमें प्रत्येक नोड नेटवर्क के हर दूसरे नोड से सीधे 'पॉइंट-टू-पॉइंट' लिंक द्वारा जुड़ा होता है?", options: ["बस टोपोलॉजी", "स्टार टोपोलॉजी", "मेश टोपोलॉजी (Mesh Topology)", "हाइब्रिड टोपोलॉजी"], correct: 2, explanation: "पूर्ण मेश टोपोलॉजी (Full Mesh) सबसे विश्वसनीय और सुरक्षित टोपोलॉजी है क्योंकि इसमें बैकअप लिंक उपलब्ध होते हैं।<br>N नोड्स के लिए इसमें कुल [N(N-1)]/2 स्वतंत्र केबल कनेक्शनों की आवश्यकता होती है।" },
+            { id: 12, tag: "", question: "स्टार और बस टोपोलॉजी के संयोजन से बनने वाली पदानुक्रमित (Hierarchical) टोपोलॉजी क्या कहलाती है?", options: ["रिंग टोपोलॉजी", "ट्री टोपोलॉजी (Tree Topology)", "मेश टोपोलॉजी", "पॉइंट टोपोलॉजी"], correct: 1, explanation: "ट्री टोपोलॉजी में रूट नोड और शाखाओं की तरह कई स्टार नेटवर्क एक सेंट्रल बस बैकबोन से जुड़े होते हैं।<br>यह बड़े कॉर्पोरेट नेटवर्कों के विस्तार के लिए उपयुक्त मानी जाती है।" },
+            { id: 13, tag: "", question: "दो या दो से अधिक विभिन्न प्रकार की टोपोलॉजी के मिश्रण से तैयार नेटवर्क क्या कहलाता है?", options: ["मिश्रित / हाइब्रिड टोपोलॉजी (Hybrid Topology)", "रिंग टोपोलॉजी", "डुअल टोपोलॉजी", "ग्लोबल टोपोलॉजी"], correct: 0, explanation: "जब दो या अधिक अलग-अलग टोपोलॉजी (जैसे स्टार + रिंग या स्टार + मेश) को एक साथ जोड़ा जाता है, तो उसे हाइब्रिड टोपोलॉजी कहते हैं।<br>यह अत्यधिक स्केलेबल और लचीली होती है।" },
+            { id: 14, tag: "", question: "नेटवर्किंग के मानक मॉडल 'OSI' का पूर्ण रूप क्या है?", options: ["Open Systems Interconnection", "Operating System Interface", "Optical System Integration", "Online Service Interlink"], correct: 0, explanation: "OSI (Open Systems Interconnection) मॉडल को ISO द्वारा 1984 में विकसित किया गया था।<br>यह विभिन्न निर्माताओं के कंप्यूटरों के बीच मानकीकृत नेटवर्क संचार को समझने का 7-लेयर वैचारिक ढांचा है।" },
+            { id: 15, tag: "", question: "OSI संदर्भ मॉडल में कुल कितनी परतें (Layers) होती हैं?", options: ["4 परतें", "5 परतें", "7 परतें (7 Layers)", "8 परतें"], correct: 2, explanation: "OSI मॉडल में 7 परतें होती हैं: 1. Physical, 2. Data Link, 3. Network, 4. Transport, 5. Session, 6. Presentation, और 7. Application Layer।" },
+            { id: 16, tag: "", question: "OSI मॉडल की कौन-सी परत उपयोगकर्ता (User) और एप्लीकेशन सॉफ्टवेयर के सबसे निकटतम होती है?", options: ["Physical Layer", "Network Layer", "Transport Layer", "Application Layer (लेयर 7)"], correct: 3, explanation: "एप्लीकेशन लेयर (Layer 7) सीधे उपयोगकर्ता के सॉफ्टवेयर (जैसे ब्राउज़र, ईमेल क्लाइंट) के साथ इंटरैक्ट करती है।<br>HTTP, FTP, SMTP और DNS जैसे प्रोटोकॉल इसी लेयर पर कार्य करते हैं।" },
+            { id: 17, tag: "", question: "डेटा एन्क्रिप्शन, डिक्रिप्शन और कंप्रेशन का कार्य OSI मॉडल की किस परत पर संपन्न होता है?", options: ["Application Layer", "Presentation Layer (लेयर 6)", "Session Layer", "Transport Layer"], correct: 1, explanation: "प्रेजेंटेशन लेयर डेटा के सिंटैक्स और सेमेंटिक्स के लिए जिम्मेदार होती है।<br>यह डेटा को ट्रांसमिशन से पहले एन्क्रिप्ट (सुरक्षित) करती है और प्राप्त होने पर डिक्रिप्ट व डीकंप्रेस करती है।" },
+            { id: 18, tag: "", question: "नेटवर्क संचार में दो कंप्यूटरों के बीच डायलॉग कंट्रोल और सेशन स्थापित करने का कार्य कौन-सी परत करती है?", options: ["Session Layer (लेयर 5)", "Transport Layer", "Network Layer", "Data Link Layer"], correct: 0, explanation: "सेशन लेयर दो संचारित उपकरणों के मध्य कनेक्शन (Session) को स्थापित, प्रबंधित और समाप्त करने का कार्य करती है।" },
+            { id: 19, tag: "", question: "एंड-टू-एंड संचार (End-to-End Delivery) और फ्लो व एरर कंट्रोल के लिए कौन-सी परत जिम्मेदार है?", options: ["Network Layer", "Transport Layer (लेयर 4)", "Data Link Layer", "Physical Layer"], correct: 1, explanation: "ट्रांसपोर्ट लेयर को OSI मॉडल का दिल (Heart of OSI) कहा जाता है।<br>यह डेटा को सेगमेंट्स में तोड़ती है और बिना किसी त्रुटि के स्रोत से गंतव्य तक डेटा की पूर्ण डिलीवरी सुनिश्चित करती है।" },
+            { id: 20, tag: "", question: "डेटा पैकेटों के रूटिंग (Routing) और तार्किक एड्रेसिंग (IP Addressing) के लिए कौन-सी परत जिम्मेदार है?", options: ["Physical Layer", "Data Link Layer", "Network Layer (लेयर 3)", "Session Layer"], correct: 2, explanation: "नेटवर्क लेयर पर राउटर (Router) कार्य करता है।<br>यह डेटा पैकेटों को विभिन्न नेटवर्कों से होकर गुजरने के लिए सबसे छोटा और सर्वोत्तम पथ (Best Route) निर्धारित करती है।" },
+            { id: 21, tag: "", question: "भौतिक पते (MAC Address) और डेटा को फ्रेम (Frames) में व्यवस्थित करने का कार्य कौन-सी परत करती है?", options: ["Physical Layer", "Data Link Layer (लेयर 2)", "Network Layer", "Transport Layer"], correct: 1, explanation: "डेटा लिंक लेयर पैकेटों को फ्रेम्स में बदलती है और एक ही नेटवर्क सेगमेंट के नोड्स के बीच त्रुटिरहित ट्रांसमिशन हेतु MAC एड्रेस का उपयोग करती है।<br>स्विच और ब्रिज इसी लेयर पर कार्य करते हैं।" },
+            { id: 22, tag: "", question: "डेटा को कच्चे बिट्स (Raw Bits - 0s & 1s) और इलेक्ट्रॉनिक/ऑप्टिकल सिग्नलों के रूप में भेजने वाली परत कौन-सी है?", options: ["Physical Layer (लेयर 1)", "Data Link Layer", "Network Layer", "Application Layer"], correct: 0, explanation: "फिजिकल लेयर नेटवर्क के भौतिक तारों, वोल्टेज स्तरों, पिन संरचना, रेडियो तरंगों और केबल्स से सीधे संबंधित होती है।" },
+            { id: 23, tag: "", question: "वेबपेज (HTML दस्तावेज) को इंटरनेट ब्राउज़र पर सुरक्षित रूप से मंगाने के लिए किस प्रोटोकॉल का उपयोग होता है?", options: ["FTP", "HTTPS (Hypertext Transfer Protocol Secure)", "SMTP", "SNMP"], correct: 1, explanation: "HTTPS का पूर्ण रूप Hypertext Transfer Protocol Secure है।<br>यह SSL/TLS एन्क्रिप्शन तकनीक का उपयोग करता है ताकि उपयोगकर्ता और वेब सर्वर के बीच का डेटा हैकर्स से पूरी तरह सुरक्षित रहे।" },
+            { id: 24, tag: "", question: "इंटरनेट पर बड़ी फाइलों को एक कंप्यूटर से दूसरे कंप्यूटर पर अपलोड या डाउनलोड करने का मानक प्रोटोकॉल कौन-सा है?", options: ["FTP (File Transfer Protocol)", "HTTP", "Telnet", "ARP"], correct: 0, explanation: "FTP (File Transfer Protocol) TCP/IP नेटवर्क पर दो कंप्यूटरों के बीच फाइलों के कुशल और सुरक्षित स्थानांतरण हेतु प्रयुक्त होता है।" },
+            { id: 25, tag: "", question: "ईमेल भेजने (Outgoing Mail Transmission) के लिए किस प्रोटोकॉल का प्राथमिक उपयोग किया जाता है?", options: ["POP3", "IMAP", "SMTP (Simple Mail Transfer Protocol)", "DHCP"], correct: 2, explanation: "SMTP का पूरा नाम Simple Mail Transfer Protocol है।<br>यह क्लाइंट से सर्वर और एक मेल सर्वर से दूसरे मेल सर्वर तक ईमेल संदेशों को पुश (भेजने) का कार्य करता है।" },
+            { id: 26, tag: "", question: "मेल सर्वर से ईमेल डाउनलोड करके स्थानीय कंप्यूटर पर प्राप्त करने वाला प्रोटोकॉल कौन-सा है?", options: ["SMTP", "POP3 (Post Office Protocol 3)", "DNS", "ICMP"], correct: 1, explanation: "POP3 मेल सर्वर से सभी नए ईमेल इनबॉक्स को यूजर के डिवाइस पर डाउनलोड कर लेता है और सामान्यतः सर्वर से मूल ईमेल हटा देता है।" },
+            { id: 27, tag: "", question: "ईमेल को सर्वर पर ही सुरक्षित रखकर विभिन्न डिवाइसों से सिंक (Sync) करके पढ़ने की सुविधा कौन देता है?", options: ["POP3", "IMAP (Internet Message Access Protocol)", "SMTP", "FTP"], correct: 1, explanation: "IMAP (Internet Message Access Protocol) आधुनिक ईमेल प्रोटोकॉल है।<br>यह ईमेल को सीधे सर्वर पर बनाए रखता है जिससे फोन, टैबलेट और लैपटॉप पर एक साथ वास्तविक समय में इनबॉक्स सिंक रहता है।" },
+            { id: 28, tag: "", question: "मनुष्य के पढ़ने योग्य डोमेन नाम (जैसे www.google.com) को संख्यात्मक IP एड्रेस में बदलने वाली प्रणाली क्या कहलाती है?", options: ["DHCP", "DNS (Domain Name System)", "NAT", "URL"], correct: 1, explanation: "DNS (Domain Name System) इंटरनेट की फोनबुक (Phonebook of the Internet) कहलाता है।<br>कंप्यूटर केवल IP पते समझता है, अतः DNS वेबसाइट के नाम को संबंधित सर्वर के IP एड्रेस में अनुवादित करता है।" },
+            { id: 29, tag: "", question: "नेटवर्क में जुड़े नए कंप्यूटरों को स्वचालित रूप से IP एड्रेस आवंटित करने वाला प्रोटोकॉल कौन-सा है?", options: ["DNS", "DHCP (Dynamic Host Configuration Protocol)", "ARP", "RARP"], correct: 1, explanation: "DHCP का पूरा नाम Dynamic Host Configuration Protocol है।<br>यह नेटवर्क एडमिनिस्ट्रेटर के बिना प्रत्येक कनेक्टेड डिवाइस को स्वतः ही एक वैध IP एड्रेस, सबनेट मास्क और डिफॉल्ट गेटवे प्रदान करता है।" },
+            { id: 30, tag: "", question: "TCP (Transmission Control Protocol) की मुख्य विशेषता क्या है?", options: ["यह कनेक्शन-रहित और अविश्वसनीय है", "यह कनेक्शन-उन्मुख (Connection-Oriented) और पूर्णतः विश्वसनीय है", "यह केवल ऑडियो भेजता है", "यह केबल रहित है"], correct: 1, explanation: "TCP एक कनेक्शन-ओरिएंटेड प्रोटोकॉल है जो 3-Way Handshake का उपयोग करता है।<br>यह डेटा पैकेटों की रसीद (Acknowledgement) प्राप्त करता है और खोए हुए डेटा को दोबारा भेजकर 100% सटीक डिलीवरी सुनिश्चित करता है।" },
+            { id: 31, tag: "", question: "लाइव वीडियो स्ट्रीमिंग और ऑनलाइन गेमिंग में तेज गति के लिए प्रयुक्त कनेक्शन-रहित (Connectionless) प्रोटोकॉल कौन-सा है?", options: ["TCP", "UDP (User Datagram Protocol)", "FTP", "POP3"], correct: 1, explanation: "UDP (User Datagram Protocol) में पावती (Acknowledgement) का इंतजार नहीं किया जाता।<br>यह बिना किसी देरी के अत्यधिक तेज गति से डेटा भेजता है, भले ही कुछ पैकेट रास्ते में छूट जाएं।" },
+            { id: 32, tag: "", question: "एक मानक IPv4 (Internet Protocol Version 4) एड्रेस कितने बिट्स का होता है?", options: ["16 बिट्स", "32 बिट्स (32 Bits)", "64 बिट्स", "128 बिट्स"], correct: 1, explanation: "IPv4 एड्रेस 32 बिट्स का होता है जिसे 8-8 बिट्स के 4 भागों (Octets) में डॉट्स द्वारा अलग करके लिखा जाता है (उदा. 192.168.1.1)।" },
+            { id: 33, tag: "", question: "IPv6 (Internet Protocol Version 6) एड्रेस की कुल लंबाई कितने बिट्स होती है?", options: ["32 बिट्स", "64 बिट्स", "128 बिट्स (128 Bits)", "256 बिट्स"], correct: 2, explanation: "IPv4 एड्रेस की वैश्विक कमी को दूर करने के लिए IPv6 विकसित किया गया।<br>यह 128 बिट्स का होता है और इसे 16-बिट के 8 हेक्साडेसिमल ब्लॉकों में कोलन (:) द्वारा अलग करके लिखा जाता है।" },
+            { id: 34, tag: "", question: "नेटवर्क कार्ड (NIC) पर निर्माता कंपनी द्वारा स्थायी रूप से बर्न किया गया 48-बिट भौतिक पता क्या कहलाता है?", options: ["IP Address", "MAC Address (Media Access Control)", "Port Address", "URL"], correct: 1, explanation: "MAC Address किसी डिवाइस का अद्वितीय हार्डवेयर (भौतिक) पता होता है।<br>यह 48 बिट्स (6 बाइट्स) का होता है और इसे 12 हेक्साडेसिमल अंकों में लिखा जाता है (उदा. 00:1A:2B:3C:4D:5E)।" },
+            { id: 35, tag: "", question: "IP एड्रेस को उसके संबंधित भौतिक MAC एड्रेस में खोजने और बदलने वाला प्रोटोकॉल कौन-सा है?", options: ["ARP (Address Resolution Protocol)", "DNS", "DHCP", "ICMP"], correct: 0, explanation: "ARP (Address Resolution Protocol) नेटवर्क लेयर के तार्किक 32-बिट IP एड्रेस को डेटा लिंक लेयर के भौतिक 48-बिट MAC एड्रेस में मैप करता है।" },
+            { id: 36, tag: "", question: "दो या दो से अधिक पूरी तरह भिन्न प्रोटोकॉल और आर्किटेक्चर वाले नेटवर्कों को आपस में जोड़ने वाला स्मार्ट उपकरण क्या कहलाता है?", options: ["हब", "ब्रिज", "गेटवे (Gateway)", "रिपीटर"], correct: 2, explanation: "गेटवे (Gateway) OSI मॉडल की सभी परतों पर प्रोटोकॉल रूपांतरण (Protocol Conversion) करने में सक्षम होता है।<br>यह अलग-अलग नियमों पर चलने वाले भिन्न नेटवर्कों को आपस में जोड़ता है।" },
+            { id: 37, tag: "", question: "लंबी दूरी में केबलों के भीतर कमजोर पड़ चुके इलेक्ट्रॉनिक सिग्नलों को प्रवर्धित (Amplify/Regenerate) करने वाला उपकरण कौन-सा है?", options: ["रिपीटर (Repeater)", "स्विच", "मॉडेम", "राउटर"], correct: 0, explanation: "सिग्नल जब लंबी दूरी तय करते हैं तो उनमें क्षीणन (Attenuation) आ जाता है।<br>रिपीटर फिजिकल लेयर पर कमजोर सिग्नलों को पुनः अपनी मूल शक्ति में बनाकर आगे प्रसारित करता है।" },
+            { id: 38, tag: "", question: "नेटवर्क स्विच और हब में मुख्य अंतर क्या होता है?", options: ["हब स्मार्ट है और स्विच डम्ब है", "हब डेटा को सभी पोर्ट्स पर ब्रॉडकास्ट करता है जबकि स्विच केवल लक्षित नोड को डेटा भेजता है", "स्विच में कोई पोर्ट नहीं होता", "हब में इंटरनेट नहीं चलता"], correct: 1, explanation: "हब एक 'डम्ब डिवाइस' है जो प्राप्त डेटा को सभी जुड़े कंप्यूटरों पर अंधाधुंध भेज देता है।<br>स्विच MAC एड्रेस टेबल पढ़कर केवल उसी विशिष्ट कंप्यूटर को पैकेट भेजता है जिसके लिए वह बना है।" },
+            { id: 39, tag: "", question: "इंटरनेट का जनक (Father of the Internet) किसे माना जाता है?", options: ["टिम बर्नर्स ली", "विंट सर्फ (Vint Cerf) एवं बॉब कान", "चार्ल्स बैबेज", "बिल गेट्स"], correct: 1, explanation: "विंट सर्फ (Vinton Cerf) और रॉबर्ट बॉब कान ने TCP/IP प्रोटोकॉल सूट की रूपरेखा तैयार की थी।<br>इसी कारण विंट सर्फ को आधिकारिक रूप से 'इंटरनेट का जनक' कहा जाता है।" },
+            { id: 40, tag: "", question: "WWW (World Wide Web) का आविष्कार 1989 में CERN प्रयोगशाला में किसने किया था?", options: ["विंट सर्फ", "टिम बर्नर्स ली (Tim Berners-Lee)", "स्टीव जॉब्स", "मार्क जुकरबर्ग"], correct: 1, explanation: "ब्रिटिश वैज्ञानिक सर टिम बर्नर्स ली ने 1989 में WWW, पहला वेब ब्राउज़र (WorldWideWeb) और HTML भाषा का आविष्कार किया था।" },
+            { id: 41, tag: "", question: "किसी वेबपेज के पूर्ण और अद्वितीय इंटरनेट पते (Web Address) को तकनीकी रूप से क्या कहा जाता है?", options: ["IP", "URL (Uniform Resource Locator)", "MAC", "HTTP"], correct: 1, explanation: "URL (Uniform Resource Locator) इंटरनेट पर किसी भी दस्तावेज, इमेज या वेबपेज का अद्वितीय ग्लोबल पता होता है (उदा. https://www.example.com/index.html)।" },
+            { id: 42, tag: "", question: "संस्था या विश्वविद्यालय के आंतरिक कर्मचारियों द्वारा उपयोग किए जाने वाले सुरक्षित निजी नेटवर्क को क्या कहते हैं?", options: ["इंटरनेट", "इंट्रानेट (Intranet)", "एक्स्ट्रानेट", "ईथरनेट"], correct: 1, explanation: "इंट्रानेट किसी संगठन का पूर्णतः निजी नेटवर्क होता है।<br>यह इंटरनेट तकनीकों (TCP/IP) पर आधारित होता है लेकिन इसे केवल उस संगठन के अधिकृत सदस्य ही एक्सेस कर सकते हैं।" },
+            { id: 43, tag: "", question: "सार्वजनिक असुरक्षित इंटरनेट पर एक एन्क्रिप्टेड और सुरक्षित सुरंग (Tunnel) बनाकर निजी नेटवर्क एक्सेस करने की तकनीक क्या कहलाती है?", options: ["VPN (Virtual Private Network)", "VLAN", "VoIP", "WAN"], correct: 0, explanation: "VPN का पूरा नाम Virtual Private Network है।<br>यह यूजर के IP एड्रेस को छुपाकर डेटा को एन्क्रिप्ट करता है, जिससे सार्वजनिक वाई-फाई पर भी बैंक-स्तरीय सुरक्षित संचार संभव होता है।" },
+            { id: 44, tag: "", question: "इंटरनेट पर वॉयस कॉल और टेलीफोन वार्तालाप करने की तकनीक को क्या कहा जाता है?", options: ["VoIP (Voice over Internet Protocol)", "FTP", "SMTP", "Telnet"], correct: 0, explanation: "VoIP (Voice over IP) एनालॉग आवाज को डिजिटल डेटा पैकेटों में बदलकर इंटरनेट के माध्यम से संचारित करता है।<br>WhatsApp Call, Skype और Zoom इसी तकनीक पर काम करते हैं।" },
+            { id: 45, tag: "", question: "नेटवर्क संचार चैनल द्वारा प्रति सेकंड स्थानांतरित किए जा सकने वाले डेटा की अधिकतम क्षमता क्या कहलाती है?", options: ["लेटेन्सी", "बैंडविड्थ (Bandwidth)", "जिटर", "थ्रूपुट"], correct: 1, explanation: "बैंडविड्थ किसी नेटवर्क कनेक्शन की डेटा वहन क्षमता (Data Carrying Capacity) है।<br>इसे सामान्यतः बिट्स प्रति सेकंड (bps, Mbps, Gbps) में मापा जाता है।" },
+            { id: 46, tag: "", question: "डेटा पैकेट को स्रोत से गंतव्य तक पहुँचने और वापस आने में लगने वाले समय के विलंब (Delay) को क्या कहते हैं?", options: ["बैंडविड्थ", "लेटेन्सी (Latency / Ping Time)", "अपलोड स्पीड", "फ्रेम रेट"], correct: 1, explanation: "लेटेन्सी नेटवर्क में होने वाली समयावधि की देरी है जिसे मिलीसेकंड (ms) में मापा जाता है।<br>ऑनलाइन लाइव वीडियो और गेमिंग में जितनी कम लेटेन्सी होगी, अनुभव उतना ही स्मूथ होगा।" },
+            { id: 47, tag: "", question: "कम्युनिकेशन चैनल जिसमें डेटा एक ही समय में दोनों दिशाओं (Simultaneously Both Directions) में प्रवाहित हो सकता है, क्या कहलाता है?", options: ["सिम्प्लेक्स (Simplex)", "हाफ-डुप्लेक्स (Half-Duplex)", "फुल-डुप्लेक्स (Full-Duplex)", "मल्टीप्लेक्स"], correct: 2, explanation: "फुल-डुप्लेक्स में दोनों पक्ष एक ही समय पर एक साथ बोल और सुन सकते हैं (उदा. टेलीफोन और मोबाइल संचार)।<br>वॉकी-टॉकी हाफ-डुप्लेक्स और टीवी ब्रॉडकास्ट सिम्प्लेक्स का उदाहरण है।" },
+            { id: 48, tag: "", question: "इंटरनेट का पूर्ववर्ती (प्रारंभिक) नेटवर्क कौन-सा था जिसे 1969 में अमेरिकी रक्षा विभाग द्वारा शुरू किया गया था?", options: ["NSFNET", "ARPANET", "INTRANET", "ALOHANET"], correct: 1, explanation: "ARPANET का पूरा नाम Advanced Research Projects Agency Network था।<br>यह पैकेट स्विचिंग तकनीक का उपयोग करने वाला दुनिया का पहला ऑपरेशनल कंप्यूटर नेटवर्क था जिसने इंटरनेट की नींव रखी।" },
+            { id: 49, tag: "", question: "दूरस्थ (Remote) कंप्यूटर को कमांड लाइन के माध्यम से सुरक्षित रूप से लॉगिन और नियंत्रित करने के लिए प्रयुक्त एन्क्रिप्टेड प्रोटोकॉल कौन-सा है?", options: ["Telnet", "SSH (Secure Shell)", "HTTP", "FTP"], correct: 1, explanation: "SSH (Secure Shell) एक क्रिप्टोग्राफिक नेटवर्क प्रोटोकॉल है।<br>पुराना Telnet प्रोटोकॉल असुरक्षित (Plain Text) था, जबकि SSH सुरक्षित रूप से रिमोट सर्वर प्रबंधन की सुविधा देता है।" },
+            { id: 50, tag: "", question: "वेबसाइट डोमेन नामों के अंत में आने वाले '.edu', '.gov' और '.org' एक्सटेंशन क्या कहलाते हैं?", options: ["IP क्लास", "TLD (Top-Level Domains)", "प्रोटोकॉल हेडर", "सबनेट मास्क"], correct: 1, explanation: "TLD (Top-Level Domain) इंटरनेट डोमेन पदानुक्रम का उच्चतम स्तर है।<br>जैसे .edu शैक्षणिक संस्थानों के लिए, .gov सरकारी पोर्टलों के लिए, और .org गैर-लाभकारी संगठनों के लिए आरक्षित होता है।" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
