@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">भारत का भूगोल — टेस्ट 19: परिवहन</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">परिवहन (Test 19)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_geo_test_19"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "भारत में पहली रेलवे लाइन 1853 में किसके बीच और कितनी दूरी पर चलाई गई थी?", options: ["(a) हावड़ा से हुगली (34 किमी)", "(b) मुंबई से ठाणे (34 किमी)", "(c) चेन्नई से अरक्कोणम (45 किमी)", "(d) दिल्ली से आगरा (200 किमी)"], correct: 1, explanation: "भारत की पहली यात्री ट्रेन 16 अप्रैल 1853 को लॉर्ड डलहौजी के कार्यकाल में मुंबई (बोरी बंदर) से ठाणे के बीच 34 किलोमीटर की दूरी पर चलाई गई थी।" },
+            { id: 2, tag: "", question: "भारतीय रेलवे बोर्ड (Railway Board) की स्थापना किस वर्ष की गई थी?", options: ["(a) 1905", "(b) 1921", "(c) 1950", "(d) 1853"], correct: 0, explanation: "लॉर्ड कर्जन के कार्यकाल में वर्ष 1905 में भारतीय रेलवे बोर्ड का गठन किया गया था।" },
+            { id: 3, tag: "", question: "भारतीय रेलवे का राष्ट्रीयकरण (Nationalization) किस वर्ष किया गया था?", options: ["(a) 1947", "(b) 1950", "(c) 1951", "(d) 1956"], correct: 2, explanation: "स्वतंत्रता के पश्चात विभिन्न रियासती व निजी रेल कंपनियों का विलय कर भारतीय रेलवे का राष्ट्रीयकरण वर्ष 1951 में किया गया था।" },
+            { id: 4, tag: "", question: "भारतीय रेलवे नेटवर्क का विश्व में कौन-सा स्थान है (लंबाई के मामले में)?", options: ["(a) प्रथम", "(b) द्वितीय", "(c) तृतीय", "(d) चतुर्थ"], correct: 3, explanation: "लंबाई के दृष्टिकोण से अमेरिका, चीन और रूस के बाद भारतीय रेलवे नेटवर्क विश्व का चौथा सबसे बड़ा नेटवर्क है।" },
+            { id: 5, tag: "", question: "भारतीय रेलवे को कुल कितने जोन्स (Railway Zones) में विभाजित किया गया है?", options: ["(a) 16", "(b) 17", "(c) 18 (दक्षिण तट रेलवे सहित)", "(d) 19"], correct: 2, explanation: "भारतीय रेलवे को प्रशासनिक सुविधा हेतु वर्तमान में कुल 18 जोन्स में बांटा गया है, जिसका नवीनतम जोन 'दक्षिण तट रेलवे' (मुख्यालय - विशाखापट्टनम) है।" },
+            { id: 6, tag: "", question: "भारतीय रेलवे के किस जोन का मुख्यालय गोरखपुर में स्थित है?", options: ["(a) उत्तर रेलवे", "(b) पूर्वोत्तर रेलवे (NER)", "(c) उत्तर-मध्य रेलवे", "(d) पूर्व-मध्य रेलवे"], correct: 1, explanation: "पूर्वोत्तर रेलवे (North Eastern Railway) का मुख्य मुख्यालय उत्तर प्रदेश के गोरखपुर में स्थित है।" },
+            { id: 7, tag: "", question: "कोंकण रेलवे (Konkan Railway) मार्ग निम्नलिखित में से किन राज्यों से होकर गुजरता है?", options: ["(a) महाराष्ट्र, गोवा और कर्नाटक", "(b) केरल, तमिलनाडु और कर्नाटक", "(c) गुजरात, महाराष्ट्र और गोवा", "(d) महाराष्ट्र, कर्नाटक और केरल"], correct: 0, explanation: "741 किमी लंबी कोंकण रेलवे परियोजना महाराष्ट्र, गोवा और कर्नाटक (रोहा से मंगलोर तक) राज्यों को जोड़ती है, जो पश्चिमी घाट की सुरंगों से गुजरती है।" },
+            { id: 8, tag: "", question: "भारत का सबसे लंबा रेलवे प्लेटफार्म वर्तमान में कौन-सा है?", options: ["(a) गोरखपुर (उत्तर प्रदेश)", "(b) हुबली (श्री सिद्धारूढ़ स्वामीजी रेलवे स्टेशन - कर्नाटक)", "(c) खड़गपुर (प. बंगाल)", "(d) कोल्लम (केरल)"], correct: 1, explanation: "कर्नाटक के हुबली जंक्शन पर स्थित 'श्री सिद्धारूढ़ स्वामीजी रेलवे स्टेशन' का प्लेटफार्म (लगभग 1507 मीटर) वर्तमान में विश्व और भारत का सबसे लंबा रेलवे प्लेटफार्म है।" },
+            { id: 9, tag: "", question: "भारत की पहली सेमी-हाईस्पीड ट्रेन 'वंदे भारत एक्सप्रेस' (Train 18) का परिचालन सर्वप्रथम किस मार्ग पर शुरू हुआ था?", options: ["(a) नई दिल्ली से वाराणसी", "(b) नई दिल्ली से कटरा", "(c) मुंबई से अहमदाबाद", "(d) बेंगलुरु से मैसूर"], correct: 0, explanation: "देश की पहली स्वदेशी सेमी-हाईस्पीड ट्रेन 'वंदे भारत एक्सप्रेस' फरवरी 2019 में नई दिल्ली से वाराणसी के बीच शुरू की गई थी।" },
+            { id: 10, tag: "", question: "स्वर्णिम चतुर्भुज परियोजना (Golden Quadrilateral Project) किन चार महानगरों को सड़क मार्ग से जोड़ती है?", options: ["(a) दिल्ली - मुंबई - चेन्नई - कोलकाता", "(b) दिल्ली - जयपुर - अहमदाबाद - मुंबई", "(c) कोलकाता - नागपुर - हैदराबाद - बेंगलुरु", "(d) दिल्ली - लखनऊ - पटना - गुवाहाटी"], correct: 0, explanation: "अटल बिहारी वाजपेयी सरकार द्वारा शुरू की गई स्वर्णिम चतुर्भुज महामार्ग परियोजना देश के चार महानगरों (दिल्ली, मुंबई, चेन्नई, कोलकाता) को 4/6 लेन एक्सप्रेसवे से जोड़ती है।" },
+            { id: 11, tag: "", question: "भारत का सबसे लंबा राष्ट्रीय राजमार्ग (National Highway) वर्तमान में कौन-सा है?", options: ["(a) NH-44 (श्रीनगर से कन्याकुमारी)", "(b) NH-27", "(c) NH-19", "(d) NH-16"], correct: 0, explanation: "NH-44 (पुराना NH-7) उत्तर में श्रीनगर से शुरू होकर दक्षिण में कन्याकुमारी तक जाता है, जो लगभग 3745 किमी की लंबाई के साथ भारत का सबसे लंबा राष्ट्रीय राजमार्ग है।" },
+            { id: 12, tag: "", question: "प्रधानमंत्री ग्राम सड़क योजना (PMGSY) की शुरुआत किस वर्ष की गई थी?", options: ["(a) दिसंबर 2000", "(b) जनवरी 2004", "(c) अगस्त 2008", "(d) मार्च 2012"], correct: 0, explanation: "ग्रामीण क्षेत्रों में सभी मौसम में चलने वाली पक्की सड़कों के निर्माण हेतु दिसंबर 2000 में 'प्रधानमंत्री ग्राम सड़क योजना' शुरू की गई थी।" },
+            { id: 13, tag: "", question: "सीमा सड़क संगठन (BRO - Border Roads Organisation) की स्थापना किस वर्ष की गई थी?", options: ["(a) 1960", "(b) 1950", "(c) 1972", "(d) 1985"], correct: 0, explanation: "देश की उत्तरी और उत्तर-पूर्वी सीमावर्ती दुर्गम पहाड़ी क्षेत्रों में रणनीतिक सड़कों के निर्माण हेतु मई 1960 में BRO की स्थापना की गई थी।" },
+            { id: 14, tag: "", question: "अटल टनल (रोहतांग सुरंग) मनाली को किससे जोड़ती है?", options: ["(a) लेह / लाहुल-स्पीति घाटी", "(b) शिमला", "(c) धर्मशाला", "(d) श्रीनगर"], correct: 0, explanation: "हिमाचल प्रदेश में पीर पंजाल श्रेणी के नीचे बनी 9.02 किमी लंबी 'अटल टनल' मनाली को लाहुल और स्पीति घाटी (लेह मार्ग) से जोड़ती है।" },
+            { id: 15, tag: "", question: "भारत का सबसे बड़ा राष्ट्रीय जलमार्ग (National Waterway-1) किस नदी पर और कहाँ से कहाँ तक है?", options: ["(a) गंगा-भागीरथी-हुगली नदी (प्रयागराज से हल्दिया)", "(b) ब्रह्मपुत्र नदी (सादिया से धुबरी)", "(c) कोट्टापुरम से कोल्लम (पश्चिमी तट नहर)", "(d) गोदावरी-कृष्णा नदी"], correct: 0, explanation: "NW-1 गंगा-भागीरथी-हुगली नदी प्रणाली पर प्रयागराज (इलाहाबाद) से हल्दिया तक 1620 किमी लंबा भारत का सबसे लंबा राष्ट्रीय जलमार्ग है।" },
+            { id: 16, tag: "", question: "ब्रह्मपुत्र नदी पर सादिया से धुबरी तक कौन-सा राष्ट्रीय जलमार्ग (NW) स्थित है?", options: ["(a) NW-1", "(b) NW-2", "(c) NW-3", "(d) NW-4"], correct: 0, explanation: "असम में ब्रह्मपुत्र नदी पर सादिया से धुबरी तक 891 किमी लंबा जलमार्ग 'राष्ट्रीय जलमार्ग संख्या-2' (NW-2) है।" },
+            { id: 17, tag: "", question: "भारत में कुल कितने प्रमुख (Major) बंदरगाह संचालित हैं?", options: ["(a) 11", "(b) 12", "(c) 13 (नवीनतम वधावन सहित)", "(d) 15"], correct: 2, explanation: "भारत के तटीय राज्यों में केंद्र सरकार के नियंत्रण वाले कुल 13 प्रमुख बंदरगाह (Major Ports) हैं, जिसमें हाल ही में महाराष्ट्र का 'वधावन पोर्ट' शामिल किया गया है।" },
+            { id: 18, tag: "", question: "भारत का सबसे गहरा और भूमि से घिरा हुआ (Landlocked) सुरक्षित बंदरगाह कौन-सा है?", options: ["(a) विशाखापट्टनम बंदरगाह (आंध्र प्रदेश)", "(b) पारादीप बंदरगाह", "(c) कोचीन बंदरगाह", "(d) कांडला बंदरगाह"], correct: 0, explanation: "आंध्र प्रदेश में स्थित विशाखापट्टनम बंदरगाह भूमि से घिरा हुआ और डॉल्फिन नोज पहाड़ी के पीछे सुरक्षित प्राकृतिक बंदरगाह है।" },
+            { id: 19, tag: "", question: "गुजरात में स्थित 'कांडला बंदरगाह' (वर्तमान नाम - दीनदयाल बंदरगाह) किस प्रकार का बंदरगाह है?", options: ["(a) ज्वारीय बंदरगाह (Tidal Port)", "(b) कोरल बंदरगाह", "(c) नदीमुख बंदरगाह", "(d) कृत्रिम लैगून बंदरगाह"], correct: 0, explanation: "कच्छ की खाड़ी में स्थित कांडला एक प्रमुख ज्वारीय बंदरगाह (Tidal Port) है, जिसे कराची बंदरगाह के विकल्प के रूप में विकसित किया गया था।" },
+            { id: 20, tag: "", question: "भारत का सबसे बड़ा कंटेनर बंदरगाह (Largest Container Port) कौन-सा है?", options: ["(a) जवाहरलाल नेहरू पोर्ट (JNPT / Nhava Sheva - मुंबई)", "(b) चेन्नई पोर्ट", "(c) मुंद्रा पोर्ट", "(d) पारादीप"], correct: 0, explanation: "महाराष्ट्र में मुंबई के पास स्थित जेएनपीटी (JNPT - Nhava Sheva) भारत का सबसे बड़ा कंटेनर यातायात संभालने वाला बंदरगाह है।" },
+            { id: 21, tag: "", question: "ओडिशा में स्थित 'पारादीप बंदरगाह' से मुख्य रूप से किस खनिज का निर्यात किया जाता है?", options: ["(a) लौह अयस्क", "(b) अभ्रक", "(c) बॉक्साइट", "(d) मैंगनीज"], correct: 0, explanation: "पारादीप एक गहरे पानी का कृत्रिम बंदरगाह है, जहाँ से मयूरभंज और क्योंझर खानों का उच्च कोटि का लौह अयस्क जापान को निर्यात होता है।" },
+            { id: 22, tag: "", question: "तमिलनाडु में स्थित 'चेन्नई बंदरगाह' किस प्रकार का बंदरगाह है?", options: ["(a) कृत्रिम बंदरगाह (Artificial Port)", "(b) प्राकृतिक लैगून", "(c) नदी तटीय बंदरगाह", "(d) ज्वारीय बंदरगाह"], correct: 0, explanation: "चेन्नई बंदरगाह भारत के सबसे पुराने कृत्रिम (Artificial) बंदरगाहों में से एक है, जो खुले समुद्र तट पर कृत्रिम रूप से बनाया गया है।" },
+            { id: 23, tag: "", question: "भारत का कौन-सा बंदरगाह 'नवीन मंगलोर' (New Mangalore) के नाम से जाना जाता है और कॉफी निर्यात के लिए प्रसिद्ध है?", options: ["(a) कर्नाटक तट पर स्थित बंदरगाह", "(b) केरल तट", "(c) गोवा तट", "(d) महाराष्ट्र"], correct: 0, explanation: "कर्नाटक में स्थित न्यू मंगलोर बंदरगाह मुख्य रूप से कुद्रेमुख का लौह अयस्क और कॉफी के निर्यात के लिए जाना जाता है।" },
+            { id: 24, tag: "", question: "केरल में वेम्बनाद कयाल के मुहाने पर स्थित प्राकृतिक बंदरगाह कौन-सा है?", options: ["(a) कोच्चि (कोचीन) बंदरगाह", "(b) कालिकट", "(c) तिरुवनंतपुरम", "(d) अल्लेपी"], correct: 0, explanation: "कोचीन बंदरगाह (केरल) वेम्बनाद झील के पास विलिंग्डन द्वीप पर स्थित एक उत्कृष्ट प्राकृतिक बंदरगाह है, जिसे 'अरब सागर की रानी' कहते हैं।" },
+            { id: 25, tag: "", question: "भारतीय वायुसेना की स्थापना किस वर्ष की गई थी?", options: ["(a) 1932", "(b) 1947", "(c) 1950", "(d) 1962"], correct: 0, explanation: "भारतीय वायुसेना (Indian Air Force) की स्थापना 8 अक्टूबर 1932 को की गई थी, इसलिए 8 अक्टूबर को वायुसेना दिवस मनाया जाता है।" },
+            { id: 26, tag: "", question: "भारत में नागरिक उड्डयन (Civil Aviation) की शुरुआत सबसे पहले किस वर्ष हुई थी?", options: ["(a) 1911 (इलाहाबाद से नैनी के बीच)", "(b) 1921", "(c) 1935", "(d) 1947"], correct: 0, explanation: "भारत में पहली आधिकारिक विमान डाक सेवा फरवरी 1911 में हेनरी पिकेट द्वारा इलाहाबाद से नैनी के बीच 10 किमी की दूरी पर उड़ाई गई थी।" },
+            { id: 27, tag: "", question: "अंतरराष्ट्रीय उड़ानों के संचालन के लिए जिम्मेदार 'एयर इंडिया' (Air India) का मुख्यालय कहाँ स्थित है?", options: ["(a) नई दिल्ली", "(b) मुंबई", "(c) बेंगलुरु", "(d) हैदराबाद"], correct: 0, explanation: "टाटा समूह के स्वामित्व वाली एयर इंडिया का मुख्य मुख्यालय नई दिल्ली में स्थित है।" },
+            { id: 28, tag: "", question: "भारतीय विमानपतन प्राधिकरण (AAI) की स्थापना किस वर्ष की गई थी?", options: ["(a) 1995", "(b) 1982", "(c) 2001", "(d) 1974"], correct: 0, explanation: "देश के सभी नागरिक विमानन हवाई अड्डों के प्रबंधन और विकास हेतु 'भारतीय विमानपतन प्राधिकरण' (AAI) की स्थापना 1 अप्रैल 1995 को की गई थी।" },
+            { id: 29, tag: "", question: "इंदिरा गांधी अंतरराष्ट्रीय हवाई अड्डा (IGIA) कहाँ स्थित है?", options: ["(a) नई दिल्ली", "(b) मुंबई", "(c) कोलकाता", "(d) चेन्नई"], correct: 0, explanation: "इंदिरा गांधी अंतरराष्ट्रीय हवाई अड्डा भारत का सबसे व्यस्त और प्रमुख हवाई अड्डा है, जो नई दिल्ली में स्थित है।" },
+            { id: 30, tag: "", question: "छत्रपति शिवाजी महाराज अंतरराष्ट्रीय हवाई अड्डा कहाँ स्थित है?", options: ["(a) मुंबई (महाराष्ट्र)", "(b) पणजी", "(c) नागपुर", "(d) पुणे"], correct: 0, explanation: "मुंबई स्थित छत्रपति शिवाजी महाराज अंतरराष्ट्रीय हवाई अड्डा देश का दूसरा सबसे व्यस्त हवाई अड्डा है।" },
+            { id: 31, tag: "", question: "नेताजी सुभाष चंद्र बोस अंतरराष्ट्रीय हवाई अड्डा कहाँ स्थित है?", options: ["(a) कोलकाता (पश्चिम बंगाल)", "(b) अगरतला", "(c) गुवाहाटी", "(d) भुवनेश्वर"], correct: 0, explanation: "कोलकाता (दमदम) में स्थित अंतरराष्ट्रीय हवाई अड्डे का नाम नेताजी सुभाष चंद्र बोस के नाम पर रखा गया है।" },
+            { id: 32, tag: "", question: "अंडमान और निकोबार द्वीप समूह की राजधानी पोर्ट ब्लेयर में स्थित हवाई अड्डे का नाम क्या है?", options: ["(a) वीर सावरकर अंतरराष्ट्रीय हवाई अड्डा", "(b) सुभाष चंद्र बोस एयरपोर्ट", "(c) इंदिरा गांधी एयरपोर्ट", "(d) राजीव गांधी एयरपोर्ट"], correct: 0, explanation: "पोर्ट ब्लेयर (अंडमान) में स्थित सिविल हवाई अड्डे का नाम 'वीर सावरकर अंतरराष्ट्रीय हवाई अड्डा' है।" },
+            { id: 33, tag: "", question: "भारत का कौन-सा बंदरगाह निजी क्षेत्र के सहयोग से विकसित देश का पहला प्रमुख बंदरगाह है?", options: ["(a) एन्नोर बंदरगाह (कामराज बंदरगाह - तमिलनाडु)", "(b) मुंद्रा पोर्ट", "(c) धामरा पोर्ट", "(d) पोरबंदर"], correct: 0, explanation: "तमिलनाडु में चेन्नई के उत्तर में स्थित 'एन्नोर (कामराज) बंदरगाह' देश का पहला ऐसा प्रमुख बंदरगाह है जिसे कंपनी अधिनियम के तहत सार्वजनिक-निजी भागीदारी (PPP) से बनाया गया है।" },
+            { id: 34, tag: "", question: "कोंकण रेलवे मार्ग पर सर्वाधिक लंबी सुरंग कौन-सी है?", options: ["(a) करबुडे सुरंग (Karbude Tunnel - लगभग 6.5 किमी)", "(b) पीर पंजाल सुरंग", "(c) श्यामा प्रसाद मुखर्जी टनल", "(d) संगलदान सुरंग"], correct: 0, explanation: "कोंकण रेलवे मार्ग पर महाराष्ट्र के रत्नागिरि के पास स्थित 'करबुडे सुरंग' लगभग 6.5 किलोमीटर लंबी है, जो निर्माण के समय सबसे लंबी थी।" },
+            { id: 35, tag: "", question: "भारत में मेट्रो रेल सेवा की शुरुआत सबसे पहले किस शहर में हुई थी?", options: ["(a) कोलकाता (1984)", "(b) नई दिल्ली (2002)", "(c) बेंगलुरु (2011)", "(d) मुंबई (2014ो)"], correct: 0, explanation: "भारत में सर्वप्रथम मेट्रो रेल सेवा की शुरुआत 24 अक्टूबर 1984 को कोलकाता (दमदम से टॉलीगंज) में हुई थी।" },
+            { id: 36, tag: "", question: "भारतीय रेलवे का मुख्यालय (Railway Board Headquarter) कहाँ स्थित है?", options: ["(a) नई दिल्ली", "(b) मुंबई", "(c) कोलकाता", "(d) लखनऊ"], correct: 0, explanation: "भारतीय रेलवे का केंद्रीय मुख्यालय रेल भवन, नई दिल्ली में स्थित है।" },
+            { id: 37, tag: "", question: "राष्ट्रीय राजमार्ग प्राधिकरण (NHAI - National Highways Authority of India) की स्थापना किस वर्ष हुई थी?", options: ["(a) 1988 (अधिनियम द्वारा 1995 में पूर्ण सक्रिय)", "(b) 1975", "(c) 2000", "(d) 1960"], correct: 0, explanation: "सड़क परिवहन एवं राजमार्ग मंत्रालय के अधीन NHAI की स्थापना 1988 में संसद के अधिनियम द्वारा की गई थी, जो राष्ट्रीय राजमार्गों के विकास व रखरखाव के लिए उत्तरदायी है।" },
+            { id: 38, tag: "", question: "भारत में 'वन्यजीव संरक्षण अधिनियम' किस वर्ष पारित किया गया था?", options: ["(a) 1972", "(b) 1986", "(c) 1992", "(d) 2002"], correct: 0, explanation: "भारतीय वन्यजीवों, पक्षियों और पौधों के संरक्षण तथा अवैध शिकार पर रोक लगाने के लिए संसद द्वारा 'वन्यजीव (संरक्षण) अधिनियम, 1972' लागू किया गया था।" },
+            { id: 39, tag: "", question: "पर्यावरण (संरक्षण) अधिनियम [Environment (Protection) Act] भारत में किस वर्ष लागू हुआ?", options: ["(a) 1986", "(b) 1974", "(c) 1980", "(d) 1991"], correct: 0, explanation: "भोपाल गैस त्रासदी (1984) के बाद पर्यावरण संरक्षण और सुधार हेतु व्यापक कानून के रूप में 'पर्यावरण संरक्षण अधिनियम, 1986' लागू किया गया।" },
+            { id: 40, tag: "", question: "भारत का राष्ट्रीय जलीय जीव (National Aquatic Animal) किसे घोषित किया गया है?", options: ["(a) गंगा की डॉल्फिन (Gangetic Dolphin)", "(b) ब्लू ह्वेल", "(c) मगरमच्छ", "(d) कछुआ"], correct: 0, explanation: "गंगा नदी तंत्र में पाई जाने वाली अंधी डॉल्फिन (Platanista gangetica) को भारत का राष्ट्रीय जलीय जीव घोषित किया गया है।" },
+            { id: 41, tag: "", question: "सूची-I (राष्ट्रीय उद्यान) को सूची-II (राज्य) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (राष्ट्रीय उद्यान)</th><th style='padding:8px;'>सूची-II (राज्य)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) काजीरंगा</td><td style='padding:6px;'>1. गुजरात</td></tr><tr><td style='padding:6px;'>(B) गिर</td><td style='padding:6px;'>2. असम</td></tr><tr><td style='padding:6px;'>(C) पेरियार</td><td style='padding:6px;'>3. राजस्थान</td></tr><tr><td style='padding:6px;'>(D) रणथंभौर</td><td style='padding:6px;'>4. केरल</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-2, B-1, C-4, D-3", "(b) A-1, B-2, C-3, D-4", "(c) A-2, B-4, C-1, D-3", "(d) A-3, B-2, C-4, D-1"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• काजीरंगा — असम<br>• गिर — गुजरात<br>• पेरियार — केरल<br>• रणथंभौर — राजस्थान" },
+            { id: 42, tag: "", question: "सूची-I (विशेष जीव/संरक्षण) को सूची-II (संबंधित राष्ट्रीय पार्क) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (जीव)</th><th style='padding:8px;'>सूची-II (राष्ट्रीय पार्क)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) हंगुल (कश्मीरी स्टैग)</td><td style='padding:6px;'>1. केवलादेव राष्ट्रीय उद्यान</td></tr><tr><td style='padding:6px;'>(B) संगाई हिरण</td><td style='padding:6px;'>2. दाचीगाम राष्ट्रीय उद्यान</td></tr><tr><td style='padding:6px;'>(C) साइबेरियाई सारस</td><td style='padding:6px;'>3. जिम कॉर्बेट राष्ट्रीय उद्यान</td></tr><tr><td style='padding:6px;'>(D) बाघ (Tiger)</td><td style='padding:6px;'>4. केइबुल लामजाओ राष्ट्रीय उद्यान</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-2, B-4, C-1, D-3", "(b) A-1, B-2, C-3, D-4", "(c) A-2, B-3, C-4, D-1", "(d) A-4, B-1, C-2, D-3"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• हंगुल — दाचीगाम (कश्मीर)<br>• संगाई हिरण — केइबुल लामजाओ (मणिपुर)<br>• साइबेरियाई सारस — केवलादेव (राजस्थान)<br>• बाघ — जिम कॉर्बेट (उत्तराखंड)" },
+            { id: 43, tag: "", question: "सूची-I (बायोस्फीयर रिजर्व) को सूची-II (राज्य) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (बायोस्फीयर रिजर्व)</th><th style='padding:8px;'>सूची-II (राज्य)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) नीलगिरि</td><td style='padding:6px;'>1. मेघालय</td></tr><tr><td style='padding:6px;'>(B) नोकरेक</td><td style='padding:6px;'>2. तमिलनाडु-केरल-कर्नाटक</td></tr><tr><td style='padding:6px;'>(C) सिमलीपाल</td><td style='padding:6px;'>3. असम</td></tr><tr><td style='padding:6px;'>(D) मानस</td><td style='padding:6px;'>4. ओडिशा</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-2, B-1, C-4, D-3", "(b) A-1, B-2, C-3, D-4", "(c) A-2, B-3, C-1, D-4", "(d) A-3, B-4, C-2, D-1"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• नीलगिरि — तमिलनाडू, केरल, कर्नाटक<br>• नोकरेक — मेघालय<br>• सिमलीपाल — ओडिशा<br>• मानस — असम" },
+            { id: 44, tag: "", question: "अभिकथन (A): भारत में जैव विविधता का संरक्षण करने के लिए राष्ट्रीय उद्यानों, अभयारण्यों और जैवमंडल आरक्षित क्षेत्रों (Biosphere Reserves) की एक विस्तृत श्रृंखला बनाई गई है।<br>कारण (R): प्राकृतिक आवासों के नष्ट होने, अवैध शिकार और जलवायु परिवर्तन के कारण कई दुर्लभ वनस्पतियाँ व जीव-जंतु विलुप्त होने की कगार पर हैं।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "मानवीय हस्तक्षेप और वनों के विखंडन से वन्यजीवों का अस्तित्व खतरे में पड़ा है, जिसके फलस्वरूप इन संरक्षित क्षेत्रों (In-situ conservation) का सृजन किया गया है।" },
+            { id: 45, tag: "", question: "अभिकथन (A): मणिपुर की लोकटक झील में स्थित केइबुल लामजाओ राष्ट्रीय उद्यान पारिस्थितिक रूप से अत्यंत अनूठा है।<br>कारण (R): यह पार्क 'फुम्डी' नामक तैरती हुई सड़ी-गली वनस्पतियों और मिट्टी के मैट पर स्थित है, जिस पर दुर्लभ संगाई हिरण निवास करता है।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "केइबुल लामजाओ दुनिया का एकमात्र तैरता पार्क है, जहाँ फुकुम/फुम्डी पर तैरते हुए संगाई हिरण (Dancing deer) अपना जीवन बिताते हैं।" },
+            { id: 46, tag: "", question: "भारत में वन्यजीव संरक्षण और राष्ट्रीय पार्कों के संदर्भ में निम्नलिखित कथनों पर विचार कीजिए:<br>1. राष्ट्रीय उद्यान (National Park) में किसी भी प्रकार की मानवीय गतिविधियों, पशुओं की चराई और निजी भूमि अधिकारों की अनुमति नहीं होती है।<br>2. वन्यजीव अभयारण्य (Wildlife Sanctuary) में कुछ सीमित मानवीय गतिविधियों और पशु चराई की अनुमति दी जा सकती है।<br>3. बायोस्फीयर रिजर्व का मुख्य उद्देश्य केवल पर्यटन को बढ़ावा देना है।<br><br>उपर्युक्त में से कौन-से कथन सही हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) 1, 2 और 3"], correct: 0, explanation: "कथन 3 गलत है क्योंकि बायोस्फीयर रिजर्व का मुख्य उद्देश्य संरक्षण, अनुसंधान और सतत विकास (Sustainable Development) है, न कि केवल पर्यटन। कथन 1 और 2 सही हैं।" },
+            { id: 47, tag: "", question: "अभिकथन (A): भारत में प्रोजेक्ट टाइगर की शुरुआत से देश में बाघों की संख्या में लगातार सकारात्मक सुधार हुआ है।<br>कारण (R): बाघों की गणना अब प्रत्येक 4 वर्ष पर आधुनिक तकनीक (कैमरा ट्रैप और जीआईएस मैपिंग) के माध्यम से की जाती है।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "प्रोजेक्ट टाइगर के प्रभावी क्रियान्वयन और वैज्ञानिक मॉनिटरिंग के कारण भारत में विश्व के 75% से अधिक बाघ सुरक्षित रूप से पल रहे हैं।" },
+            { id: 48, tag: "", question: "भारत के जैवमंडल आरक्षित क्षेत्रों (Biosphere Reserves) के संदर्भ में निम्नलिखित कथनों पर विचार कीजिए:<br>1. देश में कुल 18 बायोस्फीयर रिजर्व आधिकारिक रूप से अधिसूचित हैं।<br>2. मन्नार की खाड़ी और नीलगिरि भारत के प्रमुख बायोस्फीयर रिजर्व हैं।<br>3. सभी 18 बायोस्फीयर रिजर्व अनिवार्य रूप से यूनेस्को की वैश्विक सूची में शामिल हैं।<br><br>उपर्युक्त में से कौन-सा/से कथन सही है/हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) 1, 2 और 3"], correct: 0, explanation: "कथन 3 गलत है क्योंकि भारत के 18 में से केवल 12 बायोस्फीयर रिजर्व ही यूनेस्को के MAB नेटवर्क में शामिल हैं। कथन 1 और 2 सत्य हैं।" },
+            { id: 49, tag: "", question: "अभिकथन (A): उत्तराखंड का जिम कॉर्बेट राष्ट्रीय उद्यान भारत का बाघ संरक्षण में ऐतिहासिक मील का पत्थर रहा है।<br>कारण (R): यहीं से 1973 में भारत में 'प्रोजेक्ट टाइगर' का औपचारिक शुभारंभ किया गया था।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "जिम कॉर्बेट पार्क (हेली नेशनल पार्क) बाघों की घनी आबादी वाला पहला पार्क था, जहाँ से इंदिरा गांधी सरकार ने प्रोजेक्ट टाइगर की शुरुआत की थी।" },
+            { id: 50, tag: "", question: "सूची-I (अभयारण्य/पार्क) को सूची-II (विशेष वन्यजीव) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (पार्क)</th><th style='padding:8px;'>सूची-II (विशेष जीव)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) काजीरंगा</td><td style='padding:6px;'>1. एशियाई शेर</td></tr><tr><td style='padding:6px;'>(B) गिर</td><td style='padding:6px;'>2. एक सींग वाला गैंडा</td></tr><tr><td style='padding:6px;'>(C) सुंदरबन</td><td style='padding:6px;'>3. कश्मीरी हंगुल</td></tr><tr><td style='padding:6px;'>(D) दाचीगाम</td><td style='padding:6px;'>4. रॉयल बंगाल टाइगर</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-2, B-1, C-4, D-3", "(b) A-1, B-2, C-3, D-4", "(c) A-2, B-3, C-1, D-4", "(d) A-4, B-1, C-2, D-3"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• काजीरंगा — एक सींग वाला गैंडा<br>• गिर — एशियाई शेर<br>• सुंदरबन — रॉयल बंगाल टाइगर<br>• दाचीगाम — कश्मीरी हंगुल" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
