@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">संक्रामक रोग एवं प्रतिरक्षा विज्ञान</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_paid_h10"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "जीवाणु के संक्रमण से होने वाला निम्नलिखित में से कौन-सा रोग है?", options: ["टाइफाइड", "एड्स", "मलेरिया", "इन्फ्लूएंजा"], correct: 0, explanation: "टाइफाइड साल्मोनेला टाइफी नामक जीवाणु के संक्रमण से होता है।<br>एड्स वायरस से, मलेरिया परजीवी से और इन्फ्लूएंजा वायरस से होने वाला रोग है।" },
+            { id: 2, tag: "", question: "प्रोटोजोआ परजीवी के कारण फैलने वाला प्रमुख संक्रामक रोग कौन-सा है?", options: ["क्षय रोग", "मलेरिया", "टेटनस", "खसरा"], correct: 1, explanation: "मलेरिया प्लाज्मोडियम नामक प्रोटोजोआ परजीवी के कारण होता है, जिसका वाहक मादा एनोफिलीज मच्छर है।<br>क्षय रोग और टेटनस जीवाणु जनित हैं, जबकि खसरा विषाणु जनित है।" },
+            { id: 3, tag: "", question: "एड्स रोग की पहचान के लिए मुख्य रूप से कौन-सा परीक्षण किया जाता है?", options: ["विडाल टेस्ट", "एलिसा टेस्ट", "मोंटेक्स टेस्ट", "रैपिड एंटीजन टेस्ट"], correct: 1, explanation: "एड्स संक्रमण की संपुष्टि के लिए एलिसा परीक्षण सबसे प्रमुख प्रारंभिक जाँच है।<br>विडाल टेस्ट टाइफाइड के लिए और मोंटेक्स टेस्ट टीबी के लिए किया जाता है।" },
+            { id: 4, tag: "", question: "शरीर में प्रवेश करने वाले बाहरी रोगाणुओं के खिलाफ एंटीबॉडी बनाने वाली मुख्य श्वेत रक्त कोशिकाएं कौन-सी हैं?", options: ["आरबीसी", "लिंफोसाइट्स", "प्लेटलेट्स", "बेसोफिल्स"], correct: 1, explanation: "श्वेत रक्त कोशिकाओं के अंतर्गत आने वाली लिंफोसाइट्स शरीर की विशिष्ट प्रतिरक्षा प्रणाली का निर्माण करती हैं।<br>ये रोगाणुओं को पहचान कर उनके विरुद्ध एंटीबॉडी बनाती हैं।" },
+            { id: 5, tag: "", question: "जन्म के समय बच्चे को बीसीजी का टीका किस गंभीर संक्रामक रोग से बचाव के लिए लगाया जाता है?", options: ["पोलियो", "त्प्पेदिक या क्षय रोग", "हेपेटाइटिस", "डिप्थीरिया"], correct: 1, explanation: "बीसीजी का टीका नवजात शिशु को ट्यूबरकुलोसिस से सुरक्षा प्रदान करने के लिए जन्म के तुरंत बाद दिया जाता है।" },
+            { id: 6, tag: "", question: "पोलियो ड्राप के आविष्कारक वैज्ञानिक का क्या नाम है?", options: ["एडवर्ड जेनर", "जोनास साल्क", "लुई पाश्चर", "अलेक्जेंडर फ्लेमिंग"], correct: 1, explanation: "जोनास साल्क ने पोलियो का टीका बनाया था, जबकि अल्बर्ट साबिन ने मुंह से दी जाने वाली ओरल पोलियो वैक्सीन विकसित की थी।<br>एडवर्ड जेनर ने चेचक का टीका खोजा था।" },
+            { id: 7, tag: "", question: "विश्व स्वास्थ्य संगठन का मुख्यालय दुनिया के किस शहर में स्थित है?", options: ["जिनेवा", "पेरिस", "न्यूयॉर्क", "वाशिंगटन"], correct: 0, explanation: "विश्व स्वास्थ्य संगठन का केंद्रीय मुख्यालय स्विट्जरलैंड के जिनेवा शहर में स्थित है।<br>यह वैश्विक जन स्वास्थ्य नीतियों और महामारी नियंत्रण की सर्वोच्च संस्था है।" },
+            { id: 8, tag: "", question: "मादा एडीज इजिप्टी मच्छर के काटने से फैलने वाला वायरल संक्रमण कौन-सा है?", options: ["मलेरिया", "डेंगू", "फाइलेरिया", "कालाजार"], correct: 1, explanation: "डेंगू एक विषाणु जनित रोग है जो मुख्य रूप से दिन के समय काटने वाली मादा एडीज इजिप्टी मच्छर के माध्यम से फैलता है।" },
+            { id: 9, tag: "", question: "हमारे शरीर में सक्रिय प्रतिरक्षा स्वतः कैसे उत्पन्न होती है?", options: ["बाहर बनी हुई एंटीबॉडी सीधे शरीर में डालने से", "टीका लगवाने या प्राकृतिक संक्रमण के बाद शरीर द्वारा खुद एंटीबॉडी बनाने से", "प्लेसेंटा के जरिए मां से बच्चे में आने से", "रक्त आधान कराने से"], correct: 1, explanation: "जब शरीर किसी रोगाणु के संपर्क में आता है या टीका लगवाया जाता है, तो प्रतिरक्षा तंत्र खुद एंटीबॉडी तैयार करता है जिसे सक्रिय प्रतिरक्षा कहते हैं।" },
+            { id: 10, tag: "", question: "मां के दूध से नवजात शिशु को मिलने वाली प्राकृतिक प्रतिरक्षा किस श्रेणी में आती है?", options: ["सक्रिय प्रतिरक्षा", "निष्क्रिय प्रतिरक्षा", "कृत्रिम प्रतिरक्षा", "हर्ड इम्युनिटी"], correct: 1, explanation: "शिशु को माता के दूध या प्लेसेंटा के माध्यम से बनी-बनाई एंटीबॉडी मिलती हैं, जिन्हें शरीर खुद नहीं बनाता।<br>इस प्रकार की अल्पकालिक सुरक्षा को निष्क्रिय प्रतिरक्षा कहा जाता है।" },
+            { id: 11, tag: "", question: "क्षय रोग के उपचार के लिए अपनाई जाने वाली बहु-औषधीय चिकित्सा पद्धति को क्या कहते हैं?", options: ["डॉट्स", "ओआरएस थेरेपी", "एआरटी थेरेपी", "कीमोथेरेपी"], correct: 0, explanation: "टीबी के मरीजों के लिए प्रत्यक्ष निर्देशित उपचार रणनीति को डॉट्स कहा जाता है।<br>इसके तहत नियमित निगरानी में एंटीबायोटिक दवाइयां दी जाती हैं।" },
+            { id: 12, tag: "", question: "रैबीज रोग मुख्य रूप से किस माध्यम से मानव शरीर में फैलता है?", options: ["दूषित जल पीने से", "संक्रमित कुत्ते या जानवर के काटने से", "दूषित वायु में सांस लेने से", "संक्रमित मच्छर के काटने से"], correct: 1, explanation: "रैबीज एक लाइलाज और घातक वायरल संक्रमण है जो पागल कुत्ते, बिल्ली या बंदर के काटने से उनकी लार के जरिए तंत्रिका तंत्र में पहुंचता है।" },
+            { id: 13, tag: "", question: "चेचक के टीके की खोज सबसे पहले किस वैज्ञानिक ने की थी?", options: ["लुई पाश्चर", "एडवर्ड जेनर", "रॉबर्ट कॉक", "जोसफ लिस्टर"], correct: 1, explanation: "एडवर्ड जेनर ने चेचक के टीके की खोज की थी।<br>यह चिकित्सा इतिहास का पहला सफल टीका था, जिसके बाद दुनिया से चेचक का पूर्ण उन्मूलन हो गया।" },
+            { id: 14, tag: "", question: "भारत को किस वर्ष आधिकारिक रूप से पोलियो मुक्त घोषित किया गया था?", options: ["दो हजार दस", "चौदह", "अठारह", "बीस"], correct: 1, explanation: "भारत में पोलियो का आखिरी मामला मिला था, और उसके बाद विश्व स्वास्थ्य संगठन ने भारत को पोलियो मुक्त देश घोषित कर दिया था।" },
+            { id: 15, tag: "", question: "निम्नलिखित में से कौन-सा रोग संक्रामक श्रेणी में नहीं आता है?", options: ["मधुमेह", "इन्फ्लूएंजा", "हैजा", "प्लेग"], correct: 0, explanation: "मधुमेह एक असंचयी या गैर-संक्रामक रोग है जो जीवनशैली और हार्मोन की गड़बड़ी से होता है।" },
+            { id: 16, tag: "", question: "काली खांसी के रोकथाम के लिए बच्चों को कौन-सा टीका लगाया जाता है?", options: ["बीसीजी टीका", "डिपटीटी का टीका", "टाइफाइड का टीका", "एमएमआर टीका"], correct: 1, explanation: "डिपटीटी का टीका डिप्थीरिया, पर्टुसिस और टेटनस तीनों खतरनाक जीवाणु रोगों से एक साथ सुरक्षा देता है।" },
+            { id: 17, tag: "", question: "प्रोटोजोआ जनित रोग पेचिश मुख्य रूप से मानव शरीर के किस अंग को प्रभावित करता है?", options: ["फेफड़े", "आंत", "यकृत", "हृदय"], correct: 1, explanation: "परजीवी दूषित पानी और भोजन के जरिए आंतों में पहुँचकर पेचिश पैदा करता है।<br>इससे पेट में ऐंठन और खूनी दस्त की समस्या होती है।" },
+            { id: 18, tag: "", question: "कुष्ठ रोग किस जीवाणु के संक्रमण के कारण उत्पन्न होता है?", options: ["माइकोबैक्टीरियम लेप्री", "विब्रियो कोलेरा", "बैसिलस एंथ्रेसिस", "साल्मोनेला टाइफी"], correct: 0, explanation: "कुष्ठ रोग को हंसेन रोग भी कहते हैं, जो माइकोबैक्टीरियम लेप्री नामक जीवाणु के कारण होता है।<br>यह मुख्य रूप से त्वचा और परिधीय तंत्रिकाओं को प्रभावित करता है।" },
+            { id: 19, tag: "", question: "जल जनित रोग हैजा का मुख्य रोगाणु कौन-सा है?", options: ["साल्मोनेला टाइफी", "विब्रियो कोलेरा", "डिपलोकोकस न्यूमोनिया", "ट्रेपोनिमा पैलिडम"], correct: 1, explanation: "हैजा दूषित जल और भोजन से फैलने वाला तीव्र जीवाणु जनित रोग है जिसका कारक विब्रियो कोलेरा है।" },
+            { id: 20, tag: "", question: "शरीर की प्रतिरक्षा प्रणाली जब अपनी ही स्वस्थ कोशिकाओं को बाहरी रोगाणु समझकर नष्ट करने लगती है, तो ऐसी स्थिति को क्या कहते हैं?", options: ["प्रतिरक्षा न्यूनता रोग", "स्वप्रतिरक्षी रोग", "संक्रामक एलर्जी", "उपार्जित संक्रमण"], correct: 1, explanation: "जब शरीर का रक्षा तंत्र आत्म-पहचान की क्षमता खो देता है और खुद के ऊतकों पर हमला करता है, तो उसे स्वप्रतिरक्षी रोग कहते हैं।" },
+            { id: 21, tag: "", question: "बीसीजी के टीके में उपयोग किया जाने वाला बैक्टीरिया किस प्रकृति का होता है?", options: ["जीवित और अत्यधिक विषैला", "कमजोर लाइव जीवाणु", "पूरी तरह मृत जीवाणु", "रासायनिक रूप से संश्लेषित कृत्रिम कण"], correct: 1, explanation: "बीसीजी टीके में कमजोर किए गए जीवित स्ट्रेन का उपयोग किया जाता है जो बीमारी पैदा किए बिना प्रतिरोधक क्षमता जगाता है।" },
+            { id: 22, tag: "", question: "रुबेला वायरस के संक्रमण से बच्चों में मुख्य रूप से कौन-सा रोग होता है?", options: ["जर्मन खसरा", "रैबीज", "चिकनगुनिया", "पीलिया"], correct: 0, explanation: "रुबेला वायरस के कारण होने वाले संक्रमण को जर्मन खसरा कहा जाता है।<br>गर्भावस्था के शुरुआती महीनों में यह भ्रूण के विकास को नुकसान पहुँचा सकता है।" },
+            { id: 23, tag: "", question: "हेपेटाइटिस बी मुख्य रूप से शरीर के किस अंग को संक्रमित करने वाला वायरल रोग है?", options: ["फेफड़े", "यकृत", "वृक्क", "आंत"], correct: 1, explanation: "हेपेटाइटिस बी एक गंभीर विषाणु जनित संक्रमण है जो यकृत की कोशिकाओं पर हमला कर सूजन पैदा करता है।" },
+            { id: 24, tag: "", question: "हर्ड इम्युनिटी की अवधारणा किससे संबंधित है?", options: ["किसी एक व्यक्ति की व्यक्तिगत ताकत से", "समुदाय के अधिकांश लोगों में टीकाकरण से रोग प्रतिरोधक क्षमता विकसित होने से", "केवल पशुओं में होने वाली बीमारी से", "आनुवंशिक उत्परिवर्तन से"], correct: 1, explanation: "जब किसी समुदाय में पर्याप्त संख्या में लोग किसी बीमारी के खिलाफ प्रतिरक्षित हो जाते हैं, तो अप्रतिरोधी लोग भी सुरक्षित हो जाते हैं।" },
+            { id: 25, tag: "", question: "निम्नलिखित में से कौन-सी बीमारी संक्रामक नहीं है, बल्कि हीनता जनित है?", options: ["स्कर्वी", "प्लेग", "सिफलिस", "डिप्थीरिया"], correct: 0, explanation: "स्कर्वी विटामिन सी की कमी से होने वाला हीनता जनित रोग है जो एक व्यक्ति से दूसरे में नहीं फैलता।" },
+            { id: 26, tag: "", question: "प्लाज्मोडियम परजीवी के जीवन चक्र का लैंगिक चरण मुख्य रूप से किसमें पूरा होता है?", options: ["मनुष्य के यकृत में", "मादा एनोफिलीज मच्छर के भीतर", "मानव लाल रक्त कोशिकाओं में", "दूषित जल में"], correct: 1, explanation: "प्लाज्मोडियम अपना अलैंगिक चक्र मानव शरीर में पूरा करता है, जबकि उसका लैंगिक प्रजनन चक्र मादा एनोफिलीज मच्छर की आंत में संपन्न होता है।" },
+            { id: 27, tag: "", question: "शरीर में किसी बाहरी एंटीजन के प्रवेश पर सबसे पहले बनने वाली प्राथमिक एंटीबॉडी कौन-सी है?", options: ["आईजीजी", "आईजीएम", "आईजीई", "आईजीए"], correct: 1, explanation: "संक्रमण या टीकाकरण के बाद शरीर में सबसे पहले बनने वाली और सबसे बड़ी आकार की एंटीबॉडी इम्यूनोग्लोबुलिन एम होती है।" },
+            { id: 28, tag: "", question: "एलर्जी की प्रक्रिया के दौरान शरीर में कौन-सा रासायनिक पदार्थ बड़ी मात्रा में मुक्त होता है?", options: ["इंसुलिन", "हिस्टामाइन", "पेप्सिन", "रेनिन"], correct: 1, explanation: "एलर्जी पैदा करने वाले कारक के संपर्क में आने पर कोशिकाओं से हिस्टामाइन रिलीज होते हैं जो सूजन और खुजली पैदा करते हैं।" },
+            { id: 29, tag: "", question: "निम्नलिखित में से कौन-सा टीका लाइव एटेन्यूएटेड टीके का उदाहरण है?", options: ["टिटनेस टॉक्साइड", "एमएमआर टीका", "रेबीज का मृत टीका", "हेपेटाइटिस बी टीका"], correct: 1, explanation: "एमएमआर टीका जीवित कमजोर वायरस से बनाए जाते हैं जो मजबूत प्रतिरक्षा प्रदान करते हैं।" },
+            { id: 30, tag: "", question: "भारत सरकार द्वारा बच्चों के टीकाकरण के लिए संचालित राष्ट्रव्यापी मिशन का क्या नाम है?", options: ["मिशन इंद्रधनुष", "आयुष्मान भारत", "राष्ट्रीय पोषण मिशन", "स्वच्छ भारत अभियान"], correct: 0, explanation: "मिशन इंद्रधनुष भारत सरकार का एक प्रमुख टीकाकरण अभियान है जिसके तहत बच्चों और गर्भवती महिलाओं को टीकाकृत किया जाता है।" },
+            { id: 31, tag: "", question: "फाइलेरिया रोग का प्रसारण मुख्य रूप से किसके काटने से होता है?", options: ["क्यूलेक्स मच्छर", "मादा एनोफिलीज", "घरेलू मक्खी", "सैंडफ्लाई"], correct: 0, explanation: "फाइलेरिया कृमि का संक्रमण मुख्य रूप से संक्रमित क्यूलेक्स मच्छरों के काटने से फैलता है जो लसीका वाहिकाओं को अवरुद्ध करता है।" },
+            { id: 32, tag: "", question: "निम्नलिखित में से कौन-सा यौन संचारित संक्रमण पूरी तरह लाइलाज वायरल बीमारी माना जाता है?", options: ["सिफलिस", "गोनोरिया", "एड्स", "क्लेमाइडिया"], correct: 2, explanation: "सिफलिस, गोनोरिया और क्लेमाइडिया जीवाणु जनित हैं जिनका इलाज संभव है, जबकि एड्स एक लाइलाज वायरल बीमारी है।" },
+            { id: 33, tag: "", question: "प्रोटोजोआ जनित कालाजार रोग का वाहक कीट कौन-सा है?", options: ["बालू मक्खी", "सीसी मक्खी", "मादा एनोफिलीज", "एडीज मच्छर"], correct: 0, explanation: "कालाजार परजीवी के कारण होता है और इसका मुख्य वाहक कीट बालू मक्खी है जो यकृत को क्षति पहुँचाता है।" },
+            { id: 34, tag: "", question: "शरीर की जन्मजात रक्षा प्रणाली किस प्रकार की होती है?", options: ["जन्मजात और गैर-विशिष्ट सुरक्षा", "जीवनकाल में केवल टीके से मिलने वाली सुरक्षा", "केवल रक्त आधान से मिलने वाली सुरक्षा", "अत्यधिक विशिष्ट सुरक्षा"], correct: 0, explanation: "जन्मजात प्रतिरक्षा वह सुरक्षा है जो जन्म से ही शरीर में मौजूद होती है और गैर-विशिष्ट रूप से काम करती है।" },
+            { id: 35, tag: "", question: "तपेदिक के बैक्टीरिया की खोज सबसे पहले किस वैज्ञानिक ने की थी?", options: ["रॉबर्ट कॉक", "लुई पाश्चर", "अलेक्जेंडर फ्लेमिंग", "कार्ल लैंडस्टीनर"], correct: 0, explanation: "रॉबर्ट कॉक ने माइकोबैक्टीरियम ट्यूबरकुलोसिस की खोज की थी, जिसके लिए उन्हें नोबेल पुरस्कार मिला था।" },
+            { id: 36, tag: "", question: "ट्रेकोमा रोग मुख्य रूप से मानव शरीर के किस अंग को संक्रमित करता है?", options: ["आंखें", "गला", "त्वचा", "फेफड़े"], correct: 0, explanation: "ट्रेकोमा जीवाणु के कारण होने वाला नेत्र संक्रमण है जो पलकों को नुकसान पहुँचाता है।" },
+            { id: 37, tag: "", question: "निम्नलिखित में से कौन-सा टीका बच्चों को डिप्थीरिया, काली खांसी और टेटनस से बचाता है?", options: ["बीसीजी", "डिपटीटी", "ओपीवी", "एमएमआर"], correct: 1, explanation: "डिपटीटी का टीका तीन गंभीर जीवाणु संक्रमणों से बच्चों को सुरक्षित रखने के लिए लगाया जाता है।" },
+            { id: 38, tag: "", question: "स्वाइन फ्लू किस प्रकार का संक्रामक रोग है?", options: ["जीवाणु जनित", "विषाणु जनित", "कवक जनित", "परजीवी जनित"], correct: 1, explanation: "स्वाइन फ्लू इन्फ्लूएंजा वायरस के कारण फैलने वाला एक श्वसन संबंधी संक्रामक वायरल रोग है।" },
+            { id: 39, tag: "", question: "दाद की बीमारी मानव शरीर में किसके संक्रमण से फैलती है?", options: ["कवक", "बैक्टीरिया", "वायरस", "प्रोटोजोआ"], correct: 0, explanation: "दाद कवकों के संक्रमण से होने वाला त्वचा रोग है जिसमें त्वचा पर लाल चकत्ते होते हैं।" },
+            { id: 40, tag: "", question: "शरीर में एंटीबॉडी का उत्पादन मुख्य रूप से किस प्रकार की रक्त कोशिकाओं द्वारा किया जाता है?", options: ["बी-लिम्फोसाइट्स", "न्यूट्रोफिल्स", "एरिथ्रोसाइट्स", "थ्रॉम्बोसाइट्स"], correct: 0, explanation: "बी-लिम्फोसाइट्स परिपक्व होकर प्लाज्मा कोशिकाओं में बदलती हैं, जो विशिष्ट एंटीबॉडी का उत्पादन करती हैं।" },
+            { id: 41, tag: "", question: "संक्रामक रोगों और उनके कारकों के संबंध में निम्नलिखित कथनों पर विचार कीजिए:<br><br><b>कथन I:</b> टाइफाइड साल्मोनेला टाइफी नामक जीवाणु के संक्रमण से होता है।<br><b>कथन II:</b> मलेरिया एक विषाणु जनित रोग है जो मच्छरों से फैलता है।<br><br>उपर्युक्त में से कौन-सा/से कथन सही है/हैं?", options: ["केवल कथन II सही है", "केवल कथन I सही है", "कथन I और II दोनों सही हैं", "न तो कथन I और न ही II सही है"], correct: 1, explanation: "टाइफाइड जीवाणु जनित है, अतः कथन I सत्य है।<br>मलेरिये का कारक प्रोटोजोआ परजीवी है, वायरस नहीं, अतः कथन II असत्य है।" },
+            { id: 42, tag: "", question: "सूची-I को सूची-II के साथ सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>a. एड्स</td><td style='border:1px solid #cbd5e1; padding:6px;'>1. साल्मोनेला टाइफी</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>b. टाइफाइड</td><td style='border:1px solid #cbd5e1; padding:6px;'>2. वायरस</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>c. मलेरिया</td><td style='border:1px solid #cbd5e1; padding:6px;'>3. माइकोबैक्टीरियम</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>d. क्षय रोग</td><td style='border:1px solid #cbd5e1; padding:6px;'>4. प्लाज्मोडियम परजीवी</td></tr></table>", options: ["(a) a-2, b-1, c-4, d-3", "(b) a-1, b-2, c-3, d-4", "(c) a-2, b-3, c-1, d-4", "(d) a-4, b-1, c-2, d-3"], correct: 0, explanation: "एड्स वायरस से होता है (a-2)।<br>टाइफाइड साल्मोनेला से होता है (b-1)।<br>मलेरिया प्लाज्मोडियम से होता है (c-4)।<br>क्षय रोग माइकोबैक्टीरियम से होता है (d-3)।" },
+            { id: 43, tag: "", question: "<b>कथन (A):</b> नवजात शिशु को माता के दूध से मिलने वाली प्रतिरक्षा निष्क्रिय प्रतिरक्षा का एक बेहतरीन उदाहरण है।<br><b>कारण (R):</b> इस प्रकार की प्रतिरक्षा में शिशु का अपना प्रतिरक्षा तंत्र स्वयं एंटीबॉडी का निर्माण करता है।", options: ["(a) (A) सही है, परंतु (R) गलत है", "(b) (A) गलत है, परंतु (R) सही है", "(c) (A) और (R) दोनों सही हैं तथा (R), (A) की सही व्याख्या है", "(d) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है"], correct: 0, explanation: "माता के दूध से मिलने वाली प्रतिरक्षा निष्क्रिय है क्योंकि इसमें शिशु का शरीर एंटीबॉडी खुद नहीं बनाता।<br>अतः कथन सही है और कारण गलत है।" },
+            { id: 44, tag: "", question: "प्रतिरक्षा प्रणाली और टीकों के संबंध में निम्नलिखित कथनों पर विचार कीजिए:<br><br><b>कथन I:</b> एडवर्ड जेनर ने सबसे पहले चेचक के टीके की खोज की थी।<br><b>कथन II:</b> बीसीजी का टीका पोलियो की रोकथाम के लिए दिया जाता है।<br><br>उपर्युक्त में से कौन-सा/से कथन सही है/हैं?", options: ["केवल कथन I सही है", "केवल कथन II सही है", "कथन I और II दोनों सही हैं", "न तो कथन I और न ही II सही है"], correct: 0, explanation: "एडवर्ड जेनर ने चेचक का टीका खोजा था, अतः कथन I सत्य है।<br>बीसीजी का टीका टीबी के लिए होता है न कि पोलियो के लिए, अतः कथन II असत्य है।" },
+            { id: 45, tag: "", question: "सूची-I को सूची-II के साथ सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>a. एलिसा टेस्ट</td><td style='border:1px solid #cbd5e1; padding:6px;'>1. टाइफाइड की जांच</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>b. विडाल टेस्ट</td><td style='border:1px solid #cbd5e1; padding:6px;'>2. एड्स की संपुष्टि</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>c. मोंटेक्स टेस्ट</td><td style='border:1px solid #cbd5e1; padding:6px;'>4. क्षय रोग की जाँच</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>d. डॉट्स प्रणाली</td><td style='border:1px solid #cbd5e1; padding:6px;'>3. टीबी उपचार की रणनीति</td></tr></table>", options: ["(a) a-2, b-1, c-4, d-3", "(b) a-1, b-2, c-3, d-4", "(c) a-2, b-3, c-1, d-4", "(d) a-4, b-1, c-2, d-3"], correct: 0, explanation: "एलिसा टेस्ट एड्स के लिए है (a-2)।<br>विडाल टेस्ट टाइफाइड के लिए है (b-1)।<br>मोंटेक्स टेस्ट टीबी जांच है (c-4)।<br>डॉट्स टीबी उपचार रणनीति है (d-3)।" },
+            { id: 46, tag: "", question: "संक्रामक रोगों के प्रसार के संबंध में निम्नलिखित कथनों पर विचार कीजिए:<br><br><b>कथन I:</b> डेंगू एक वायरल संक्रमण है जो एडीज मच्छरों के काटने से फैलता है।<br><b>कथन II:</b> कुष्ठ रोग एक आनुवंशिक विकार है जो एक पीढ़ी से दूसरी पीढ़ी में जाता है।<br><br>उपर्युक्त में से कौन-सा/से कथन सही है/हैं?", options: ["केवल कथन I सही है", "केवल कथन II सही है", "कथन I और II दोनों सही हैं", "न तो कथन I और न ही II सही है"], correct: 0, explanation: "डेंगू मच्छरों से फैलने वाला वायरल रोग है, अतः कथन I सही है।<br>कुष्ठ रोग जीवाणु जनित संक्रामक रोग है, आनुवंशिक नहीं, अतः कथन II गलत है।" },
+            { id: 47, tag: "", question: "सूची-I को सूची-II के साथ सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>a. रैबीज</td><td style='border:1px solid #cbd5e1; padding:6px;'>1. बालू मक्खी</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>b. कालाजार</td><td style='border:1px solid #cbd5e1; padding:6px;'>2. पागल कुत्ते का काटना</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>c. फाइलेरिया</td><td style='border:1px solid #cbd5e1; padding:6px;'>3. क्यूलेक्स मच्छर</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>d. मलेरिया</td><td style='border:1px solid #cbd5e1; padding:6px;'>4. मादा एनोफिलीज</td></tr></table>", options: ["(a) a-2, b-1, c-3, d-4", "(b) a-1, b-2, c-3, d-4", "(c) a-2, b-3, c-1, d-4", "(d) a-4, b-1, c-2, d-3"], correct: 0, explanation: "रैबीज कुत्ते के काटने से होता है (a-2)।<br>कालाजार बालू मक्खी से फैलता है (b-1)।<br>फाइलेरिया क्यूलेक्स मच्छर से होता है (c-3)।<br>मलेरिया मादा एनोफिलीज से फैलता है (d-4)।" },
+            { id: 48, tag: "", question: "<b>कथन (A):</b> हर्ड इम्युनिटी किसी समुदाय को व्यापक स्तर पर संक्रामक बीमारियों से सुरक्षा प्रदान करती है।<br><b>कारण (R):</b> जब अधिकांश लोग प्रतिरक्षित हो जाते हैं, तो संक्रमण की श्रृंखला टूट जाती है और असक्षित लोग भी सुरक्षित रहते हैं।", options: ["(a) (A) सही है, परंतु (R) गलत है", "(b) (A) गलत है, परंतु (R) सही है", "(c) (A) और (R) दोनों सही हैं तथा (R), (A) की सही व्याख्या है", "(d) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है"], correct: 2, explanation: "समुदाय में उच्च टीकाकरण दर से हर्ड इम्युनिटी बनती है जिससे संक्रमण आगे नहीं फैल पाता।<br>अतः दोनों कथन सही हैं और कारण सही व्याख्या है।" },
+            { id: 49, tag: "", question: "प्रतिरक्षा तंत्र की कार्यप्रणाली के संबंध में निम्नलिखित कथनों पर विचार कीजिए:<br><br><b>कथन I:</b> शरीर में प्रवेश करने वाले बाहरी पदार्थों को एंटीजन कहा जाता है।<br><b>कथन II:</b> टी-लिम्फोसाइट्स कोशिकाएं सीधे एंटीबॉडी का निर्माण करती हैं।<br><br>उपर्युक्त में से कौन-सा/से कथन सही है/हैं?", options: ["केवल कथन I सही है", "केवल कथन II सही है", "कथन I और II दोनों सही हैं", "न तो कथन I और न ही II सही है"], correct: 0, explanation: "बाहरी पदार्थों को एंटीजन कहते हैं, अतः कथन I सही है।<br>एंटीबॉडी का मुख्य निर्माण प्लाज्मा कोशिकाओं में बदलने वाली बी-लिम्फोसाइट्स करती हैं, अतः कथन II गलत है।" },
+            { id: 50, tag: "", question: "सूची-I को सूची-II के साथ सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>a. डीपीटी टीका</td><td style='border:1px solid #cbd5e1; padding:6px;'>1. डिप्थीरिया, काली खांसी, टेटनस</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>b. बीसीजी टीका</td><td style='border:1px solid #cbd5e1; padding:6px;'>2. क्षय रोग की रोकथाम</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>c. ओपीवी टीका</td><td style='border:1px solid #cbd5e1; padding:6px;'>3. पोलियो की रोकथाम</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>d. एमएमआर टीका</td><td style='border:1px solid #cbd5e1; padding:6px;'>4. खसरा, गलघोंटू, रुबेला</td></tr></table>", options: ["(a) a-1, b-2, c-3, d-4", "(b) a-2, b-1, c-3, d-4", "(c) a-1, b-3, c-2, d-4", "(d) a-4, b-3, c-2, d-1"], correct: 0, explanation: "डिपटीटी टीका डिप्थीरिया, पर्टुसिस और टेटनस के लिए है (a-1)।<br>बीसीजी टीबी के लिए है (b-2)।<br>ओपीवी पोलियो के लिए है (c-3)।<br>एमएमआर खसरा, मम्प्स और रुबेला के लिए है (d-4)।" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
