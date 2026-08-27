@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">भारत का भूगोल — टेस्ट 15: कृषि : विविध एवं पशुपालन</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">कृषि : विविध एवं पशुपालन (Test 15)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_geo_test_15"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "भारत में अंगूरों की खेती (Grape Cultivation) का वैज्ञानिक अध्ययन क्या कहलाता है?", options: ["(a) विटीकल्चर (Viticulture)", "(b) सेरीकल्चर", "(c) पिसीकल्चर", "(d) फ्लोरीकल्चर"], correct: 0, explanation: "अंगूर की वैज्ञानिक खेती को विटीकल्चर (Viticulture) कहते हैं। महाराष्ट्र का नासिक जिला देश की 'ग्रेप कैपिटल' कहलाता है।" },
+            { id: 2, tag: "", question: "रेशम के कीटों का पालन (Silkworm rearing) क्या कहलाता है?", options: ["(a) एपीकल्चर", "(b) सेरीकल्चर (Sericulture)", "(c) वर्मीकल्चर", "(d) मोरीकल्चर"], correct: 1, explanation: "शहतूत, अरंडी या अर्जुन के पत्तों पर रेशम के कीटों को पालकर कच्चा रेशम उत्पादन करना सेरीकल्चर (Sericulture) कहलाता है।" },
+            { id: 3, tag: "", question: "मधुमक्खी पालन (Beekeeping) को वैज्ञानिक भाषा में क्या कहा जाता है?", options: ["(a) सिल्वीकल्चर", "(b) पोमोलॉजी", "(c) एपीकल्चर (Apiculture)", "(d) ओलेरीकल्चर"], correct: 2, explanation: "शहद एवं मोम के व्यावसायिक उत्पादन हेतु वैज्ञानिक तरीके से मधुमक्खियों का पालन एपीकल्चर (Apiculture) कहलाता है।" },
+            { id: 4, tag: "", question: "सब्जियों की व्यावसायिक कृषि का अध्ययन क्या कहलाता है?", options: ["(a) ओलेरीकल्चर (Olericulture)", "(b) फ्लोरीकल्चर", "(c) पोमोलॉजी", "(d) आर्बोरीकल्चर"], correct: 0, explanation: "शाक-सब्जियों के उत्पादन, प्रबंधन और विपणन का अध्ययन ओलेरीकल्चर (Olericulture) कहलाता है।" },
+            { id: 5, tag: "", question: "फलों के वैज्ञानिक अध्ययन और उत्पादन को क्या कहते हैं?", options: ["(a) पोमोलॉजी (Pomology)", "(b) हाइड्रोपोनिक्स", "(c) पिसीकल्चर", "(d) सिट्रीकल्चर"], correct: 0, explanation: "फलों की खेती और उनके गुणों के वैज्ञानिक अध्ययन को पोमोलॉजी (Pomology) कहा जाता है।" },
+            { id: 6, tag: "", question: "मत्स्य पालन (Fish farming) का व्यावसायिक विज्ञान क्या कहलाता है?", options: ["(a) पिसीकल्चर (Pisciculture)", "(b) विटीकल्चर", "(c) मैरीकल्चर", "(d) सेरीकल्चर"], correct: 0, explanation: "नियंत्रित जलाशयों, तालाबों या बाड़ों में मछलियों का व्यावसायिक प्रजनन और पालन पिसीकल्चर (Pisciculture) कहलाता है।" },
+            { id: 7, tag: "", question: "केंचुआ पालन (Earthworm farming) द्वारा जैविक खाद तैयार करना क्या कहलाता है?", options: ["(a) वर्मीकल्चर (Vermiculture)", "(b) फ्लोरीकल्चर", "(c) सिल्वीकल्चर", "(d) हार्बरकल्चर"], correct: 0, explanation: "केंचुओं के माध्यम से कृषि एवं जैविक कचरे को उच्च गुणवत्ता वाली वर्मीकम्पोस्ट खाद में बदलना वर्मीकल्चर कहलाता है।" },
+            { id: 8, tag: "", question: "बिना मिट्टी के केवल पोषक तत्वों से युक्त जल में पौधों को उगाना क्या कहलाता है?", options: ["(a) हाइड्रोपोनिक्स (Hydroponics)", "(b) एरोपोनिक्स", "(c) जियोपोनिक्स", "(d) एक्वापोनिक्स"], correct: 0, explanation: "मिट्टी के बिना केवल जल और घुलनशील खनिज उर्वरक घोल में नियंत्रित तापमान पर पौधे उगाना हाइड्रोपोनिक्स (Soilless cultivation) कहलाता है।" },
+            { id: 9, tag: "", question: "हवा में बिना मिट्टी व बिना जल भरे पौधों की जड़ों को लटकाकर पोषक फुहार देना क्या कहलाता है?", options: ["(a) एरोपोनिक्स (Aeroponics)", "(b) हाइड्रोपोनिक्स", "(c) विटीकल्चर", "(d) पिसीकल्चर"], correct: 0, explanation: "एरोपोनिक्स तकनीक में पौधे की जड़ें वायु में लटकी रहती हैं और उन पर नियमित समय पर पोषक तत्वों की धुंध (Mist) का छिड़काव किया जाता है।" },
+            { id: 10, tag: "", question: "भारत में 'राष्ट्रीय बागवानी मिशन' (National Horticulture Mission - NHM) किस पंचवर्षीय योजना में शुरू किया गया था?", options: ["(a) 9वीं योजना", "(b) 10वीं योजना (2005-06)", "(c) 11वीं योजना", "(d) 8वीं योजना"], correct: 1, explanation: "देश में बागवानी फसलों (फल, सब्जी, फूल, मसाले) के समग्र विकास हेतु 10वीं पंचवर्षीय योजना के दौरान वर्ष 2005-06 में NHM शुरू किया गया था।" },
+            { id: 11, tag: "", question: "भारत में 'गोल्डन रिवोल्यूशन' (स्वर्ण क्रांति) का संबंध किससे है?", options: ["(a) जूट उत्पादन", "(b) शहद एवं समग्र बागवानी विकास", "(c) दलहन उत्पादन", "(d) अंडा उत्पादन"], correct: 1, explanation: "स्वर्ण क्रांति (Golden Revolution) का संबंध फल, शहद और बागवानी फसलों के उत्पादन में तीव्र वृद्धि से है।" },
+            { id: 12, tag: "", question: "भारत में 'रजत क्रांति' (Silver Revolution) किससे संबंधित है?", options: ["(a) अंडा एवं पोल्ट्री उत्पादन", "(b) चांदी उत्पादन", "(c) कपास उत्पादन", "(d) दूध उत्पादन"], correct: 0, explanation: "भारत में अंडा और कुक्कुट (Poultry) उत्पादन में भारी वृद्धि को रजत क्रांति (Silver Revolution) कहा जाता है।" },
+            { id: 13, tag: "", question: "भारत में 'गोल क्रांति' (Round Revolution) का संबंध किससे है?", options: ["(a) टमाटर", "(b) आलू उत्पादन", "(c) प्याज", "(d) अंडा"], correct: 1, explanation: "आलू के उत्पादन को कई गुना बढ़ाने और वैज्ञानिक भंडारण के लिए चलाई गई पहल को गोल क्रांति कहा जाता है।" },
+            { id: 14, tag: "", question: "'लाल क्रांति' (Red Revolution) का संबंध किससे है?", options: ["(a) टमाटर एवं मांस उत्पादन", "(b) सेब उत्पादन", "(c) मिर्च उत्पादन", "(d) गुलाब उत्पादन"], correct: 0, explanation: "टमाटर और मांस (Meat) उत्पादन में तीव्र वृद्धि को लाल क्रांति के रूप में जाना जाता है।" },
+            { id: 15, tag: "", question: "20वीं पशुधन संगणना (2019) के अनुसार भारत में कुल पशुधन (Livestock) की संख्या कितनी दर्ज की गई?", options: ["(a) 535.78 मिलियन (लगभग 53.6 करोड़)", "(b) 450.25 मिलियन", "(c) 612.40 मिलियन", "(d) 380.10 मिलियन"], correct: 0, explanation: "20वीं पशुधन गणना के अनुसार भारत में कुल पशुधन आबादी 535.78 मिलियन दर्ज की गई, जिसमें उत्तर प्रदेश प्रथम स्थान पर है।" },
+            { id: 16, tag: "", question: "भारत में कुल पशुधन (Livestock Population) में किस राज्य का स्थान प्रथम है?", options: ["(a) राजस्थान", "(b) उत्तर प्रदेश", "(c) मध्य प्रदेश", "(d) पश्चिम बंगाल"], correct: 1, explanation: "उत्तर प्रदेश भारत में कुल पशुधन संख्या (लगभग 68 मिलियन) और कुल दुग्ध उत्पादन दोनों में देश में शीर्ष स्थान पर है।" },
+            { id: 17, tag: "", question: "भारत में मवेशियों (गायों/Cattle) की सर्वाधिक संख्या किस राज्य में पाई जाती है?", options: ["(a) उत्तर प्रदेश", "(b) पश्चिम बंगाल", "(c) मध्य प्रदेश", "(d) राजस्थान"], correct: 1, explanation: "20वीं पशुधन गणना के अनुसार गायों (Cattle) की सर्वाधिक संख्या पश्चिम बंगाल में है, जिसके बाद उत्तर प्रदेश का स्थान आता है।" },
+            { id: 18, tag: "", question: "भारत में भैंसों (Buffaloes) की सर्वाधिक संख्या किस राज्य में स्थित है?", options: ["(a) उत्तर प्रदेश", "(b) राजस्थान", "(c) गुजरात", "(d) हरियाणा"], correct: 0, explanation: "उत्तर प्रदेश देश के कुल भैंसों की संख्या का लगभग 33% हिस्सा रखते हुए प्रथम स्थान पर है।" },
+            { id: 19, tag: "", question: "भारत में बकरियों (Goats) और ऊंटों (Camels) की सर्वाधिक संख्या किस राज्य में है?", options: ["(a) राजस्थान", "(b) पश्चिम बंगाल", "(c) महाराष्ट्र", "(d) गुजरात"], correct: 0, explanation: "राजस्थान बकरियों, भेड़ों और ऊंटों की संख्या में देश के अग्रणी राज्यों में शामिल है (ऊंटों में 85% के साथ शीर्ष पर)।" },
+            { id: 20, tag: "", question: "भारत में भेड़ों (Sheep) की सर्वाधिक आबादी किस राज्य में दर्ज की गई है?", options: ["(a) आंध्र प्रदेश", "(b) तेलंगाना", "(c) राजस्थान", "(d) कर्नाटक"], correct: 1, explanation: "20वीं पशुधन गणना के अनुसार भारत में सर्वाधिक भेड़ें तेलंगाना राज्य में पाई जाती हैं।" },
+            { id: 21, tag: "", question: "विश्व में सर्वाधिक भैंसों की संख्या किस देश में पाई जाती है?", options: ["(a) ब्राजील", "(b) चीन", "(c) भारत", "(d) पाकिस्तान"], correct: 2, explanation: "विश्व की कुल भैंस आबादी का 50% से अधिक हिस्सा भारत में पाया जाता है।" },
+            { id: 22, tag: "", question: "'मुर्रा' (Murrah) निम्नलिखित में से किस पशु की भारत की सबसे प्रसिद्ध दुधारू नस्ल है?", options: ["(a) गाय की", "(b) भैंस की", "(c) बकरी की", "(d) भेड़ की"], correct: 1, explanation: "मुर्रा हरियाणा और पंजाब में पाई जाने वाली विश्व प्रसिद्ध भैंस की नस्ल है, जिसे अधिक दूध देने के कारण 'ब्लैक गोल्ड' (Black Gold) भी कहा जाता है।" },
+            { id: 23, tag: "", question: "भदावरी, जाफराबादी, नीली-रावी और मेहसाणा किसकी प्रमुख नस्लें हैं?", options: ["(a) गाय की", "(b) भैंस की", "(c) बकरी की", "(d) भेड़ की"], correct: 1, explanation: "भदावरी (जिसके दूध में वसा/Fat सर्वाधिक 13% तक होती है), जाफराबादी, सुरती और नीली-रावी भैंस की प्रमुख भारतीय नस्लें हैं।" },
+            { id: 24, tag: "", question: "गीर (Gir), साहीवाल, लाल सिंधी और थारपारकर किसकी प्रसिद्ध दुधारू देशी नस्लें हैं?", options: ["(a) गाय की (Cattle)", "(b) भैंस की", "(c) बकरी की", "(d) भेड़ की"], correct: 0, explanation: "गीर (गुजरात), साहीवाल (पंजाब/हरियाणा) और थारपारकर (राजस्थान) भारत की सर्वोत्तम देशी दुधारू गायों की नस्लें हैं।" },
+            { id: 25, tag: "", question: "द्विकाजी (दूध और भारवाहक दोनों) देशी गाय की प्रसिद्ध नस्ल कौन-सी है?", options: ["(a) अमृतमहल", "(b) नागोरी", "(c) हरियाणा और कांक्रेज", "(d) खिल्लारी"], correct: 2, explanation: "हरियाणा और कांक्रेज (गुजरात) गाय की सर्वोत्तम द्विकाजी (Dual-purpose) नस्लें हैं, जिनकी गायें अच्छा दूध देती हैं और बैल खेती/भार ढोने में कुशल होते हैं।" },
+            { id: 26, tag: "", question: "विश्व में गाय की किस विदेशी नस्ल को सर्वाधिक दूध उत्पादन के लिए जाना जाता है?", options: ["(a) जर्सी", "(b) होल्स्टीन-फ्रिजियन (Holstein-Friesian)", "(c) ब्राउन स्विस", "(d) रेड डेन"], correct: 1, explanation: "नीदरलैंड मूल की होल्स्टीन-फ्रिजियन (HF) गाय विश्व में प्रतिदिन सर्वाधिक दूध देने वाली प्रसिद्ध डेयरी नस्ल है।" },
+            { id: 27, tag: "", question: "'गरीब की गाय' (Poor Man's Cow) किसे कहा जाता है?", options: ["(a) भेड़ को", "(b) बकरी को", "(c) भैंस को", "(d) मुर्गी को"], correct: 1, explanation: "महात्मा गांधी ने बकरी को 'गरीब की गाय' कहा था क्योंकि इसके पालन में न्यूनतम खर्च आता है और यह कभी भी ताजा पौष्टिक दूध उपलब्ध कराती है।" },
+            { id: 28, tag: "", question: "जमुनापारी, बारबरी, ब्लैक बंगाल और बीटल किसकी प्रमुख भारतीय नस्लें हैं?", options: ["(a) बकरी की (Goat)", "(b) भेड़ की", "(c) गाय की", "(d) सुअर की"], correct: 0, explanation: "जमुनापारी (इटावा, उ.प्र.) और बारबरी बकरी की प्रमुख दुधारू नस्लें हैं, जबकि ब्लैक बंगाल मांस उत्पादन के लिए विख्यात है।" },
+            { id: 29, tag: "", question: "पश्मीना (Pashmina) नामक विश्वप्रसिद्ध अत्यंत महीन और गर्म ऊन किस पशु से प्राप्त होती है?", options: ["(a) कश्मीरी/चेंगथांगी बकरी से", "(b) मारवाड़ी भेड़ से", "(c) अंगोरा खरगोश से", "(d) याक से"], correct: 0, explanation: "पश्मीना लद्दाख के उच्च शिखरों पर पाई जाने वाली चेंगथांगी/कश्मीरी नस्ल की पहाड़ी बकरी के भीतरी कोमल बालों (Undercoat) से प्राप्त होती है।" },
+            { id: 30, tag: "", question: "'अंगोरा ऊन' (Angora Wool) किस जीव से प्राप्त की जाती है?", options: ["(a) अंगोरा बकरी से", "(b) अंगोरा खरगोश (Rabbit) से", "(c) भेड़ से", "(d) लामा से"], correct: 1, explanation: "अंगोरा ऊन विशेष रूप से अंगोरा खरगोश के मुलायम रेशों से बनाई जाती है (जबकि मोहायर ऊन अंगोरा बकरी से मिलती है)।" },
+            { id: 31, tag: "", question: "भारत में उत्तम गुणवत्ता वाली कालीन ऊन प्रदान करने वाली 'चोकला' (Chokla) किसकी नस्ल है, जिसे 'भारत की मेरिनो' कहते हैं?", options: ["(a) बकरी की", "(b) भेड़ की (Sheep)", "(c) ऊंट की", "(d) घोड़े की"], correct: 1, explanation: "राजस्थान के शेखावाटी क्षेत्र में पाई जाने वाली चोकला भेड़ को अपने महीन ऊन के कारण 'भारतीय मेरिनो' कहा जाता है।" },
+            { id: 32, tag: "", question: "भारत में अंडों की टोकरी (Egg Bowl of Asia) किस राज्य को कहा जाता है?", options: ["(a) तमिलनाडु", "(b) आंध्र प्रदेश", "(c) पंजाब", "(d) पश्चिम बंगाल"], correct: 1, explanation: "विशाल पोल्ट्री फार्मिंग और प्रतिवर्ष अरबों अंडों के उत्पादन के कारण आंध्र प्रदेश को 'एशिया के अंडों की टोकरी' कहा जाता है।" },
+            { id: 33, tag: "", question: "मुर्गियों की प्रसिद्ध लड़ाकू और स्वादिष्ट काले मांस वाली 'कड़कनाथ' (Kadaknath) नस्ल किस राज्य की मूल प्रजाति है?", options: ["(a) मध्य प्रदेश (झाबुआ)", "(b) ओडिशा", "(c) छत्तीसगढ़", "(d) राजस्थान"], correct: 0, explanation: "कड़कनाथ (कालामासी) मध्य प्रदेश के झाबुआ और धार जिलों की मूल देशी कुक्कुट नस्ल है, जिसे GI टैग प्राप्त है। इसका मांस, रक्त और हड्डियाँ काले रंग की होती हैं।" },
+            { id: 34, tag: "", question: "पशुओं में होने वाला घातक 'खुरपका-मुंहपका रोग' (FMD - Foot and Mouth Disease) किसके संक्रमण से फैलता है?", options: ["(a) जीवाणु (Bacteria)", "(b) विषाणु (Virus)", "(c) कवक (Fungus)", "(d) प्रोटोजोआ"], correct: 1, explanation: "खुरपका-मुंहपका (FMD) खुर वाले मवेशियों में Picornaviridae कुल के वायरस द्वारा फैलने वाला एक अत्यंत संक्रामक विषाणु जनित रोग है।" },
+            { id: 35, tag: "", question: "पशुओं में 'गिल्टी रोग' या 'एंथ्रेक्स' (Anthrax) किसके कारण होता है?", options: ["(a) बेसिलस एंथ्रेसिस जीवाणु द्वारा", "(b) विषाणु द्वारा", "(c) प्रोटोजोआ द्वारा", "(d) कुपोषण द्वारा"], correct: 0, explanation: "एंथ्रेक्स एक घातक जीवाणु जनित (Bacillus anthracis) रोग है जो पशुओं से मनुष्यों में भी फैल सकता है (Zoonotic disease)।" },
+            { id: 36, tag: "", question: "गाय और भैंस के थनों में सूजन आ जाने वाला रोग 'थनैला' (Mastitis) मुख्य रूप से क्या है?", options: ["(a) जीवाणु जनित संक्रमण", "(b) आनुवंशिक रोग", "(c) विषाणु रोग", "(d) प्रोटोजोआ रोग"], correct: 0, explanation: "थनैला (Mastitis) दुधारू पशुओं के अयन (थन) में स्ट्रेप्टोकोकस या स्टेफिलोकोकस जीवाणुओं के संक्रमण से होने वाला गंभीर रोग है, जिससे दूध उत्पादन गिर जाता है।" },
+            { id: 37, tag: "", question: "मुर्गियों में तीव्र गति से फैलने वाला और भारी मृत्यु दर लाने वाला 'रानीखेत रोग' (Ranikhet / Newcastle disease) किससे होता है?", options: ["(a) वायरस (विषाणु)", "(b) बैक्टीरिया", "(c) कवक", "(d) प्रोटोजोआ"], correct: 0, explanation: "रानीखेत रोग कुक्कुटों में पैरामिक्सोवायरस (Paramyxovirus) द्वारा होने वाला अत्यंत संक्रामक और जानलेवा विषाणु रोग है।" },
+            { id: 38, tag: "", question: "भारत का 'राष्ट्रीय डेयरी विकास बोर्ड' (NDDB) कहाँ स्थित है?", options: ["(a) करनाल (हरियाणा)", "(b) आणंद (गुजरात)", "(c) नई दिल्ली", "(d) भोपाल"], correct: 1, explanation: "NDDB की स्थापना 1965 में डॉ. वर्गीज कुरियन द्वारा गुजरात के आणंद में की गई थी, जिसने ऑपरेशन फ्लड का संचालन किया।" },
+            { id: 39, tag: "", question: "भारतीय पशु चिकित्सा अनुसंधान संस्थान (IVRI) कहाँ स्थित है?", options: ["(a) इज्जतनगर, बरेली (उत्तर प्रदेश)", "(b) करनाल (हरियाणा)", "(c) मथूरा", "(d) पंतनगर"], correct: 0, explanation: "ICAR-भारतीय पशु चिकित्सा अनुसंधान संस्थान (IVRI) उत्तर प्रदेश के बरेली जिले के इज्जतनगर में स्थित है।" },
+            { id: 40, tag: "", question: "केंद्रीय बकरी अनुसंधान संस्थान (CIRG) कहाँ अवस्थित है?", options: ["(a) मखदूम, मथुरा (उत्तर प्रदेश)", "(b) हिसार (हरियाणा)", "(c) अविकानगर (राजस्थान)", "(d) करनाल"], correct: 0, explanation: "केंद्रीय बकरी अनुसंधान संस्थान (CIRG) उत्तर प्रदेश के मथुरा जिले के मखदूम (फरह) में स्थित है।" },
+            { id: 41, tag: "", question: "सूची-I (कृषि शाखा) को सूची-II (संबंधित विषय) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (कृषि शाखा)</th><th style='padding:8px;'>सूची-II (विषय)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) विटीकल्चर</td><td style='padding:6px;'>1. सब्जियों की खेती</td></tr><tr><td style='padding:6px;'>(B) सेरीकल्चर</td><td style='padding:6px;'>2. मधुमक्खी पालन</td></tr><tr><td style='padding:6px;'>(C) ओलेरीकल्चर</td><td style='padding:6px;'>3. अंगूर की खेती</td></tr><tr><td style='padding:6px;'>(D) एपीकल्चर</td><td style='padding:6px;'>4. रेशम कीट पालन</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-3, B-4, C-1, D-2", "(b) A-4, B-3, C-1, D-2", "(c) A-3, B-1, C-4, D-2", "(d) A-1, B-4, C-3, D-2"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• विटीकल्चर — अंगूर की खेती<br>• सेरीकल्चर — रेशम कीट पालन<br>• ओलेरीकल्चर — सब्जियों की खेती<br>• एपीकल्चर — मधुमक्खी पालन" },
+            { id: 42, tag: "", question: "सूची-I (पशु नस्ल) को सूची-II (पशु वर्ग) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (नस्ल)</th><th style='padding:8px;'>सूची-II (पशु वर्ग)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) साहीवाल</td><td style='padding:6px;'>1. भैंस</td></tr><tr><td style='padding:6px;'>(B) मुर्रा</td><td style='padding:6px;'>2. गाय</td></tr><tr><td style='padding:6px;'>(C) जमुनापारी</td><td style='padding:6px;'>3. भेड़</td></tr><tr><td style='padding:6px;'>(D) चोकला</td><td style='padding:6px;'>4. बकरी</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-2, B-1, C-4, D-3", "(b) A-1, B-2, C-4, D-3", "(c) A-2, B-4, C-1, D-3", "(d) A-3, B-1, C-4, D-2"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• साहीवाल — गाय<br>• मुर्रा — भैंस<br>• जमुनापारी — बकरी<br>• चोकला — भेड़" },
+            { id: 43, tag: "", question: "सूची-I (अनुसंधान संस्थान) को सूची-II (स्थान) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (संस्थान)</th><th style='padding:8px;'>सूची-II (स्थान)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) केंद्रीय शुष्क क्षेत्र अनुसंधान संस्थान (CAZRI)</td><td style='padding:6px;'>1. अविकानगर (राजस्थान)</td></tr><tr><td style='padding:6px;'>(B) राष्ट्रीय डेयरी अनुसंधान संस्थान (NDRI)</td><td style='padding:6px;'>2. करनाल (हरियाणा)</td></tr><tr><td style='padding:6px;'>(C) केंद्रीय भेड़ एवं ऊन अनुसंधान संस्थान (CSWRI)</td><td style='padding:6px;'>3. जोधपुर (राजस्थान)</td></tr><tr><td style='padding:6px;'>(D) केंद्रीय भैंस अनुसंधान संस्थान (CIRB)</td><td style='padding:6px;'>4. हिसार (हरियाणा)</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-3, B-2, C-1, D-4", "(b) A-2, B-3, C-1, D-4", "(c) A-3, B-1, C-2, D-4", "(d) A-4, B-2, C-1, D-3"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• CAZRI — जोधपुर<br>• NDRI — करनाल<br>• CSWRI — अविकानगर (टोंक)<br>• CIRB — हिसार" },
+            { id: 44, tag: "", question: "अभिकथन (A): भारत में भैंसों की संख्या गायों की तुलना में कम होने के बावजूद देश के कुल दुग्ध उत्पादन में भैंसों का योगदान 50% से अधिक है।<br>कारण (R): भारतीय भैंसों की औसत दुग्ध उत्पादकता और उनके दूध में वसा (Fat) की मात्रा देशी गायों की तुलना में काफी अधिक होती है।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "भारत में भैंसें (विशेषकर मुर्रा, मेहसाणा) अधिक दूध और 7-8% वसा देती हैं, जिससे डेयरी उद्योग और घरेलू उपयोग में भैंस के दूध की मांग व योगदान सर्वाधिक रहता है।" },
+            { id: 45, tag: "", question: "अभिकथन (A): भारत दुनिया में सबसे बड़ा दुग्ध उत्पादक देश है, किंतु वैश्विक डेयरी निर्यात में इसकी हिस्सेदारी 1% से भी कम है।<br>कारण (R): भारत की विशाल घरेलू आबादी द्वारा दूध और दुग्ध उत्पादों की भारी घरेलू खपत हो जाती है।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "भारत विश्व का लगभग 24% दूध उत्पादित करता है, परंतु 1.4 अरब की आबादी होने के कारण लगभग संपूर्ण उत्पादन घरेलू बाजार में ही खप जाता है, जिससे निर्यात हेतु अधिशेष कम बचता है।" },
+            { id: 46, tag: "", question: "पशुधन और डेयरी विकास के संदर्भ में निम्नलिखित कथनों पर विचार कीजिए:<br>1. 'ऑपरेशन फ्लड' की शुरुआत 1970 में तीन चरणों में की गई थी।<br>2. राष्ट्रीय गोकुल मिशन का मुख्य उद्देश्य देशी गोवंशीय नस्लों का वैज्ञानिक संरक्षण और नस्ल सुधार करना है।<br>3. भारत में प्रति व्यक्ति दूध की उपलब्धता भारतीय चिकित्सा अनुसंधान परिषद (ICMR) के न्यूनतम मानक से बहुत कम है।<br><br>उपर्युक्त में से कौन-से कथन सही हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) 1, 2 और 3"], correct: 0, explanation: "कथन 3 गलत है क्योंकि भारत में वर्तमान में प्रति व्यक्ति दूध उपलब्धता लगभग 459 ग्राम/दिन है, जो ICMR के 300 ग्राम/दिन के मानक और विश्व औसत (325 ग्राम) से काफी अधिक है।" },
+            { id: 47, tag: "", question: "अभिकथन (A): भारत के शुष्क एवं अर्ध-शुष्क क्षेत्रों में छोटे और सीमांत किसानों के लिए बकरी और भेड़ पालन एक 'जीवंत बीमा' (Living Insurance) का कार्य करता है।<br>कारण (R): बकरियां और भेड़ें सूखे व प्रतिकूल मौसम में कंटीली झाड़ियां खाकर जीवित रह सकती हैं तथा आपातकाल में तत्काल नकद आय प्रदान करती हैं।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "अकाल या फसल नष्ट होने पर शुष्क क्षेत्रों के गरीब किसान बकरियों और भेड़ों को बेचकर अपनी आजीविका चलाते हैं, अतः इन्हें वित्तीय सुरक्षा कवच (ATM of rural poor) माना जाता है।" },
+            { id: 48, tag: "", question: "मिश्रित कृषि (Integrated Farming System) के संदर्भ में निम्नलिखित कथनों पर विचार कीजिए:<br>1. इसमें फसलों के उप-उत्पाद (भूसा, पुआल) पशुओं के चारे के रूप में उपयोग किए जाते हैं।<br>2. पशुओं का गोबर और मूत्र बायोगैस उत्पादन तथा खेतों हेतु जैविक खाद (FYM) प्रदान करता है।<br>3. यह प्रणाली किसान की आय को स्थिर करती है और बाहरी आदान लागतों (Input costs) को कम करती है।<br><br>उपर्युक्त में से कौन-से कथन सही हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) 1, 2 और 3"], correct: 3, explanation: "एकीकृत कृषि प्रणाली में फसल अवशेष और पशुधन उत्पाद एक-दूसरे के पूरक बनकर चक्रीय पोषक तत्व प्रवाह स्थापित करते हैं, जिससे शून्य-अपशिष्ट और सतत आय सुनिश्चित होती है।" },
+            { id: 49, tag: "", question: "अभिकथन (A): पशुओं में साइलेज (Silage) बनाना हरे चारे के संरक्षण की एक सर्वोत्तम विधि है।<br>कारण (R): साइलेज गड्ढों (Silo pits) में हरे चारे को हवा की अनुपस्थिति (किण्वन/Fermentation) में दबाकर लंबे समय तक बिना पोषक तत्व खोए सुरक्षित रखा जाता है।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "मक्का, ज्वार या बाजरे के हरे चारे को अवायवीय (Anaerobic) अवस्था में लैक्टिक एसिड किण्वन द्वारा साइलेज के रूप में संरक्षित किया जाता है, जो चारे की कमी वाले मौसम में रसीला पोषण देता है।" },
+            { id: 50, tag: "", question: "सूची-I (पशु रोग) को सूची-II (रोग कारक सूक्ष्मजीव) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (रोग)</th><th style='padding:8px;'>सूची-II (कारक)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) खुरपका-मुंहपका (FMD)</td><td style='padding:6px;'>1. जीवाणु (Bacillus anthracis)</td></tr><tr><td style='padding:6px;'>(B) एंथ्रेक्स (गिल्टी रोग)</td><td style='padding:6px;'>2. विषाणु (Picornavirus)</td></tr><tr><td style='padding:6px;'>(C) रानीखेत रोग</td><td style='padding:6px;'>3. जीवाणु (Streptococcus agalactiae)</td></tr><tr><td style='padding:6px;'>(D) थनैला रोग</td><td style='padding:6px;'>4. विषाणु (Paramyxovirus)</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-2, B-1, C-4, D-3", "(b) A-1, B-2, C-4, D-3", "(c) A-2, B-3, C-4, D-1", "(d) A-4, B-1, C-2, D-3"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• खुरपका-मुंहपका — पिकोर्नावायरस (विषाणु)<br>• एंथ्रेक्स — बेसिलस एंथ्रेसिस (जीवाणु)<br>• रानीखेत — पैरामिक्सोवायरस (विषाणु)<br>• थनैला — स्ट्रेप्टोकोकस (जीवाणु)" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
