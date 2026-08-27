@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">भारत का भूगोल — टेस्ट 21: विविध (अंतिम महा-मॉक)</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">विविध भूगोल (Test 21)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_geo_test_21"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "क्षेत्रफल की दृष्टि से भारत का विश्व में कौन-सा स्थान है?", options: ["(a) पाँचवाँ", "(b) छठा", "(c) सातवाँ", "(d) आठवाँ"], correct: 2, explanation: "क्षेत्रफल (32,87,263 वर्ग किमी) की दृष्टि से रूस, कनाडा, चीन, अमेरिका, ब्राजील और ऑस्ट्रेलिया के बाद भारत विश्व का सातवाँ बड़ा देश है।" },
+            { id: 2, tag: "", question: "जनसंख्या की दृष्टि से भारत का विश्व में कौन-सा स्थान है?", options: ["(a) प्रथम", "(b) द्वितीय", "(c) तृतीय", "(d) चतुर्थ"], correct: 0, explanation: "संयुक्त राष्ट्र की जनसांख्यिकी रिपोर्टों के अनुसार वर्तमान में भारत जनसंख्या के मामले में विश्व में प्रथम स्थान पर पहुँच गया है।" },
+            { id: 3, tag: "", question: "भारत का कुल क्षेत्रफल विश्व के कुल स्थलीय क्षेत्रफल का लगभग कितना प्रतिशत है?", options: ["(a) 2.42%", "(b) 4.20%", "(c) 1.80%", "(d) 3.28%"], correct: 0, explanation: "भारत का क्षेत्रफल 32,87,263 वर्ग किमी है, जो विश्व के कुल भू-भाग का लगभग 2.42% हिस्सा है, जबकि यहाँ विश्व की 17.5% जनसंख्या निवास करती है।" },
+            { id: 4, tag: "", question: "भारतीय उपमहाद्वीप में सम्मिलित देश कौन-से हैं?", options: ["(a) भारत, पाकिस्तान, बांग्लादेश, नेपाल और भूटान", "(b) केवल भारत और चीन", "(c) भारत, श्रीलंका और म्यांमार", "(d) भारत और चीन"], correct: 0, explanation: "भारतीय उपमहाद्वीप में मुख्य रूप से भारत, पाकिस्तान, बांग्लादेश, नेपाल और भूटान देश शामिल हैं, जिनकी भौगोलिक विशिष्टताएँ साझा हैं।" },
+            { id: 5, tag: "", question: "कर्क रेखा (Tropic of Cancer - 23.5° N) भारत के कितने राज्यों से होकर गुजरती है?", options: ["(a) 7", "(b) 8", "(c) 9", "(d) 6"], correct: 1, explanation: "कर्क रेखा भारत के 8 राज्यों—गुजरात, राजस्थान, मध्य प्रदेश, छत्तीसगढ़, झारखंड, पश्चिम बंगाल, त्रिपुरा और मिजोरम से होकर गुजरती है।" },
+            { id: 6, tag: "", question: "भारत की मानक समय रेखा (Standard Meridian - 82.5° E) किस शहर के पास से गुजरती है?", options: ["(a) मिर्जापुर / नैनी (प्रयागराज - उत्तर प्रदेश)", "(b) भोपाल", "(c) जबलपुर", "(d) नागपुर"], correct: 0, explanation: "भारत की मानक समय रेखा 82.5° पूर्वी देशांतर है, जो उत्तर प्रदेश के प्रयागराज (नैनी/मिर्जापुर) से गुजरती है और ग्रीनविच समय (GMT) से 5 घंटे 30 मिनट आगे है।" },
+            { id: 7, tag: "", question: "भारतीय मानक समय रेखा (82.5° E) कुल कितने राज्यों से होकर गुजरती है?", options: ["(a) 4", "(b) 5 (उ.प्र., म.प्र., छत्तीसगढ़, ओडिशा, आंध्र प्रदेश)", "(c) 6", "(d) 3"], correct: 1, explanation: "मानक समय रेखा 5 राज्यों—उत्तर प्रदेश, मध्य प्रदेश, छत्तीसगढ़, ओडिशा और आंध्र प्रदेश से होकर गुजरती है।" },
+            { id: 8, tag: "", question: "भारत की स्थलीय सीमा की कुल लंबाई लगभग कितनी है?", options: ["(a) 7,516 किमी", "(b) 15,200 किमी", "(c) 20,400 किमी", "(d) 6,100 किमी"], correct: 1, explanation: "भारत की कुल भू-सीमा (स्थलीय सीमा) लगभग 15,200 किलोमीटर है, जबकि मुख्य भूमि व द्वीपों सहित तटीय रेखा की लंबाई 7,516.6 किमी है।" },
+            { id: 9, tag: "", question: "भारत के साथ सबसे लंबी स्थलीय सीमा किस देश की लगती है?", options: ["(a) पाकिस्तान", "(b) चीन", "(c) बांग्लादेश (लगभग 4,096 किमी)", "(d) नेपाल"], correct: 2, explanation: "भारत अपनी सबसे लंबी स्थलीय अंतरराष्ट्रीय सीमा (लगभग 4096.7 किमी) बांग्लादेश के साथ साझा करता है।" },
+            { id: 10, tag: "", question: "भारत के साथ सबसे छोटी स्थलीय सीमा साझा करने वाला देश कौन-सा है?", options: ["(a) अफगानिस्तान (लगभग 106 किमी)", "(b) भूटान", "(c) म्यांमार", "(d) मालदीव"], correct: 0, explanation: "भारत की सबसे छोटी स्थलीय सीमा लद्दाख क्षेत्र में अफगानिस्तान के साथ मात्र 106 किलोमीटर लगती है (पाक अधिकृत कश्मीर क्षेत्र में)।" },
+            { id: 11, tag: "", question: "भारत और चीन के बीच की सीमा रेखा को क्या कहा जाता है?", options: ["(a) रेडक्लिफ रेखा", "(b) मैकमोहन रेखा", "(c) डूरंड रेखा", "(d) हिंडनबर्ग रेखा"], correct: 1, explanation: "भारत और चीन के बीच पूर्वी सेक्टर में निर्धारित सीमा रेखा को 'मैकमोहन रेखा' (1914) कहा जाता है।" },
+            { id: 12, tag: "", question: "भारत और पाकिस्तान के बीच की सीमा रेखा का क्या नाम है?", options: ["(a) मैकमोहन रेखा", "(b) रेडक्लिफ रेखा (1947)", "(c) हियुंडाई रेखा", "(d) 49वीं समानांतर रेखा"], correct: 1, explanation: "भारत और पाकिस्तान के बीच सर सर रेडक्लिफ द्वारा 15 अगस्त 1947 को निर्धारित सीमा रेखा को 'रेडक्लिफ रेखा' कहते हैं।" },
+            { id: 13, tag: "", question: "भारत के दक्षिण में स्थित सबसे अंतिम बिंदु (Southernmost point) कौन-सा है?", options: ["(a) कन्याकुमारी (केप कोमोरिन)", "(b) इंदिरा पॉइंट (पिगमेलियन पॉइंट - अंडमान निकोबार)", "(c) रामेश्वरम", "(d) पोर्ट ब्लेयर"], correct: 1, explanation: "भारत का सुदूर दक्षिणतम बिंदु (6°45' N अक्षांश पर) ग्रेट निकोबार द्वीप में स्थित 'इंदिरा पॉइंट' है, जबकि मुख्य भूमि का अंतिम छोर कन्याकुमारी है।" },
+            { id: 14, tag: "", question: "भारत का सुदूर उत्तरतम बिंदु (Northernmost point) कौन-सा है?", options: ["(a) इंदिरा कोल (लद्दाख)", "(b) सियाचिन ग्लेशियर", "(c) किथू", "(d) गोहरमाता"], correct: 0, explanation: "भारत का सबसे उत्तरी बिंदु लद्दाख केंद्रशासित प्रदेश में स्थित 'इंदिरा कोल' (Indira Col) है।" },
+            { id: 15, tag: "", question: "भारत का सुदूर पश्चिमी बिंदु 'गुहर मोती' (Guan Moti) किस राज्य में स्थित है?", options: ["(a) राजस्थान", "(b) गुजरात (कच्छ जिला)", "(c) महाराष्ट्र", "(d) पंजाब"], correct: 1, explanation: "भारत का सबसे पश्चिमी बिंदु गुजरात के कच्छ जिले में सर क्रीक के पास स्थित 'गुहर मोती' (या गौर माता) है।" },
+            { id: 16, tag: "", question: "भारत का सुदूर पूर्वी बिंदु 'किबिथू' (Kibithu) किस राज्य में स्थित है?", options: ["(a) अरुणाचल प्रदेश", "(b) असम", "(c) नागालैंड", "(d) मणिपुर"], correct: 0, explanation: "भारत का सबसे पूर्वी बिंदु अरुणाचल प्रदेश के अंजल जिले में स्थित 'किबिथू' है।" },
+            { id: 17, tag: "", question: "क्षेत्रफल की दृष्टि से भारत का सबसे बड़ा राज्य कौन-सा है?", options: ["(a) मध्य प्रदेश", "(b) महाराष्ट्र", "(c) राजस्थान", "(d) उत्तर प्रदेश"], correct: 2, explanation: "राजस्थान (3,42,239 वर्ग किमी) क्षेत्रफल के आधार पर भारत का सबसे बड़ा राज्य है, जिसके बाद मध्य प्रदेश और महाराष्ट्र आते हैं।" },
+            { id: 18, tag: "", question: "जनसंख्या की दृष्टि से भारत का सबसे बड़ा राज्य कौन-सा है?", options: ["(a) महाराष्ट्र", "(b) उत्तर प्रदेश", "(c) बिहार", "(d) पश्चिम बंगाल"], correct: 1, explanation: "2011 की जनगणना के अनुसार उत्तर प्रदेश लगभग 20 करोड़ से अधिक जनसंख्या के साथ देश का सर्वाधिक आबादी वाला राज्य है।" },
+            { id: 19, tag: "", question: "क्षेत्रफल की दृष्टि से भारत का सबसे छोटा राज्य कौन-सा है?", options: ["(a) सिक्किम", "(b) गोवा", "(c) त्रिपुरा", "(d) नागालैंड"], correct: 1, explanation: "गोवा (3,702 वर्ग किमी) क्षेत्रफल की दृष्टि से भारत का सबसे छोटा राज्य है।" },
+            { id: 20, tag: "", question: "भारत में सर्वाधिक जनसंख्या घनत्व (Population Density) वाला राज्य कौन-सा है?", options: ["(a) केरल", "(b) बिहार (1106 व्यक्ति/वर्ग किमी)", "(c) पश्चिम बंगाल", "(d) उत्तर प्रदेश"], correct: 1, explanation: "2011 की जनगणना के अनुसार 1106 व्यक्ति प्रति वर्ग किमी घनत्व के साथ बिहार भारत का सर्वाधिक जनसंख्या घनत्व वाला राज्य है।" },
+            { id: 21, tag: "", question: "भारत में सर्वाधिक साक्षरता दर (Literacy Rate) किस राज्य में दर्ज की गई है?", options: ["(a) मिजोरम", "(b) केरल (94% से अधिक)", "(c) गोवा", "(d) त्रिपुरा"], correct: 1, explanation: "2011 की जनगणना के अनुसार 94% साक्षरता के साथ केरल भारत का सर्वोच्च साक्षरता वाला राज्य है।" },
+            { id: 22, tag: "", question: "भारत का लिंगानुपात (Sex Ratio) 2011 की जनगणना के अनुसार कितना है?", options: ["(a) 933", "(b) 943 महिलाएं प्रति 1000 पुरुष", "(c) 950", "(d) 960"], correct: 1, explanation: "2011 की जनगणना के अनुसार भारत का औसत लिंगानुपात 943 महिलाएं प्रति 1000 पुरुष दर्ज किया गया था।" },
+            { id: 23, tag: "", question: "भारत का सर्वाधिक लिंगानुपात वाला राज्य कौन-सा है?", options: ["(a) तमिलनाडु", "(b) केरल (1084)", "(c) कर्नाटक", "(d) मणिपुर"], correct: 1, explanation: "केरल राज्य में 1084 का लिंगानुपात देश के सभी राज्यों में सबसे अधिक है।" },
+            { id: 24, tag: "", question: "भारत की मुख्य भूमि की तटरेखा की लंबाई लगभग कितनी है?", options: ["(a) 6,100 किमी", "(b) 7,516.6 किमी (द्वीपों सहित)", "(c) 5,000 किमी", "(d) 9,000 किमी"], correct: 0, explanation: "भारत की मुख्य भूमि की तटीय रेखा लगभग 6,100 किमी लंबी है, और यदि अंडमान-निकोबार व लक्षद्वीप को मिला लिया जाए तो कुल तटरेखा 7,516.6 किमी हो जाती है।" },
+            { id: 25, tag: "", question: "भारत के किस राज्य की तटरेखा (Coastline) सबसे लंबी है?", options: ["(a) आंध्र प्रदेश", "(b) गुजरात (लगभग 1214 किमी)", "(c) महाराष्ट्र", "(d) तमिलनाडु"], correct: 1, explanation: "कटी-फटी और लंबी खाड़ियों के कारण गुजरात राज्य की समुद्र तटीय रेखा (लगभग 1214 किमी) भारत में सबसे लंबी है।" },
+            { id: 26, tag: "", question: "भारत के कुल कितने राज्य समुद्र तट (Coastline) से लगे हुए हैं?", options: ["(a) 7", "(b) 8", "(c) 9 (गुजरात, महाराष्ट्र, गोवा, कर्नाटक, केरल, तमिलनाडु, आंध्र प्रदेश, ओडिशा, पश्चिम बंगाल)", "(d) 10"], correct: 2, explanation: "भारत के कुल 9 राज्य समुद्री तट पर स्थित हैं—5 पश्चिमी तट पर और 4 पूर्वी तट पर।" },
+            { id: 27, tag: "", question: "भारत के किन दो राज्यों से कर्क रेखा नहीं गुजरती है, जबकि वे उसके समीप हैं?", options: ["(a) ओडिशा और आंध्र प्रदेश", "(b) पंजाब और हरियाणा", "(c) बिहार और झारखंड", "(d) महाराष्ट्र और कर्नाटक"], correct: 0, explanation: "कर्क रेखा 8 राज्यों से गुजरती है; दिए गए विकल्पों में ओडिशा और आंध्र प्रदेश से कर्क रेखा नहीं गुजरती है।" },
+            { id: 28, tag: "", question: "लक्षद्वीप समूह (Lakshadweep) अरब सागर में किस प्रकार के द्वीपों का उदाहरण है?", options: ["(a) प्रवाल द्वीप (Coral / Atoll Islands)", "(b) ज्वालामुखी द्वीप", "(c) विवर्तनिक द्वीप", "(d) डेल्टाई द्वीप"], correct: 0, explanation: "लक्षद्वीप समूह मूँगा जीवों के कंकाल (कोरल रीफ/एटॉल) से बने प्रवाल द्वीप हैं।" },
+            { id: 29, tag: "", question: "अंडमान और निकोबार द्वीप समूह की सर्वोच्च चोटी 'सैडल पीक' (Saddle Peak) कहाँ स्थित है?", options: ["(a) उत्तरी अंडमान", "(b) मध्य अंडमान", "(c) दक्षिण अंडमान", "(d) ग्रेट निकोबार"], correct: 0, explanation: "732 मीटर ऊँची 'सैडल पीक' अंडमान-निकोबार द्वीप समूह की सबसे ऊँची चोटी है, जो 'उत्तरी अंडमान' में स्थित है।" },
+            { id: 30, tag: "", question: "अंडमान और निकोबार को कौन सा चैनल अलग करता है?", options: ["(a) 8 डिग्री चैनल", "(b) 9 डिग्री चैनल", "(c) 10 डिग्री चैनल (10 Degree Channel)", "(d) डंकन पैसेज"], correct: 2, explanation: "10 डिग्री चैनल 'छोटा अंडमान' (Little Andaman) को 'कार निकोबार' (Car Nicobar) द्वीप से अलग करता है।" },
+            { id: 31, tag: "", question: "मिनीकॉइ द्वीप को मुख्य लक्षद्वीप से कौन सा चैनल अलग करता है?", options: ["(a) 8 डिग्री चैनल", "(b) 9 डिग्री चैनल (9 Degree Channel)", "(c) 10 डिग्री चैनल", "(d) अंडमान सागर"], correct: 1, explanation: "9 डिग्री चैनल मिनिकॉय द्वीप को शेष लक्षद्वीप (कवारत्ती समूह) से अलग करता है, जबकि 8 डिग्री चैनल मालदीव को मिनिकॉय से अलग करता है।" },
+            { id: 32, tag: "", question: "भारत और श्रीलंका के बीच कौन सा जल डमरूमध्य और द्वीप स्थित है?", options: ["(a) पाक जलडमरूमध्य और पंबन द्वीप (रामसेतु)", "(b) मलक जलडमरूमध्य", "(c) डोवर जलसंधि", "(d) बैरन जलडमरूमध्य"], correct: 0, explanation: "भारत (तमिलनाडु) और श्रीलंका के बीच 'पाक जलडमरूमध्य' (Palk Strait) और मन्नार की खाड़ी स्थित है, जहाँ पंबन द्वीप व रामसेतु है।" },
+            { id: 33, tag: "", question: "भारत का एकमात्र सक्रिय ज्वालामुखी (Active Volcano) 'बैरन द्वीप' (Barren Island) कहाँ स्थित है?", options: ["(a) अंडमान सागर (अंडमान-निकोबार)", "(b) लक्षद्वीप सागर", "(c) खंभात की खाड़ी", "(d) मन्नार की खाड़ी"], correct: 0, explanation: "बैरन द्वीप पोर्ट ब्लेयर से उत्तर-पूर्व में अंडमान सागर में स्थित भारत और दक्षिण एशिया का एकमात्र सक्रिय ज्वालामुखी है।" },
+            { id: 34, tag: "", question: "भारत के किस राज्य को 'पाँच नदियों की भूमि' (Land of Five Rivers) कहा जाता है?", options: ["(a) हरियाणा", "(b) पंजाब", "(c) उत्तर प्रदेश", "(d) केरल"], correct: 1, explanation: "पंजाब (सतलज, व्यास, रावी, चेनाब और झेलम नदियों का दोआब क्षेत्र) को 'पाँच नदियों की भूमि' कहा जाता है।" },
+            { id: 35, tag: "", question: "भारत के किस शहर को 'ब्लेड सिटी' या 'महलों का शहर' या 'आनंद का शहर' (City of Joy) कहा जाता है?", options: ["(a) कोलकाता (पश्चिम बंगाल)", "(b) जयपुर", "(c) उदयपुर", "(d) बेंगलुरु"], correct: 0, explanation: "पश्चिम बंगाल की राजधानी कोलकाता को ऐतिहासिक उपनामों में 'सिटी ऑफ़ जॉय' (आनंद का शहर) कहा जाता है।" },
+            { id: 36, tag: "", question: "भारत के किस राज्य को 'भगवान का अपना देश' (God's Own Country) कहा जाता है?", options: ["(a) गोवा", "(b) केरल", "(c) उत्तराखंड", "(d) हिमाचल प्रदेश"], correct: 1, explanation: "केरल की प्राकृतिक सुंदरता, बैकवाटर्स और हरियाली के कारण पर्यटन विभाग द्वारा इसे 'God's Own Country' कहा जाता है।" },
+            { id: 37, tag: "", question: "भारत का कौन-सा राज्य 'भारत का हृदय प्रदेश' (Heart State of India) कहलाता है?", options: ["(a) मध्य प्रदेश", "(b) छत्तीसगढ़", "(c) उत्तर प्रदेश", "(d) राजस्थान"], correct: 0, explanation: "मध्य प्रदेश भौगोलिक रूप से देश के ठीक मध्य में स्थित होने के कारण 'हृदय प्रदेश' कहलाता है।" },
+            { id: 38, tag: "", question: "भारत के किस द्वीप का नाम बदलकर 'नेताजी सुभाष चंद्र बोस द्वीप' कर दिया गया है?", options: ["(a) रॉस द्वीप (Ross Island - अंडमान)", "(b) नील द्वीप", "(c) हैवलॉक द्वीप", "(d) व्हीलर द्वीप"], correct: 0, explanation: "अंडमान-निकोबार के रॉस द्वीप का नाम बदलकर नेताजी सुभाष चंद्र बोस द्वीप, हैवलॉक का स्वराज द्वीप और नील द्वीप का नाम शहीद द्वीप रखा गया है।" },
+            { id: 39, tag: "", question: "उड़ीसा तट पर स्थित 'व्हीलर द्वीप' (Wheeler Island) का नाम बदलकर क्या रखा गया है?", options: ["(a) एपीजे अब्दुल कलाम द्वीप", "(b) विक्रम साराभाई द्वीप", "(c) सतीश धवन द्वीप", "(d) होमी भाभा द्वीप"], correct: 0, explanation: "ओडिशा के चांदीपुर के पास स्थित व्हीलर द्वीप, जहाँ से मिसाइलों का परीक्षण होता है, का नाम बदलकर 'डॉ. एपीजे अब्दुल कलाम द्वीप' रखा गया है।" },
+            { id: 40, tag: "", question: "क्षेत्रफल की दृष्टि से भारत का सबसे बड़ा जिला (District) कौन-सा है?", options: ["(a) लेह (लद्दाख)", "(b) कच्छ (गुजरात - 45,674 वर्ग किमी)", "(c) जैसलमेर (राजस्थान)", "(d) बीकानेर"], correct: 1, explanation: "गुजरात का 'कच्छ जिला' क्षेत्रफल (45,674 वर्ग किमी) के आधार पर भारत का सबसे बड़ा जिला है, उसके बाद लेह का स्थान है।" },
+            { id: 41, tag: "", question: "सूची-I (भौगोलिक उपनाम) को सूची-II (शहर/राज्य) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (उपनाम)</th><th style='padding:8px;'>सूची-II (शहर/राज्य)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) भारत का मैनचेस्टर</td><td style='padding:6px;'>1. कानपुर</td></tr><tr><td style='padding:6px;'>(B) उत्तर भारत का मैनचेस्टर</td><td style='padding:6px;'>2. कोयंबटूर</td></tr><tr><td style='padding:6px;'>(C) दक्षिण भारत का मैनचेस्टर</td><td style='padding:6px;'>3. अहमदाबाद</td></tr><tr><td style='padding:6px;'>(D) सूती वस्त्रों की राजधानी</td><td style='padding:6px;'>4. मुंबई</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-3, B-1, C-2, D-4", "(b) A-1, B-2, C-3, D-4", "(c) A-3, B-2, C-1, D-4", "(d) A-4, B-3, C-2, D-1"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• भारत का मैनचेस्टर — अहमदाबाद<br>• उत्तर भारत का मैनचेस्टर — कानपुर<br>• दक्षिण भारत का मैनचेस्टर — कोयंबटूर<br>• सूती वस्त्रों की राजधानी — मुंबई" },
+            { id: 42, tag: "", question: "सूची-I (जल चैनल/डमरूमध्य) को सूची-II (स्थिति) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (चैनल)</th><th style='padding:8px;'>सूची-II (अलगाव क्षेत्र)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) 8 डिग्री चैनल</td><td style='padding:6px;'>1. छोटा अंडमान व कार निकोबार</td></tr><tr><td style='padding:6px;'>(B) 9 डिग्री चैनल</td><td style='padding:6px;'>2. मालदीव और मिनिकॉय</td></tr><tr><td style='padding:6px;'>(C) 10 डिग्री चैनल</td><td style='padding:6px;'>3. दक्षिण अंडमान व लिटिल अंडमान</td></tr><tr><td style='padding:6px;'>(D) डंकन पैसेज</td><td style='padding:6px;'>4. मिनिकॉय और लक्षद्वीप मुख्य भू-भाग</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-2, B-4, C-1, D-3", "(b) A-1, B-2, C-3, D-4", "(c) A-2, B-1, C-4, D-3", "(d) A-3, B-4, C-2, D-1"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• 8 डिग्री चैनल — मालदीव और मिनिकॉय<br>• 9 डिग्री चैनल — मिनिकॉय और लक्षद्वीप मुख्य द्वीप<br>• 10 डिग्री चैनल — छोटा अंडमान और कार निकोबार<br>• डंकन पैसेज — दक्षिण अंडमान और लिटिल अंडमान" },
+            { id: 43, tag: "", question: "सूची-I (भौगोलिक उपनाम) को सूची-II (स्थान) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (उपनाम)</th><th style='padding:8px;'>सूची-II (स्थान)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) पाँच नदियों की भूमि</td><td style='padding:6px;'>1. कोच्चि (केरल)</td></tr><tr><td style='padding:6px;'>(B) अरब सागर की रानी</td><td style='padding:6px;'>2. पंजाब</td></tr><tr><td style='padding:6px;'>(C) पर्वतों की रानी</td><td style='padding:6px;'>3. मसूरी (उत्तराखंड)</td></tr><tr><td style='padding:6px;'>(D) अंतरिक्ष का शहर</td><td style='padding:6px;'>4. बेंगलुरु</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-2, B-1, C-3, D-4", "(b) A-1, B-2, C-3, D-4", "(c) A-2, B-3, C-1, D-4", "(d) A-4, B-1, C-2, D-3"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• पाँच नदियों की भूमि — पंजाब<br>• अरब सागर की रानी — कोच्चि<br>• पर्वतों की रानी — मसूरी<br>• अंतरिक्ष का शहर — बेंगलुरु" },
+            { id: 44, tag: "", question: "अभिकथन (A): भारत की भौगोलिक स्थिति इसे दक्षिण एशिया में एक सामरिक और भू-राजनीतिक रूप से अत्यंत महत्वपूर्ण राष्ट्र बनाती है।<br>कारण (R): भारत तीन ओर से समुद्र से घिरा हुआ एक प्रायद्वीप है और इसकी विशाल तटरेखा इसे हिंद महासागर में केंद्रीय स्थिति प्रदान करती है।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "हिंद महासागर के शीर्ष पर प्रायद्वीपीय स्थिति के कारण भारत पश्चिमी एशिया, अफ्रीका, दक्षिण-पूर्व एशिया और ऑस्ट्रेलिया के बीच समुद्री व्यापार का प्रमुख केंद्र है।" },
+            { id: 45, tag: "", question: "अभिकथन (A): भारत के सभी राज्यों में उत्तर प्रदेश की सीमा सबसे अधिक राज्यों और एक केंद्रशासित प्रदेश से लगती है।<br>README: (R) उत्तर प्रदेश की सीमा कुल 8 राज्यों (उत्तराखंड, हिमाचल प्रदेश, हरियाणा, राजस्थान, मध्य प्रदेश, छत्तीसगढ़, झारखंड, बिहार) और 1 केंद्रशासित प्रदेश (दिल्ली) से स्पर्श करती है।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "उत्तर प्रदेश भारत में सर्वाधिक राज्यों (8 राज्य + 1 UT) को स्पर्श करने वाला केंद्रीय भू-भाग वाला राज्य है।" },
+            { id: 46, tag: "", question: "भारत के अक्षांशीय और देशांतर विस्तार के संदर्भ में निम्नलिखित कथनों पर विचार कीजिए:<br>1. भारत का मुख्य भूमि पर अक्षांशीय विस्तार 8°4' N से 37°6' N के बीच है।<br>2. भारत का देशांतरीय विस्तार 68°7' E से 97°25' E के बीच है।<br>3. गुजरात से अरुणाचल प्रदेश के स्थानीय समय में लगभग 2 घंटे (120 मिनट) का अंतर होता है।<br><br>उपर्युक्त में से कौन-से कथन सही हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) 1, 2 और 3"], correct: 3, explanation: "तीनों कथन पूर्णतः सत्य हैं: देशांतरीय अंतर लगभग 30° है, जिससे पृथ्वी के घूर्णन के कारण सूर्योदय अरुणाचल में गुजरात से लगभग 2 घंटे पहले होता है।" },
+            { id: 47, tag: "", question: "अभिकथन (A): अंडमान और निकोबार द्वीप समूह को म्यांमार के कोको द्वीप से 'कोको जलमार्ग' (Coco Channel) अलग करता है।<br>कारण (R): कोको द्वीप समूह पर म्यांमार का प्रशासनिक अधिकार है, जबकि इसके दक्षिण में उत्तर अंडमान स्थित है।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "उत्तर अंडमान के उत्तर में बंगाल की खाड़ी में स्थित कोको चैनल म्यांमार के कोको द्वीप को भारतीय अंडमान द्वीप से अलग करता है।" },
+            { id: 48, tag: "", question: "भारतीय द्वीप समूहों के संदर्भ में निम्नलिखित कथनों पर विचार कीजिए:<br>1. लक्षद्वीप समूह के सभी द्वीप प्रवाल भित्तियों (Coral Reefs) से निर्मित हैं।<br>2. बैरन द्वीप भारत का एकमात्र जागृत (Active) ज्वालामुखी है।<br>3. पंबन द्वीप भारत और म्यांमार के बीच स्थित है।<br><br>उपर्युक्त में से कौन-सा/से कथन सही है/हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) 1, 2 और 3"], correct: 0, explanation: "कथन 3 गलत है क्योंकि पंबन द्वीप भारत और श्रीलंका के बीच मन्नार की खाड़ी में स्थित है, न कि म्यांमार के पास। कथन 1 और 2 सत्य हैं।" },
+            { id: 49, tag: "", question: "अभिकथन (A): भारत की जलवायु को 'उष्णकटिबंधीय मानसूनी' प्रकार की जलवायु कहा जाता है।<br>कारण (R): कर्क रेखा देश के लगभग बीचों-बीच से गुजरती है और देश का दक्षिणी हिस्सा उष्णकटिबंधीय तथा उत्तरी हिस्सा उपोष्ण कटिबंध में स्थित है।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "कर्क रेखा (23.5° N) भारत को दो कटिबंधों में बांटती है; दक्षिणी उष्णकटिबंधीय क्षेत्र में सूर्य की किरणें साल में दो बार लंबवत होती हैं और उत्तर में शीतोष्ण/उपोष्ण दशाएँ होती हैं।" },
+            { id: 50, tag: "", question: "सूची-I (सीमा रेखा) को सूची-II (संबंधित देश) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (सीमा रेखा)</th><th style='padding:8px;'>सूची-II (देश)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) मैकमोहन रेखा</td><td style='padding:6px;'>1. भारत और पाकिस्तान</td></tr><tr><td style='padding:6px;'>(B) रेडक्लिफ रेखा</td><td style='padding:6px;'>2. भारत और चीन</td></tr><tr><td style='padding:6px;'>(C) डूरंड रेखा</td><td style='padding:6px;'>3. भारत और अफगानिस्तान</td></tr><tr><td style='padding:6px;'>(D) जीरो लाइन</td><td style='padding:6px;'>4. भारत (त्रिपुरा) और बांग्लादेश</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-2, B-1, C-3, D-4", "(b) A-1, B-2, C-3, D-4", "(c) A-2, B-3, C-1, D-4", "(d) A-4, B-1, C-2, D-3"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• मैकमोहन रेखा — भारत और चीन<br>• रेडक्लिफ रेखा — भारत और पाकिस्तान<br>• डूरंड रेखा — भारत और अफगानिस्तान (वर्तमान में पाक-अफगानिस्तान)<br>• जीरो लाइन — त्रिपुरा और बांग्लादेश की सीमा" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
