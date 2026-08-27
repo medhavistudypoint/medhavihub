@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ सही किया गया CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ सही किया गया बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">गृह विज्ञान (Home Science)</span>
+                        <!-- 🌟 यहाँ डायनेमिक टैग दिखेगा -->
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ सही किया गया डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_free_test_d34"; 
+
+        // 2. 50 प्रश्नों का द्विभाषी (Bilingual) डेटासेट
+        const dataset = [
+            {
+                id: 1,
+                tag: "Adulteration Concept",
+                question: "खाद्य अपमिश्रण निवारण अधिनियम (PFA Act) के अंतर्गत अपमिश्रण के संदर्भ में निम्नलिखित कथनों पर विचार कीजिए:<br><i>Consider the following statements regarding 'Adulteration' under the PFA Act:</i><br>I. खाद्य पदार्थ में कोई सस्ता, हीन या विजातीय पदार्थ मिलाना। / Addition of any cheap, inferior, or foreign substance to food.<br>II. खाद्य पदार्थ से उसके किसी आवश्यक पोषक तत्व को निकाल लेना। / Abstraction of any essential nutritional constituent from food.<br>III. खाद्य पदार्थ को अस्वास्थ्यकर या दूषित परिस्थितियों में तैयार करना अथवा बेचना। / Preparing or selling food under insanitary or contaminated conditions.<br>IV. प्राकृतिक रूप से उपस्थित केवल नमी की मात्रा में मामूली परिवर्तन होना। / A slight natural variation solely in the moisture content.<br><b>उपर्युक्त में से कौन-से कथन विधिक रूप से खाद्य अपमिश्रण के अंतर्गत आते हैं? / Which of the above statements legally fall under food adulteration?</b>",
+                options: [
+                    "केवल कथन I और कथन IV / Only statements I and IV",
+                    "केवल कथन II और कथन IV / Only statements II and IV",
+                    "केवल कथन I, II और III / Only statements I, II, and III",
+                    "उपर्युक्त सभी कथन I, II, III, IV / All statements I, II, III, and IV"
+                ],
+                correct: 2
+            },
+            {
+                id: 2,
+                tag: "Match Spices Adulterants",
+                question: "सूची-I (खाद्य पदार्थ) को सूची-II (सामान्य अपमिश्रक) से सुमेलित कीजिए:<br><i>Match List-I (Food Article) with List-II (Common Adulterant):</i><br><b>सूची-I:</b> A. साबुत काली मिर्च, B. पिसी लाल मिर्च, C. पिसी हल्दी, D. पिसा धनिया<br><b>सूची-II:</b> 1. ईंट का चूरा अथवा लेड क्रोमेट, 2. पपीते के सूखे बीज, 3. चोकर का चूरा/लकड़ी बुरादा, 4. मेटानिल येलो रंजक",
+                options: [
+                    "A-1, B-2, C-3, D-4 / A-1, B-2, C-3, D-4",
+                    "A-2, B-1, C-4, D-3 / A-2, B-1, C-4, D-3",
+                    "A-3, B-4, C-1, D-2 / A-3, B-4, C-1, D-2",
+                    "A-4, B-3, C-2, D-1 / A-4, B-3, C-2, D-1"
+                ],
+                correct: 1
+            },
+            {
+                id: 3,
+                tag: "HACCP Principles",
+                question: "कोडेक्स एलिमेंटेरियस द्वारा प्रतिपादित HACCP प्रणाली के सात सिद्धांतों का सही तार्किक क्रम क्या है?<br><i>What is the correct logical sequence of the seven principles of the HACCP system established by Codex Alimentarius?</i><br>(a) CCP निर्धारण, (b) जोखिम विश्लेषण, (c) महत्वपूर्ण सीमाएं, (d) सुधारात्मक कार्रवाई, (e) निगरानी प्रणाली, (f) सत्यापन, (g) दस्तावेजीकरण",
+                options: [
+                    "(a) → (b) → (c) → (e) → (d) → (f) → (g)",
+                    "(b) → (c) → (a) → (d) → (e) → (g) → (f)",
+                    "(c) → (a) → (b) → (e) → (d) → (f) → (g)",
+                    "(b) → (a) → (c) → (e) → (d) → (f) → (g)"
+                ],
+                correct: 3
+            },
+            {
+                id: 4,
+                tag: "Food Additives",
+                question: "सूची-I (खाद्य योज्य) को सूची-II (कार्यात्मक वर्ग) से सुमेलित कीजिए:<br><i>Match List-I (Food Additive) with List-II (Functional Class):</i><br><b>सूची-I:</b> A. ऐनेटो, B. सोडियम बेंजोएट, C. बी.एच.ए. (BHA), D. कोचिनील<br><b>सूची-II:</b> 1. वसा एंटीऑक्सीडेंट, 2. पादप व्युत्पन्न पीला रंजक, 3. कीट व्युत्पन्न प्राकृतिक लाल रंजक, 4. अम्लीय माध्यम परिरक्षक",
+                options: [
+                    "A-1, B-4, C-2, D-3 / A-1, B-4, C-2, D-3",
+                    "A-2, B-4, C-1, D-3 / A-2, B-4, C-1, D-3",
+                    "A-3, B-1, C-4, D-2 / A-3, B-1, C-4, D-2",
+                    "A-4, B-2, C-3, D-1 / A-4, B-2, C-3, D-1"
+                ],
+                correct: 1
+            },
+            {
+                id: 5,
+                tag: "Egg Freshness Test",
+                question: "अंडे की ताजगी जांचने के 'जल प्लवन परीक्षण' (Water Floatation Test) के संदर्भ में कौन सा कथन वैज्ञानिक रूप से सत्य है?<br><i>Which statement is scientifically correct regarding the 'Water Floatation Test' to determine egg freshness?</i>",
+                options: [
+                    "पुराना अंडा पानी में डूब जाता है क्योंकि उसका खोल भारी हो जाता है / A stale egg sinks in water because its shell becomes heavier",
+                    "ताज़ा अंडा तैरता है क्योंकि उसमें प्रोटीन गैसों का घनत्व कम होता है / A fresh egg floats because the density of protein gases is low",
+                    "पुराना अंडा तैरता है क्योंकि आंतरिक वायु कोष (Air Cell) बढ़ जाता है / A stale egg floats because the internal air cell expands",
+                    "ताज़ा और पुराना दोनों अंडे समान रूप से पानी के मध्य में लटके रहते हैं / Both fresh and stale eggs remain suspended equally in water"
+                ],
+                correct: 2
+            },
+            {
+                id: 6,
+                tag: "Argemone Identification",
+                question: "सरसों के बीजों में आर्जिमोन मैक्सिकाना के बीजों की मिलावट की पहचान और प्रभाव के संदर्भ में सही युग्म क्या है?<br><i>Which pair is correct regarding the physical identification and health effect of Argemone mexicana seed adulteration in mustard?</i>",
+                options: [
+                    "चिकने गोल बीज — रिकेट्स रोग की उत्पत्ति / Smooth round seeds — Etiology of rickets disease",
+                    "बड़े अंडाकार बीज — घेंघा रोग का प्रसार / Large oval seeds — Spread of goitre disease",
+                    "अत्यधिक सफेद बीज — स्कर्वी रोग के लक्षण / Highly white seeds — Manifestation of scurvy disease",
+                    "खुरदरे पूंछदार बीज — एपिडेमिक ड्रॉप्सी रोग / Rough tailed seeds — Occurrence of epidemic dropsy"
+                ],
+                correct: 3
+            },
+            {
+                id: 7,
+                tag: "Inventory Management",
+                question: "खाद्य गोदामों और प्रसंस्करण इकाइयों में प्रयुक्त 'FIFO' इन्वेंट्री प्रणाली का मूल क्रियान्वयन आधार क्या है?<br><i>What is the core operational principle of the 'FIFO' inventory management system in food warehouses and processing units?</i>",
+                options: [
+                    "नवीन सामग्री का उपयोग पुराने भंडार से पहले सुनिश्चित करना / Ensuring newer material is consumed before older stored stocks",
+                    "पहले प्राप्त कच्चे माल का उपभोग पहले कर शेल्फ-लाइफ सुरक्षित रखना / Consuming earlier received stock first to safeguard shelf-life",
+                    "केवल वित्तीय लाभ वाले महंगे उत्पादों को प्राथमिकता पर रखना / Prioritizing only high-profit items during production cycles",
+                    "क्षतिग्रस्त माल को बिना परीक्षण किए उत्पादन में सीधे खपा देना / Utilizing damaged materials directly into processing batches"
+                ],
+                correct: 1
+            },
+            {
+                id: 8,
+                tag: "Toxic Dyes",
+                question: "मीठी सौंफ और सुपारी में प्रयुक्त गैर-स्वीकृत रासायनिक रंजक 'ऑरामीन ओ' (Auramine O) का वास्तविक प्रभाव क्या है?<br><i>What is the actual toxicological effect and primary use of the non-permitted chemical dye 'Auramine O' in fennel seeds and betel nuts?</i>",
+                options: [
+                    "प्राकृतिक सौंफ में मनभावन मीठी सुगंध उत्पन्न करना / Imparting a sweet aromatic fragrance to natural fennel seeds",
+                    "सौंफ की शेल्फ-लाइफ को पांच वर्षों तक सुरक्षित रखना / Extending the commercial shelf-life of fennel up to five years",
+                    "केवल पीला रंग देना जो कैंसरकारी व यकृत के लिए विषैला है / Imparting only yellow color, which is carcinogenic and hepatotoxic",
+                    "सुपारी की कठोरता को कम करके उसे पूरी तरह मुलायम करना / Reducing the physical hardness of betel nut to make it soft"
+                ],
+                correct: 2
+            },
+            {
+                id: 9,
+                tag: "Chemical Tests Match",
+                question: "सूची-I (अपमिश्रण परीक्षण) को सूची-II (लक्षित मिलावटी रसायन) से सुमेलित कीजिए:<br><i>Match List-I (Adulteration Test) with List-II (Target Adulterant):</i><br><b>सूची-I:</b> A. सांद्र $HNO_3$ टेस्ट, B. सांद्र $HCl$ टेस्ट, C. आयोडीन टेस्ट, D. बौडोइन टेस्ट<br><b>सूची-II:</b> 1. दूध में स्टार्च, 2. सरसों तेल में आर्जिमोन, 3. दाल में मेटानिल येलो, 4. घी में वनस्पति तिल तेल",
+                options: [
+                    "A-1, B-3, C-2, D-4 / A-1, B-3, C-2, D-4",
+                    "A-3, B-2, C-4, D-1 / A-3, B-2, C-4, D-1",
+                    "A-4, B-1, C-3, D-2 / A-4, B-1, C-3, D-2",
+                    "A-2, B-3, C-1, D-4 / A-2, B-3, C-1, D-4"
+                ],
+                correct: 3
+            },
+            {
+                id: 10,
+                tag: "Metanil Yellow Detection",
+                question: "पिसी हल्दी और बेसन में मेटानिल येलो की मिलावट की पहचान हेतु सांद्र $HCl$ मिलाने पर कौन सा रंग परिवर्तन देखा जाता है?<br><i>What characteristic color change occurs upon adding conc. $HCl$ to detect Metanil Yellow adulteration in turmeric powder and gram flour?</i>",
+                options: [
+                    "विलयन तुरंत गहरा नीला होकर बाद में काला पड़ जाता है / The solution turns deep blue and subsequently turns black",
+                    "विलयन मैजेंटा गुलाबी होता है जो जल मिलाने पर भी बना रहता है / The solution turns magenta pink and persists even after adding water",
+                    "विलयन हल्का हरा होकर पूरी तरह रंगहीन में बदल जाता है / The solution turns light green and turns completely colorless",
+                    "विलयन में तीव्र झाग के साथ दूधिया सफेद अवक्षेप बनता है / The solution produces heavy effervescence with a milky white precipitate"
+                ],
+                correct: 1
+            },
+            {
+                id: 11,
+                tag: "HACCP Workflow",
+                question: "खाद्य सुरक्षा प्रबंधन प्रणाली (HACCP) स्थापित करते समय प्रारंभिक चरणों का सही अनुक्रम क्या है?<br><i>What is the correct sequential workflow during the initial establishment of a Hazard Analysis Critical Control Point (HACCP) system?</i>",
+                options: [
+                    "महत्वपूर्ण सीमाएं तय करना → निगरानी करना → टीम बनाना → प्रवाह आरेख / Critical limits → Monitoring → HACCP team → Flow diagram",
+                    "प्रवाह आरेख सत्यापन → खतरे पहचानना → रिकॉर्ड रखना → सुधारात्मक कार्य / Flow diagram → Hazard analysis → Record keeping → Corrections",
+                    "खतरों की पहचान → CCP का निर्धारण → निगरानी → रिकॉर्ड का संधारण / Hazard analysis → CCP determination → Monitoring → Record keeping",
+                    "रिकॉर्ड संधारण → सत्यापन → खतरे पहचानना → सीमाएं निर्धारित करना / Record keeping → Verification → Hazard identification → Critical limits"
+                ],
+                correct: 2
+            },
+            {
+                id: 12,
+                tag: "Food Adulterants Match",
+                question: "सूची-I (खाद्य पदार्थ) को सूची-II (संभावित अपमिश्रक) से सुमेलित कीजिए:<br><i>Match List-I (Food Item) with List-II (Potential Adulterant):</i><br><b>सूची-I:</b> A. दही और मावा, B. साबुत खाद्यान्न, C. गेहूं का आटा, D. मक्खन एवं घी<br><b>सूची-II:</b> 1. अखाद्य चोकर/खड़िया, 2. कंकड़/रेत/मिट्टी, 3. ब्लॉटिंग पेपर/स्टार्च, 4. हाइड्रोजनीकृत वनस्पति वसा",
+                options: [
+                    "A-1, B-4, C-2, D-3 / A-1, B-4, C-2, D-3",
+                    "A-2, B-1, C-4, D-3 / A-2, B-1, C-4, D-3",
+                    "A-4, B-3, C-1, D-2 / A-4, B-3, C-1, D-2",
+                    "A-3, B-2, C-1, D-4 / A-3, B-2, C-1, D-4"
+                ],
+                correct: 3
+            },
+            {
+                id: 13,
+                tag: "Lathyrism Pathology",
+                question: "खेसारी दाल (Lathyrus sativus) के लगातार सेवन से उत्पन्न होने वाले 'लैथिरिज़्म' रोग का मुख्य पैथोफिजियोलॉजिकल प्रभाव क्या है?<br><i>What is the primary pathophysiological manifestation of 'Lathyrism' caused by regular consumption of Khesari dal (Lathyrus sativus)?</i>",
+                options: [
+                    "फेफड़ों की कुपिकाओं का सिकुड़ना और तीव्र दमा / Bronchial constriction and acute pulmonary asthma",
+                    "रक्त में हीमोग्लोबिन निर्माण की प्रक्रिया रुकना / Complete arrest of hepatic hemoglobin biosynthesis",
+                    "निचले अंगों के मोटर न्यूरॉन्स का स्थायी पक्षाघात / Irreversible spastic paralysis of lower motor neurons",
+                    "आंतों में पोषक तत्वों के अवशोषण की पूर्ण विफलता / Complete malabsorption of micronutrients in the intestine"
+                ],
+                correct: 2
+            },
+            {
+                id: 14,
+                tag: "PFA History",
+                question: "भारत में 'खाद्य अपमिश्रण निवारण अधिनियम' (PFA Act) के पारित होने और पूरे देश में इसके नियमों के लागू होने का सही वर्ष क्या है?<br><i>In which years was the 'Prevention of Food Adulteration Act' (PFA Act) enacted by parliament and its rules implemented across India?</i>",
+                options: [
+                    "पारित वर्ष 1950 तथा नियम लागू वर्ष 1952 / Enacted in 1950 and Rules enforced in 1952",
+                    "पारित वर्ष 1954 तथा नियम लागू वर्ष 1955 / Enacted in 1954 and Rules enforced in 1955",
+                    "पारित वर्ष 1964 तथा नियम लागू वर्ष 1965 / Enacted in 1964 and Rules enforced in 1965",
+                    "पारित वर्ष 1974 तथा नियम लागू वर्ष 1976 / Enacted in 1974 and Rules enforced in 1976"
+                ],
+                correct: 1
+            },
+            {
+                id: 15,
+                tag: "Epidemic Dropsy Symptoms",
+                question: "आर्जिमोन तेल से होने वाले 'एपिडेमिक ड्रॉप्सी' (Epidemic Dropsy) के प्राथमिक नैदानिक लक्षण क्या हैं?<br><i>What are the primary clinical diagnostic symptoms of 'Epidemic Dropsy' caused by argemone oil ingestion?</i>",
+                options: [
+                    "त्वचा का अत्यधिक सूखापन एवं रतौंधी की समस्या / Severe cutaneous xerosis and night blindness problems",
+                    "हड्डियों का क्षरण एवं दांतों में फ्लोरोसिस के धब्बे / Osteomalacia and fluorosis patches across teeth",
+                    "मांसपेशियों में ऐंठन एवं थायरॉयड ग्रंथि का बढ़ना / Muscle twitching and pathological goitre enlargement",
+                    "पैरों में गंभीर सूजन, जठरांत्र शोथ और हृदय विफलता / Severe bilateral edema, gastroenteritis, and cardiac failure"
+                ],
+                correct: 3
+            },
+            {
+                id: 16,
+                tag: "Ice Cream Adulteration",
+                question: "निम्न गुणवत्ता वाली आइसक्रीम और गाढ़े मिष्ठानों में मात्रा और गाढ़ापन बढ़ाने के लिए किस अपमिश्रक का उपयोग किया जाता है?<br><i>Which adulterant is commonly incorporated into sub-standard commercial ice creams and thickened sweets to artificially increase volume?</i>",
+                options: [
+                    "अरंडी का गाढ़ा तेल / Heavy castor bean oil",
+                    "उबले मसले आलू का पेस्ट / Boiled mashed potato paste",
+                    "खनिज पैराफिन मोम / Inedible paraffin wax",
+                    "कच्चा सोयाबीन चूर्ण / Raw soya bean powder"
+                ],
+                correct: 1
+            },
+            {
+                id: 17,
+                tag: "Wheat Flour Adulteration",
+                question: "गेहूं के आटे में कृत्रिम रूप से वजन बढ़ाने और लागत घटाने के लिए मिलाए जाने वाले 'ब्रान डस्ट' (Bran Dust) का मुख्य स्रोत क्या है?<br><i>What constitutes the principal source of 'Bran Dust' adulterated into wheat flour to artificially increase weight and decrease costs?</i>",
+                options: [
+                    "चावल की पालिश से निकला स्टार्च / Starch extracted during rice polishing",
+                    "दालों के छिलकों का बारीक चूर्ण / Fine milled powder of pulse hulls",
+                    "अनाज का अनुपयोगी अखाद्य चोकर / Inedible powdered outer bran waste",
+                    "मक्के के दानों का सूखा पाउडर / Dried ground maize grain powder"
+                ],
+                correct: 2
+            },
+            {
+                id: 18,
+                tag: "Preservative Action",
+                question: "खाद्य परिरक्षक के रूप में प्रयुक्त 'सोडियम बेंजोएट' निम्नलिखित में से किस खाद्य मैट्रिक्स में सर्वाधिक प्रभावी रोगाणुरोधी कार्य करता है?<br><i>Under which of the following food matrices does the chemical preservative 'Sodium Benzoate' exhibit its optimal antimicrobial efficacy?</i>",
+                options: [
+                    "उच्च क्षारीय दूध और मिष्ठान उत्पाद / Highly alkaline dairy and confectionery products",
+                    "अम्लीय फलों के रस, जैम और स्क्वैश / Acidic fruit juices, jams, and fruit squashes",
+                    "पूरी तरह उदासीन वसा और मक्खन / Completely neutral fats and butter spreads",
+                    "अत्यधिक लवणयुक्त सूखे अनाज भंडार / Heavily salted dry grain storage reserves"
+                ],
+                correct: 1
+            },
+            {
+                id: 19,
+                tag: "Natural Pigment Sources",
+                question: "मक्खन को पीला रंग देने वाला 'ऐनेटो' (Annatto) और चाशनी में प्रयुक्त लाल रंजक 'कोचीनील' (Cochineal) क्रमशः किस स्रोत से प्राप्त होते हैं?<br><i>From which biological sources are the natural yellow dye 'Annatto' and the red dye 'Cochineal' commercially extracted?</i>",
+                options: [
+                    "खनिज रॉक अयस्क एवं पेट्रोलियम कोलतार / Mineral rock ore and synthetic petroleum tar",
+                    "समुद्री लाल शैवाल एवं भूमिगत कवक जाल / Marine red algae and subterranean fungal hyphae",
+                    "सिंथेटिक एजो यौगिक एवं कृत्रिम एस्टर / Synthetic azo structures and artificial esters",
+                    "बिक्सा पौधे के बीज एवं डैक्टाइलोपियस मादा कीट / Bixa orellana seeds and Dactylopius coccus insects"
+                ],
+                correct: 3
+            },
+            {
+                id: 20,
+                tag: "CCP Definition",
+                question: "खाद्य सुरक्षा मानकों के तहत 'क्रिटिकल कंट्रोल पॉइंट' (CCP) को किस रूप में परिभाषित किया जाता है?<br><i>Under food safety management systems, how is a 'Critical Control Point' (CCP) precisely defined?</i>",
+                options: [
+                    "कारखाने में श्रमिकों की उपस्थिति दर्ज करने का स्थल / The administrative desk where worker attendance is recorded",
+                    "अंतिम उत्पाद का विपणन और खुदरा मूल्य तय करने का केंद्र / The commercial center where the retail pricing of food is fixed",
+                    "वह चरण जहाँ सुरक्षा जोखिम को समाप्त या नियंत्रित किया जा सके / The step where a food safety hazard can be prevented, eliminated, or reduced",
+                    "कच्चे माल के परिवहन हेतु प्रयोग किए जाने वाले वाहन / The transport vehicles utilized for carrying raw farm produce"
+                ],
+                correct: 2
+            },
+            {
+                id: 21,
+                tag: "ODAP Nomenclature",
+                question: "खेसारी दाल में उपस्थित न्यूरोटॉक्सिन 'BOAA / ODAP' का सही रासायनिक नाम क्या है?<br><i>What is the correct biochemical chemical nomenclature for the neurotoxin 'BOAA / ODAP' present in Lathyrus sativus?</i>",
+                options: [
+                    "α-अमीनो-β-मिथाइलअमीनोप्रोपियोनिक एसिड / α-Amino-β-methylaminopropionic acid",
+                    "β-N-ऑक्सालाइल-α,β-डायअमीनोप्रोपियोनिक एसिड / β-N-Oxalyl-α,β-diaminopropionic acid",
+                    "गामा-अमीनोब्यूटायरिक एसिड हाइड्रोक्लोराइड / Gamma-aminobutyric acid hydrochloride",
+                    "डायमिथाइलअमीनोएज़ोबेंजीन सल्फोनिक एसिड / Dimethylaminoazobenzene sulfonic acid"
+                ],
+                correct: 1
+            },
+            {
+                id: 22,
+                tag: "Urea Detection in Milk",
+                question: "दूध में गैर-कानूनी रूप से मिलाए गए 'यूरिया' की पुष्टि हेतु DMAB अभिकर्मक मिलाने पर कौन सा रंग संकुल प्राप्त होता है?<br><i>Which color complex is formed when DMAB reagent is added to detect synthetic urea adulteration in milk samples?</i>",
+                options: [
+                    "गहरा नीला-बैंगनी रंग / Deep blue-violet color complex",
+                    "पन्ना हरा प्रतिदीप्त रंग / Emerald green fluorescent complex",
+                    "गहरा भूरा-काला अवक्षेप / Heavy brownish-black precipitate",
+                    "स्पष्ट चमकीला पीला रंग / Distinct bright yellow color complex"
+                ],
+                correct: 3
+            },
+            {
+                id: 23,
+                tag: "Halphen Test",
+                question: "खाद्य तेलों में 'कपासिया तेल' (Cottonseed Oil) की मिलावट का पता लगाने वाले 'हाल्डेन/हैल्फेन परीक्षण' (Halphen's Test) में कौन सा रंग विकसित होता है?<br><i>What distinct chromogenic response indicates a positive 'Halphen Test' for detecting cottonseed oil adulteration in edible oils?</i>",
+                options: [
+                    "गहरा बैंगनी रंग / Intense purple-violet color",
+                    "पन्ना हरा रंग / Deep emerald-green color",
+                    "गहरा लाल/गुलाबी रंग / Deep crimson red / pink color",
+                    "दूधिया सफेद रंग / Persistent milky-white turbidity"
+                ],
+                correct: 2
+            },
+            {
+                id: 24,
+                tag: "Milk Neutralizer Test",
+                question: "दूध को खट्टा होने से रोकने के लिए मिलाए गए क्षारीय न्यूट्रलाइज़र ($\text{NaOH}/\text{Na}_2\text{CO}_3$) की पहचान किस परीक्षण से की जाती है?<br><i>Which qualitative chemical test identifies alkaline neutralizers ($\text{NaOH}/\text{Na}_2\text{CO}_3$) added to preserve souring milk?</i>",
+                options: [
+                    "बेनेडिक्ट परीक्षण / Benedict's qualitative test",
+                    "रोसोलिक एसिड परीक्षण / Rosolic acid indicator test",
+                    "बार्फोइड परीक्षण / Barfoed's monosaccharide test",
+                    "सेलिवानॉफ परीक्षण / Seliwanoff's resorcinol test"
+                ],
+                correct: 1
+            },
+            {
+                id: 25,
+                tag: "RM Value Measurement",
+                question: "शुद्ध देशी घी और मक्खन के परीक्षण में 'रेइचर्ट-मीस्ल मान' (Reichert-Meissl Value) रासायनिक रूप से क्या मापता है?<br><i>What does the 'Reichert-Meissl (RM) Value' quantitatively measure in the purity analysis of butterfat and pure ghee?</i>",
+                options: [
+                    "कुल असंतृप्त वसा अम्लों की संख्या / Total number of unsaturated fatty acid double bonds",
+                    "अवाष्पशील और जल-अघुलनशील दीर्घ श्रृंखला वसा अम्ल / Non-volatile and water-insoluble long-chain fatty acids",
+                    "मुक्त वसा अम्लों की कुल अम्लीय संख्या / Total acid value corresponding to free fatty acid breakdown",
+                    "वाष्पशील और जल-घुलनशील लघु श्रृंखला वसा अम्ल / Steam-volatile and water-soluble short-chain fatty acids"
+                ],
+                correct: 3
+            },
+            {
+                id: 26,
+                tag: "Formalin Detection",
+                question: "दूध में परिरक्षक के रूप में प्रयुक्त 'फॉर्मेलिन' की पहचान हेतु किए जाने वाले 'हेहनर परीक्षण' (Hehner's Test) में क्या परिणाम प्राप्त होता है?<br><i>What visual analytical result confirms formaldehyde (formalin) preservative in milk during 'Hehner's Test'?</i>",
+                options: [
+                    "परखनली के तल में पीला अवक्षेप / Granular yellow precipitation at the base",
+                    "संपूर्ण विलयन का गहरा हरा होना / Complete emerald-green discoloration of solution",
+                    "दोनों द्रवों के जोड़ पर बैंगनी छल्ला / Distinct violet ring at the junction of two liquids",
+                    "सतह पर सफेद झाग की मोटी परत / Thick persistent layer of white lather on surface"
+                ],
+                correct: 2
+            },
+            {
+                id: 27,
+                tag: "Melamine Fraud Mechanism",
+                question: "दुग्ध उत्पादों में 'मेलामाइन' (Melamine) की मिलावट किस मानक परीक्षण विधि की तकनीकी सीमा का लाभ उठाकर प्रोटीन की मात्रा को कृत्रिम रूप से बढ़ाती है?<br><i>Melamine adulteration in dairy exploits the analytical limitation of which standard testing method to artificially inflate crude protein?</i>",
+                options: [
+                    "सोक्सलेट वसा निष्कर्षण विधि / Soxhlet solvent fat extraction method",
+                    "केल्डाहल कुल नाइट्रोजन विधि / Kjeldahl total nitrogen digestion method",
+                    "गैस क्रोमैटोग्राफी विधि / Gas chromatography partition method",
+                    "रिफ्रैक्टोमेट्री सूचकांक विधि / Refractometric refractive index method"
+                ],
+                correct: 1
+            },
+            {
+                id: 28,
+                tag: "Mineral Oil Detection",
+                question: "खाद्य तेलों में अखाद्य खनिज तेल (Liquid Paraffin) की मिलावट का पता लगाने के लिए कौन सा रासायनिक परीक्षण किया जाता है?<br><i>Which chemical test is used to detect non-edible mineral hydrocarbons (liquid paraffin) in edible vegetable oils?</i>",
+                options: [
+                    "आयोडीन मान परीक्षण / Iodine value unsaturation test",
+                    "क्रीस रासायनिक परीक्षण / Kreis rancidity phloroglucinol test",
+                    "फीहे रिसोर्सिनॉल परीक्षण / Fiehe's resorcinol furfural test",
+                    "होल्डे साबुनीकरण परीक्षण / Holde's saponification turbidity test"
+                ],
+                correct: 3
+            },
+            {
+                id: 29,
+                tag: "Aflatoxin Genetic Impact",
+                question: "मूँगफली में फफूंद जनित 'एफ्लाटॉक्सिन $B_1$' मानव यकृत में कैंसर उत्पन्न करने हेतु किस जीन में विशिष्ट उत्परिवर्तन (Mutation) करता है?<br><i>Which specific human tumor gene undergoes mutation (G $\rightarrow$ T transversion at codon 249) following chronic aflatoxin $B_1$ exposure?</i>",
+                options: [
+                    "HER2 ऑन्कोजीन संरचना / HER2 regulatory oncogene",
+                    "BRCA-1 सप्रेशर जीन / BRCA-1 repair suppressor gene",
+                    "p53 ट्यूमर सप्रेशर जीन / p53 tumor suppressor gene",
+                    "c-Myc नियामक ऑन्कोजीन / c-Myc cell-cycle oncogene"
+                ],
+                correct: 2
+            },
+            {
+                id: 30,
+                tag: "TPC Limit in Frying Oils",
+                question: "FSSAI के नियमों के अनुसार तलने वाले खाद्य तेलों (Frying Oil) में 'टोटल पोलर कंपाउंड्स' (TPC) की अधिकतम सुरक्षित सीमा क्या है?<br><i>According to FSSAI statutory limits, what is the maximum permissible threshold for Total Polar Compounds (TPC) in repeated frying oils?</i>",
+                options: [
+                    "अधिकतम 10 प्रतिशत सीमा / Maximum 10 percent limit",
+                    "अधिकतम 15 प्रतिशत सीमा / Maximum 15 percent limit",
+                    "अधिकतम 20 प्रतिशत सीमा / Maximum 20 percent limit",
+                    "अधिकतम 25 प्रतिशत सीमा / Maximum 25 percent limit"
+                ],
+                correct: 3
+            },
+            {
+                id: 31,
+                tag: "Nitrosamines Toxicity",
+                question: "प्रसंस्कृत मांस में परिरक्षक के रूप में प्रयुक्त सोडियम नाइट्राइट आंत में एमीन्स से क्रिया कर किस कार्सिनोजेनिक यौगिक का निर्माण करता है?<br><i>Which potent group of carcinogenic compounds is formed in the gut when sodium nitrite in cured meat reacts with amines?</i>",
+                options: [
+                    "एक्रिलामाइड विषैला यौगिक / Acrylamide neurotoxic byproduct",
+                    "नाइट्रोसामाइन कैंसरकारी यौगिक / Nitrosamine carcinogenic adducts",
+                    "पॉलीसाइक्लिक हाइड्रोकार्बन / Polycyclic aromatic hydrocarbons",
+                    "हे트로साइक्लिक एरोमैटिक एमीन / Heterocyclic aromatic amines"
+                ],
+                correct: 1
+            },
+            {
+                id: 32,
+                tag: "Baudouin Test Reagents",
+                question: "वनस्पति घी में तिल के तेल के सेसामोलिन की पहचान हेतु 'बाउडोइन परीक्षण' (Baudouin Test) में किन अभिकर्मकों का उपयोग होता है?<br><i>Which pair of reagents is utilized in 'Baudouin's Test' to detect the sesamolin tracer present in vanaspati?</i>",
+                options: [
+                    "सांद्र नाइट्रिक अम्ल एवं फेरिक क्लोराइड / Conc. nitric acid and ferric chloride",
+                    "तनु सल्फ्यूरिक अम्ल एवं अमोनियम ऑक्सालेट / Dil. sulfuric acid and ammonium oxalate",
+                    "हाइड्रोक्लोरिक अम्ल एवं फर्फ्यूरल घोल / Hydrochloric acid and 2% furfural in alcohol",
+                    "तनु एसिटिक अम्ल एवं लेड एसीटेट घोल / Dil. acetic acid and lead acetate solution"
+                ],
+                correct: 2
+            },
+            {
+                id: 33,
+                tag: "EA-IRMS Honey Testing",
+                question: "शहद में उच्च-फ्रुक्टोज कॉर्न सिरप (HFCS) अथवा C-4 पादप शर्करा की मिलावट पकड़ने हेतु वैश्विक स्तर पर प्रयुक्त मानक तकनीक कौन सी है?<br><i>Which analytical technique is regarded as the international benchmark for detecting C-4 plant sugars (cane/corn syrup) in honey?</i>",
+                options: [
+                    "फ्लेम फोटोमेट्री विश्लेषण / Flame photometry atomic emission",
+                    "पेपर क्रोमैटोग्राफी विधि / Paper chromatography separation",
+                    "यूवी-विजिबल स्पेक्ट्रोस्कोपी / UV-Visible spectrophotometry",
+                    "आइसोटोप रेश्यो मास स्पेक्ट्रोमेट्री / Stable Isotope Ratio Mass Spectrometry (EA-IRMS)"
+                ],
+                correct: 3
+            },
+            {
+                id: 34,
+                tag: "Fiehe's Test for Honey",
+                question: "शहद में कृत्रिम इनवर्ट शुगर सिरप की पहचान हेतु किए जाने वाले 'फीहे परीक्षण' (Fiehe's Test) में किस यौगिक से चेरी-लाल रंग बनता है?<br><i>Which intermediate breakdown product reacts with resorcinol to yield a cherry-red complex in 'Fiehe's Test' for artificial invert sugar?</i>",
+                options: [
+                    "ग्लूकोसामाइन हाइड्रोक्लोराइड / Glucosamine hydrochloride salt",
+                    "5-हाइड्रोक्सीमिथाइलफर्फ्यूरल / 5-Hydroxymethylfurfural (5-HMF)",
+                    "फ्रुक्टो-ऑलिगोसैकेराइड्स / Fructo-oligosaccharide polymer",
+                    "कैरामेलिन जटिल बहुलक / Caramelin complex condensation mass"
+                ],
+                correct: 1
+            },
+            {
+                id: 35,
+                tag: "H2O2 Detection in Milk",
+                question: "दूध में अवैध रूप से मिलाए गए 'हाइड्रोजन परॉक्साइड' ($H_2O_2$) की पहचान किस रासायनिक अभिकर्मक द्वारा की जाती है?<br><i>Which specific chemical reagent provides rapid diagnostic identification of illegal hydrogen peroxide ($H_2O_2$) in milk?</i>",
+                options: [
+                    "फेनॉलफ्थलीन एल्कोहॉलिक घोल / Phenolphthalein ethanolic solution",
+                    "अमोनियम ऑक्सालेट का ताजा घोल / Fresh ammonium oxalate reagent",
+                    "वैनेडियम पेंटॉक्साइड अम्लीय घोल / Vanadium pentoxide ($V_2O_5$) in dil. $H_2SO_4$",
+                    "कॉपर सल्फेट का क्षारीय घोल / Alkaline copper sulfate solution"
+                ],
+                correct: 2
+            },
+            {
+                id: 36,
+                tag: "Sudan Dyes Toxicology",
+                question: "लाल मिर्च पाउडर में गैर-कानूनी रूप से प्रयुक्त 'सूडान रंगों' (Sudan I–IV) पर पूर्ण प्रतिबंध का प्राथमिक विष-वैज्ञानिक कारण क्या है?<br><i>What is the principal toxicological rationale behind the global prohibition of industrial Sudan dyes (I–IV) in spices?</i>",
+                options: [
+                    "पेप्सिन एंजाइम के स्राव को पूर्णतः रोकना / Complete suppression of gastric pepsin enzyme secretion",
+                    "लाल रक्त कोशिकाओं का तत्काल विनाश करना / Immediate cellular lysis of peripheral red blood cells",
+                    "आंतों में पोषक तत्वों का अवशोषण रोकना / Complete mechanical blockage of intestinal microvilli",
+                    "डीएनए-एडक्ट्स बनाने वाले कैंसरकारी मेटाबोलाइट्स / Hepatic bio-activation into mutagenic aromatic amines and DNA adducts"
+                ],
+                correct: 3
+            },
+            {
+                id: 37,
+                tag: "Potassium Bromate Ban",
+                question: "ब्रेड और बेकिंग उद्योग में आटे की लोच बढ़ाने हेतु प्रयुक्त 'पोटेशियम ब्रोमेट' ($KBrO_3$) को क्यों प्रतिबंधित किया गया है?<br><i>Why has potassium bromate ($KBrO_3$), historically utilized as a dough improver, been banned in flour processing?</i>",
+                options: [
+                    "यह यीस्ट की किण्वन दर को अत्यधिक घटाता है / It severely retards the natural fermentative action of baker's yeast",
+                    "यह IARC श्रेणी 2B का संभावित कैंसरकारी यौगिक है / It is classified as an IARC Group 2B potential genotoxic carcinogen",
+                    "यह बेकिंग के दौरान आटे के प्रोटीन को नष्ट करता है / It completely degrades the gluten protein network during baking",
+                    "यह ब्रेड के प्राकृतिक स्वाद को पूरी तरह बदल देता है / It permanently alters the intrinsic flavor profile of bread"
+                ],
+                correct: 1
+            },
+            {
+                id: 38,
+                tag: "Polenske Value",
+                question: "खाद्य वसा और मक्खन के रासायनिक विश्लेषण में 'पोलेन्स्के मान' (Polenske Value) क्या मापता है?<br><i>What does the 'Polenske Value' specifically quantify during the analytical differentiation of edible fats and butter?</i>",
+                options: [
+                    "कुल असंतृप्त वसा अम्लों की मात्रा / Total quantitative fraction of polyunsaturated fats",
+                    "वाष्पशील और जल-घुलनशील वसा अम्ल / Steam-volatile and water-soluble fatty acid titers",
+                    "वाष्पशील और जल-अघुलनशील वसा अम्ल / Steam-volatile and water-insoluble fatty acid titers",
+                    "मुक्त वसा अम्लों की अम्लीय संख्या / Direct acid titration value of unesterified free fatty acids"
+                ],
+                correct: 2
+            },
+            {
+                id: 39,
+                tag: "Rongalite Bleach Toxicity",
+                question: "गुड़ को ब्लीच कर चमकीला बनाने हेतु प्रयुक्त 'सोडियम फॉर्मेल्डिहाइड सल्फॉक्सीलेट' (Rongalite) गर्म करने पर क्या उत्सर्जित करता है?<br><i>Which toxic degradation products are emitted when jaggery treated with the bleaching agent 'Rongalite' is heated?</i>",
+                options: [
+                    "कार्बन मोनोऑक्साइड एवं अमोनिया गैस / Carbon monoxide and ammonia gases",
+                    "नाइट्रोजन डाइऑक्साइड एवं फॉसजीन गैस / Nitrogen dioxide and phosgene vapors",
+                    "हाइड्रोजन सायनाइड एवं क्लोरीन गैस / Hydrogen cyanide and chlorine gases",
+                    "सल्फर डाइऑक्साइड एवं फॉर्मेल्डिहाइड / Sulfur dioxide ($SO_2$) and formaldehyde vapors"
+                ],
+                correct: 3
+            },
+            {
+                id: 40,
+                tag: "FSSA Penal Provisions",
+                question: "खाद्य सुरक्षा और मानक अधिनियम (FSSA 2006) की धारा 59 के तहत असुरक्षित खाद्य से उपभोक्ता की मृत्यु होने पर क्या न्यूनतम विधिक दंड है?<br><i>Under Section 59(iv) of the FSSA 2006, what is the statutory penalty if consumption of unsafe food results in the death of a consumer?</i>",
+                options: [
+                    "3 वर्ष का कारावास एवं ₹3 लाख जुर्माना / Imprisonment for 3 years and a fine of ₹3 Lakh",
+                    "7 वर्ष से आजीवन कारावास एवं ₹10 लाख जुर्माना / Imprisonment for $\ge$7 years up to life and a fine $\ge$₹10 Lakh",
+                    "5 वर्ष का कारावास एवं ₹5 लाख जुर्माना / Imprisonment for 5 years and a fine of ₹5 Lakh",
+                    "केवल ₹25 लाख जुर्माना बिना किसी कारावास के / Pure monetary fine of ₹25 Lakh with no imprisonment"
+                ],
+                correct: 1
+            },
+            {
+                id: 41,
+                tag: "Antibiotic Residue Gold Standard",
+                question: "खाद्य उत्पादों में सूक्ष्म एंटीबायोटिक अवशेषों (Antibiotic Residues) की सटीक पहचान हेतु नियामक प्रयोगशालाओं की 'स्वर्ण मानक' तकनीक कौन सी है?<br><i>Which analytical technique is regarded as the regulatory gold standard for confirming trace antibiotic residues ($<1\ \text{ppb}$) in food?</i>",
+                options: [
+                    "थिन लेयर क्रोमैटोग्राफी विधि / High-performance thin layer chromatography (HPTLC)",
+                    "यूवी-विजिबल स्पेक्ट्रोस्कोपी / Derivative ultraviolet-visible spectrophotometry",
+                    "एलसी-एमएस/एमएस विश्लेषणात्मक तकनीक / Liquid Chromatography-Tandem Mass Spectrometry (LC-MS/MS)",
+                    "गैस क्रोमैटोग्राफी फ्लेम डिटेक्शन / Gas Chromatography with Flame Ionization Detection (GC-FID)"
+                ],
+                correct: 2
+            },
+            {
+                id: 42,
+                tag: "Hansa Test Serology",
+                question: "गाय के दूध में भैंस के दूध की मिलावट का पता लगाने के लिए राष्ट्रीय डेयरी अनुसंधान संस्थान (NDRI) द्वारा विकसित परीक्षण कौन सा है?<br><i>Which serological immunodiffusion assay was developed by NDRI Karnal to detect the adulteration of cow milk with buffalo milk?</i>",
+                options: [
+                    "बौडोइन रासायनिक फर्फ्यूरल टेस्ट / Baudouin's furfural chromogenic reaction test",
+                    "रोसोलिक एसिड न्यूट्रलाइज़र टेस्ट / Rosolic acid neutralization indicator test",
+                    "आयोडीन स्टार्च अवक्षेपण टेस्ट / Iodine-starch precipitation photometric test",
+                    "हंसा एंटीबॉडी सीरोलॉजिकल टेस्ट / Hansa specific antibody-antigen serological test"
+                ],
+                correct: 3
+            },
+            {
+                id: 43,
+                tag: "Coumarin in Cassia",
+                question: "असली दालचीनी के स्थान पर बेची जाने वाली 'कैसिया' (Cassia) की छाल में कौन सा विषैला यौगिक उच्च मात्रा में पाया जाता है?<br><i>Which hepatotoxic phytotoxin occurs in high concentrations (up to 1%) in cheap Cassia bark substituted for Ceylon Cinnamon?</i>",
+                options: [
+                    "सोलेनाइन विषैला यौगिक / Solanine glycoalkaloid",
+                    "कूमारिन यकृत-विषाक्त यौगिक / Coumarin hepatotoxic compound",
+                    "रिसिन घातक प्रोटीन घटक / Ricin ribosomal toxic protein",
+                    "गोइट्रिन थायरॉयड संदमक / Goitrin thyroid inhibitor"
+                ],
+                correct: 1
+            },
+            {
+                id: 44,
+                tag: "Trans-Fat Statutory Limits",
+                question: "FSSAI विनियमों के अनुसार सभी प्रकार के खाद्य तेलों और वसा में ट्रांस-फैटी एसिड (TFA) की अधिकतम कानूनी सीमा क्या है?<br><i>According to statutory FSSAI regulations, what is the maximum permissible legal threshold for industrial Trans-Fatty Acids (TFAs) in edible fats?</i>",
+                options: [
+                    "अधिकतम 5 प्रतिशत सीमा / Maximum 5 percent limit by weight",
+                    "अधिकतम 3 प्रतिशत सीमा / Maximum 3 percent limit by weight",
+                    "अधिकतम 2 प्रतिशत सीमा / Maximum 2 percent limit by weight",
+                    "अधिकतम 1 प्रतिशत सीमा / Maximum 1 percent limit by weight"
+                ],
+                correct: 2
+            },
+            {
+                id: 45,
+                tag: "Kreis Test Molecule",
+                question: "खाद्य वसा एवं तेलों में लिपिड पेरॉक्सीडेशन और विकृतगंधिता की पहचान हेतु प्रयुक्त 'क्रीस परीक्षण' (Kreis Test) किस मध्यवर्ती यौगिक पर आधारित है?<br><i>The Kreis Test for evaluating oxidative rancidity in edible fats is based on the photometric detection of which intermediate decomposition molecule?</i>",
+                options: [
+                    "मुक्त ब्यूटायरिक वसा अम्ल / Unesterified butyric free fatty acid",
+                    "ट्राइग्लिसराइड बहुलक संकुल / Triglyceride polymerized dimeric ester",
+                    "डायएसिटिल मध्यवर्ती यौगिक / Diacetyl volatile ketone intermediate",
+                    "एपिहाइड्रिनएल्डिहाइड संकुल / Epihydrinaldehyde / Malonaldehyde complex"
+                ],
+                correct: 3
+            },
+            {
+                id: 46,
+                tag: "Patulin Limit in Apple Juice",
+                question: "प्रसंस्कृत सेब के रस में फफूंद जनित किस ताप-प्रतिरोधी मायकोटॉक्सिन की अधिकतम सीमा $50\ \mu\text{g/kg}$ निर्धारित है?<br><i>For which heat-resistant fungal mycotoxin (*Penicillium expansum*) has FSSAI established a statutory limit of $50\ \mu\text{g/kg}$ in apple juice?</i>",
+                options: [
+                    "ज़ीरालेनोन मायकोटॉक्सिन / Zearalenone estrogenic mycotoxin",
+                    "पैटुलिन मायकोटॉक्सिन / Patulin polyketide mycotoxin",
+                    "ओकराटॉक्सिन मायकोटॉक्सिन / Ochratoxin nephrotoxic mycotoxin",
+                    "फ्यूमोनिसिन मायकोटॉक्सिन / Fumonisin neurotoxic mycotoxin"
+                ],
+                correct: 1
+            },
+            {
+                id: 47,
+                tag: "Lead Toxicity on Enzymes",
+                question: "लेड क्रोमेट की मिलावट से शरीर में प्रवेश करने वाला लेड हीम-संश्लेषण के किस एंजाइम को अपरिवर्तनीय रूप से संदमित करता है?<br><i>Which key regulatory enzyme in heme biosynthesis is irreversibly inhibited by lead from ingested lead chromate?</i>",
+                options: [
+                    "बिलीवरडिन रिडक्टेस एंजाइम / Biliverdin reductase enzyme",
+                    "हीम ऑक्सीजनेस एंजाइम / Heme oxygenase enzyme",
+                    "δ-अमीनोलेवुलिनिक एसिड डिहाइड्रैटैस / δ-Aminolevulinic Acid Dehydratase (δ-ALAD)",
+                    "सक्सीनाइल-CoA सिंथेटेस एंजाइम / Succinyl-CoA synthetase enzyme"
+                ],
+                correct: 2
+            },
+            {
+                id: 48,
+                tag: "OPRP vs CCP",
+                question: "ISO 22000 / HACCP के तहत 'ऑपरेशनल प्री-रेक्विजिट प्रोग्राम' (OPRP) और 'क्रिटिकल कंट्रोल पॉइंट' (CCP) में मुख्य अंतर क्या है?<br><i>What is the core distinction between an 'Operational Prerequisite Program' (OPRP) and a 'Critical Control Point' (CCP) under ISO 22000?</i>",
+                options: [
+                    "OPRP का रिकॉर्ड रखना आवश्यक नहीं होता जबकि CCP का होता है / OPRP record retention is voluntary whereas CCP documentation is legally binding",
+                    "CCP केवल भौतिक खतरों पर लागू होता है और OPRP केवल रासायनिक पर / CCP controls only physical debris whereas OPRP manages chemical toxins",
+                    "OPRP अंतिम उत्पाद पर लागू होता है और CCP कच्चे माल की आवक पर / OPRP evaluates retail packaging whereas CCP evaluates initial farm procurement",
+                    "CCP पर मात्रात्मक समीक्षात्मक सीमाएं होती हैं जबकि OPRP नियंत्रण उपाय है / CCP requires measurable critical limits whereas OPRP is a general control measure"
+                ],
+                correct: 3
+            },
+            {
+                id: 49,
+                tag: "Misbranded vs Unsafe Food",
+                question: "FSSA 2006 के तहत 'मिथ्या छाप खाद्य' (Misbranded Food) और 'असुरक्षित खाद्य' (Unsafe Food) में प्रमुख विधिक अंतर क्या है?<br><i>What is the primary statutory distinction between 'Misbranded Food' and 'Unsafe Food' under the Food Safety and Standards Act, 2006?</i>",
+                options: [
+                    "दोनों श्रेणियों में आर्थिक जुर्माने और कारावास के प्रावधान बिल्कुल समान हैं / Both classifications carry identical penal imprisonment terms and monetary fines",
+                    "मिथ्या छाप लेबलिंग/भ्रामक दावों से संबंधित है जबकि असुरक्षित स्वास्थ्य को हानि पहुँचाता है / Misbranded pertains to deceptive labeling whereas Unsafe directly endangers health",
+                    "मिथ्या छाप में केवल गैर-जमानती कारावास है जबकि असुरक्षित में केवल चेतावनी दी जाती है / Misbranding imposes non-bailable prison whereas unsafe food receives warning notices",
+                    "मिथ्या छाप केवल पैकेजिंग की खराबी है और असुरक्षित केवल एक्सपायरी डेट से संबंधित है / Misbranding is limited to physical package tearing and unsafe food to expiry dates"
+                ],
+                correct: 1
+            },
+            {
+                id: 50,
+                tag: "Hansa Test Principle",
+                question: "गाय के दूध में भैंस के दूध की पहचान हेतु 'हंसा परीक्षण' किस वैज्ञानिक सिद्धांत पर कार्य करता है?<br><i>On which biological/chemical principle does the 'Hansa Test' operate to detect buffalo milk adulteration in cow milk?</i>",
+                options: [
+                    "विशिष्ट गुरुत्व में अंतर पर आधारित हाइड्रोमीटर अवसादन / Hydrometer differential sedimentation based on relative specific gravity",
+                    "प्रकाश के ध्रुवण घूर्णन में परिवर्तन पर आधारित पोलरीमेट्री / Optical polarimetry tracking shifts in carbohydrate rotary polarization",
+                    "भैंस के दूध प्रोटीन एंटीजन और विशिष्ट एंटीबॉडी की अवक्षेपण क्रिया / Specific antigen-antibody precipitation reaction against buffalo milk protein",
+                    "वसा कणिकाओं के व्यास के आधार पर अपकेंद्रीय पृथक्करण / Centrifugal sedimentation separating divergent fat globule diameters"
+                ],
+                correct: 2
+            }
+        ];
+    </script>
+
+    <!-- ✅ सही किया गया JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
