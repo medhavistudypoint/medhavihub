@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">भारत का भूगोल — टेस्ट 14: फसलें</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">फसलें (Test 14)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_geo_test_14"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "भारत की मुख्य खाद्य फसल (Staple Food Crop) कौन-सी है?", options: ["(a) गेहूं", "(b) चावल (धान)", "(c) मक्का", "(d) बाजरा"], correct: 1, explanation: "भारत की सर्वप्रमुख खाद्य फसल चावल है, जो देश के कुल बोए गए खाद्यान्न क्षेत्रफल के सर्वाधिक भाग पर उगाई जाती है।" },
+            { id: 2, tag: "", question: "भारत में चावल का सर्वाधिक उत्पादन करने वाला राज्य कौन-सा है?", options: ["(a) उत्तर प्रदेश", "(b) पंजाब", "(c) पश्चिम बंगाल", "(d) आंध्र प्रदेश"], correct: 2, explanation: "पश्चिम बंगाल भारत में चावल का सबसे बड़ा उत्पादक राज्य है, जहाँ वर्ष में तीन फसलें (औस, अमन, बोरो) उगाई जाती हैं।" },
+            { id: 3, tag: "", question: "भारत में गेहूं का सर्वाधिक उत्पादन किस राज्य में होता है?", options: ["(a) पंजाब", "(b) हरियाणा", "(c) उत्तर प्रदेश", "(d) मध्य प्रदेश"], correct: 2, explanation: "उत्तर प्रदेश भारत में कुल गेहूं उत्पादन तथा क्षेत्रफल दोनों में प्रथम स्थान रखता है।" },
+            { id: 4, tag: "", question: "भारत में प्रति हेक्टेयर गेहूं की सर्वाधिक उत्पादकता (Yield per hectare) किस राज्य में है?", options: ["(a) उत्तर प्रदेश", "(b) पंजाब", "(c) हरियाणा", "(d) राजस्थान"], correct: 1, explanation: "पंजाब में विकसित नहरी सिंचाई, आधुनिक मशीनीकरण और उर्वरकों के अधिकतम उपयोग के कारण गेहूं की प्रति हेक्टेयर उत्पादकता देश में सर्वाधिक है।" },
+            { id: 5, tag: "", question: "भारत का कौन-सा क्षेत्र 'चावल का कटोरा' (Rice Bowl of India) कहलाता है?", options: ["(a) सिंधु-गंगा का मैदान", "(b) कृष्णा-गोदावरी डेल्टा क्षेत्र", "(c) पूर्वोत्तर क्षेत्र", "(d) केरल तथा तमिलनाडु तट"], correct: 1, explanation: "आंध्र प्रदेश में स्थित कृष्णा-गोदावरी डेल्टा क्षेत्र को अपनी उपजाऊ जलोढ़ मृदा और सघन धान उत्पादन के कारण 'भारत का चावल का कटोरा' कहा जाता है।" },
+            { id: 6, tag: "", question: "कल्याण सोना, सोनालिका और कुंदन किसकी उच्च उत्पादक प्रजातियां हैं?", options: ["(a) गेहूं की", "(b) चावल की", "(c) मक्का की", "(d) सरसों की"], correct: 0, explanation: "कल्याण सोना, सोनालिका, कुंदन, राज-3077, और HD-2967 भारत में हरित क्रांति के दौरान विकसित गेहूं की प्रमुख बौनी व अधिक उपज देने वाली किस्में हैं।" },
+            { id: 7, tag: "", question: "जया, पद्मा, पूसा सुगंधा-5 और बाला किसकी उन्नत किस्में हैं?", options: ["(a) मक्का की", "(b) धान (चावल) की", "(c) गेहूं की", "(d) ज्वार की"], correct: 1, explanation: "जया, पद्मा, बाला, आईआर-8, रत्ना और पूसा सुगंधा धान (चावल) की प्रमुख अधिक उपज देने वाली किस्में हैं।" },
+            { id: 8, tag: "", question: "कर्नाल बंट (Karnal Bunt) निम्नलिखित में से किस फसल का एक प्रमुख कवक जनित रोग है?", options: ["(a) धान", "(b) मटर", "(c) गेहूं", "(d) राई"], correct: 2, explanation: "कर्नाल बंट (Tilletia indica कवक द्वारा) गेहूं का एक गंभीर फंगल रोग है, जिसकी पहचान सर्वप्रथम 1931 में करनाल (हरियाणा) में हुई थी।" },
+            { id: 9, tag: "", question: "गन्ने (Sugarcane) के कुल उत्पादन और क्षेत्रफल में भारत का कौन-सा राज्य शीर्ष स्थान पर है?", options: ["(a) महाराष्ट्र", "(b) उत्तर प्रदेश", "(c) कर्नाटक", "(d) तमिलनाडु"], correct: 1, explanation: "उत्तर प्रदेश भारत में गन्ने के कुल क्षेत्रफल एवं कुल उत्पादन दोनों में प्रथम स्थान रखता है।" },
+            { id: 10, tag: "", question: "भारत में चीनी (Sugar) का सबसे बड़ा उत्पादक राज्य कौन-सा है?", options: ["(a) उत्तर प्रदेश", "(b) महाराष्ट्र", "(c) तमिलनाडु", "(d) आंध्र प्रदेश"], correct: 1, explanation: "गन्ने में उच्च सुक्रोज (शर्करा) की मात्रा और लंबी पेराई अवधि के कारण महाराष्ट्र चीनी उत्पादन में देश का अग्रणी राज्य है।" },
+            { id: 11, tag: "", question: "गन्ने में शर्करा की मात्रा घट जाती है, यदि-", options: ["(a) पौधे वृद्धि की अवधि में अत्यधिक वर्षा हो", "(b) पकने की अवधि में पाला गिर जाए", "(c) तापमान लगातार बहुत उच्च रहे", "(d) पर्याप्त धूप न मिले"], correct: 1, explanation: "गन्ना पकते समय यदि पाला (Frost) गिर जाए तो पौधे का रस सूख जाता है और ग्लूकोज का सुक्रोज में रूपांतरण रुकने से शर्करा की मात्रा तेजी से घट जाती है।" },
+            { id: 12, tag: "", question: "भारत में कपास (Cotton) का सर्वाधिक उत्पादन करने वाला अग्रणी राज्य कौन-सा है?", options: ["(a) गुजरात", "(b) महाराष्ट्र", "(c) तेलंगाना", "(d) आंध्र प्रदेश"], correct: 0, explanation: "गुजरात में काली एवं कछारी मिट्टी और उत्तम सिंचाई के कारण देश में कपास का सर्वाधिक उत्पादन होता है, जिसके बाद महाराष्ट्र का स्थान है।" },
+            { id: 13, tag: "", question: "महाराष्ट्र और गुजरात में कपास की खेती के अत्यधिक सफल होने का मुख्य भौगोलिक कारण क्या है?", options: ["(a) भारी मानसूनी वर्षा", "(b) रेगुर (काली) मिट्टी की प्रचुरता", "(c) शीतोष्ण जलवायु", "(d) लाल लेटराइट मिट्टी"], correct: 1, explanation: "दक्कन लावा ट्रैप की काली (रेगुर) मिट्टी में नमी धारण करने की उच्च क्षमता होती है, जो कपास की जड़ों के लिए आदर्श होती है।" },
+            { id: 14, tag: "", question: "भारत में 'सफेद सोना' (White Gold) के नाम से किस नकदी फसल को जाना जाता है?", options: ["(a) जूट", "(b) चाय", "(c) कपास", "(d) रेशम"], correct: 2, explanation: "कपास को इसके उच्च आर्थिक मूल्य, वस्त्र उद्योग में अपरिहार्यता और सफेद रेशों के कारण 'सफेद सोना' कहा जाता है।" },
+            { id: 15, tag: "", question: "भारत में 'स्वर्ण रेशा' (Golden Fibre) किसे कहा जाता है?", options: ["(a) कपास", "(b) जूट (पटसन)", "(c) रेशम", "(d) सन"], correct: 1, explanation: "जूट को इसके चमकीले सुनहरे भूरे रंग और उच्च निर्यात मूल्य के कारण 'स्वर्ण रेशा' (गोल्डन फाइबर) कहा जाता है।" },
+            { id: 16, tag: "", question: "भारत में जूट का सर्वाधिक क्षेत्रफल एवं उत्पादन किस राज्य में पाया जाता है?", options: ["(a) असम", "(b) बिहार", "(c) पश्चिम बंगाल", "(d) ओडिशा"], correct: 2, explanation: "पश्चिम बंगाल के गंगा डेल्टा (हुगली बेसिन) में अनुकूल आर्द्र जलवायु, जलोढ़ मिट्टी और रेशे धोने हेतु प्रचुर जल के कारण देश का लगभग 75% जूट उत्पादित होता है।" },
+            { id: 17, tag: "", question: "भारत में सोयाबीन (Soybean) का सबसे बड़ा उत्पादक राज्य कौन-सा है, जिसे 'सोया स्टेट' भी कहा जाता है?", options: ["(a) महाराष्ट्र", "(b) मध्य प्रदेश", "(c) राजस्थान", "(d) गुजरात"], correct: 1, explanation: "मध्य प्रदेश को देश के कुल सोयाबीन उत्पादन का एक बड़ा हिस्सा पैदा करने के कारण भारत का 'सोया स्टेट' कहा जाता है।" },
+            { id: 18, tag: "", question: "मूंगफली (Groundnut) का भारत में सबसे बड़ा उत्पादक राज्य कौन-सा है?", options: ["(a) गुजरात", "(b) राजस्थान", "(c) तमिलनाडु", "(d) आंध्र प्रदेश"], correct: 0, explanation: "गुजरात का सौराष्ट्र क्षेत्र देश में मूंगफली उत्पादन का सबसे प्रमुख केंद्र है।" },
+            { id: 19, tag: "", question: "सरसों (Mustard) और रेपसीड के उत्पादन में भारत का कौन-सा राज्य शीर्ष स्थान पर है?", options: ["(a) उत्तर प्रदेश", "(b) राजस्थान", "(c) हरियाणा", "(d) मध्य प्रदेश"], correct: 1, explanation: "राजस्थान भारत के कुल सरसों उत्पादन का लगभग 45% से अधिक हिस्सा अकेले पैदा करता है।" },
+            { id: 20, tag: "", question: "भारत में दालों (Pulses) का सर्वाधिक उत्पादन करने वाला राज्य कौन-सा है?", options: ["(a) उत्तर प्रदेश", "(b) महाराष्ट्र", "(c) मध्य प्रदेश", "(d) राजस्थान"], correct: 2, explanation: "मध्य प्रदेश भारत में कुल दलहन (चना, तुअर, उड़द आदि) उत्पादन में देश का अग्रणी राज्य है।" },
+            { id: 21, tag: "", question: "भारत में चाय (Tea) का सर्वाधिक उत्पादन किस राज्य में होता है?", options: ["(a) पश्चिम बंगाल", "(b) असम", "(c) केरल", "(d) तमिलनाडु"], correct: 1, explanation: "असम की ब्रह्मपुत्र और सुरमा घाटी देश के कुल चाय उत्पादन का 50% से अधिक हिस्सा पैदा करती है।" },
+            { id: 22, tag: "", question: "भारत में सर्वोत्तम गुणवत्ता वाली सुगंधित 'दार्जिलिंग चाय' किस राज्य में उगाई जाती है?", options: ["(a) असम", "(b) सिक्किम", "(c) पश्चिम बंगाल", "(d) मेघालय"], correct: 2, explanation: "दार्जिलिंग पश्चिम बंगाल का एक पर्वतीय जिला है, जहाँ की चाय को भारत का पहला GI टैग (2004) प्राप्त हुआ था।" },
+            { id: 23, tag: "", question: "भारत में कॉफी (कहावा) का सर्वाधिक उत्पादन किस राज्य में होता है?", options: ["(a) केरल", "(b) कर्नाटक", "(c) तमिलनाडु", "(d) आंध्र प्रदेश"], correct: 1, explanation: "कर्नाटक के पश्चिमी घाट (चिकमगलूर, कोडागु, हासन) में भारत की कुल कॉफी का लगभग 70% भाग उत्पादित होता है।" },
+            { id: 24, tag: "", question: "भारत में उगाई जाने वाली कॉफी की दो मुख्य प्रजातियाँ कौन-सी हैं?", options: ["(a) अरेबिका और रोबस्टा", "(b) लिबेरिका और एक्सेलसा", "(c) मोचा और बोर्बोन", "(d) जमैका और जावा"], correct: 0, explanation: "भारत में उच्च गुणवत्ता वाली अरेबिका (Arabica) और रोबस्टा (Robusta) कॉफी का मुख्य रूप से उत्पादन किया जाता है।" },
+            { id: 25, tag: "", question: "भारत में प्राकृतिक रबर (Natural Rubber) का सबसे बड़ा उत्पादक राज्य कौन-सा है?", options: ["(a) तमिलनाडु", "(b) केरल", "(c) कर्नाटक", "(d) त्रिपुरा"], correct: 1, explanation: "केरल देश के कुल प्राकृतिक रबर उत्पादन का लगभग 75% से अधिक हिस्सा अकेले उत्पादित करता है।" },
+            { id: 26, tag: "", question: "भारत में 'मसालों का बगीचा' (Spice Garden of India) किस राज्य को कहा जाता है?", options: ["(a) कर्नाटक", "(b) केरल", "(c) आंध्र प्रदेश", "(d) तमिलनाडु"], correct: 1, explanation: "केरल को अपने समृद्ध इतिहास और काली मिर्च, इलायची, लौंग, दालचीनी जैसे मसालों के प्रचुर उत्पादन के कारण मसालों का बगीचा कहा जाता है।" },
+            { id: 27, tag: "", question: "'काली मिर्च' (Black Pepper) का सबसे प्रमुख उत्पादक राज्य कौन-सा है?", options: ["(a) केरल", "(b) कर्नाटक", "(c) तमिलनाडु", "(d) गोवा"], correct: 1, explanation: "वर्तमान में कर्नाटक भारत में काली मिर्च का सबसे बड़ा उत्पादक राज्य बन गया है, जिसके बाद केरल का स्थान है।" },
+            { id: 28, tag: "", question: "भारत में सबसे अधिक तंबाकू (Tobacco) का उत्पादन किस राज्य में होता है?", options: ["(a) गुजरात", "(b) आंध्र प्रदेश", "(c) कर्नाटक", "(d) उत्तर प्रदेश"], correct: 1, explanation: "आंध्र प्रदेश (विशेषकर गुंटूर और प्रकाशम जिले) भारत में वर्जीनिया तंबाकू का सबसे बड़ा उत्पादक और निर्यातक है।" },
+            { id: 29, tag: "", question: "भारत में रेशम (Silk) का सर्वाधिक उत्पादन करने वाला राज्य कौन-सा है?", options: ["(a) असम", "(b) कर्नाटक", "(c) पश्चिम बंगाल", "(d) बिहार"], correct: 1, explanation: "कर्नाटक देश के कुल शहतूती रेशम (Mulberry Silk) उत्पादन में प्रथम स्थान रखता है।" },
+            { id: 30, tag: "", question: "विश्व में केवल भारत के असम राज्य में प्राकृतिक रूप से पाया जाने वाला सुनहरे रंग का दुर्लभ रेशम कौन-सा है?", options: ["(a) टसर रेशम", "(b) एरी रेशम", "(c) मूंगा रेशम (Muga Silk)", "(d) शहतूती रेशम"], correct: 2, explanation: "मूंगा रेशम (Antheraea assamensis) असम का विशेष भौगोलिक उत्पाद (GI Tag) है, जो अपने प्राकृतिक सुनहरे पीले रंग और टिकाऊपन के लिए प्रसिद्ध है।" },
+            { id: 31, tag: "", question: "भारत में आलू (Potato) का सबसे बड़ा उत्पादक राज्य कौन-सा है?", options: ["(a) पश्चिम बंगाल", "(b) उत्तर प्रदेश", "(c) बिहार", "(d) पंजाब"], correct: 1, explanation: "उत्तर प्रदेश देश के कुल आलू उत्पादन का लगभग 30% से अधिक हिस्सा अकेले पैदा करता है।" },
+            { id: 32, tag: "", question: "भारत में प्याज (Onion) का सर्वाधिक उत्पादन किस राज्य में होता है?", options: ["(a) गुजरात", "(b) मध्य प्रदेश", "(c) महाराष्ट्र (नासिक)", "(d) कर्नाटक"], correct: 2, explanation: "महाराष्ट्र (विशेष रूप से नासिक जिला) भारत का सबसे बड़ा प्याज उत्पादक क्षेत्र और प्रमुख व्यापारिक मंडी है।" },
+            { id: 33, tag: "", question: "केसर (Saffron) का भारत में एकमात्र व्यावसायिक उत्पादक राज्य/UT कौन-सा है?", options: ["(a) हिमाचल प्रदेश", "(b) उत्तराखंड", "(c) जम्मू और कश्मीर", "(d) सिक्किम"], correct: 2, explanation: "जम्मू और कश्मीर के पुलवामा (पाम्पोर) और किश्तवाड़ क्षेत्र के करेवा मैदान भारत में कश्मीरी केसर (GI Tag) के एकमात्र उत्पादक हैं।" },
+            { id: 34, tag: "", question: "मक्का (Maize) की फसल के लिए किस प्रकार की जलवायु सबसे उपयुक्त होती है?", options: ["(a) गर्म और आर्द्र", "(b) अत्यधिक शुष्क और ठंडा", "(c) शीत शीतोष्ण", "(d) भारी दलदली"], correct: 0, explanation: "मक्का मूलतः उष्णकटिबंधीय पौधा है जिसे 21°C से 27°C तापमान और 50-100 सेमी वर्षा की आवश्यकता होती है।" },
+            { id: 35, tag: "", question: "बाजरा (Pearl Millet) किस प्रकार की मिट्टी और जलवायु में सबसे अच्छी वृद्धि करता है?", options: ["(a) चिकनी जलोढ़ मिट्टी और भारी वर्षा", "(b) बलुई हल्की मिट्टी और कम वर्षा (शुष्क जलवायु)", "(c) अम्लीय लेटराइट मिट्टी", "(d) दलदली मिट्टी"], correct: 1, explanation: "बाजरा एक सूखा-सहिष्णु मोटा अनाज है, जो राजस्थान और गुजरात की हल्की बलुई मिट्टी और 40-50 सेमी अल्प वर्षा में आसानी से उगता है।" },
+            { id: 36, tag: "", question: "सूरजमुखी (Sunflower) के बीज में तेल की मात्रा लगभग कितनी होती है?", options: ["(a) 15-20%", "(b) 35-42%", "(c) 55-60%", "(d) 10-12%"], correct: 1, explanation: "सूरजमुखी के परिपक्व बीजों में 35% से 42% तक उच्च गुणवत्ता वाला खाद्य तेल पाया जाता है, जो हृदय रोगियों के लिए उत्तम माना जाता है।" },
+            { id: 37, tag: "", question: "भारत में मोटे अनाजों (Nutri-Cereals / Millets) का सबसे बड़ा उत्पादक राज्य कौन-सा है?", options: ["(a) राजस्थान", "(b) कर्नाटक", "(c) महाराष्ट्र", "(d) मध्य प्रदेश"], correct: 0, explanation: "बाजरा और ज्वार की बड़े पैमाने पर शुष्क खेती के कारण राजस्थान देश में कुल मोटे अनाजों का सबसे बड़ा उत्पादक है।" },
+            { id: 38, tag: "", question: "बरसीम (Berseem) किस प्रकार की फसल है?", options: ["(a) प्रमुख तिलहन फसल", "(b) दलहनी चारा फसल (Fodder Crop)", "(c) रेशा फसल", "(d) नगदी फल फसल"], correct: 1, explanation: "बरसीम (Trifolium alexandrinum) रबी मौसम में उगाई जाने वाली अत्यंत पौष्टिक और प्रोटीन-युक्त दलहनी चारा फसल है।" },
+            { id: 39, tag: "", question: "केंद्रीय आलू अनुसंधान संस्थान (CPRI) कहाँ स्थित है?", options: ["(a) शिमला (हिमाचल प्रदेश)", "(b) कुफरी", "(c) जालंधर", "(d) लखनऊ"], correct: 0, explanation: "केंद्रीय आलू अनुसंधान संस्थान (ICAR-CPRI) हिमाचल प्रदेश की राजधानी शिमला में स्थित है।" },
+            { id: 40, tag: "", question: "राष्ट्रीय काजू अनुसंधान केंद्र (DCR) कहाँ स्थित है?", options: ["(a) कोच्चि (केरल)", "(b) पुत्तूर (कर्नाटक)", "(c) पणजी (गोवा)", "(d) चेन्नई (तमिलनाडु)"], correct: 1, explanation: "ICAR-काजू अनुसंधान निदेशालय (DCR) कर्नाटक के दक्षिण कन्नड़ जिले के पुत्तूर में स्थित है।" },
+            { id: 41, tag: "", question: "सूची-I (फसल) को सूची-II (शीर्ष उत्पादक राज्य) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (फसल)</th><th style='padding:8px;'>सूची-II (राज्य)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) चाय</td><td style='padding:6px;'>1. कर्नाटक</td></tr><tr><td style='padding:6px;'>(B) कॉफी</td><td style='padding:6px;'>2. असम</td></tr><tr><td style='padding:6px;'>(C) रबर</td><td style='padding:6px;'>3. गुजरात</td></tr><tr><td style='padding:6px;'>(D) मूंगफली</td><td style='padding:6px;'>4. केरल</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-2, B-1, C-4, D-3", "(b) A-1, B-2, C-3, D-4", "(c) A-2, B-4, C-1, D-3", "(d) A-4, B-1, C-2, D-3"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• चाय — असम<br>• कॉफी — कर्नाटक<br>• रबर — केरल<br>• मूंगफली — गुजरात" },
+            { id: 42, tag: "", question: "सूची-I (फसल) को सूची-II (प्रसिद्ध किस्म) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (फसल)</th><th style='padding:8px;'>सूची-II (किस्म)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) चावल</td><td style='padding:6px;'>1. सोनालिका</td></tr><tr><td style='padding:6px;'>(B) गेहूं</td><td style='padding:6px;'>2. जया</td></tr><tr><td style='padding:6px;'>(C) सरसों</td><td style='padding:6px;'>3. बीटी (Bt) कॉटन</td></tr><tr><td style='padding:6px;'>(D) कपास</td><td style='padding:6px;'>4. वरुणा (T-59)</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-2, B-1, C-4, D-3", "(b) A-1, B-2, C-3, D-4", "(c) A-3, B-1, C-4, D-2", "(d) A-2, B-4, C-1, D-3"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• चावल — जया<br>• गेहूं — सोनालिका<br>• सरसों — वरुणा (T-59)<br>• कपास — बीटी कॉटन" },
+            { id: 43, tag: "", question: "सूची-I (बोर्ड/संस्थान) को सूची-II (मुख्यालय) से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; text-align:left;' border='1'><thead><tr style='background:#f1f5f9;'><th style='padding:8px;'>सूची-I (बोर्ड)</th><th style='padding:8px;'>सूची-II (मुख्यालय)</th></tr></thead><tbody><tr><td style='padding:6px;'>(A) कॉफी बोर्ड</td><td style='padding:6px;'>1. कोलकाता (प. बंगाल)</td></tr><tr><td style='padding:6px;'>(B) रबर बोर्ड</td><td style='padding:6px;'>2. बेंगलुरु (कर्नाटक)</td></tr><tr><td style='padding:6px;'>(C) चाय बोर्ड</td><td style='padding:6px;'>3. कोट्टायम (केरल)</td></tr><tr><td style='padding:6px;'>(D) तंबाकू बोर्ड</td><td style='padding:6px;'>4. गुंटूर (आंध्र प्रदेश)</td></tr></tbody></table><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) A-2, B-3, C-1, D-4", "(b) A-1, B-2, C-3, D-4", "(c) A-3, B-1, C-2, D-4", "(d) A-2, B-4, C-1, D-3"], correct: 0, explanation: "सही सुमेलन निम्नवत है:<br>• कॉफी बोर्ड — बेंगलुरु<br>• रबर बोर्ड — कोट्टायम<br>• चाय बोर्ड — कोलकाता<br>• तंबाकू बोर्ड — गुंटूर" },
+            { id: 44, tag: "", question: "अभिकथन (A): उत्तर भारत की तुलना में दक्षिण भारत (महाराष्ट्र/तमिलनाडु) में गन्ने की प्रति हेक्टेयर उपज और शर्करा की मात्रा अधिक होती है।<br>कारण (R): दक्षिण भारत की उष्णकटिबंधीय समुद्री जलवायु में पाला नहीं पड़ता और गन्ने की पेराई का मौसम अधिक लंबा होता है।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "दक्षिण भारत की आर्द्र और पाला-रहित उष्णकटिबंधीय जलवायु गन्ने में सुक्रोज जमाव के लिए आदर्श है, जिससे यहाँ मिलों को लंबे समय तक पेराई हेतु रसदार गन्ना मिलता है।" },
+            { id: 45, tag: "", question: "अभिकथन (A): चाय की खेती ढलानी पहाड़ी क्षेत्रों में ही की जाती है, मैदानी भागों में नहीं।<br>कारण (R): चाय के पौधों की जड़ों में पानी का जमाव (Waterlogging) पौधों को सड़ा देता है, अतः तीव्र जल निकास आवश्यक है।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "चाय को 150-250 सेमी भारी वर्षा की आवश्यकता होती है, लेकिन जड़ों में स्थिर जल घातक होता है; इसलिए ढलानों पर पानी तेजी से बह जाता है।" },
+            { id: 46, tag: "", question: "कपास की खेती के लिए आवश्यक भौगोलिक दशाओं पर विचार कीजिए:<br>1. 21°C से 30°C तक उच्च तापमान<br>2. कम से कम 210 पाला-रहित दिन (Frost-free days)<br>3. गहरी काली (रेगुर) अथवा जलोढ़ मृदा<br>4. फसल पकते समय तेज चमकदार धूप<br><br>उपर्युक्त में से कौन-से कथन सही हैं?", options: ["(a) केवल 1, 2 और 3", "(b) केवल 2, 3 और 4", "(c) केवल 1 और 3", "(d) 1, 2, 3 और 4"], correct: 3, explanation: "कपास एक उपोष्ण/उष्णकटिबंधीय नकदी फसल है जिसके रेशे के विकास हेतु 210 पाला-रहित दिन और डोडे खिलते समय खिली धूप अनिवार्य है।" },
+            { id: 47, tag: "", question: "अभिकथन (A): भारत दुनिया में दालों का सबसे बड़ा उत्पादक होने के साथ-साथ सबसे बड़ा उपभोक्ता और आयातक भी है।<br>कारण (R): भारत की विशाल शाकाहारी जनसंख्या के भोजन में प्रोटीन का प्रमुख स्रोत दालें हैं और घरेलू मांग उत्पादन से अधिक है।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "भारत विश्व की 25% दालें उत्पादित करता है लेकिन 27% उपभोग करता है, जिससे मांग-आपूर्ति अंतराल पाटने हेतु म्यांमार, कनाडा और अफ्रीकी देशों से आयात करना पड़ता है।" },
+            { id: 48, tag: "", question: "गेहूं की कृषि के संदर्भ में निम्नलिखित कथनों पर विचार कीजिए:<br>1. बोते समय 10°C से 15°C तथा पकते समय 20°C से 25°C तापमान आवश्यक है।<br>2. इसके लिए 50 से 75 सेमी वार्षिक वर्षा पर्याप्त होती है।<br>3. यह भारत की सर्वप्रमुख खरीफ फसल है।<br><br>उपर्युक्त में से कौन-सा/से कथन सही है/हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) 1, 2 और 3"], correct: 0, explanation: "कथन 3 गलत है क्योंकि गेहूं भारत की मुख्य 'रबी फसल' (शीतकालीन फसल) है जिसे अक्टूबर-नवंबर में बोकर मार्च-अप्रैल में काटा जाता है।" },
+            { id: 49, tag: "", question: "अभिकथन (A): पश्चिम बंगाल के जूट उद्योग की अधिकांश मिलें हुगली नदी के दोनों किनारों पर संकीर्ण पट्टी में केंद्रित हैं।<br>कारण (R): जूट रेशे के सड़ाव (Retting) और धुलाई के लिए हुगली नदी से प्रचुर मीठा जल, सस्ता जल परिवहन और बिहार-ओडिशा से सस्ते श्रमिक सुलभ हैं।<br><br>नीचे दिए गए कूट से सही उत्तर चुनिए:", options: ["(a) (A) और (R) दोनों सही हैं और (R), (A) की सही व्याख्या है।", "(b) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं है।", "(c) (A) सही है, परंतु (R) गलत है।", "(d) (A) गलत है, परंतु (R) सही है।"], correct: 0, explanation: "हुगली बेसिन में कच्चा माल, शुद्ध जल, कोयला ऊर्जा (रानीगंज), बंदरगाह सुविधा (कोलकाता) और सस्ता श्रम उपलब्ध होने से जूट मिलों का सघन जमाव हुआ।" },
+            { id: 50, tag: "", question: "भारत में बागानी/रोपण फसलों (Plantation Crops) के संदर्भ में निम्नलिखित कथनों पर विचार कीजिए:<br>1. चाय, कॉफी, रबर और नारियल प्रमुख रोपण फसलें हैं।<br>2. यह बड़े फार्मों पर की जाने वाली एकल-फसली एवं पूंजी-प्रधान कृषि है।<br>3. इसका अधिकांश उत्पादन सीधे उद्योगों के लिए कच्चे माल के रूप में होता है।<br><br>उपर्युक्त में से कौन-से कथन सही हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) 1, 2 और 3"], correct: 3, explanation: "रोपण कृषि यूरोपीय प्रभाव से विकसित एक अत्यधिक वैज्ञानिक, पूंजी-प्रधान और निर्यात-उन्मुख कृषि प्रणाली है जिसमें बड़े बागानों में नकदी फसलें उगाई जाती हैं।" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
