@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">कुपोषण एवं पोषण संबंधी विकार</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_paid_h16"; 
+
+        const dataset = [
+            {
+                id: 1,
+                tag: "",
+                question: "कुपोषण की सबसे व्यापक एवं वैज्ञानिक परिभाषा क्या है?",
+                options: [
+                    "केवल भोजन की मात्रा कम मिलने की अवस्था",
+                    "ऊर्जा अथवा पोषक तत्त्वों की कमी, अधिकता या असंतुलन",
+                    "केवल बच्चों में कम वजन की अवस्था",
+                    "केवल विटामिन की कमी से उत्पन्न अवस्था"
+                ],
+                correct: 1,
+                explanation: "कुपोषण में अल्पपोषण के साथ सूक्ष्म पोषक तत्त्वों की कमी, अधिक वजन, मोटापा और आहार-संबंधी असंक्रामक रोग भी सम्मिलित होते हैं। इसलिए कुपोषण का अर्थ केवल भोजन की कमी नहीं है।"
+            },
+            {
+                id: 2,
+                tag: "",
+                question: "निम्नलिखित में से कौन-सा अल्पपोषण का मान्य रूप नहीं है?",
+                options: [
+                    "वेस्टिंग",
+                    "स्टंटिंग",
+                    "कम वजन",
+                    "उच्च रक्तचाप"
+                ],
+                correct: 3,
+                explanation: "अल्पपोषण के प्रमुख रूप वेस्टिंग, स्टंटिंग, कम वजन और सूक्ष्म पोषक तत्त्वों की कमी हैं। उच्च रक्तचाप असंक्रामक रोग है, यद्यपि असंतुलित आहार इसका जोखिम बढ़ा सकता है।"
+            },
+            {
+                id: 3,
+                tag: "",
+                question: "बच्चे में लंबाई के अनुपात में वजन कम होना किसका संकेत है?",
+                options: [
+                    "वेस्टिंग",
+                    "स्टंटिंग",
+                    "अधिक वजन",
+                    "लंबाई में तीव्र वृद्धि"
+                ],
+                correct: 0,
+                explanation: "कम वजन-के-लिए-लंबाई को वेस्टिंग या दुबलापन कहते हैं। यह सामान्यतः हाल के तीव्र वजन ह्रास, अपर्याप्त भोजन या गंभीर संक्रमण से जुड़ा होता है।"
+            },
+            {
+                id: 4,
+                tag: "",
+                question: "बच्चे में आयु के अनुसार लंबाई कम होने को क्या कहा जाता है?",
+                options: [
+                    "अंडरवेट",
+                    "वेस्टिंग",
+                    "स्टंटिंग",
+                    "एडिमा"
+                ],
+                correct: 2,
+                explanation: "कम लंबाई-के-लिए-आयु को स्टंटिंग कहते हैं। यह दीर्घकालिक या बार-बार होने वाले अल्पपोषण, संक्रमण और अनुचित शिशु आहार का संचयी प्रभाव दर्शाता है।"
+            },
+            {
+                id: 5,
+                tag: "",
+                question: "आयु के अनुसार वजन कम होने की अवस्था क्या कहलाती है?",
+                options: [
+                    "वेस्टिंग",
+                    "अंडरवेट",
+                    "स्टंटिंग",
+                    "अधिक वजन"
+                ],
+                correct: 1,
+                explanation: "कम वजन-के-लिए-आयु को अंडरवेट कहते हैं। अंडरवेट बच्चा स्टंटेड, वेस्टेड या दोनों हो सकता है; इसलिए यह अकेले दीर्घकालिक और तीव्र कुपोषण में स्पष्ट अंतर नहीं करता।"
+            },
+            {
+                id: 6,
+                tag: "",
+                question: "कुपोषण के ‘दोहरे बोझ’ का क्या अर्थ है?",
+                options: [
+                    "अल्पपोषण और अधिक वजन या मोटापे का साथ-साथ पाया जाना",
+                    "केवल दो विटामिनों की एक साथ कमी होना",
+                    "केवल प्रोटीन और ऊर्जा की कमी होना",
+                    "संक्रामक रोग और चोट का एक साथ होना"
+                ],
+                correct: 0,
+                explanation: "किसी देश, समुदाय, परिवार या कभी-कभी एक ही व्यक्ति में अल्पपोषण के साथ अधिक वजन, मोटापा या आहार-संबंधी रोग पाए जा सकते हैं। इसे कुपोषण का दोहरा बोझ कहते हैं।"
+            },
+            {
+                id: 7,
+                tag: "",
+                question: "प्रोटीन-ऊर्जा कुपोषण का प्रमुख आधार क्या है?",
+                options: [
+                    "केवल विटामिन C का कम सेवन",
+                    "केवल आयोडीन का कम सेवन",
+                    "केवल जल का कम सेवन",
+                    "ऊर्जा और प्रोटीन की अपर्याप्त उपलब्धता या उपयोग"
+                ],
+                correct: 3,
+                explanation: "प्रोटीन-ऊर्जा कुपोषण में आहार से पर्याप्त ऊर्जा और प्रोटीन नहीं मिलते अथवा संक्रमण के कारण उनका उपयोग प्रभावित होता है। क्वाशियोरकर और मैरास्मस इसके प्रमुख नैदानिक रूप हैं।"
+            },
+            {
+                id: 8,
+                tag: "",
+                question: "क्वाशियोरकर को सामान्यतः किस पोषण समस्या से जोड़ा जाता है?",
+                options: [
+                    "केवल विटामिन D की कमी",
+                    "पर्याप्त ऊर्जा न मिलने के साथ विशेष रूप से गंभीर प्रोटीन-अभाव",
+                    "केवल आयरन की कमी",
+                    "केवल जल की कमी"
+                ],
+                correct: 1,
+                explanation: "क्वाशियोरकर का विकास जटिल है, लेकिन इसे प्रायः गंभीर प्रोटीन-अभाव और समग्र खराब आहार से जोड़ा जाता है। संक्रमण और ऑक्सीडेटिव तनाव भी इसकी अभिव्यक्ति को प्रभावित कर सकते हैं।"
+            },
+            {
+                id: 9,
+                tag: "",
+                question: "क्वाशियोरकर की प्रमुख पहचान कौन-सी है?",
+                options: [
+                    "केवल शरीर की लंबाई बढ़ना",
+                    "केवल रक्तचाप बढ़ना",
+                    "दोनों पैरों में पोषणजन्य एडिमा",
+                    "केवल दृष्टि दोष होना"
+                ],
+                correct: 2,
+                explanation: "क्वाशियोरकर में दोनों पैरों से शुरू होने वाली पिटिंग एडिमा महत्वपूर्ण पहचान है। शरीर में द्रव जमा होने के कारण वास्तविक वजन ह्रास छिप सकता है।"
+            },
+            {
+                id: 10,
+                tag: "",
+                question: "क्वाशियोरकर में वसायुक्त यकृत बनने का संभावित कारण क्या है?",
+                options: [
+                    "यकृत से वसा के परिवहन के लिए आवश्यक लिपोप्रोटीन निर्माण प्रभावित होना",
+                    "आहार से बिल्कुल भी वसा का अवशोषण न होना",
+                    "पित्ताशय में कैल्शियम का जमाव होना",
+                    "वृक्क द्वारा ग्लूकोज का अधिक उत्सर्जन होना"
+                ],
+                correct: 0,
+                explanation: "प्रोटीन-अभाव में कुछ अपोलिपोप्रोटीनों का निर्माण प्रभावित हो सकता है। इससे यकृत में संचित वसा का परिवहन घटता है और फैटी लिवर विकसित हो सकता है।"
+            },
+            {
+                id: 11,
+                tag: "",
+                question: "मैरास्मस का प्रमुख पोषण आधार क्या है?",
+                options: [
+                    "केवल आयोडीन की कमी",
+                    "दीर्घकालिक रूप से ऊर्जा एवं सभी प्रमुख पोषक तत्त्वों की गंभीर कमी",
+                    "केवल विटामिन K की कमी",
+                    "केवल सोडियम की अधिकता"
+                ],
+                correct: 1,
+                explanation: "मैरास्मस में शरीर को पर्याप्त ऊर्जा और प्रोटीन दोनों नहीं मिलते। शरीर ऊर्जा के लिए वसा और मांसपेशियों का उपयोग करने लगता है, जिससे अत्यधिक दुबलापन दिखाई देता है।"
+            },
+            {
+                id: 12,
+                tag: "",
+                question: "मैरास्मस की सामान्य पहचान कौन-सी है?",
+                options: [
+                    "दोनों पैरों में स्पष्ट एडिमा",
+                    "शरीर में वसा का अत्यधिक जमाव",
+                    "केवल गले में सूजन",
+                    "गंभीर दुबलापन और उपचर्म वसा का बहुत कम होना"
+                ],
+                correct: 3,
+                explanation: "मैरास्मस में मांसपेशियों और उपचर्म वसा का गंभीर क्षय होता है। सामान्यतः क्वाशियोरकर जैसी द्विपार्श्वीय पोषणजन्य एडिमा उपस्थित नहीं होती।"
+            },
+            {
+                id: 13,
+                tag: "",
+                question: "क्वाशियोरकर और मैरास्मस में सबसे उपयोगी विभेदक विशेषता क्या है?",
+                options: [
+                    "क्वाशियोरकर में एडिमा, जबकि मैरास्मस में सामान्यतः एडिमा का अभाव",
+                    "दोनों में हमेशा समान शारीरिक परिवर्तन",
+                    "मैरास्मस में केवल रतौंधी होना",
+                    "क्वाशियोरकर में केवल हड्डियाँ प्रभावित होना"
+                ],
+                correct: 0,
+                explanation: "दोनों में वृद्धि रुकना और संक्रमण का जोखिम बढ़ सकता है। फिर भी पोषणजन्य एडिमा क्वाशियोरकर की महत्वपूर्ण विशेषता है, जबकि मैरास्मस में अत्यधिक क्षीणता अधिक स्पष्ट होती है।"
+            },
+            {
+                id: 14,
+                tag: "",
+                question: "त्वचा में चकत्तेदार परिवर्तन, बालों का रंग बदलना और एडिमा किस अवस्था से अधिक संबंधित हैं?",
+                options: [
+                    "केवल आयरन-अल्पता एनीमिया",
+                    "साधारण अधिक वजन",
+                    "क्वाशियोरकर",
+                    "केवल विटामिन C की कमी"
+                ],
+                correct: 2,
+                explanation: "क्वाशियोरकर में एडिमा के साथ त्वचा और बालों में परिवर्तन, वृद्धि रुकना, उदासीनता और यकृत में वसा जमना पाया जा सकता है। सभी लक्षण प्रत्येक बच्चे में समान रूप से उपस्थित हों, यह आवश्यक नहीं है।"
+            },
+            {
+                id: 15,
+                tag: "",
+                question: "कुपोषण और संक्रमण के संबंध में कौन-सा कथन सही है?",
+                options: [
+                    "कुपोषण संक्रमण से हमेशा सुरक्षा देता है",
+                    "कुपोषण प्रतिरक्षा घटाता है और संक्रमण कुपोषण को अधिक गंभीर बना सकता है",
+                    "संक्रमण का पोषण स्थिति पर कोई प्रभाव नहीं पड़ता",
+                    "संक्रमण केवल अधिक वजन वाले बच्चों में होता है"
+                ],
+                correct: 1,
+                explanation: "कुपोषण से संक्रमणों के प्रति संवेदनशीलता बढ़ सकती है। संक्रमण भूख घटाकर, अवशोषण प्रभावित करके और पोषक तत्त्वों की आवश्यकता बढ़ाकर कुपोषण को और गंभीर बना सकता है।"
+            },
+            {
+                id: 16,
+                tag: "",
+                question: "विटामिन A की कमी का प्रारम्भिक नेत्र संबंधी लक्षण कौन-सा है?",
+                options: [
+                    "रतौंधी",
+                    "मोतियाबिंद",
+                    "दूरदृष्टि",
+                    "वर्णांधता"
+                ],
+                correct: 0,
+                explanation: "विटामिन A रेटिना में रोडोप्सिन निर्माण और कम प्रकाश में देखने के लिए आवश्यक है। इसकी कमी में सबसे पहले मंद प्रकाश में देखने की क्षमता प्रभावित हो सकती है।"
+            },
+            {
+                id: 17,
+                tag: "",
+                question: "जेरोफ्थैल्मिया का संबंध किससे है?",
+                options: [
+                    "केवल दाँतों के क्षय से",
+                    "केवल रक्तचाप में वृद्धि से",
+                    "विटामिन A की कमी से होने वाले नेत्र परिवर्तनों के समूह से",
+                    "विटामिन B₁ की कमी से होने वाली तंत्रिका समस्या से"
+                ],
+                correct: 2,
+                explanation: "जेरोफ्थैल्मिया में रतौंधी से लेकर कंजंक्टाइवा और कॉर्निया के सूखेपन तथा गंभीर कॉर्नियल क्षति तक की अवस्थाएँ शामिल हो सकती हैं।"
+            },
+            {
+                id: 18,
+                tag: "",
+                question: "बिटॉट स्पॉट किस पोषक तत्त्व की कमी का संकेत है?",
+                options: [
+                    "विटामिन C",
+                    "विटामिन D",
+                    "विटामिन K",
+                    "विटामिन A"
+                ],
+                correct: 3,
+                explanation: "बिटॉट स्पॉट नेत्र के कंजंक्टाइवा पर दिखाई देने वाले झागदार या केराटिनयुक्त धब्बे हैं। ये विटामिन A की कमी से संबंधित जेरोफ्थैल्मिया के संकेत हैं।"
+            },
+            {
+                id: 19,
+                tag: "",
+                question: "बच्चों में विटामिन D की गंभीर कमी से कौन-सा रोग होता है?",
+                options: [
+                    "स्कर्वी",
+                    "रिकेट्स",
+                    "पेलाग्रा",
+                    "बेरी-बेरी"
+                ],
+                correct: 1,
+                explanation: "विटामिन D कैल्शियम और फॉस्फोरस के अवशोषण एवं अस्थि खनिजीकरण में सहायता करता है। बच्चों में इसकी कमी से बढ़ती हड्डियों का खनिजीकरण प्रभावित होकर रिकेट्स हो सकता है।"
+            },
+            {
+                id: 20,
+                tag: "",
+                question: "वयस्कों में विटामिन D की कमी से अस्थियों के अपर्याप्त खनिजीकरण को क्या कहते हैं?",
+                options: [
+                    "ऑस्टियोमलेशिया",
+                    "ऑस्टियोआर्थराइटिस",
+                    "स्कोलियोसिस",
+                    "गाउट"
+                ],
+                correct: 0,
+                explanation: "ऑस्टियोमलेशिया में वयस्कों की पहले से निर्मित हड्डियों का खनिजीकरण प्रभावित होता है। रिकेट्स बच्चों की बढ़ती हड्डियों में होने वाली संबंधित अवस्था है।"
+            },
+            {
+                id: 21,
+                tag: "",
+                question: "विटामिन C की गंभीर कमी से कौन-सा रोग होता है?",
+                options: [
+                    "बेरी-बेरी",
+                    "पेलाग्रा",
+                    "रिकेट्स",
+                    "स्कर्वी"
+                ],
+                correct: 3,
+                explanation: "स्कर्वी में मसूड़ों की समस्या, त्वचा के नीचे छोटे रक्तस्राव, कमजोरी और घाव भरने में विलंब हो सकता है। इसका आधार दोषपूर्ण कोलेजन निर्माण है।"
+            },
+            {
+                id: 22,
+                tag: "",
+                question: "स्कर्वी के अधिकांश लक्षण किस प्रक्रिया के प्रभावित होने से उत्पन्न होते हैं?",
+                options: [
+                    "इंसुलिन निर्माण",
+                    "थायरॉक्सिन निर्माण",
+                    "कोलेजन संश्लेषण",
+                    "यूरिया निर्माण"
+                ],
+                correct: 2,
+                explanation: "विटामिन C कोलेजन संश्लेषण के लिए आवश्यक है। कोलेजन संयोजी ऊतक, रक्तवाहिकाओं, त्वचा, मसूड़ों और घाव भरने के लिए महत्वपूर्ण होता है।"
+            },
+            {
+                id: 23,
+                tag: "",
+                question: "थायमिन की कमी से कौन-सा रोग होता है?",
+                options: [
+                    "स्कर्वी",
+                    "बेरी-बेरी",
+                    "पेलाग्रा",
+                    "रिकेट्स"
+                ],
+                correct: 1,
+                explanation: "थायमिन अर्थात विटामिन B₁ ऊर्जा उपापचय में सहएंजाइम के रूप में कार्य करता है। इसकी गंभीर कमी तंत्रिका और हृदय संबंधी लक्षणों वाले बेरी-बेरी का कारण बन सकती है।"
+            },
+            {
+                id: 24,
+                tag: "",
+                question: "आर्द्र एवं शुष्क बेरी-बेरी में सही अंतर क्या है?",
+                options: [
+                    "आर्द्र रूप में हृदय एवं एडिमा, शुष्क रूप में तंत्रिका तंत्र प्रमुख रूप से प्रभावित होता है",
+                    "आर्द्र रूप में केवल आँख और शुष्क रूप में केवल त्वचा प्रभावित होती है",
+                    "दोनों का कारण विटामिन C की कमी है",
+                    "दोनों में केवल अस्थियों का खनिजीकरण प्रभावित होता है"
+                ],
+                correct: 0,
+                explanation: "आर्द्र बेरी-बेरी में हृदय-रक्तसंचार संबंधी परिवर्तन और द्रव-संचय प्रमुख हो सकते हैं। शुष्क बेरी-बेरी में परिधीय तंत्रिकाओं और मांसपेशियों से संबंधित लक्षण प्रमुख होते हैं।"
+            },
+            {
+                id: 25,
+                tag: "",
+                question: "पेलाग्रा किस विटामिन की कमी से होता है?",
+                options: [
+                    "विटामिन B₁",
+                    "विटामिन B₂",
+                    "नियासिन",
+                    "विटामिन B₁₂"
+                ],
+                correct: 2,
+                explanation: "नियासिन को विटामिन B₃ कहा जाता है। शरीर कुछ नियासिन ट्रिप्टोफैन से बना सकता है, इसलिए नियासिन या ट्रिप्टोफैन की गंभीर कमी पेलाग्रा से संबंधित हो सकती है।"
+            },
+            {
+                id: 26,
+                tag: "",
+                question: "पेलाग्रा के परंपरागत ‘तीन D’ कौन-से हैं?",
+                options: [
+                    "डिहाइड्रेशन, डिप्थीरिया और डिप्रेशन",
+                    "डर्मेटाइटिस, डेंटल कैरीज और डिहाइड्रेशन",
+                    "डायरिया, डिफॉर्मिटी और डिमिनरलाइजेशन",
+                    "डर्मेटाइटिस, डायरिया और डिमेंशिया"
+                ],
+                correct: 3,
+                explanation: "पेलाग्रा के प्रमुख लक्षणों को तीन D—डर्मेटाइटिस, डायरिया और डिमेंशिया—से याद किया जाता है। अनुपचारित गंभीर अवस्था में चौथा D मृत्यु को दर्शाता है।"
+            },
+            {
+                id: 27,
+                tag: "",
+                question: "होंठों के कोनों का फटना और मैजेंटा टंग किसकी कमी से संबंधित हो सकते हैं?",
+                options: [
+                    "राइबोफ्लेविन",
+                    "विटामिन D",
+                    "विटामिन K",
+                    "आयोडीन"
+                ],
+                correct: 0,
+                explanation: "राइबोफ्लेविन अर्थात विटामिन B₂ की कमी में एंगुलर चीलोसिस, होंठों की सूजन, ग्लोसाइटिस और त्वचा संबंधी परिवर्तन हो सकते हैं।"
+            },
+            {
+                id: 28,
+                tag: "",
+                question: "गर्भावस्था के प्रारम्भिक चरण में फोलेट की कमी मुख्यतः किस जन्मजात समस्या का जोखिम बढ़ाती है?",
+                options: [
+                    "रतौंधी",
+                    "न्यूरल ट्यूब दोष",
+                    "दंत फ्लोरोसिस",
+                    "घेंघा"
+                ],
+                correct: 1,
+                explanation: "भ्रूण की न्यूरल ट्यूब गर्भावस्था के अत्यंत प्रारम्भिक चरण में बनती है। इसलिए गर्भधारण से पहले और प्रारम्भिक गर्भावस्था में पर्याप्त फोलेट महत्वपूर्ण है।"
+            },
+            {
+                id: 29,
+                tag: "",
+                question: "विटामिन B₁₂ की कमी की कौन-सी विशेषता इसे फोलेट की कमी से अलग करने में सहायक है?",
+                options: [
+                    "केवल त्वचा का सूखापन",
+                    "केवल भूख का बढ़ना",
+                    "तंत्रिका तंत्र संबंधी परिवर्तन",
+                    "केवल रक्तचाप का बढ़ना"
+                ],
+                correct: 2,
+                explanation: "विटामिन B₁₂ और फोलेट दोनों की कमी मेगालोब्लास्टिक एनीमिया उत्पन्न कर सकती है। B₁₂ की कमी में सुन्नता, झनझनाहट और अन्य तंत्रिका संबंधी समस्याएँ भी हो सकती हैं।"
+            },
+            {
+                id: 30,
+                tag: "",
+                question: "विटामिन K की कमी का प्रमुख परिणाम क्या है?",
+                options: [
+                    "रतौंधी",
+                    "पेलाग्रा",
+                    "रिकेट्स",
+                    "रक्त का थक्का बनने में बाधा और रक्तस्राव की प्रवृत्ति"
+                ],
+                correct: 3,
+                explanation: "विटामिन K कई क्लॉटिंग कारकों के सक्रियण के लिए आवश्यक है। इसकी कमी में रक्त का थक्का बनने में अधिक समय लग सकता है।"
+            },
+            {
+                id: 31,
+                tag: "",
+                question: "पोषण संबंधी एनीमिया का सबसे सामान्य कारण कौन-सा है?",
+                options: [
+                    "विटामिन E की कमी",
+                    "आयरन की कमी",
+                    "सोडियम की कमी",
+                    "फ्लोराइड की कमी"
+                ],
+                correct: 1,
+                explanation: "आयरन हीमोग्लोबिन निर्माण के लिए आवश्यक है। अपर्याप्त सेवन, कम अवशोषण, अधिक आवश्यकता या रक्त हानि आयरन-अल्पता एनीमिया का कारण बन सकते हैं।"
+            },
+            {
+                id: 32,
+                tag: "",
+                question: "पादप खाद्य पदार्थों के नॉन-हीम आयरन का अवशोषण किससे बढ़ता है?",
+                options: [
+                    "विटामिन C से भरपूर खाद्य पदार्थ",
+                    "भोजन के साथ अत्यधिक चाय",
+                    "अधिक मात्रा में फाइटेट",
+                    "भोजन के साथ अधिक टैनिन"
+                ],
+                correct: 0,
+                explanation: "विटामिन C नॉन-हीम आयरन को अधिक घुलनशील एवं अवशोषण योग्य रूप में बनाए रखने में सहायता करता है। चाय के टैनिन और अधिक फाइटेट इसका अवशोषण घटा सकते हैं।"
+            },
+            {
+                id: 33,
+                tag: "",
+                question: "एनीमिया के संबंध में कौन-सा कथन सही है?",
+                options: [
+                    "प्रत्येक एनीमिया केवल आयरन की कमी से होता है",
+                    "एनीमिया में हमेशा रक्त कोशिकाओं की संख्या बढ़ती है",
+                    "एनीमिया केवल वयस्क पुरुषों में पाया जाता है",
+                    "आयरन के अलावा फोलेट, B₁₂, संक्रमण और रक्त हानि भी कारण हो सकते हैं"
+                ],
+                correct: 3,
+                explanation: "एनीमिया स्वयं एक संकेत है, जिसके कई कारण हो सकते हैं। आयरन की कमी सबसे सामान्य पोषण कारण है, लेकिन अन्य पोषक कमियाँ, संक्रमण, सूजन और आनुवंशिक विकार भी जिम्मेदार हो सकते हैं।"
+            },
+            {
+                id: 34,
+                tag: "",
+                question: "आयोडीन की कमी के कारण थायरॉइड ग्रंथि के बढ़ने को क्या कहा जाता है?",
+                options: [
+                    "रिकेट्स",
+                    "पेलाग्रा",
+                    "घेंघा",
+                    "स्कर्वी"
+                ],
+                correct: 2,
+                explanation: "आयोडीन थायरॉइड हार्मोन निर्माण के लिए आवश्यक है। इसकी कमी होने पर TSH का प्रभाव बढ़ सकता है, जिससे थायरॉइड ग्रंथि का आकार बढ़कर घेंघा विकसित हो सकता है।"
+            },
+            {
+                id: 35,
+                tag: "",
+                question: "गर्भावस्था में गंभीर आयोडीन-अभाव का सबसे महत्वपूर्ण प्रभाव क्या हो सकता है?",
+                options: [
+                    "केवल माता के दाँतों का रंग बदलना",
+                    "भ्रूण के मस्तिष्क और तंत्रिका विकास का प्रभावित होना",
+                    "केवल माता की लंबाई बढ़ना",
+                    "भ्रूण में विटामिन C का अधिक निर्माण"
+                ],
+                correct: 1,
+                explanation: "थायरॉइड हार्मोन भ्रूण के मस्तिष्क विकास में महत्वपूर्ण है। गंभीर आयोडीन-अभाव से स्थायी बौद्धिक और तंत्रिका संबंधी क्षति का जोखिम बढ़ सकता है।"
+            },
+            {
+                id: 36,
+                tag: "",
+                question: "जनसंख्या स्तर पर आयोडीन-अल्पता विकारों की रोकथाम की प्राथमिक रणनीति क्या है?",
+                options: [
+                    "सार्वभौमिक नमक आयोडीकरण",
+                    "प्रत्येक भोजन में अधिक चीनी मिलाना",
+                    "केवल कैल्शियम की गोलियाँ देना",
+                    "भोजन से सभी खनिज हटाना"
+                ],
+                correct: 0,
+                explanation: "खाद्य-ग्रेड नमक में नियंत्रित मात्रा में आयोडीन मिलाना व्यापक जनसंख्या तक आयोडीन पहुँचाने का प्रभावी उपाय है। नमक को नमी और तेज धूप से सुरक्षित रखना चाहिए।"
+            },
+            {
+                id: 37,
+                tag: "",
+                question: "जिंक की कमी का संभावित प्रभाव कौन-सा है?",
+                options: [
+                    "केवल रक्तचाप में अचानक वृद्धि",
+                    "केवल आँख के लेंस में धुंधलापन",
+                    "वृद्धि, प्रतिरक्षा और घाव भरने की प्रक्रिया प्रभावित होना",
+                    "शरीर में वसा का अनिवार्य रूप से बढ़ना"
+                ],
+                correct: 2,
+                explanation: "जिंक अनेक एंजाइमों, कोशिका-विभाजन और प्रतिरक्षा क्रियाओं के लिए आवश्यक है। इसकी कमी में वृद्धि धीमी, संक्रमण का जोखिम अधिक और घाव भरने में विलंब हो सकता है।"
+            },
+            {
+                id: 38,
+                tag: "",
+                question: "कैल्शियम की दीर्घकालिक अपर्याप्तता किस समस्या का जोखिम बढ़ा सकती है?",
+                options: [
+                    "स्कर्वी",
+                    "कम अस्थि घनत्व और ऑस्टियोपोरोसिस",
+                    "पेलाग्रा",
+                    "बेरी-बेरी"
+                ],
+                correct: 1,
+                explanation: "कैल्शियम अस्थि निर्माण और रखरखाव के लिए आवश्यक है। विटामिन D, शारीरिक सक्रियता, हार्मोन और आयु भी अस्थि घनत्व को प्रभावित करते हैं।"
+            },
+            {
+                id: 39,
+                tag: "",
+                question: "लंबे समय तक अत्यधिक फ्लोराइड सेवन का प्रमुख परिणाम क्या है?",
+                options: [
+                    "आयरन-अल्पता एनीमिया",
+                    "विटामिन A की कमी",
+                    "थायमिन की कमी",
+                    "दंत या अस्थि फ्लोरोसिस"
+                ],
+                correct: 3,
+                explanation: "विकासशील दाँतों के समय अधिक फ्लोराइड दंत फ्लोरोसिस उत्पन्न कर सकता है। बहुत अधिक और दीर्घकालिक संपर्क अस्थियों को भी प्रभावित कर सकता है।"
+            },
+            {
+                id: 40,
+                tag: "",
+                question: "सूक्ष्म पोषक तत्त्वों की कमी रोकने का सबसे व्यापक तरीका कौन-सा है?",
+                options: [
+                    "विविध आहार, फोर्टिफिकेशन, आवश्यक सप्लीमेंटेशन और संक्रमण नियंत्रण",
+                    "केवल एक प्रकार का अनाज नियमित खाना",
+                    "सभी वसा और प्रोटीन आहार से हटाना",
+                    "केवल रोग के गंभीर होने पर उपचार करना"
+                ],
+                correct: 0,
+                explanation: "पोषण-कमी के कारण अनेक होते हैं, इसलिए समाधान भी बहुस्तरीय होना चाहिए। विविध आहार, स्तनपान, उचित पूरक आहार, खाद्य सुदृढ़ीकरण, लक्षित पूरकता और संक्रमण नियंत्रण उपयोगी हैं।"
+            },
+            {
+                id: 41,
+                tag: "",
+                question: "विटामिन को संबंधित अल्पताजन्य रोग से सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>1. विटामिन A</td><td style='border:1px solid #cbd5e1; padding:6px;'>a. स्कर्वी</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>2. विटामिन D</td><td style='border:1px solid #cbd5e1; padding:6px;'>b. जेरोफ्थैल्मिया</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>3. विटामिन B₁</td><td style='border:1px solid #cbd5e1; padding:6px;'>c. बेरी-बेरी</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>4. विटामिन C</td><td style='border:1px solid #cbd5e1; padding:6px;'>d. रिकेट्स</td></tr></table>",
+                options: [
+                    "1-a, 2-c, 3-d, 4-b",
+                    "1-b, 2-d, 3-c, 4-a",
+                    "1-c, 2-a, 3-b, 4-d",
+                    "1-d, 2-b, 3-a, 4-c"
+                ],
+                correct: 1,
+                explanation: "विटामिन A की कमी से जेरोफ्थैल्मिया, D से रिकेट्स, B₁ से बेरी-बेरी और C से स्कर्वी होता है। ये प्रमुख विटामिन-अल्पताजन्य रोग हैं।"
+            },
+            {
+                id: 42,
+                tag: "",
+                question: "खनिज को संबंधित प्रभाव से सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>1. आयरन</td><td style='border:1px solid #cbd5e1; padding:6px;'>a. घाव भरने और वृद्धि में विलंब</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>2. आयोडीन</td><td style='border:1px solid #cbd5e1; padding:6px;'>b. फ्लोरोसिस</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>3. जिंक</td><td style='border:1px solid #cbd5e1; padding:6px;'>c. पोषण संबंधी एनीमिया</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>4. अधिक फ्लोराइड</td><td style='border:1px solid #cbd5e1; padding:6px;'>d. घेंघा</td></tr></table>",
+                options: [
+                    "1-a, 2-b, 3-d, 4-c",
+                    "1-d, 2-c, 3-b, 4-a",
+                    "1-c, 2-d, 3-a, 4-b",
+                    "1-b, 2-a, 3-c, 4-d"
+                ],
+                correct: 2,
+                explanation: "आयरन-अभाव एनीमिया, आयोडीन-अभाव घेंघा, जिंक-अभाव वृद्धि एवं घाव भरने में समस्या और अधिक फ्लोराइड फ्लोरोसिस से संबंधित है।"
+            },
+            {
+                id: 43,
+                tag: "",
+                question: "पोषण संकेतक को उसके अर्थ से सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>1. वेस्टिंग</td><td style='border:1px solid #cbd5e1; padding:6px;'>a. कम वजन-के-लिए-लंबाई</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>2. स्टंटिंग</td><td style='border:1px solid #cbd5e1; padding:6px;'>b. कम लंबाई-के-लिए-आयु</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>3. अंडरवेट</td><td style='border:1px solid #cbd5e1; padding:6px;'>c. कम वजन-के-लिए-आयु</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>4. MUAC</td><td style='border:1px solid #cbd5e1; padding:6px;'>d. तीव्र कुपोषण की सामुदायिक स्क्रीनिंग</td></tr></table>",
+                options: [
+                    "1-a, 2-b, 3-c, 4-d",
+                    "1-c, 2-a, 3-d, 4-b",
+                    "1-b, 2-d, 3-a, 4-c",
+                    "1-d, 2-c, 3-b, 4-a"
+                ],
+                correct: 0,
+                explanation: "वेस्टिंग हाल की तीव्र पोषण समस्या, स्टंटिंग दीर्घकालिक समस्या और अंडरवेट दोनों का संयुक्त प्रभाव दिखा सकता है। MUAC ऊपरी भुजा की मध्य परिधि है, जिसका उपयोग तीव्र कुपोषण की स्क्रीनिंग में होता है।"
+            },
+            {
+                id: 44,
+                tag: "",
+                question: "अवस्था को उसकी प्रमुख विशेषता से सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>1. क्वाशियोरकर</td><td style='border:1px solid #cbd5e1; padding:6px;'>a. नियासिन की गंभीर कमी</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>2. मैरास्मस</td><td style='border:1px solid #cbd5e1; padding:6px;'>b. दोषपूर्ण कोलेजन निर्माण</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>3. स्कर्वी</td><td style='border:1px solid #cbd5e1; padding:6px;'>c. पोषणजन्य एडिमा</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>4. पेलाग्रा</td><td style='border:1px solid #cbd5e1; padding:6px;'>d. गंभीर क्षीणता और वसा ह्रास</td></tr></table>",
+                options: [
+                    "1-a, 2-c, 3-d, 4-b",
+                    "1-b, 2-a, 3-c, 4-d",
+                    "1-d, 2-b, 3-a, 4-c",
+                    "1-c, 2-d, 3-b, 4-a"
+                ],
+                correct: 3,
+                explanation: "क्वाशियोरकर में एडिमा, मैरास्मस में गंभीर क्षीणता, स्कर्वी में कोलेजन संश्लेषण की समस्या और पेलाग्रा में नियासिन की कमी प्रमुख है।"
+            },
+            {
+                id: 45,
+                tag: "",
+                question: "पोषण हस्तक्षेप को उसके उदाहरण से सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>1. फोर्टिफिकेशन</td><td style='border:1px solid #cbd5e1; padding:6px;'>a. अलग-अलग खाद्य समूहों का सेवन</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>2. सप्लीमेंटेशन</td><td style='border:1px solid #cbd5e1; padding:6px;'>b. आयोडीनयुक्त नमक</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>3. आहार विविधीकरण</td><td style='border:1px solid #cbd5e1; padding:6px;'>c. पोषक-समृद्ध फसल विकसित करना</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>4. बायोफोर्टिफिकेशन</td><td style='border:1px solid #cbd5e1; padding:6px;'>d. निर्धारित विटामिन A खुराक देना</td></tr></table>",
+                options: [
+                    "1-d, 2-a, 3-c, 4-b",
+                    "1-b, 2-d, 3-a, 4-c",
+                    "1-c, 2-b, 3-d, 4-a",
+                    "1-a, 2-c, 3-b, 4-d"
+                ],
+                correct: 1,
+                explanation: "फोर्टिफिकेशन में प्रसंस्करण के दौरान पोषक तत्त्व मिलाए जाते हैं, सप्लीमेंटेशन में अलग खुराक दी जाती है, विविधीकरण में अनेक खाद्य समूह और बायोफोर्टिफिकेशन में फसल का पोषण स्तर बढ़ाया जाता है।"
+            },
+            {
+                id: 46,
+                tag: "",
+                question: "<b>कथन I:</b> स्टंटिंग सामान्यतः दीर्घकालिक या बार-बार होने वाले अल्पपोषण का संकेत है।<br><b>कथन II:</b> आयु के अनुसार कम लंबाई लंबे समय से चली आ रही पोषण एवं स्वास्थ्य समस्याओं का संचयी प्रभाव दिखाती है।<br><br>उपर्युक्त कथनों के आलोक में सही विकल्प चुनिए:",
+                options: [
+                    "कथन I और II दोनों सही हैं तथा कथन II, कथन I की सही व्याख्या है",
+                    "कथन I और II दोनों सही हैं, लेकिन कथन II, कथन I की सही व्याख्या नहीं है",
+                    "कथन I सही है, लेकिन कथन II गलत है",
+                    "कथन I गलत है, लेकिन कथन II सही है"
+                ],
+                correct: 0,
+                explanation: "लंबाई पर दीर्घकालिक पोषण-अभाव और संक्रमणों का प्रभाव धीरे-धीरे दिखाई देता है। इसलिए स्टंटिंग को पुरानी या बार-बार होने वाली पोषण समस्या से जोड़ा जाता है।"
+            },
+            {
+                id: 47,
+                tag: "",
+                question: "<b>कथन I:</b> क्वाशियोरकर में शरीर का वास्तविक वजन ह्रास एडिमा के कारण छिप सकता है।<br><b>कथन II:</b> एडिमा में ऊतकों के बीच द्रव जमा होने से शरीर का मापा गया वजन बढ़ सकता है।<br><br>उपर्युक्त कथनों के आलोक में सही विकल्प चुनिए:",
+                options: [
+                    "कथन I और II दोनों सही हैं तथा कथन II, कथन I की सही व्याख्या है",
+                    "कथन I और II दोनों सही हैं, लेकिन कथन II, कथन I की सही व्याख्या नहीं है",
+                    "कथन I सही है, लेकिन कथन II गलत है",
+                    "कथन I गलत है, लेकिन कथन II सही है"
+                ],
+                correct: 0,
+                explanation: "एडिमा का द्रव शरीर के वजन में शामिल हो जाता है। इसलिए केवल वजन देखकर क्वाशियोरकर की गंभीरता का सही अनुमान नहीं लगाया जा सकता।"
+            },
+            {
+                id: 48,
+                tag: "",
+                question: "<b>कथन I:</b> प्रत्येक प्रकार का एनीमिया आयरन की कमी के कारण नहीं होता।<br><b>कथन II:</b> आयरन की कमी पोषण संबंधी एनीमिया का सबसे सामान्य कारण है।<br><br>उपर्युक्त कथनों के आलोक में सही विकल्प चुनिए:",
+                options: [
+                    "कथन I और II दोनों सही हैं तथा कथन II, कथन I की सही व्याख्या है",
+                    "कथन I और II दोनों सही हैं, लेकिन कथन II, कथन I की सही व्याख्या नहीं है",
+                    "कथन I सही है, लेकिन कथन II गलत है",
+                    "कथन I गलत है, लेकिन कथन II सही है"
+                ],
+                correct: 1,
+                explanation: "एनीमिया के अन्य कारणों में फोलेट या B₁₂ की कमी, संक्रमण, रक्त हानि, सूजन और आनुवंशिक विकार शामिल हैं। आयरन-अभाव सामान्य कारण है, लेकिन एकमात्र कारण नहीं।"
+            },
+            {
+                id: 49,
+                tag: "",
+                question: "<b>कथन I:</b> विटामिन C पादप खाद्य पदार्थों के नॉन-हीम आयरन का अवशोषण बढ़ाता है।<br><b>कथन II:</b> आँवला, अमरूद और खट्टे फल विटामिन C के अच्छे स्रोत हैं।<br><br>उपर्युक्त कथनों के आलोक में सही विकल्प चुनिए:",
+                options: [
+                    "कथन I और II दोनों सही हैं तथा कथन II, कथन I की सही व्याख्या है",
+                    "कथन I और II दोनों सही हैं, लेकिन कथन II, कथन I की सही व्याख्या नहीं है",
+                    "कथन I सही है, लेकिन कथन II गलत है",
+                    "कथन I गलत है, लेकिन कथन II सही है"
+                ],
+                correct: 1,
+                explanation: "दोनों कथन सही हैं, लेकिन दूसरा कथन केवल विटामिन C के खाद्य स्रोत बताता है। अवशोषण बढ़ने का कारण आयरन को अधिक घुलनशील रूप में बनाए रखने की विटामिन C की क्षमता है।"
+            },
+            {
+                id: 50,
+                tag: "",
+                question: "<b>कथन I:</b> आयोडीनयुक्त नमक आयोडीन-अल्पता विकारों की रोकथाम का प्रभावी जनस्वास्थ्य उपाय है।<br><b>कथन II:</b> नमक का व्यापक उपयोग थोड़ी मात्रा में आयोडीन को बड़ी जनसंख्या तक पहुँचाने में सहायता करता है।<br><br>उपर्युक्त कथनों के आलोक में सही विकल्प चुनिए:",
+                options: [
+                    "कथन I और II दोनों सही हैं तथा कथन II, कथन I की सही व्याख्या है",
+                    "कथन I और II दोनों सही हैं, लेकिन कथन II, कथन I की सही व्याख्या नहीं है",
+                    "कथन I सही है, लेकिन कथन II गलत है",
+                    "कथन I गलत है, लेकिन कथन II सही है"
+                ],
+                correct: 0,
+                explanation: "नमक का सेवन अधिकांश घरों में नियमित रूप से होता है। इसलिए नियंत्रित मात्रा में आयोडीन मिलाकर जनसंख्या स्तर पर आयोडीन-अभाव को रोकना संभव होता है।"
+            }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
