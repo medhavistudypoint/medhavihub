@@ -6,30 +6,122 @@
     <title>कंप्यूटर व ICT - TGT/PGT GS</title>
     <style>
         * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f1f5f9; color: #1e293b; }
         .brand-hero { background: linear-gradient(135deg, #0b1e47, #1e3a8a); color: white; padding: 30px 20px 25px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
         .brand-logo { width: 85px; height: 85px; border-radius: 50%; border: 3px solid #facc15; object-fit: cover; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         .brand-title { font-size: 24px; font-weight: 900; color: #facc15; margin: 0; letter-spacing: 0.8px; text-transform: uppercase; }
         .brand-tagline { font-size: 13px; color: #ffffff; opacity: 0.95; margin: 6px 0 15px 0; font-weight: 500; }
         .page-badge { display: inline-block; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(250, 204, 21, 0.4); color: #ffffff; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; }
-        .container { max-width: 800px; margin: 20px auto 40px; padding: 0 12px; }
-        .back-btn { display: inline-block; margin-bottom: 16px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 13px; }
-        .section-title { font-size: 17px; color: #0b1e47; border-bottom: 2px solid #0b1e47; padding-bottom: 5px; margin: 25px 0 15px; font-weight: 800; }
-        .grid { display: flex; flex-direction: column; gap: 12px; }
-        .card { background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; gap: 12px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04); transition: all 0.2s ease-in-out; }
+        .container { max-width: 800px; margin: 20px auto 40px; padding: 0 14px; }
+        .back-btn { display: inline-block; margin-bottom: 16px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 10px 18px; border-radius: 8px; font-weight: bold; font-size: 13px; transition: background 0.2s; }
+        .back-btn:hover { background: #cbd5e1; }
+        .section-title { font-size: 18px; color: #0b1e47; border-bottom: 2px solid #0b1e47; padding-bottom: 6px; margin: 28px 0 16px; font-weight: 800; }
+        
+        .grid { display: flex; flex-direction: column; gap: 14px; }
+        
+        /* PDF Card Style */
+        .card { 
+            background: #ffffff; 
+            border: 1.5px solid #e2e8f0; 
+            border-radius: 12px; 
+            padding: 18px 22px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            gap: 12px; 
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.04); 
+            transition: all 0.25s ease; 
+        }
         @media (min-width: 600px) { .card { flex-direction: row; align-items: center; } }
-        .card:hover { border-color: #3b82f6; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08); transform: translateY(-2px); }
+        .card:hover { border-color: #3b82f6; box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08); transform: translateY(-2px); }
         .card h3 { font-size: 15px; margin: 0; color: #0b1e47; font-weight: 700; line-height: 1.4; }
-        .btn-action { text-align: center; text-decoration: none; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 800; min-width: 140px; cursor: pointer; border: none; color: white; white-space: nowrap; transition: background-color 0.2s; }
-        .btn-class { background-color: #2563eb; } .btn-test { background-color: #16a34a; } .btn-pdf { background-color: #d97706; }
-        .btn-disabled { background-color: #64748b !important; }
+        .btn-action { text-align: center; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-size: 13.5px; font-weight: 800; min-width: 140px; cursor: pointer; border: none; color: white; white-space: nowrap; transition: background-color 0.2s; }
+        .btn-pdf { background-color: #d97706; }
+
+        /* 🔥 चौड़ा, आकर्षक और प्रीमियम टेस्ट कार्ड */
+        .test-card-timer {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            color: #1e293b;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.03);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            gap: 12px;
+        }
+        .test-card-timer:hover {
+            border-color: #2563eb;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
+            transform: translateY(-2px);
+            background-color: #fafcff;
+        }
+        .test-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+        }
+
+        /* 🌟 आकर्षक स्टेटस बैज */
+        .status-msg {
+            font-size: 13px;
+            font-weight: 800;
+            white-space: nowrap;
+            padding: 7px 14px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            letter-spacing: 0.3px;
+        }
+        
+        /* 🟢 Live Badge */
+        .status-live { 
+            color: #15803d; 
+            background: #dcfce7; 
+            border: 1px solid #86efac;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.25);
+            animation: liveGlow 1.8s infinite;
+        }
+        
+        /* ⏳ Coming Soon Badge */
+        .status-coming { 
+            color: #b45309; 
+            background: #fef3c7; 
+            border: 1px solid #fde68a;
+        }
+        
+        /* 🚫 Test Over Badge */
+        .status-over { 
+            color: #b91c1c; 
+            background: #fee2e2; 
+            border: 1px solid #fecaca;
+        }
+
+        @keyframes liveGlow {
+            0% { transform: scale(1); box-shadow: 0 0 0 rgba(34, 197, 94, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 0 12px rgba(34, 197, 94, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 0 0 rgba(34, 197, 94, 0.4); }
+        }
+
+        /* Modal Styles */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
         .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .modal-box h3 { margin-top: 0; color: #0b1e47; font-size: 18px; }
         .modal-box p { font-size: 13px; color: #64748b; margin-bottom: 15px; }
         .modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; text-align: center; box-sizing: border-box; outline: none; }
         .modal-box button { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
-        .btn-submit { background: #16a34a; color: white; margin-bottom: 8px; } .btn-close { background: #e2e8f0; color: #1e293b; margin-top: 6px; }
+        .btn-submit { background: #16a34a; color: white; margin-bottom: 8px; } 
+        .btn-close { background: #e2e8f0; color: #1e293b; margin-top: 6px; }
     </style>
 </head>
 <body>
@@ -46,49 +138,37 @@
         
         <div class="section-title">📚 संपूर्ण कंप्यूटर व ICT नोट्स (PDF)</div>
         <div class="grid">
-            <div class="card"><div class="card-info"><h3>कंप्यूटर, इंटरनेट शब्दावली, ICT व शैक्षिक तकनीक PDF</h3></div><button onclick="checkAccess('gspdf/computer-full.html')" class="btn-action btn-pdf" data-type="pdf">📖 PDF खोलें</button></div>
+            <div class="card">
+                <div class="card-info"><h3>कंप्यूटर, इंटरनेट शब्दावली, ICT व शैक्षिक तकनीक PDF</h3></div>
+                <button onclick="checkAccess('gspdf/computer-full.html')" class="btn-action btn-pdf" data-type="pdf">📖 PDF खोलें</button>
+            </div>
         </div>
-<!---
-        <div class="section-title">🎥 वीडियो क्लासेस (10 Classes)</div>
-        <div class="grid">
-            <div class="card"><div class="card-info"><h3>Computer Class - 01</h3></div><button onclick="checkAccess('gsclass/comp1.html')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer Class - 02</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer Class - 03</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer Class - 04</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer Class - 05</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer Class - 06</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer Class - 07</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer Class - 08</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer Class - 09</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer Class - 10</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-        </div>
---->
+
         <div class="section-title">📝 ऑनलाइन मॉक टेस्ट (20 Tests)</div>
         <div class="grid">
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 01</h3></div><button onclick="checkAccess('gstest/compt1.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 02</h3></div><button onclick="checkAccess('gstest/compt2.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 03</h3></div><button onclick="checkAccess('gstest/compt3.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 04</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 05</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 06</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 07</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 08</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 09</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 10</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 11</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 12</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 13</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 14</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 15</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 16</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 17</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 18</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 19</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Computer & ICT Test - 20</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-01T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt1.html"><span class="test-title">📝 टेस्ट 1: कंप्यूटर का परिचय, इतिहास एवं पीढ़ियाँ</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-02T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt2.html"><span class="test-title">📝 टेस्ट 2: कंप्यूटर हार्डवेयर, सीपीयू एवं आंतरिक संरचना</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-03T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt3.html"><span class="test-title">📝 टेस्ट 3: कंप्यूटर सॉफ्टवेयर एवं ऑपरेटिंग सिस्टम</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-04T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt4.html"><span class="test-title">📝 टेस्ट 4: इनपुट एवं आउटपुट डिवाइसेस</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-05T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt5.html"><span class="test-title">📝 टेस्ट 5: मेमोरी एवं डेटा स्टोरेज इकाइयाँ</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-07T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt6.html"><span class="test-title">📝 टेस्ट 6: कंप्यूटर नेटवर्किंग, टोपोलॉजी एवं प्रोटोकॉल्स</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-08T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt7.html"><span class="test-title">📝 टेस्ट 7: ईमेल, वेब ब्राउज़र एवं सर्च इंजन</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-09T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt8.html"><span class="test-title">📝 टेस्ट 8: सोशल मीडिया एवं डिजिटल संचार तकनीक</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-10T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt9.html"><span class="test-title">📝 टेस्ट 9: साइबर सुरक्षा, मैलवेयर एवं IT अधिनियम</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-11T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt10.html"><span class="test-title">📝 टेस्ट 10: MS Office (Word, Excel, PowerPoint) एवं शॉर्टकट कीज़</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-12T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt11.html"><span class="test-title">📝 टेस्ट 11: शिक्षा में ICT: अवधारणा, मॉडल एवं पेडागॉजी</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-14T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt12.html"><span class="test-title">📝 टेस्ट 12: राष्ट्रीय डिजिटल शिक्षा, SWAYAM एवं MOOCs पोर्टल</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-15T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt13.html"><span class="test-title">📝 टेस्ट 13: ई-कंटेंट, मल्टीमीडिया एवं OER मानक</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-16T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt14.html"><span class="test-title">📝 टेस्ट 14: स्मार्ट क्लासरूम, IFPD एवं इंटरैक्टिव उपकरण</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-17T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt15.html"><span class="test-title">📝 टेस्ट 15: प्रमुख शैक्षिक पोर्टल, मोबाइल ऐप्स एवं LMS</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-18T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt16.html"><span class="test-title">📝 टेस्ट 16: डिजिटल साक्षरता, ई-गवर्नेंस एवं ऑनलाइन भुगतान</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-19T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt17.html"><span class="test-title">📝 टेस्ट 17: शैक्षिक प्रौद्योगिकी का विकास, शिक्षण प्रतिमान एवं सिद्धांत</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-21T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt18.html"><span class="test-title">📝 टेस्ट 18: डिजिटल डेटाबेस, DBMS एवं बिग डेटा</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-22T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt19.html"><span class="test-title">📝 टेस्ट 19: नवीनतम उभरती तकनीकें (AI, IoT, Cloud, Blockchain)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-23T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/compt20.html"><span class="test-title">📝 टेस्ट 20: संपूर्ण ICT एवं शैक्षिक प्रौद्योगिकी (महा-मॉक टेस्ट)</span><span class="status-msg">Loading...</span></a>
         </div>
     </div>
 
-    <!-- ऑथेंटिकेशन / पेमेंट मॉडल -->
     <div id="loginModal" class="modal-overlay">
         <div class="modal-box">
             <h3>🔒 GS पेड स्टूडेंट एक्सेस</h3>
@@ -112,34 +192,43 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3VolXNGLi8jlH7aAniR7v8_mbpH62Y6Dz4LvNakPpt7Z-FHEPcC8KNLRY7nlbh-gy/exec"; 
     let pendingUrl = null;
 
-    window.addEventListener('DOMContentLoaded', () => {
-        const buttons = document.querySelectorAll('.btn-action');
-        buttons.forEach(btn => {
-            const onclickAttr = btn.getAttribute('onclick') || '';
-            const btnType = btn.getAttribute('data-type') || '';
+    // ✅ टाइमर और लाइव/कमिंग सून स्थिति हैंडलर
+    function initTestCards() {
+        const now = new Date().getTime();
+        const testCards = document.querySelectorAll('.test-card-timer');
 
-            if (onclickAttr.includes("'#'") || onclickAttr.includes('""')) {
-                btn.innerText = '⏳ Coming Soon';
-                btn.classList.add('btn-disabled');
+        testCards.forEach(card => {
+            const startStr = card.getAttribute('data-start');
+            const endStr = card.getAttribute('data-end');
+            const link = card.getAttribute('data-link');
+            const statusMsg = card.querySelector('.status-msg');
+
+            const startTime = new Date(startStr).getTime();
+            const endTime = new Date(endStr).getTime();
+
+            if (now < startTime) {
+                statusMsg.innerHTML = '⏳ Coming Soon';
+                statusMsg.className = 'status-msg status-coming';
+                card.onclick = () => alert('⏳ यह टेस्ट निर्धारित समय पर लाइव होगा!');
+            } else if (now >= startTime && now <= endTime) {
+                statusMsg.innerHTML = '🟢 Live Now';
+                statusMsg.className = 'status-msg status-live';
+                card.onclick = () => checkAccess(link);
             } else {
-                if (btnType === 'pdf') {
-                    btn.innerText = '📖 PDF खोलें';
-                    btn.classList.add('btn-pdf');
-                } else if (btnType === 'class') {
-                    btn.innerText = '▶️ क्लास देखें';
-                    btn.classList.add('btn-class');
-                } else if (btnType === 'test') {
-                    btn.innerText = '📝 टेस्ट दें';
-                    btn.classList.add('btn-test');
-                }
-                btn.classList.remove('btn-disabled');
+                statusMsg.innerHTML = '🚫 Test Over';
+                statusMsg.className = 'status-msg status-over';
+                card.onclick = () => alert('🚫 इस टेस्ट की समय सीमा समाप्त हो चुकी है!');
             }
         });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        initTestCards();
+        setInterval(initTestCards, 10000); // हर 10 सेकंड में ऑटो-रिफ्रेश
     });
 
     function checkAccess(url) {
         pendingUrl = url;
-        // ✅ मुख्य पृष्ठ से सेव होने वाले 'user_plan' की जाँच ('FULL' या 'GS')
         const plan = localStorage.getItem('user_plan');
 
         if (plan === 'FULL' || plan === 'GS') {
@@ -168,7 +257,6 @@
             return;
         }
 
-        // ✅ सही 'my_device_id' का उपयोग
         let deviceId = localStorage.getItem('my_device_id');
         if (!deviceId) {
             deviceId = "DEV_" + Math.random().toString(36).substring(2, 11) + Date.now();
