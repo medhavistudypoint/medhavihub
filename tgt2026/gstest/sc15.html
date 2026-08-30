@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB / GS</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">प्राणी विज्ञान, कार्यिकी, आनुवंशिकी एवं जैव-विकास</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_paid_sc14"; 
+
+        const dataset = [
+            {
+                id: 1,
+                tag: "",
+                question: "प्राणी विज्ञान का जनक सामान्यतः किसे कहा जाता है?",
+                options: [
+                    "थियोफ्रेस्टस",
+                    "चार्ल्स डार्विन",
+                    "कैरोलस लिनियस",
+                    "अरस्तू"
+                ],
+                correct: 3,
+                explanation: "अरस्तू ने प्राणियों की संरचना, आदतों और जीवन-प्रक्रियाओं का व्यवस्थित अध्ययन किया। उन्होंने अनेक प्राणियों को उनकी विशेषताओं के आधार पर वर्गीकृत करने का प्रयास किया। इसलिए उन्हें प्राणी विज्ञान का जनक कहा जाता है।"
+            },
+            {
+                id: 2,
+                tag: "",
+                question: "निम्नलिखित में से किस प्राणी में अरीय सममिति पाई जाती है?",
+                options: [
+                    "केंचुआ",
+                    "हाइड्रा",
+                    "कॉकरोच",
+                    "मनुष्य"
+                ],
+                correct: 1,
+                explanation: "अरीय सममिति में शरीर को केंद्रीय अक्ष से गुजरने वाले अनेक तलों द्वारा समान भागों में बाँटा जा सकता है। हाइड्रा और जेलीफिश में यह सममिति पाई जाती है। मनुष्य, केंचुआ और कॉकरोच में द्विपार्श्व सममिति होती है।"
+            },
+            {
+                id: 3,
+                tag: "",
+                question: "द्विपार्श्व सममिति वाला प्राणी है—",
+                options: [
+                    "केंचुआ",
+                    "स्पंज",
+                    "हाइड्रा",
+                    "स्टारफिश का वयस्क"
+                ],
+                correct: 0,
+                explanation: "द्विपार्श्व सममिति में शरीर को केवल एक मध्य तल द्वारा दाएँ और बाएँ समान भागों में बाँटा जा सकता है। केंचुए का शरीर यही सममिति दिखाता है। अधिकांश सक्रिय रूप से चलने वाले उच्च प्राणियों में द्विपार्श्व सममिति पाई जाती है।"
+            },
+            {
+                id: 4,
+                tag: "",
+                question: "निम्नलिखित में से किसमें वास्तविक देहगुहा पाई जाती है?",
+                options: [
+                    "प्लेनेरिया",
+                    "फीताकृमि",
+                    "केंचुआ",
+                    "हाइड्रा"
+                ],
+                correct: 2,
+                explanation: "केंचुआ एनेलिडा संघ का प्राणी है और इसमें मेसोडर्म से पूर्णतः घिरी वास्तविक देहगुहा होती है। प्लेनेरिया तथा फीताकृमि देहगुहाविहीन होते हैं। वास्तविक देहगुहा आंतरिक अंगों को व्यवस्थित स्थान और गति प्रदान करती है।"
+            },
+            {
+                id: 5,
+                tag: "",
+                question: "जल-संवहन या नाल तंत्र किस प्राणी संघ की विशेषता है?",
+                options: [
+                    "एनेलिडा",
+                    "पोरिफेरा",
+                    "मॉलस्का",
+                    "आर्थ्रोपोडा"
+                ],
+                correct: 1,
+                explanation: "स्पंजों के शरीर में अनेक सूक्ष्म छिद्र और नालियाँ होती हैं, जिनसे जल का प्रवाह होता है। जल के साथ भोजन और ऑक्सीजन आते हैं तथा अपशिष्ट बाहर निकलते हैं। इसी कारण पोरिफेरा को छिद्रधारी प्राणी कहा जाता है।"
+            },
+            {
+                id: 6,
+                tag: "",
+                question: "दंश कोशिकाएँ या निडोब्लास्ट किस संघ में पाई जाती हैं?",
+                options: [
+                    "पोरिफेरा",
+                    "निडेरिया",
+                    "प्लेटीहेल्मिन्थीज",
+                    "एनेलिडा"
+                ],
+                correct: 1,
+                explanation: "निडेरिया संघ के प्राणियों में विशेष दंश कोशिकाएँ होती हैं, जिन्हें निडोसाइट या निडोब्लास्ट कहा जाता है। ये शिकार पकड़ने और सुरक्षा में सहायता करती हैं। हाइड्रा, जेलीफिश और समुद्री एनीमोन इस संघ के उदाहरण हैं।"
+            },
+            {
+                id: 7,
+                tag: "",
+                question: "चपटे कृमियों को किस संघ में रखा जाता है?",
+                options: [
+                    "एनेलिडा",
+                    "नेमेटोडा",
+                    "मॉलस्का",
+                    "प्लेटीहेल्मिन्थीज"
+                ],
+                correct: 3,
+                explanation: "प्लेटीहेल्मिन्थीज के प्राणियों का शरीर पृष्ठ-अधरीय दिशा में चपटा होता है। प्लेनेरिया, फीताकृमि और यकृत कृमि इसके उदाहरण हैं। इस संघ के अनेक सदस्य परजीवी होते हैं।"
+            },
+            {
+                id: 8,
+                tag: "",
+                question: "गोलकृमि या राउंडवर्म को किस समूह में रखा जाता है?",
+                options: [
+                    "नेमेटोडा",
+                    "एनेलिडा",
+                    "निडेरिया",
+                    "मॉलस्का"
+                ],
+                correct: 0,
+                explanation: "नेमेटोडा के प्राणियों का शरीर लंबा, बेलनाकार और अखंडित होता है। एस्केरिस और फाइलेरिया उत्पन्न करने वाला वुचेरेरिया इसके उदाहरण हैं। इनमें कूटदेहगुहा पाई जाती है।"
+            },
+            {
+                id: 9,
+                tag: "",
+                question: "खंडित शरीर या विखंडीभवन किस संघ की प्रमुख विशेषता है?",
+                options: [
+                    "मॉलस्का",
+                    "निडेरिया",
+                    "एनेलिडा",
+                    "इकाइनोडर्मेटा"
+                ],
+                correct: 2,
+                explanation: "एनेलिडा संघ के प्राणियों का शरीर बाहरी और आंतरिक रूप से क्रमिक खंडों में विभाजित होता है। इसे वास्तविक विखंडीभवन कहा जाता है। केंचुआ, जोंक और नेरीस इस संघ के उदाहरण हैं।"
+            },
+            {
+                id: 10,
+                tag: "",
+                question: "संधियुक्त उपांग किस संघ की प्रमुख पहचान हैं?",
+                options: [
+                    "आर्थ्रोपोडा",
+                    "पोरिफेरा",
+                    "प्लेटीहेल्मिन्थीज",
+                    "मॉलस्का"
+                ],
+                correct: 0,
+                explanation: "आर्थ्रोपोडा का अर्थ ही संधियुक्त पैरों वाले प्राणी है। इस संघ में कीट, मकड़ी, केकड़ा और झींगा शामिल हैं। यह प्राणी जगत का सबसे बड़ा संघ है और इसके सदस्यों में काइटिनयुक्त बाह्यकंकाल पाया जाता है।"
+            },
+            {
+                id: 11,
+                tag: "",
+                question: "पेशीय पाद किस प्राणी संघ की प्रमुख विशेषता है?",
+                options: [
+                    "एनेलिडा",
+                    "मॉलस्का",
+                    "इकाइनोडर्मेटा",
+                    "निडेरिया"
+                ],
+                correct: 1,
+                explanation: "मॉलस्का के प्राणियों में गति के लिए सामान्यतः एक पेशीय पाद होता है। इनके शरीर में सिर, पेशीय पाद और अंतरांग पुंज जैसे भाग पाए जा सकते हैं। घोंघा, सीप, ऑक्टोपस और स्क्विड इसके उदाहरण हैं।"
+            },
+            {
+                id: 12,
+                tag: "",
+                question: "जल संवहनी तंत्र किस संघ की विशिष्ट विशेषता है?",
+                options: [
+                    "आर्थ्रोपोडा",
+                    "मॉलस्का",
+                    "एनेलिडा",
+                    "इकाइनोडर्मेटा"
+                ],
+                correct: 3,
+                explanation: "इकाइनोडर्मेटा में जल संवहनी तंत्र गति, भोजन ग्रहण और गैसों के आदान-प्रदान में सहायता करता है। इस संघ के सभी प्राणी समुद्री होते हैं। स्टारफिश और सी-अर्चिन इसके प्रमुख उदाहरण हैं।"
+            },
+            {
+                id: 13,
+                tag: "",
+                question: "रज्जुकी प्राणियों की मूल विशेषता है—",
+                options: [
+                    "जीवन की किसी अवस्था में पृष्ठरज्जु की उपस्थिति",
+                    "शरीर में छिद्रों की उपस्थिति",
+                    "केवल खुला परिसंचरण तंत्र",
+                    "काइटिन का बाह्यकंकाल"
+                ],
+                correct: 0,
+                explanation: "रज्जुकी प्राणियों में जीवन की किसी अवस्था में पृष्ठरज्जु, पृष्ठीय खोखली तंत्रिका रज्जु और ग्रसनी क्लोम छिद्र जैसी विशेषताएँ पाई जाती हैं। कशेरुकी प्राणियों में भ्रूणीय पृष्ठरज्जु के स्थान पर कशेरुक दंड विकसित हो जाता है।"
+            },
+            {
+                id: 14,
+                tag: "",
+                question: "मछलियों में श्वसन का मुख्य अंग है—",
+                options: [
+                    "त्वचा",
+                    "फेफड़े",
+                    "गलफड़े",
+                    "श्वासनलिका"
+                ],
+                correct: 2,
+                explanation: "गलफड़ों में रक्त केशिकाओं से युक्त पतली सतह होती है, जो जल में घुली ऑक्सीजन ग्रहण करती है। इसी सतह से कार्बन डाइऑक्साइड बाहर निकलती है। अधिकांश मछलियाँ जीवनभर गलफड़ों से श्वसन करती हैं।"
+            },
+            {
+                id: 15,
+                tag: "",
+                question: "उभयचर प्राणियों की प्रमुख विशेषता है—",
+                options: [
+                    "केवल समुद्री जीवन",
+                    "जल और स्थल दोनों से संबंधित जीवन",
+                    "शरीर पर पंखों की उपस्थिति",
+                    "केवल फेफड़ों द्वारा श्वसन"
+                ],
+                correct: 1,
+                explanation: "उभयचर प्राणी जीवन का एक भाग जल और एक भाग स्थल पर व्यतीत कर सकते हैं। मेढ़क का लार्वा गलफड़ों से, जबकि वयस्क फेफड़ों और त्वचा से श्वसन करता है। इनके प्रजनन के लिए सामान्यतः जल आवश्यक होता है।"
+            },
+            {
+                id: 16,
+                tag: "",
+                question: "सरीसृपों की त्वचा सामान्यतः होती है—",
+                options: [
+                    "शुष्क और शल्कयुक्त",
+                    "नम तथा ग्रंथियुक्त",
+                    "पंखों से ढकी",
+                    "बालों से ढकी"
+                ],
+                correct: 0,
+                explanation: "सरीसृपों की त्वचा शुष्क और केराटिनयुक्त शल्कों से ढकी होती है। यह शरीर से जल की हानि कम करने में सहायता करती है। साँप, छिपकली, मगरमच्छ और कछुआ इसके उदाहरण हैं।"
+            },
+            {
+                id: 17,
+                tag: "",
+                question: "पक्षियों की विशिष्ट पहचान है—",
+                options: [
+                    "नम त्वचा",
+                    "स्तन ग्रंथियाँ",
+                    "बाह्य गलफड़े",
+                    "पंखों की उपस्थिति"
+                ],
+                correct: 3,
+                explanation: "पंख केवल पक्षियों में पाए जाने वाली विशिष्ट संरचनाएँ हैं। ये उड़ान, ताप-नियमन और शरीर की सुरक्षा में सहायता करते हैं। सभी पक्षी उड़ नहीं सकते, लेकिन सभी वर्तमान पक्षियों में पंख अवश्य पाए जाते हैं।"
+            },
+            {
+                id: 18,
+                tag: "",
+                question: "स्तनधारियों की प्रमुख विशेषता है—",
+                options: [
+                    "जल संवहनी तंत्र",
+                    "शिशुओं के पोषण के लिए स्तन ग्रंथियाँ",
+                    "केवल अंडे देना",
+                    "गलफड़ों से श्वसन"
+                ],
+                correct: 1,
+                explanation: "स्तनधारी मादाओं में स्तन ग्रंथियाँ होती हैं, जिनसे उत्पन्न दूध शिशुओं के पोषण में काम आता है। अधिकांश स्तनधारी बच्चों को जन्म देते हैं, लेकिन प्लैटिपस जैसे अपवाद अंडे देते हैं। शरीर पर बाल भी स्तनधारियों की विशेषता है।"
+            },
+            {
+                id: 19,
+                tag: "",
+                question: "रक्त में ऑक्सीजन का प्रमुख परिवहन किसके द्वारा होता है?",
+                options: [
+                    "प्लेटलेट",
+                    "प्लाज्मा प्रोटीन",
+                    "लाल रक्त कोशिकाओं के हीमोग्लोबिन द्वारा",
+                    "केवल श्वेत रक्त कोशिकाओं द्वारा"
+                ],
+                correct: 2,
+                explanation: "लाल रक्त कोशिकाओं में उपस्थित हीमोग्लोबिन फेफड़ों में ऑक्सीजन से जुड़ता है। यह ऑक्सीजन को शरीर के ऊतकों तक पहुँचाता है। हीमोग्लोबिन में लौह तत्व होता है, जो ऑक्सीजन के बंधन के लिए आवश्यक है।"
+            },
+            {
+                id: 20,
+                tag: "",
+                question: "शरीर की रोग-प्रतिरोधक क्रियाओं से मुख्यतः संबंधित रक्त कोशिकाएँ हैं—",
+                options: [
+                    "श्वेत रक्त कोशिकाएँ",
+                    "लाल रक्त कोशिकाएँ",
+                    "प्लेटलेट",
+                    "केवल रक्त प्लाज्मा"
+                ],
+                correct: 0,
+                explanation: "श्वेत रक्त कोशिकाएँ रोगजनकों की पहचान और उनसे रक्षा में सहायता करती हैं। इनके विभिन्न प्रकार भक्षण, एंटीबॉडी निर्माण तथा अन्य प्रतिरक्षा क्रियाएँ करते हैं। इनकी संख्या लाल रक्त कोशिकाओं से काफी कम होती है।"
+            },
+            {
+                id: 21,
+                tag: "",
+                question: "रक्त का थक्का बनने में प्रमुख भूमिका निभाते हैं—",
+                options: [
+                    "प्लेटलेट",
+                    "लाल रक्त कोशिकाएँ",
+                    "केवल लसीका कोशिकाएँ",
+                    "न्यूरॉन"
+                ],
+                correct: 0,
+                explanation: "प्लेटलेट रक्त वाहिका के क्षतिग्रस्त स्थान पर एकत्र होकर अस्थायी प्लग बनाते हैं। ये रक्त जमने की जटिल प्रक्रिया प्रारंभ करने वाले कारकों को सक्रिय करते हैं। इससे अत्यधिक रक्तस्राव रोकने में सहायता मिलती है।"
+            },
+            {
+                id: 22,
+                tag: "",
+                question: "मानव हृदय में कक्षों की संख्या है—",
+                options: [
+                    "दो",
+                    "तीन",
+                    "चार",
+                    "पाँच"
+                ],
+                correct: 2,
+                explanation: "मानव हृदय में दो आलिंद और दो निलय होते हैं। दायाँ भाग अशुद्ध रक्त को फेफड़ों तक भेजता है, जबकि बायाँ भाग ऑक्सीजनयुक्त रक्त को शरीर में भेजता है। चार कक्षों के कारण दोनों प्रकार के रक्त का प्रभावी पृथक्करण होता है।"
+            },
+            {
+                id: 23,
+                tag: "",
+                question: "धमनी की सामान्य परिभाषा है—",
+                options: [
+                    "वह वाहिका जिसमें सदैव ऑक्सीजनयुक्त रक्त हो",
+                    "वह वाहिका जो रक्त को हृदय से दूर ले जाए",
+                    "वह वाहिका जो रक्त को हृदय की ओर लाए",
+                    "वह वाहिका जिसमें केवल अशुद्ध रक्त हो"
+                ],
+                correct: 1,
+                explanation: "धमनी की पहचान रक्त के प्रवाह की दिशा से होती है, ऑक्सीजन की मात्रा से नहीं। फुफ्फुसीय धमनी हृदय से फेफड़ों की ओर ऑक्सीजन-विहीन रक्त ले जाती है। इसलिए यह धारणा गलत है कि प्रत्येक धमनी में ऑक्सीजनयुक्त रक्त ही होता है।"
+            },
+            {
+                id: 24,
+                tag: "",
+                question: "वृक्क की संरचनात्मक एवं क्रियात्मक इकाई है—",
+                options: [
+                    "न्यूरॉन",
+                    "एल्वियोलस",
+                    "विलस",
+                    "नेफ्रॉन"
+                ],
+                correct: 3,
+                explanation: "नेफ्रॉन रक्त का निस्यंदन, उपयोगी पदार्थों का पुनःअवशोषण और कुछ पदार्थों का स्राव करता है। इन प्रक्रियाओं से मूत्र बनता है। प्रत्येक मानव वृक्क में बहुत बड़ी संख्या में नेफ्रॉन पाए जाते हैं।"
+            },
+            {
+                id: 25,
+                tag: "",
+                question: "इंसुलिन हार्मोन का स्राव होता है—",
+                options: [
+                    "थायरॉइड ग्रंथि से",
+                    "अग्न्याशय से",
+                    "अधिवृक्क ग्रंथि से",
+                    "पीयूष ग्रंथि से"
+                ],
+                correct: 1,
+                explanation: "इंसुलिन अग्न्याशय की लैंगरहैंस द्वीपिकाओं की बीटा कोशिकाओं से स्रावित होता है। यह कोशिकाओं द्वारा ग्लूकोज ग्रहण करने और अतिरिक्त ग्लूकोज को ग्लाइकोजन में बदलने में सहायता करता है। इस प्रकार यह रक्त ग्लूकोज के नियंत्रण में महत्त्वपूर्ण है।"
+            },
+            {
+                id: 26,
+                tag: "",
+                question: "थायरॉक्सिन हार्मोन का स्राव किस ग्रंथि से होता है?",
+                options: [
+                    "थायरॉइड ग्रंथि",
+                    "अग्न्याशय",
+                    "पीयूष ग्रंथि",
+                    "अधिवृक्क ग्रंथि"
+                ],
+                correct: 0,
+                explanation: "थायरॉक्सिन शरीर की उपापचय दर, वृद्धि और विकास को प्रभावित करता है। इसके निर्माण के लिए आयोडीन आवश्यक है। लंबे समय तक आयोडीन की कमी होने पर घेंघा जैसी समस्या उत्पन्न हो सकती है।"
+            },
+            {
+                id: 27,
+                tag: "",
+                question: "आनुवंशिकी का जनक किसे कहा जाता है?",
+                options: [
+                    "चार्ल्स डार्विन",
+                    "ह्यूगो डी व्रीज",
+                    "ग्रेगर जॉन मेंडल",
+                    "टी. एच. मॉर्गन"
+                ],
+                correct: 2,
+                explanation: "मेंडल ने मटर के पौधों पर नियंत्रित संकरण प्रयोग किए। उन्होंने लक्षणों के वंशानुगत होने के निश्चित नियम प्रस्तुत किए। इसलिए उन्हें आनुवंशिकी का जनक कहा जाता है।"
+            },
+            {
+                id: 28,
+                tag: "",
+                question: "मेंडल ने अपने आनुवंशिक प्रयोगों के लिए मुख्यतः किस पौधे का चयन किया था?",
+                options: [
+                    "गेहूँ",
+                    "मटर",
+                    "मक्का",
+                    "सरसों"
+                ],
+                correct: 1,
+                explanation: "मटर में स्पष्ट विपरीत लक्षण, छोटा जीवन-चक्र और अनेक बीज पाए जाते हैं। इसके फूल सामान्यतः स्व-परागित होते हैं, लेकिन कृत्रिम पर-परागण भी आसानी से कराया जा सकता है। इन विशेषताओं ने मटर को आनुवंशिक प्रयोगों के लिए उपयुक्त बनाया।"
+            },
+            {
+                id: 29,
+                tag: "",
+                question: "वंशागति की मूल इकाई है—",
+                options: [
+                    "कोशिका",
+                    "ऊतक",
+                    "गुणसूत्र का पूरा जोड़ा",
+                    "जीन"
+                ],
+                correct: 3,
+                explanation: "जीन DNA का एक विशिष्ट खंड है, जो किसी प्रोटीन या कार्यात्मक RNA की सूचना रखता है। जीन गुणसूत्रों पर निश्चित स्थानों पर पाए जाते हैं। माता-पिता से संतानों में लक्षणों का संचरण जीनों द्वारा होता है।"
+            },
+            {
+                id: 30,
+                tag: "",
+                question: "किसी जीन के वैकल्पिक रूप कहलाते हैं—",
+                options: [
+                    "एलील",
+                    "फीनोटाइप",
+                    "जीनोम",
+                    "क्रोमैटिड"
+                ],
+                correct: 0,
+                explanation: "किसी लक्षण को नियंत्रित करने वाले एक ही जीन के वैकल्पिक रूप एलील कहलाते हैं। उदाहरणतः मटर में लंबे और बौनेपन से संबंधित एलील एक ही जीन के भिन्न रूप हैं। द्विगुणित जीव में प्रत्येक जीन के सामान्यतः दो एलील होते हैं।"
+            },
+            {
+                id: 31,
+                tag: "",
+                question: "किसी जीव की आनुवंशिक संरचना कहलाती है—",
+                options: [
+                    "फीनोटाइप",
+                    "जीनोटाइप",
+                    "पारिस्थितिकी",
+                    "अनुकूलन"
+                ],
+                correct: 1,
+                explanation: "किसी लक्षण के लिए जीव में उपस्थित एलीलों के संयोजन को जीनोटाइप कहते हैं। उदाहरणतः TT, Tt और tt अलग-अलग जीनोटाइप हो सकते हैं। बाहरी रूप से दिखाई देने वाले लक्षण को फीनोटाइप कहा जाता है।"
+            },
+            {
+                id: 32,
+                tag: "",
+                question: "किसी जीव के दिखाई देने वाले या मापे जा सकने वाले लक्षण कहलाते हैं—",
+                options: [
+                    "फीनोटाइप",
+                    "जीनोटाइप",
+                    "एलील",
+                    "उत्परिवर्तन"
+                ],
+                correct: 0,
+                explanation: "फीनोटाइप जीव के प्रेक्षणीय लक्षणों को दर्शाता है, जैसे पौधे का लंबा या बौना होना। यह जीनोटाइप और पर्यावरण दोनों से प्रभावित हो सकता है। समान जीनोटाइप वाले जीवों में पर्यावरण के कारण कुछ अंतर दिखाई दे सकते हैं।"
+            },
+            {
+                id: 33,
+                tag: "",
+                question: "किसी लक्षण के लिए समान एलीलों की उपस्थिति कहलाती है—",
+                options: [
+                    "विषमयुग्मजी",
+                    "सहप्रभाविता",
+                    "बहुयुग्मविकल्पिता",
+                    "समयुग्मजी"
+                ],
+                correct: 3,
+                explanation: "यदि किसी जीन के दोनों एलील समान हों, जैसे TT या tt, तो जीव समयुग्मजी कहलाता है। यदि दोनों एलील अलग हों, जैसे Tt, तो उसे विषमयुग्मजी कहा जाता है।"
+            },
+            {
+                id: 34,
+                tag: "",
+                question: "एकल संकर क्रॉस की F₂ पीढ़ी में सामान्य प्रभाविता की स्थिति में फीनोटाइप अनुपात होता है—",
+                options: [
+                    "1:1",
+                    "9:3:3:1",
+                    "3:1",
+                    "1:2:1"
+                ],
+                correct: 2,
+                explanation: "एकल संकर क्रॉस में एक लक्षण के दो विपरीत रूपों का अध्ययन किया जाता है। पूर्ण प्रभाविता की स्थिति में F₂ पीढ़ी में प्रभावी और अप्रभावी फीनोटाइप का अनुपात 3:1 होता है। जीनोटाइप अनुपात 1:2:1 होता है।"
+            },
+            {
+                id: 35,
+                tag: "",
+                question: "मेंडल का पृथक्करण नियम बताता है कि—",
+                options: [
+                    "युग्मक निर्माण के समय एलीलों का जोड़ा अलग हो जाता है।",
+                    "सभी जीन सदैव एक साथ विरासत में मिलते हैं।",
+                    "प्रभावी एलील अप्रभावी एलील को नष्ट कर देता है।",
+                    "संतान में केवल माता के जीन आते हैं।"
+                ],
+                correct: 0,
+                explanation: "प्रत्येक लक्षण के लिए उपस्थित दो एलील युग्मक निर्माण के समय अलग हो जाते हैं। इसलिए प्रत्येक युग्मक में उस जीन का केवल एक एलील जाता है। निषेचन के समय एलीलों का जोड़ा पुनः बन जाता है।"
+            },
+            {
+                id: 36,
+                tag: "",
+                question: "मानव स्त्री में लिंग गुणसूत्रों का संयोजन होता है—",
+                options: [
+                    "XY",
+                    "XX",
+                    "XO",
+                    "YY"
+                ],
+                correct: 1,
+                explanation: "मानव स्त्री की कायिक कोशिकाओं में दो X लिंग गुणसूत्र होते हैं। उसके सभी अंडाणुओं में X गुणसूत्र जाता है। मानव पुरुष में XY गुणसूत्र होते हैं और शुक्राणु X या Y में से कोई एक ले जा सकता है।"
+            },
+            {
+                id: 37,
+                tag: "",
+                question: "मानव पुरुष में लिंग गुणसूत्रों का संयोजन है—",
+                options: [
+                    "XX",
+                    "XY",
+                    "YY",
+                    "XXX"
+                ],
+                correct: 1,
+                explanation: "पुरुष में एक X और एक Y लिंग गुणसूत्र होता है। X-युक्त शुक्राणु के अंडाणु से मिलने पर XX तथा Y-युक्त शुक्राणु के मिलने पर XY संयोजन बनता है। इसलिए मानव में संतान का गुणसूत्रीय लिंग शुक्राणु के प्रकार से निर्धारित होता है।"
+            },
+            {
+                id: 38,
+                tag: "",
+                question: "ABO रक्त समूह प्रणाली में Iᴬ और Iᴮ एलील के बीच संबंध है—",
+                options: [
+                    "अपूर्ण प्रभाविता",
+                    "पूर्ण अप्रभाविता",
+                    "सहप्रभाविता",
+                    "घातक प्रभाविता"
+                ],
+                correct: 2,
+                explanation: "Iᴬ और Iᴮ दोनों एलील साथ उपस्थित होने पर अपना प्रभाव व्यक्त करते हैं। इससे AB रक्त समूह बनता है, जिसकी लाल रक्त कोशिकाओं पर A और B दोनों प्रतिजन होते हैं। इसे सहप्रभाविता कहा जाता है।"
+            },
+            {
+                id: 39,
+                tag: "",
+                question: "लाल रक्त कोशिका आधान के संदर्भ में सामान्यतः सार्वभौमिक दाता माना जाता है—",
+                options: [
+                    "O ऋणात्मक",
+                    "AB धनात्मक",
+                    "A धनात्मक",
+                    "B ऋणात्मक"
+                ],
+                correct: 0,
+                explanation: "O ऋणात्मक लाल रक्त कोशिकाओं पर A, B और Rh-D प्रतिजन नहीं होते, इसलिए आपात स्थिति में इन्हें सामान्यतः सार्वभौमिक RBC दाता कहा जाता है। वास्तविक रक्ताधान में रक्त समूह, क्रॉस-मैचिंग और चिकित्सकीय जाँच अनिवार्य होती है।"
+            },
+            {
+                id: 40,
+                tag: "",
+                question: "लाल रक्त कोशिका आधान के संदर्भ में सामान्यतः सार्वभौमिक ग्राही है—",
+                options: [
+                    "O ऋणात्मक",
+                    "A धनात्मक",
+                    "B धनात्मक",
+                    "AB धनात्मक"
+                ],
+                correct: 3,
+                explanation: "AB धनात्मक व्यक्ति में A, B और Rh-D प्रतिजन होते हैं तथा उसके प्लाज्मा में सामान्यतः anti-A या anti-B एंटीबॉडी नहीं होतीं। इसलिए उसे सार्वभौमिक RBC ग्राही कहा जाता है। रक्ताधान से पहले चिकित्सकीय मिलान फिर भी आवश्यक होता है।"
+            },
+            {
+                id: 41,
+                tag: "",
+                question: "प्राणी संघ और उसकी प्रमुख विशेषता का सही मिलान कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>P. पोरिफेरा</td><td style='border:1px solid #cbd5e1; padding:6px;'>1. शरीर में असंख्य छिद्र</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>Q. निडेरिया</td><td style='border:1px solid #cbd5e1; padding:6px;'>2. दंश कोशिकाएँ</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>R. एनेलिडा</td><td style='border:1px solid #cbd5e1; padding:6px;'>3. खंडित शरीर</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>S. आर्थ्रोपोडा</td><td style='border:1px solid #cbd5e1; padding:6px;'>4. संधियुक्त उपांग</td></tr></table>",
+                options: [
+                    "P–2, Q–1, R–4, S–3",
+                    "P–1, Q–2, R–3, S–4",
+                    "P–3, Q–4, R–1, S–2",
+                    "P–4, Q–3, R–2, S–1"
+                ],
+                correct: 1,
+                explanation: "पोरिफेरा के शरीर में जल प्रवेश के लिए छिद्र होते हैं। निडेरिया में शिकार पकड़ने के लिए दंश कोशिकाएँ होती हैं। एनेलिडा में खंडित शरीर और आर्थ्रोपोडा में संधियुक्त उपांग पाए जाते हैं।"
+            },
+            {
+                id: 42,
+                tag: "",
+                question: "अंग और उसकी प्रमुख क्रिया का सही मिलान कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>P. फेफड़े</td><td style='border:1px solid #cbd5e1; padding:6px;'>1. गैसों का आदान-प्रदान</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>Q. वृक्क</td><td style='border:1px solid #cbd5e1; padding:6px;'>2. रक्त का निस्यंदन</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>R. हृदय</td><td style='border:1px solid #cbd5e1; padding:6px;'>3. रक्त का पंपन</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>S. अग्न्याशय</td><td style='border:1px solid #cbd5e1; padding:6px;'>4. इंसुलिन का स्राव</td></tr></table>",
+                options: [
+                    "P–2, Q–3, R–4, S–1",
+                    "P–3, Q–4, R–1, S–2",
+                    "P–4, Q–1, R–2, S–3",
+                    "P–1, Q–2, R–3, S–4"
+                ],
+                correct: 3,
+                explanation: "फेफड़ों की वायुकोषिकाओं में गैस विनिमय होता है। वृक्क नेफ्रॉन की सहायता से रक्त का निस्यंदन करते हैं और हृदय रक्त को पंप करता है। अग्न्याशय इंसुलिन सहित कई हार्मोन और पाचक एंजाइम बनाता है।"
+            },
+            {
+                id: 43,
+                tag: "",
+                question: "हार्मोन और उसके स्रोत का सही मिलान कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>P. इंसुलिन</td><td style='border:1px solid #cbd5e1; padding:6px;'>1. अग्न्याशय</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>Q. थायरॉक्सिन</td><td style='border:1px solid #cbd5e1; padding:6px;'>2. थायरॉइड</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>R. एड्रेनालिन</td><td style='border:1px solid #cbd5e1; padding:6px;'>3. अधिवृक्क ग्रंथि</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>S. वृद्धि हार्मोन</td><td style='border:1px solid #cbd5e1; padding:6px;'>4. पीयूष ग्रंथि</td></tr></table>",
+                options: [
+                    "P–1, Q–2, R–3, S–4",
+                    "P–2, Q–1, R–4, S–3",
+                    "P–3, Q–4, R–1, S–2",
+                    "P–4, Q–3, R–2, S–1"
+                ],
+                correct: 0,
+                explanation: "इंसुलिन अग्न्याशय और थायरॉक्सिन थायरॉइड ग्रंथि से निकलता है। एड्रेनालिन अधिवृक्क मज्जा से स्रावित होकर आपात प्रतिक्रिया में सहायता करता है। वृद्धि हार्मोन अग्र पीयूष से निकलता है।"
+            },
+            {
+                id: 44,
+                tag: "",
+                question: "आनुवंशिक शब्द और उसके अर्थ का सही मिलान कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>P. जीनोटाइप</td><td style='border:1px solid #cbd5e1; padding:6px;'>1. आनुवंशिक संरचना</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>Q. फीनोटाइप</td><td style='border:1px solid #cbd5e1; padding:6px;'>2. दिखाई देने वाला लक्षण</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>R. समयुग्मजी</td><td style='border:1px solid #cbd5e1; padding:6px;'>3. समान एलील</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>S. विषमयुग्मजी</td><td style='border:1px solid #cbd5e1; padding:6px;'>4. भिन्न एलील</td></tr></table>",
+                options: [
+                    "P–2, Q–1, R–4, S–3",
+                    "P–3, Q–4, R–1, S–2",
+                    "P–1, Q–2, R–3, S–4",
+                    "P–4, Q–3, R–2, S–1"
+                ],
+                correct: 2,
+                explanation: "जीनोटाइप एलीलों के संयोजन और फीनोटाइप प्रेक्षणीय लक्षण को दर्शाता है। समान एलीलों वाला जीव समयुग्मजी और भिन्न एलीलों वाला जीव विषमयुग्मजी होता है। पर्यावरण भी फीनोटाइप को प्रभावित कर सकता है।"
+            },
+            {
+                id: 45,
+                tag: "",
+                question: "वैज्ञानिक और उसके प्रमुख योगदान का सही मिलान कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>P. ग्रेगर मेंडल</td><td style='border:1px solid #cbd5e1; padding:6px;'>1. वंशागति के नियम</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>Q. चार्ल्स डार्विन</td><td style='border:1px solid #cbd5e1; padding:6px;'>2. प्राकृतिक चयन</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>R. ह्यूगो डी व्रीज</td><td style='border:1px solid #cbd5e1; padding:6px;'>3. उत्परिवर्तन सिद्धांत</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>S. वाटसन एवं क्रिक</td><td style='border:1px solid #cbd5e1; padding:6px;'>4. DNA का द्विकुंडली मॉडल</td></tr></table>",
+                options: [
+                    "P–2, Q–1, R–4, S–3",
+                    "P–1, Q–2, R–3, S–4",
+                    "P–3, Q–4, R–1, S–2",
+                    "P–4, Q–3, R–2, S–1"
+                ],
+                correct: 1,
+                explanation: "मेंडल ने वंशागति के नियम और डार्विन ने प्राकृतिक चयन का सिद्धांत दिया। डी व्रीज उत्परिवर्तन सिद्धांत से संबंधित हैं। वाटसन और क्रिक ने उपलब्ध प्रयोगात्मक प्रमाणों के आधार पर DNA का द्विकुंडली मॉडल प्रस्तुत किया।"
+            },
+            {
+                id: 46,
+                tag: "",
+                question: "मेंडल के प्रयोगों के संबंध में विचार कीजिए—<br><br>1. मटर में स्पष्ट विपरीत लक्षण उपलब्ध थे।<br>2. मटर में स्व-परागण होता है, पर नियंत्रित पर-परागण भी कराया जा सकता है।<br>3. मेंडल ने एक समय में एक या दो लक्षणों की वंशागति का अध्ययन किया।<br><br>सही विकल्प है—",
+                options: [
+                    "1, 2 और 3 सभी सही हैं।",
+                    "केवल 1 और 2 सही हैं।",
+                    "केवल 2 और 3 सही हैं।",
+                    "केवल 1 सही है।"
+                ],
+                correct: 0,
+                explanation: "मटर का पौधा छोटे जीवन-चक्र, स्पष्ट लक्षणों और अधिक संतानों के कारण उपयुक्त था। स्व-परागण से शुद्ध वंश प्राप्त किए जा सकते थे। नियंत्रित पर-परागण द्वारा विभिन्न लक्षणों वाले पौधों का संकरण संभव था।"
+            },
+            {
+                id: 47,
+                tag: "",
+                question: "मानव लिंग निर्धारण के संबंध में विचार कीजिए—<br><br>1. स्त्री में सामान्यतः XX लिंग गुणसूत्र होते हैं।<br>2. पुरुष में सामान्यतः XY लिंग गुणसूत्र होते हैं।<br>3. अंडाणु X गुणसूत्र देता है, जबकि शुक्राणु X या Y दे सकता है।<br><br>सही विकल्प है—",
+                options: [
+                    "केवल 1 और 3 सही हैं।",
+                    "1, 2 और 3 सभी सही हैं।",
+                    "केवल 2 सही है।",
+                    "केवल 1 और 2 सही हैं।"
+                ],
+                correct: 1,
+                explanation: "मानव अंडाणु में सदैव X लिंग गुणसूत्र होता है। X-युक्त शुक्राणु से XX और Y-युक्त शुक्राणु से XY संयोजन बनता है। इसलिए संतान का गुणसूत्रीय लिंग शुक्राणु में उपस्थित X या Y से निर्धारित होता है।"
+            },
+            {
+                id: 48,
+                tag: "",
+                question: "जैव-विकास के प्रमाणों के संबंध में विचार कीजिए—<br><br>1. समजात अंग समान मूल संरचना और साझा पूर्वज का संकेत देते हैं।<br>2. जीवाश्म पृथ्वी पर पूर्वकाल में उपस्थित जीवों की जानकारी देते हैं।<br>3. समरूप अंग समान कार्य, लेकिन अलग विकासीय उत्पत्ति दिखा सकते हैं।<br><br>सही विकल्प है—",
+                options: [
+                    "केवल 1 और 2 सही हैं।",
+                    "केवल 2 और 3 सही हैं।",
+                    "1, 2 और 3 सभी सही हैं।",
+                    "केवल 1 सही है।"
+                ],
+                correct: 2,
+                explanation: "समजात अंगों की मूल संरचना समान होती है, भले ही उनके कार्य अलग हों। जीवाश्म पुराने जीवों और उनके क्रमिक परिवर्तन की जानकारी देते हैं। समरूप अंग समान पर्यावरणीय आवश्यकता के कारण स्वतंत्र रूप से विकसित हो सकते हैं।"
+            },
+            {
+                id: 49,
+                tag: "",
+                question: "प्राकृतिक चयन के संबंध में विचार कीजिए—<br><br>1. प्राकृतिक चयन का सिद्धांत चार्ल्स डार्विन से संबंधित है।<br>2. लाभदायक वंशानुगत विविधता वाले जीवों के जीवित रहने और प्रजनन की संभावना अधिक हो सकती है।<br>3. लंबे समय में प्राकृतिक चयन किसी समष्टि की विशेषताओं में परिवर्तन ला सकता है।<br><br>सही विकल्प है—",
+                options: [
+                    "1, 2 और 3 सभी सही हैं।",
+                    "केवल 1 और 2 सही हैं।",
+                    "केवल 2 और 3 सही हैं।",
+                    "केवल 1 सही है।"
+                ],
+                correct: 0,
+                explanation: "समष्टि में मौजूद वंशानुगत विविधताओं पर पर्यावरण चयन दबाव डालता है। अनुकूल लक्षण वाले जीव अधिक सफल प्रजनन कर सकते हैं। कई पीढ़ियों में ऐसे लक्षणों की आवृत्ति बढ़ने से विकासीय परिवर्तन दिखाई देते हैं।"
+            },
+            {
+                id: 50,
+                tag: "",
+                question: "विविधता एवं उत्परिवर्तन के संबंध में विचार कीजिए—<br><br>1. आनुवंशिक विविधता विकास के लिए कच्चा पदार्थ प्रदान करती है।<br>2. उत्परिवर्तन DNA में होने वाला स्थायी परिवर्तन हो सकता है।<br>3. सभी उत्परिवर्तन लाभदायक नहीं होते।<br><br>सही विकल्प है—",
+                options: [
+                    "केवल 1 सही है।",
+                    "केवल 1 और 2 सही हैं।",
+                    "केवल 2 और 3 सही हैं।",
+                    "1, 2 और 3 सभी सही हैं।"
+                ],
+                correct: 3,
+                explanation: "उत्परिवर्तन नए एलील और नई आनुवंशिक विविधता उत्पन्न कर सकते हैं। इनके प्रभाव लाभदायक, हानिकारक या तटस्थ हो सकते हैं। पर्यावरणीय परिस्थितियों के अनुसार प्राकृतिक चयन कुछ विविधताओं को आगे बढ़ाता है।"
+            }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
