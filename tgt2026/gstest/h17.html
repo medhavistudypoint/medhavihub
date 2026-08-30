@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">आनुवंशिक विकार एवं अंतःस्रावी तंत्र</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_paid_h17"; 
+
+        const dataset = [
+            {
+                id: 1,
+                tag: "",
+                question: "आनुवंशिक विकार की सबसे उपयुक्त परिभाषा क्या है?",
+                options: [
+                    "जीन या गुणसूत्र में परिवर्तन के कारण उत्पन्न स्वास्थ्य अवस्था",
+                    "केवल सूक्ष्मजीवों के संक्रमण से उत्पन्न अवस्था",
+                    "केवल पोषक तत्त्वों की कमी से होने वाला रोग",
+                    "प्रत्येक ऐसा रोग जो जन्म के बाद विकसित हो"
+                ],
+                correct: 0,
+                explanation: "आनुवंशिक विकार किसी एक जीन, अनेक जीनों, गुणसूत्रों की संख्या या उनकी संरचना में परिवर्तन के कारण हो सकते हैं। सभी आनुवंशिक विकार जन्म के समय स्पष्ट दिखाई दें, यह आवश्यक नहीं है।"
+            },
+            {
+                id: 2,
+                tag: "",
+                question: "जन्मजात रोग के संबंध में कौन-सा कथन सही है?",
+                options: [
+                    "वह अनिवार्य रूप से माता-पिता से प्राप्त होता है",
+                    "वह केवल गुणसूत्रों की संख्या बदलने से होता है",
+                    "वह जन्म के समय उपस्थित होता है, पर जरूरी नहीं कि वंशानुगत हो",
+                    "वह जन्म के कई वर्ष बाद ही प्रकट होता है"
+                ],
+                correct: 2,
+                explanation: "जन्मजात अवस्था जन्म के समय उपस्थित होती है। इसका कारण आनुवंशिक परिवर्तन, गर्भावस्था के दौरान पर्यावरणीय प्रभाव या दोनों का मिश्रण हो सकता है।"
+            },
+            {
+                id: 3,
+                tag: "",
+                question: "जीन उत्परिवर्तन का सही अर्थ क्या है?",
+                options: [
+                    "कोशिका में ATP की मात्रा बढ़ना",
+                    "DNA के न्यूक्लियोटाइड अनुक्रम में परिवर्तन होना",
+                    "प्रत्येक कोशिका में जल की मात्रा घटना",
+                    "रक्त में हीमोग्लोबिन सामान्य रहना"
+                ],
+                correct: 1,
+                explanation: "जीन उत्परिवर्तन DNA अनुक्रम में स्थायी परिवर्तन है। इसका प्रभाव हानिकारक, लाभकारी अथवा तटस्थ हो सकता है और यह हमेशा रोग उत्पन्न नहीं करता।"
+            },
+            {
+                id: 4,
+                tag: "",
+                question: "गुणसूत्रीय विकार किस प्रकार के परिवर्तन से उत्पन्न हो सकता है?",
+                options: [
+                    "केवल आहार में प्रोटीन की कमी से",
+                    "केवल संक्रमण के कारण",
+                    "केवल रक्तचाप बढ़ने से",
+                    "गुणसूत्रों की संख्या या संरचना में परिवर्तन से"
+                ],
+                correct: 3,
+                explanation: "गुणसूत्रीय विकारों में अतिरिक्त या अनुपस्थित गुणसूत्र तथा विलोपन, द्विगुणन या स्थानांतरण जैसे संरचनात्मक परिवर्तन शामिल हो सकते हैं।"
+            },
+            {
+                id: 5,
+                tag: "",
+                question: "ऑटोसोमल रिसेसिव विकार में वाहक सामान्यतः कौन होता है?",
+                options: [
+                    "ऐसा व्यक्ति जिसमें दोनों जीन प्रतियाँ परिवर्तित हों",
+                    "ऐसा व्यक्ति जिसमें एक परिवर्तित और एक सामान्य जीन प्रति हो",
+                    "ऐसा व्यक्ति जिसमें कोई संबंधित जीन न हो",
+                    "ऐसा व्यक्ति जिसमें अतिरिक्त गुणसूत्र उपस्थित हो"
+                ],
+                correct: 1,
+                explanation: "ऑटोसोमल रिसेसिव विकार के वाहक में सामान्यतः संबंधित जीन की केवल एक प्रति परिवर्तित होती है। वह प्रायः रोग के पूर्ण लक्षण नहीं दिखाता, लेकिन परिवर्तित जीन आगे पहुँचा सकता है।"
+            },
+            {
+                id: 6,
+                tag: "",
+                question: "हीमोफीलिया-A किस क्लॉटिंग फैक्टर की कमी से होता है?",
+                options: [
+                    "फैक्टर VIII",
+                    "फैक्टर IX",
+                    "फैक्टर X",
+                    "फैक्टर XII"
+                ],
+                correct: 0,
+                explanation: "हीमोफीलिया-A में F8 जीन के परिवर्तन के कारण क्लॉटिंग फैक्टर VIII की मात्रा या सक्रियता कम होती है। हीमोफीलिया-B फैक्टर IX की कमी से संबंधित है।"
+            },
+            {
+                id: 7,
+                tag: "",
+                question: "हीमोफीलिया-A और हीमोफीलिया-B का सामान्य वंशागति प्रतिरूप क्या है?",
+                options: [
+                    "ऑटोसोमल डॉमिनेंट",
+                    "ऑटोसोमल रिसेसिव",
+                    "X-सहलग्न रिसेसिव",
+                    "Y-सहलग्न डॉमिनेंट"
+                ],
+                correct: 2,
+                explanation: "F8 और F9 जीन X गुणसूत्र पर स्थित होते हैं। एक ही X गुणसूत्र वाले व्यक्ति में परिवर्तित जीन की एक प्रति रोग उत्पन्न करने के लिए पर्याप्त हो सकती है।"
+            },
+            {
+                id: 8,
+                tag: "",
+                question: "X-सहलग्न लक्षण पिता से पुत्र को सीधे क्यों नहीं मिलता?",
+                options: [
+                    "पुत्र को पिता से दोनों X गुणसूत्र मिलते हैं",
+                    "पुत्र को पिता से Y और माता से X गुणसूत्र मिलता है",
+                    "पुत्र को सभी गुणसूत्र केवल माता से मिलते हैं",
+                    "पिता का X गुणसूत्र प्रत्येक पुत्र को मिलता है"
+                ],
+                correct: 1,
+                explanation: "पिता पुत्र को Y गुणसूत्र देता है, जबकि पुत्र का X गुणसूत्र माता से आता है। इसलिए पिता अपने X-सहलग्न जीन को पुत्र को सीधे नहीं देता।"
+            },
+            {
+                id: 9,
+                tag: "",
+                question: "सिकल सेल रोग में कौन-सा असामान्य हीमोग्लोबिन प्रमुख होता है?",
+                options: [
+                    "HbA",
+                    "HbF",
+                    "HbA₂",
+                    "HbS"
+                ],
+                correct: 3,
+                explanation: "HBB जीन के एक विशेष परिवर्तन से हीमोग्लोबिन-S बनता है। कम ऑक्सीजन जैसी परिस्थितियों में HbS का व्यवहार लाल रक्त कोशिकाओं की आकृति और कार्य को प्रभावित कर सकता है।"
+            },
+            {
+                id: 10,
+                tag: "",
+                question: "सिकल सेल रोग का सामान्य वंशागति प्रतिरूप क्या है?",
+                options: [
+                    "ऑटोसोमल रिसेसिव",
+                    "X-सहलग्न रिसेसिव",
+                    "ऑटोसोमल डॉमिनेंट",
+                    "माइटोकॉन्ड्रियल"
+                ],
+                correct: 0,
+                explanation: "सिकल सेल रोग की प्रमुख अवस्था विकसित होने के लिए संबंधित परिवर्तित जीन सामान्यतः दोनों माता-पिता से प्राप्त होता है। एक प्रति मिलने पर सिकल सेल ट्रेट हो सकता है।"
+            },
+            {
+                id: 11,
+                tag: "",
+                question: "कम ऑक्सीजन की स्थिति में सिकल कोशिका बनने का प्रमुख आधार क्या है?",
+                options: [
+                    "सामान्य HbA का पूर्ण विघटन",
+                    "HbS अणुओं का परस्पर जुड़कर तंतु बनाना",
+                    "प्लेटलेट की संख्या अचानक बढ़ना",
+                    "रक्त में कैल्शियम की कमी होना"
+                ],
+                correct: 1,
+                explanation: "डीऑक्सीजेनेटेड अवस्था में HbS बहुलकीकृत होकर लंबे तंतु बना सकता है। इससे लाल रक्त कोशिका कठोर और असामान्य आकृति वाली हो सकती है।"
+            },
+            {
+                id: 12,
+                tag: "",
+                question: "थैलेसीमिया की मूल विशेषता क्या है?",
+                options: [
+                    "हीमोग्लोबिन का अत्यधिक निर्माण",
+                    "प्लेटलेट का अत्यधिक निर्माण",
+                    "ग्लोबिन शृंखला का कम या अनुपस्थित निर्माण",
+                    "श्वेत रक्त कोशिकाओं की असामान्य वृद्धि"
+                ],
+                correct: 2,
+                explanation: "थैलेसीमिया में हीमोग्लोबिन की अल्फा या बीटा ग्लोबिन शृंखला का निर्माण घटता है। इससे प्रभावी हीमोग्लोबिन निर्माण और लाल रक्त कोशिका विकास प्रभावित होता है।"
+            },
+            {
+                id: 13,
+                tag: "",
+                question: "बीटा-थैलेसीमिया मुख्यतः किस जीन से संबंधित है?",
+                options: [
+                    "HBB जीन",
+                    "F8 जीन",
+                    "PAH जीन",
+                    "G6PD जीन"
+                ],
+                correct: 0,
+                explanation: "HBB जीन बीटा-ग्लोबिन बनाने के निर्देश देता है। इस जीन के परिवर्तनों से बीटा-ग्लोबिन का निर्माण कम या पूर्णतः अनुपस्थित हो सकता है।"
+            },
+            {
+                id: 14,
+                tag: "",
+                question: "आनुवंशिक वाहक जाँच का प्रमुख उद्देश्य क्या है?",
+                options: [
+                    "प्रत्येक व्यक्ति में रोग की अनिवार्य पुष्टि करना",
+                    "सभी गुणसूत्रीय विकारों का उपचार करना",
+                    "आनुवंशिक परिवर्तन को शरीर से निकालना",
+                    "परिवर्तित जीन के वाहक की पहचान करके सूचित परामर्श देना"
+                ],
+                correct: 3,
+                explanation: "वाहक जाँच से थैलेसीमिया और सिकल सेल जैसे कुछ विकारों से संबंधित जीन परिवर्तन की पहचान की जा सकती है। परिणामों को समझने के लिए प्रशिक्षित स्वास्थ्य विशेषज्ञ से आनुवंशिक परामर्श महत्वपूर्ण है।"
+            },
+            {
+                id: 15,
+                tag: "",
+                question: "डाउन सिंड्रोम का सर्वाधिक सामान्य गुणसूत्रीय आधार क्या है?",
+                options: [
+                    "मोनोसोमी 21",
+                    "ट्राइसोमी 21",
+                    "ट्राइसोमी 18",
+                    "मोनोसोमी X"
+                ],
+                correct: 1,
+                explanation: "डाउन सिंड्रोम के अधिकांश मामलों में कोशिकाओं में गुणसूत्र 21 की तीन प्रतियाँ होती हैं। कुछ मामले ट्रांसलोकेशन या मोज़ेक परिवर्तन से भी संबंधित होते हैं।"
+            },
+            {
+                id: 16,
+                tag: "",
+                question: "नॉन-डिसजंक्शन का क्या अर्थ है?",
+                options: [
+                    "DNA की दोनों शृंखलाओं का जुड़ना",
+                    "दो असंबंधित जीनों का समान होना",
+                    "कोशिका विभाजन में गुणसूत्रों का ठीक प्रकार से अलग न होना",
+                    "सभी गुणसूत्रों का पूर्णतः नष्ट होना"
+                ],
+                correct: 2,
+                explanation: "नॉन-डिसजंक्शन में समजात गुणसूत्र या सिस्टर क्रोमैटिड ठीक प्रकार से अलग नहीं होते। इससे बनने वाली कोशिका में किसी गुणसूत्र की अतिरिक्त या कम प्रति हो सकती है।"
+            },
+            {
+                id: 17,
+                tag: "",
+                question: "टर्नर सिंड्रोम का सामान्य गुणसूत्रीय विन्यास क्या है?",
+                options: [
+                    "45,X",
+                    "47,XXY",
+                    "47,XYY",
+                    "47,XXX"
+                ],
+                correct: 0,
+                explanation: "टर्नर सिंड्रोम में एक X गुणसूत्र पूर्ण या आंशिक रूप से अनुपस्थित हो सकता है। इसका सामान्य रूप 45,X लिखा जाता है।"
+            },
+            {
+                id: 18,
+                tag: "",
+                question: "क्लाइनफेल्टर सिंड्रोम का सामान्य गुणसूत्रीय विन्यास क्या है?",
+                options: [
+                    "45,X",
+                    "46,XX",
+                    "46,XY",
+                    "47,XXY"
+                ],
+                correct: 3,
+                explanation: "क्लाइनफेल्टर सिंड्रोम में सामान्यतः एक अतिरिक्त X गुणसूत्र उपस्थित होता है। इसका सबसे सामान्य गुणसूत्रीय विन्यास 47,XXY है।"
+            },
+            {
+                id: 19,
+                tag: "",
+                question: "निम्नलिखित में से कौन-सा कथन सही है?",
+                options: [
+                    "प्रत्येक जन्मजात विकार माता-पिता से प्राप्त होता है",
+                    "कुछ जन्मजात विकार आनुवंशिक और कुछ पर्यावरणीय कारणों से होते हैं",
+                    "सभी आनुवंशिक विकार जन्म के समय स्पष्ट होते हैं",
+                    "जन्मजात तथा आनुवंशिक शब्द पूर्णतः समान हैं"
+                ],
+                correct: 1,
+                explanation: "जन्मजात का अर्थ जन्म के समय उपस्थित होना है, जबकि आनुवंशिक का अर्थ जीन या गुणसूत्र संबंधी कारण होना है। दोनों श्रेणियाँ एक-दूसरे से जुड़ सकती हैं, लेकिन समान नहीं हैं।"
+            },
+            {
+                id: 20,
+                tag: "",
+                question: "नवजात स्क्रीनिंग का प्रमुख लाभ क्या है?",
+                options: [
+                    "लक्षण प्रकट होने से पहले कुछ उपचार योग्य विकारों की पहचान",
+                    "सभी आनुवंशिक विकारों को जन्म से पहले समाप्त करना",
+                    "बच्चे के सभी भविष्य के रोगों की भविष्यवाणी करना",
+                    "प्रत्येक जन्मजात विकार का तत्काल उपचार करना"
+                ],
+                correct: 0,
+                explanation: "नवजात स्क्रीनिंग से फिनाइलकीटोनूरिया और जन्मजात हाइपोथायरॉइडिज्म जैसे कुछ विकार जल्दी पहचाने जा सकते हैं। समय पर उपचार से गंभीर विकास संबंधी परिणामों को कम किया जा सकता है।"
+            },
+            {
+                id: 21,
+                tag: "",
+                question: "फिनाइलकीटोनूरिया में मुख्य रूप से किस एंजाइम की कमी होती है?",
+                options: [
+                    "टायरोसिनेज",
+                    "लैक्टेज",
+                    "फिनाइलएलानिन हाइड्रॉक्सिलेज",
+                    "ग्लूकोज-6-फॉस्फेटेज"
+                ],
+                correct: 2,
+                explanation: "यह एंजाइम फिनाइलएलानिन को टायरोसिन में परिवर्तित करता है। इसकी कमी से फिनाइलएलानिन शरीर में अधिक मात्रा में एकत्र हो सकता है।"
+            },
+            {
+                id: 22,
+                tag: "",
+                question: "फिनाइलकीटोनूरिया के प्रबंधन का प्रमुख सिद्धांत क्या है?",
+                options: [
+                    "बिना जाँच सभी प्रोटीन स्थायी रूप से बंद करना",
+                    "विशेषज्ञ की देखरेख में फिनाइलएलानिन की नियंत्रित मात्रा वाला आहार",
+                    "आहार में फिनाइलएलानिन की मात्रा अत्यधिक बढ़ाना",
+                    "केवल आयोडीनयुक्त नमक का प्रयोग करना"
+                ],
+                correct: 1,
+                explanation: "फिनाइलएलानिन आवश्यक अमीनो अम्ल भी है, इसलिए इसे पूर्णतः हटाना उचित नहीं। इसकी सुरक्षित मात्रा व्यक्ति की जाँच के आधार पर विशेषज्ञ द्वारा निर्धारित की जाती है।"
+            },
+            {
+                id: 23,
+                tag: "",
+                question: "ऐल्बिनिज्म का प्रमुख जैवरासायनिक आधार क्या है?",
+                options: [
+                    "हीमोग्लोबिन संश्लेषण में वृद्धि",
+                    "ग्लाइकोजन का अत्यधिक निर्माण",
+                    "थायरॉक्सिन का अत्यधिक निर्माण",
+                    "मेलेनिन संश्लेषण या वितरण का प्रभावित होना"
+                ],
+                correct: 3,
+                explanation: "ऐल्बिनिज्म आनुवंशिक अवस्थाओं का समूह है जिसमें मेलेनिन का निर्माण या वितरण प्रभावित होता है। मेलेनिन आँखों, त्वचा और बालों में पाया जाने वाला वर्णक है।"
+            },
+            {
+                id: 24,
+                tag: "",
+                question: "G6PD एंजाइम का लाल रक्त कोशिकाओं में प्रमुख कार्य क्या है?",
+                options: [
+                    "ऑक्सीडेटिव क्षति से सुरक्षा प्रदान करना",
+                    "इंसुलिन का निर्माण करना",
+                    "थायरॉक्सिन को सक्रिय करना",
+                    "कैल्शियम का अवशोषण करना"
+                ],
+                correct: 0,
+                explanation: "G6PD एंजाइम NADPH निर्माण में सहायता करता है, जो लाल रक्त कोशिकाओं को ऑक्सीडेटिव क्षति से बचाने के लिए आवश्यक है। इसकी कमी में कुछ संक्रमण या रासायनिक कारक हीमोलाइसिस उत्पन्न कर सकते हैं।"
+            },
+            {
+                id: 25,
+                tag: "",
+                question: "गैलेक्टोसीमिया में मुख्य समस्या क्या होती है?",
+                options: [
+                    "ग्लूकोज का कोशिकाओं में प्रवेश न होना",
+                    "गैलेक्टोज के उपापचय से संबंधित एंजाइम का दोष",
+                    "प्रोटीन का आमाशय में पाचन न होना",
+                    "आयोडीन का थायरॉइड तक न पहुँचना"
+                ],
+                correct: 1,
+                explanation: "क्लासिक गैलेक्टोसीमिया सामान्यतः GALT एंजाइम की कमी से संबंधित है। इससे गैलेक्टोज और उसके उपापचयी पदार्थ शरीर में जमा हो सकते हैं।"
+            },
+            {
+                id: 26,
+                tag: "",
+                question: "जन्मजात चयापचय दोष का सबसे उपयुक्त अर्थ क्या है?",
+                options: [
+                    "केवल अधिक भोजन से होने वाला विकार",
+                    "केवल विटामिन की कमी से होने वाला विकार",
+                    "किसी आनुवंशिक एंजाइम दोष से उपापचयी मार्ग का प्रभावित होना",
+                    "प्रत्येक संक्रामक रोग में उपापचय बढ़ना"
+                ],
+                correct: 2,
+                explanation: "जन्मजात चयापचय दोषों में किसी एंजाइम या परिवहन प्रोटीन की कमी से विशेष पदार्थ का निर्माण, विघटन या परिवहन प्रभावित होता है।"
+            },
+            {
+                id: 27,
+                tag: "",
+                question: "हाइपोथायरॉइडिज्म की मूल हार्मोनल विशेषता क्या है?",
+                options: [
+                    "थायरॉइड हार्मोन का अपर्याप्त निर्माण या प्रभाव",
+                    "कॉर्टिसोल का अत्यधिक निर्माण",
+                    "इंसुलिन का पूर्ण अभाव",
+                    "वृद्धि हार्मोन का अत्यधिक स्राव"
+                ],
+                correct: 0,
+                explanation: "थायरॉइड हार्मोन अनेक उपापचयी क्रियाओं को नियंत्रित करते हैं। इनकी कमी से शरीर की अनेक प्रक्रियाओं की गति धीमी हो सकती है।"
+            },
+            {
+                id: 28,
+                tag: "",
+                question: "जन्मजात हाइपोथायरॉइडिज्म की शीघ्र पहचान क्यों आवश्यक है?",
+                options: [
+                    "इससे केवल दाँतों का रंग बदलता है",
+                    "यह केवल रक्तचाप को प्रभावित करता है",
+                    "यह स्वतः हमेशा ठीक हो जाता है",
+                    "उपचार में देरी से मस्तिष्क एवं शारीरिक विकास प्रभावित हो सकता है"
+                ],
+                correct: 3,
+                explanation: "प्रारम्भिक जीवन में थायरॉइड हार्मोन मस्तिष्क और शरीर के विकास के लिए महत्वपूर्ण हैं। नवजात स्क्रीनिंग और समय पर उपचार गंभीर दीर्घकालिक प्रभावों को रोकने में सहायक हैं।"
+            },
+            {
+                id: 29,
+                tag: "",
+                question: "प्राथमिक हाइपोथायरॉइडिज्म में सामान्यतः कौन-सा प्रयोगशाला प्रतिरूप मिलता है?",
+                options: [
+                    "कम TSH और अधिक T₄",
+                    "अधिक TSH और कम T₄",
+                    "अधिक इंसुलिन और कम ग्लूकोज",
+                    "कम ACTH और अधिक कॉर्टिसोल"
+                ],
+                correct: 1,
+                explanation: "प्राथमिक हाइपोथायरॉइडिज्म में थायरॉइड ग्रंथि पर्याप्त हार्मोन नहीं बनाती। नकारात्मक प्रतिपुष्टि कम होने से पीयूष ग्रंथि अधिक TSH स्रावित करती है।"
+            },
+            {
+                id: 30,
+                tag: "",
+                question: "घेंघा के संबंध में कौन-सा कथन सही है?",
+                options: [
+                    "यह केवल हाइपरथायरॉइडिज्म में होता है",
+                    "यह केवल हाइपोथायरॉइडिज्म में होता है",
+                    "यह थायरॉइड की वृद्धि है और विभिन्न कार्यात्मक अवस्थाओं में हो सकता है",
+                    "यह अधिवृक्क ग्रंथि के बढ़ने को कहते हैं"
+                ],
+                correct: 2,
+                explanation: "घेंघा केवल थायरॉइड के बढ़े हुए आकार को दर्शाता है। व्यक्ति में थायरॉइड हार्मोन कम, सामान्य या अधिक हो सकते हैं।"
+            },
+            {
+                id: 31,
+                tag: "",
+                question: "मधुमेह मेलिटस की मूल विशेषता क्या है?",
+                options: [
+                    "इंसुलिन निर्माण या क्रिया की समस्या के कारण लगातार उच्च रक्त ग्लूकोज",
+                    "ADH की कमी के कारण केवल अधिक मूत्र",
+                    "थायरॉक्सिन की कमी के कारण कम उपापचय",
+                    "कॉर्टिसोल की कमी के कारण कम रक्तचाप"
+                ],
+                correct: 0,
+                explanation: "मधुमेह मेलिटस में इंसुलिन की कमी, इंसुलिन प्रतिरोध या दोनों के कारण रक्त ग्लूकोज बढ़ता है। लंबे समय में यह रक्तवाहिकाओं और विभिन्न अंगों को प्रभावित कर सकता है।"
+            },
+            {
+                id: 32,
+                tag: "",
+                question: "टाइप-1 मधुमेह का प्रमुख आधार क्या है?",
+                options: [
+                    "ADH का अपर्याप्त स्राव",
+                    "अग्न्याशय की बीटा कोशिकाओं की प्रतिरक्षा-जनित क्षति",
+                    "केवल अधिक शर्करा खाने से इंसुलिन बंद होना",
+                    "थायरॉइड ग्रंथि का बढ़ना"
+                ],
+                correct: 1,
+                explanation: "टाइप-1 मधुमेह में प्रतिरक्षा तंत्र इंसुलिन बनाने वाली बीटा कोशिकाओं को क्षति पहुँचाता है। इससे इंसुलिन का उत्पादन बहुत कम या बंद हो सकता है।"
+            },
+            {
+                id: 33,
+                tag: "",
+                question: "टाइप-2 मधुमेह की प्रमुख प्रारम्भिक विशेषता क्या है?",
+                options: [
+                    "थायरॉक्सिन प्रतिरोध",
+                    "कॉर्टिसोल प्रतिरोध",
+                    "ADH प्रतिरोध",
+                    "इंसुलिन प्रतिरोध"
+                ],
+                correct: 3,
+                explanation: "टाइप-2 मधुमेह में मांसपेशी, यकृत और वसा कोशिकाएँ इंसुलिन के प्रति ठीक प्रतिक्रिया नहीं देतीं। समय के साथ अग्न्याशय की इंसुलिन निर्माण क्षमता भी अपर्याप्त हो सकती है।"
+            },
+            {
+                id: 34,
+                tag: "",
+                question: "डायबिटीज इन्सिपिडस मुख्यतः किस हार्मोन की कमी या उसके प्रति असंवेदनशीलता से संबंधित है?",
+                options: [
+                    "एंटीडाययूरेटिक हार्मोन",
+                    "इंसुलिन",
+                    "थायरॉक्सिन",
+                    "पैराथॉर्मोन"
+                ],
+                correct: 0,
+                explanation: "डायबिटीज इन्सिपिडस में ADH की कमी या वृक्क की उसके प्रति प्रतिक्रिया कम होने से बहुत अधिक पतला मूत्र बन सकता है। यह मधुमेह मेलिटस से अलग अवस्था है।"
+            },
+            {
+                id: 35,
+                tag: "",
+                question: "कुशिंग सिंड्रोम का प्रमुख हार्मोनल आधार क्या है?",
+                options: [
+                    "इंसुलिन की गंभीर कमी",
+                    "थायरॉक्सिन की गंभीर कमी",
+                    "लंबे समय तक कॉर्टिसोल की अधिकता",
+                    "ADH की पूर्ण कमी"
+                ],
+                correct: 2,
+                explanation: "कुशिंग सिंड्रोम शरीर में लंबे समय तक अधिक कॉर्टिसोल के प्रभाव से उत्पन्न होता है। इसका कारण बाहरी ग्लूकोकोर्टिकोइड दवाएँ या शरीर में कॉर्टिसोल का अधिक निर्माण हो सकता है।"
+            },
+            {
+                id: 36,
+                tag: "",
+                question: "एडिसन रोग में प्रमुख रूप से किसकी कमी होती है?",
+                options: [
+                    "केवल वृद्धि हार्मोन",
+                    "कॉर्टिसोल तथा कभी-कभी एल्डोस्टेरोन",
+                    "केवल इंसुलिन",
+                    "केवल थायरॉक्सिन"
+                ],
+                correct: 1,
+                explanation: "एडिसन रोग प्राथमिक अधिवृक्क अपर्याप्तता है। इसमें अधिवृक्क प्रांतस्था क्षतिग्रस्त होने से कॉर्टिसोल और प्रायः एल्डोस्टेरोन का उत्पादन कम हो जाता है।"
+            },
+            {
+                id: 37,
+                tag: "",
+                question: "वयस्क में वृद्धि प्लेट बंद होने के बाद वृद्धि हार्मोन की अधिकता से कौन-सी अवस्था होती है?",
+                options: [
+                    "एक्रोमेगली",
+                    "रिकेट्स",
+                    "टर्नर सिंड्रोम",
+                    "हाइपोथायरॉइडिज्म"
+                ],
+                correct: 0,
+                explanation: "वृद्धि प्लेट बंद होने के बाद अधिक GH लंबी हड्डियों की लंबाई बहुत नहीं बढ़ाता, लेकिन अस्थियों और कोमल ऊतकों की असामान्य वृद्धि हो सकती है। इसे एक्रोमेगली कहते हैं।"
+            },
+            {
+                id: 38,
+                tag: "",
+                question: "बच्चों में वृद्धि प्लेट बंद होने से पहले वृद्धि हार्मोन की अधिकता से क्या होता है?",
+                options: [
+                    "एडिसन रोग",
+                    "पेलाग्रा",
+                    "हाइपोथायरॉइडिज्म",
+                    "जायन्टिज्म"
+                ],
+                correct: 3,
+                explanation: "वृद्धि प्लेट खुली होने के दौरान GH की अधिकता से लंबी हड्डियों की वृद्धि अत्यधिक हो सकती है। यही स्थिति जायन्टिज्म कहलाती है।"
+            },
+            {
+                id: 39,
+                tag: "",
+                question: "बाल्यावस्था में वृद्धि हार्मोन की गंभीर कमी का मुख्य प्रभाव क्या है?",
+                options: [
+                    "रक्त में ग्लूकोज का लगातार बढ़ना",
+                    "रेखीय वृद्धि की गति कम होना",
+                    "थायरॉइड ग्रंथि का अत्यधिक बढ़ना",
+                    "कॉर्टिसोल का अत्यधिक निर्माण"
+                ],
+                correct: 1,
+                explanation: "वृद्धि हार्मोन और IGF-1 बाल्यावस्था की सामान्य वृद्धि में महत्वपूर्ण हैं। इनकी कमी से लंबाई बढ़ने की गति अपेक्षा से कम हो सकती है।"
+            },
+            {
+                id: 40,
+                tag: "",
+                question: "मेटाबोलिक सिंड्रोम में सामान्यतः कौन-सा समूह पाया जाता है?",
+                options: [
+                    "रतौंधी, स्कर्वी और रिकेट्स",
+                    "हीमोफीलिया, वर्णांधता और थैलेसीमिया",
+                    "केंद्रीय मोटापा, उच्च रक्तचाप, बढ़ा ग्लूकोज और असामान्य लिपिड",
+                    "टाइफाइड, हैजा और मलेरिया"
+                ],
+                correct: 2,
+                explanation: "मेटाबोलिक सिंड्रोम परस्पर संबंधित उपापचयी जोखिम कारकों का समूह है। इससे टाइप-2 मधुमेह और हृदय रोग का जोखिम बढ़ता है।"
+            },
+            {
+                id: 41,
+                tag: "",
+                question: "रोग को संबंधित जैविक दोष से सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>1. हीमोफीलिया-A</td><td style='border:1px solid #cbd5e1; padding:6px;'>a. फैक्टर VIII की कमी</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>2. सिकल सेल रोग</td><td style='border:1px solid #cbd5e1; padding:6px;'>b. हीमोग्लोबिन-S</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>3. बीटा-थैलेसीमिया</td><td style='border:1px solid #cbd5e1; padding:6px;'>c. बीटा-ग्लोबिन निर्माण में कमी</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>4. फिनाइलकीटोनूरिया</td><td style='border:1px solid #cbd5e1; padding:6px;'>d. फिनाइलएलानिन हाइड्रॉक्सिलेज की कमी</td></tr></table>",
+                options: [
+                    "1-a, 2-b, 3-c, 4-d",
+                    "1-b, 2-a, 3-d, 4-c",
+                    "1-c, 2-d, 3-a, 4-b",
+                    "1-d, 2-c, 3-b, 4-a"
+                ],
+                correct: 0,
+                explanation: "इन चारों विकारों के अलग-अलग आणविक आधार हैं। हीमोफीलिया में क्लॉटिंग फैक्टर, सिकल सेल और थैलेसीमिया में ग्लोबिन तथा PKU में चयापचयी एंजाइम प्रभावित होता है।"
+            },
+            {
+                id: 42,
+                tag: "",
+                question: "गुणसूत्रीय अवस्था को उसके विन्यास से सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>1. डाउन सिंड्रोम</td><td style='border:1px solid #cbd5e1; padding:6px;'>a. 45,X</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>2. टर्नर सिंड्रोम</td><td style='border:1px solid #cbd5e1; padding:6px;'>b. ट्राइसोमी 21</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>3. क्लाइनफेल्टर सिंड्रोम</td><td style='border:1px solid #cbd5e1; padding:6px;'>c. ट्राइसोमी 18</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>4. एडवर्ड्स सिंड्रोम</td><td style='border:1px solid #cbd5e1; padding:6px;'>d. 47,XXY</td></tr></table>",
+                options: [
+                    "1-a, 2-b, 3-c, 4-d",
+                    "1-b, 2-a, 3-d, 4-c",
+                    "1-c, 2-d, 3-a, 4-b",
+                    "1-d, 2-c, 3-b, 4-a"
+                ],
+                correct: 1,
+                explanation: "डाउन सिंड्रोम ट्राइसोमी 21, टर्नर 45,X, क्लाइनफेल्टर 47,XXY और एडवर्ड्स सिंड्रोम ट्राइसोमी 18 से संबंधित है।"
+            },
+            {
+                id: 43,
+                tag: "",
+                question: "ग्रंथि या कोशिका को उसके हार्मोन से सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>1. थायरॉइड ग्रंथि</td><td style='border:1px solid #cbd5e1; padding:6px;'>a. इंसुलिन</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>2. अधिवृक्क प्रांतस्था</td><td style='border:1px solid #cbd5e1; padding:6px;'>b. ADH का संग्रह एवं विमोचन</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>3. अग्न्याशय की बीटा कोशिका</td><td style='border:1px solid #cbd5e1; padding:6px;'>c. थायरॉक्सिन</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>4. पश्च पीयूष</td><td style='border:1px solid #cbd5e1; padding:6px;'>d. कॉर्टिसोल</td></tr></table>",
+                options: [
+                    "1-a, 2-c, 3-d, 4-b",
+                    "1-d, 2-b, 3-c, 4-a",
+                    "1-b, 2-a, 3-d, 4-c",
+                    "1-c, 2-d, 3-a, 4-b"
+                ],
+                correct: 3,
+                explanation: "थायरॉइड थायरॉक्सिन, अधिवृक्क प्रांतस्था कॉर्टिसोल और बीटा कोशिका इंसुलिन बनाती है। ADH का निर्माण हाइपोथैलेमस में होता है और पश्च पीयूष से उसका विमोचन होता है।"
+            },
+            {
+                id: 44,
+                tag: "",
+                question: "रोग को संबंधित हार्मोनल परिवर्तन से सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>1. हाइपोथायरॉइडिज्म</td><td style='border:1px solid #cbd5e1; padding:6px;'>a. कॉर्टिसोल की अधिकता</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>2. हाइपरथायरॉइडिज्म</td><td style='border:1px solid #cbd5e1; padding:6px;'>b. अधिवृक्क हार्मोन की कमी</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>3. कुशिंग सिंड्रोम</td><td style='border:1px solid #cbd5e1; padding:6px;'>c. थायरॉइड हार्मोन की कमी</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>4. एडिसन रोग</td><td style='border:1px solid #cbd5e1; padding:6px;'>d. थायरॉइड हार्मोन की अधिकता</td></tr></table>",
+                options: [
+                    "1-a, 2-b, 3-d, 4-c",
+                    "1-d, 2-c, 3-b, 4-a",
+                    "1-c, 2-d, 3-a, 4-b",
+                    "1-b, 2-a, 3-c, 4-d"
+                ],
+                correct: 2,
+                explanation: "हाइपो और हाइपरथायरॉइडिज्म क्रमशः कम और अधिक थायरॉइड हार्मोन से संबंधित हैं। कुशिंग में कॉर्टिसोल की अधिकता तथा एडिसन में अधिवृक्क हार्मोन की कमी होती है।"
+            },
+            {
+                id: 45,
+                tag: "",
+                question: "विकार को सामान्य वंशागति आधार से सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>1. हीमोफीलिया-A</td><td style='border:1px solid #cbd5e1; padding:6px;'>a. X-सहलग्न रिसेसिव</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>2. सिकल सेल रोग</td><td style='border:1px solid #cbd5e1; padding:6px;'>b. ऑटोसोमल रिसेसिव</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>3. बीटा-थैलेसीमिया मेजर</td><td style='border:1px solid #cbd5e1; padding:6px;'>c. सामान्यतः ऑटोसोमल रिसेसिव</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>4. सामान्य ट्राइसोमी-21</td><td style='border:1px solid #cbd5e1; padding:6px;'>d. प्रायः नॉन-डिसजंक्शन की आकस्मिक घटना</td></tr></table>",
+                options: [
+                    "1-a, 2-b, 3-c, 4-d",
+                    "1-b, 2-c, 3-d, 4-a",
+                    "1-c, 2-d, 3-a, 4-b",
+                    "1-d, 2-a, 3-b, 4-c"
+                ],
+                correct: 0,
+                explanation: "हीमोफीलिया X-सहलग्न है, जबकि सिकल सेल और बीटा-थैलेसीमिया सामान्यतः ऑटोसोमल रिसेसिव हैं। ट्राइसोमी-21 के अधिकांश मामले वंशानुगत न होकर आकस्मिक नॉन-डिसजंक्शन से होते हैं।"
+            },
+            {
+                id: 46,
+                tag: "",
+                question: "<b>कथन I:</b> जन्मजात अवस्था जन्म के समय उपस्थित होती है।<br><b>कथन II:</b> नवजात स्क्रीनिंग से कुछ आनुवंशिक एवं चयापचयी विकार लक्षणों से पहले पहचाने जा सकते हैं।<br><br>उपर्युक्त कथनों के आलोक में सही विकल्प चुनिए:",
+                options: [
+                    "कथन I और II दोनों सही हैं तथा कथन II, कथन I की सही व्याख्या है",
+                    "कथन I और II दोनों सही हैं, लेकिन कथन II, कथन I की सही व्याख्या नहीं है",
+                    "कथन I सही है, लेकिन कथन II गलत है",
+                    "कथन I गलत है, लेकिन कथन II सही है"
+                ],
+                correct: 1,
+                explanation: "पहला कथन जन्मजात अवस्था की परिभाषा बताता है, जबकि दूसरा नवजात स्क्रीनिंग का लाभ बताता है। दोनों सही हैं, लेकिन दूसरा पहले की व्याख्या नहीं करता।"
+            },
+            {
+                id: 47,
+                tag: "",
+                question: "<b>कथन I:</b> हीमोफीलिया-A में रक्त का थक्का बनने की प्रक्रिया प्रभावित होती है।<br><b>कथन II:</b> इस विकार में क्लॉटिंग फैक्टर VIII की मात्रा या सक्रियता कम होती है।<br><br>उपर्युक्त कथनों के आलोक में सही विकल्प चुनिए:",
+                options: [
+                    "कथन I और II दोनों सही हैं तथा कथन II, कथन I की सही व्याख्या है",
+                    "कथन I और II दोनों सही हैं, लेकिन कथन II, कथन I की सही व्याख्या नहीं है",
+                    "कथन I सही है, लेकिन कथन II गलत है",
+                    "कथन I गलत है, लेकिन कथन II सही है"
+                ],
+                correct: 0,
+                explanation: "फैक्टर VIII रक्त के जमने की शृंखला का महत्वपूर्ण भाग है। इसकी कमी के कारण पर्याप्त एवं स्थिर थक्का बनने की प्रक्रिया प्रभावित होती है।"
+            },
+            {
+                id: 48,
+                tag: "",
+                question: "<b>कथन I:</b> डाउन सिंड्रोम के सभी मामले माता-पिता से वंशानुगत रूप में मिलते हैं।<br><b>कथन II:</b> डाउन सिंड्रोम के अधिकांश मामले गुणसूत्र 21 के आकस्मिक नॉन-डिसजंक्शन से होते हैं।<br><br>उपर्युक्त कथनों के आलोक में सही विकल्प चुनिए:",
+                options: [
+                    "कथन I और II दोनों सही हैं तथा कथन II, कथन I की सही व्याख्या है",
+                    "कथन I और II दोनों सही हैं, लेकिन कथन II, कथन I की सही व्याख्या नहीं है",
+                    "कथन I सही है, लेकिन कथन II गलत है",
+                    "कथन I गलत है, लेकिन कथन II सही है"
+                ],
+                correct: 3,
+                explanation: "अधिकांश ट्राइसोमी-21 मामले वंशानुगत नहीं होते। कुछ ट्रांसलोकेशन वाले मामलों में गुणसूत्रीय पुनर्व्यवस्था माता-पिता से मिल सकती है।"
+            },
+            {
+                id: 49,
+                tag: "",
+                question: "<b>कथन I:</b> टाइप-2 मधुमेह में इंसुलिन प्रतिरोध महत्वपूर्ण भूमिका निभाता है।<br><b>कथन II:</b> इंसुलिन प्रतिरोध में मांसपेशी, यकृत और वसा कोशिकाएँ इंसुलिन के प्रति पर्याप्त प्रतिक्रिया नहीं देतीं।<br><br>उपर्युक्त कथनों के आलोक में सही विकल्प चुनिए:",
+                options: [
+                    "कथन I और II दोनों सही हैं तथा कथन II, कथन I की सही व्याख्या है",
+                    "कथन I और II दोनों सही हैं, लेकिन कथन II, कथन I की सही व्याख्या नहीं है",
+                    "कथन I सही है, लेकिन कथन II गलत है",
+                    "कथन I गलत है, लेकिन कथन II सही है"
+                ],
+                correct: 0,
+                explanation: "कोशिकाओं की कमजोर प्रतिक्रिया के कारण ग्लूकोज का उपयोग प्रभावित होता है। अग्न्याशय कुछ समय तक अधिक इंसुलिन बनाकर इसकी भरपाई करता है, लेकिन बाद में रक्त शर्करा बढ़ सकती है।"
+            },
+            {
+                id: 50,
+                tag: "",
+                question: "<b>कथन I:</b> घेंघा का अर्थ थायरॉइड ग्रंथि का बढ़ना है।<br><b>कथन II:</b> आयोडीन थायरॉइड हार्मोन के निर्माण के लिए आवश्यक होता है।<br><br>उपर्युक्त कथनों के आलोक में सही विकल्प चुनिए:",
+                options: [
+                    "कथन I और II दोनों सही हैं तथा कथन II, कथन I की सही व्याख्या है",
+                    "कथन I और II दोनों सही हैं, लेकिन कथन II, कथन I की सही व्याख्या नहीं है",
+                    "कथन I सही है, लेकिन कथन II गलत है",
+                    "कथन I गलत है, लेकिन कथन II सही है"
+                ],
+                correct: 1,
+                explanation: "पहला कथन घेंघा की परिभाषा है। दूसरा आयोडीन का कार्य बताता है; आयोडीन की कमी घेंघा का एक कारण है, लेकिन थायरॉइड वृद्धि के अन्य कारण भी हो सकते हैं।"
+            }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
