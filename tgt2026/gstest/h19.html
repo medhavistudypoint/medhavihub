@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">स्वास्थ्य संगठन एवं राष्ट्रीय स्वास्थ्य कार्यक्रम</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_paid_h19"; 
+
+        const dataset = [
+            {
+                id: 1,
+                tag: "",
+                question: "विश्व स्वास्थ्य संगठन का संविधान कब प्रभावी हुआ?",
+                options: [
+                    "24 अक्टूबर 1945",
+                    "7 अप्रैल 1948",
+                    "11 दिसंबर 1946",
+                    "1 जनवरी 1950"
+                ],
+                correct: 1,
+                explanation: "WHO का संविधान 7 अप्रैल 1948 को प्रभावी हुआ। इसी घटना की स्मृति में प्रतिवर्ष 7 अप्रैल को विश्व स्वास्थ्य दिवस मनाया जाता है।"
+            },
+            {
+                id: 2,
+                tag: "",
+                question: "विश्व स्वास्थ्य दिवस कब मनाया जाता है?",
+                options: [
+                    "7 अप्रैल",
+                    "12 मई",
+                    "1 दिसंबर",
+                    "24 अक्टूबर"
+                ],
+                correct: 0,
+                explanation: "7 अप्रैल WHO की स्थापना से संबंधित दिवस है। विश्व स्वास्थ्य दिवस के माध्यम से प्रत्येक वर्ष किसी प्रमुख वैश्विक स्वास्थ्य विषय पर जागरूकता बढ़ाई जाती है।"
+            },
+            {
+                id: 3,
+                tag: "",
+                question: "विश्व स्वास्थ्य संगठन का मुख्यालय कहाँ स्थित है?",
+                options: [
+                    "पेरिस",
+                    "न्यूयॉर्क",
+                    "रोम",
+                    "जिनेवा"
+                ],
+                correct: 3,
+                explanation: "WHO का मुख्यालय जिनेवा, स्विट्जरलैंड में है। इसके अतिरिक्त विश्व के विभिन्न क्षेत्रों के लिए क्षेत्रीय कार्यालय भी हैं।"
+            },
+            {
+                id: 4,
+                tag: "",
+                question: "WHO का संवैधानिक उद्देश्य क्या है?",
+                options: [
+                    "केवल संक्रामक रोग समाप्त करना",
+                    "केवल सदस्य देशों को औषधियाँ देना",
+                    "सभी लोगों को स्वास्थ्य का सर्वोच्च संभव स्तर प्राप्त कराना",
+                    "केवल अस्पतालों का निर्माण कराना"
+                ],
+                correct: 2,
+                explanation: "WHO का कार्य वैश्विक स्वास्थ्य संबंधी प्रयासों को निर्देशित और समन्वित करना है। इसमें स्वास्थ्य मानक, तकनीकी मार्गदर्शन, निगरानी और आपातकालीन प्रतिक्रिया सम्मिलित हैं।"
+            },
+            {
+                id: 5,
+                tag: "",
+                question: "WHO के अनुसार स्वास्थ्य की सही अवधारणा क्या है?",
+                options: [
+                    "पूर्ण शारीरिक, मानसिक एवं सामाजिक कल्याण की अवस्था",
+                    "केवल शरीर में रोग की अनुपस्थिति",
+                    "केवल शारीरिक क्षमता का अच्छा होना",
+                    "केवल मानसिक तनाव का न होना"
+                ],
+                correct: 0,
+                explanation: "WHO के संविधान में स्वास्थ्य को केवल रोग या दुर्बलता की अनुपस्थिति नहीं माना गया। इसमें शारीरिक, मानसिक और सामाजिक कल्याण शामिल है।"
+            },
+            {
+                id: 6,
+                tag: "",
+                question: "WHO का संयुक्त राष्ट्र से क्या संबंध है?",
+                options: [
+                    "यह संयुक्त राष्ट्र से स्वतंत्र निजी संस्था है",
+                    "यह संयुक्त राष्ट्र की स्वास्थ्य संबंधी विशिष्ट एजेंसी है",
+                    "यह केवल विश्व बैंक का स्वास्थ्य विभाग है",
+                    "यह किसी एक देश का सरकारी विभाग है"
+                ],
+                correct: 1,
+                explanation: "WHO संयुक्त राष्ट्र प्रणाली के भीतर अंतरराष्ट्रीय स्वास्थ्य कार्यों के निर्देशन और समन्वय की प्रमुख संस्था है।"
+            },
+            {
+                id: 7,
+                tag: "",
+                question: "विश्व स्वास्थ्य संगठन कितने क्षेत्रों में संगठित है?",
+                options: [
+                    "चार",
+                    "पाँच",
+                    "छह",
+                    "आठ"
+                ],
+                correct: 2,
+                explanation: "WHO छह क्षेत्रों—अफ्रीका, अमेरिका, दक्षिण-पूर्व एशिया, यूरोप, पूर्वी भूमध्यसागर और पश्चिमी प्रशांत—में संगठित है।"
+            },
+            {
+                id: 8,
+                tag: "",
+                question: "विश्व स्वास्थ्य सभा का प्रमुख स्थान क्या है?",
+                options: [
+                    "WHO की अनुसंधान प्रयोगशाला",
+                    "WHO का क्षेत्रीय वित्त कार्यालय",
+                    "केवल स्वास्थ्यकर्मियों का प्रशिक्षण केंद्र",
+                    "WHO की सर्वोच्च निर्णय लेने वाली संस्था"
+                ],
+                correct: 3,
+                explanation: "विश्व स्वास्थ्य सभा में सदस्य देशों के प्रतिनिधि भाग लेते हैं। यह WHO की नीतियाँ, कार्यक्रम और बजट संबंधी प्रमुख निर्णय करती है।"
+            },
+            {
+                id: 9,
+                tag: "",
+                question: "रोगों के अंतरराष्ट्रीय वर्गीकरण—ICD का संरक्षक कौन है?",
+                options: [
+                    "UNICEF",
+                    "WHO",
+                    "ICMR",
+                    "FAO"
+                ],
+                correct: 1,
+                explanation: "International Classification of Diseases विभिन्न रोगों और स्वास्थ्य अवस्थाओं को मानकीकृत कोड प्रदान करता है। इससे देशों के स्वास्थ्य आँकड़ों की तुलना और विश्लेषण संभव होता है।"
+            },
+            {
+                id: 10,
+                tag: "",
+                question: "UNICEF की स्थापना कब हुई?",
+                options: [
+                    "11 दिसंबर 1946",
+                    "7 अप्रैल 1948",
+                    "24 अक्टूबर 1945",
+                    "1 जनवरी 1953"
+                ],
+                correct: 0,
+                explanation: "UNICEF की स्थापना द्वितीय विश्वयुद्ध के बाद बच्चों की आपात आवश्यकताओं को पूरा करने के लिए संयुक्त राष्ट्र महासभा ने 11 दिसंबर 1946 को की थी।"
+            },
+            {
+                id: 11,
+                tag: "",
+                question: "UNICEF का मूल पूरा नाम क्या था?",
+                options: [
+                    "United Nations International Community Education Fund",
+                    "Universal Nations International Child Emergency Foundation",
+                    "United Nations International Children’s Emergency Fund",
+                    "United Nations Integrated Child Education Forum"
+                ],
+                correct: 2,
+                explanation: "1953 में इसका औपचारिक नाम United Nations Children’s Fund कर दिया गया, लेकिन मूल नाम से बना संक्षिप्त रूप UNICEF बनाए रखा गया।"
+            },
+            {
+                id: 12,
+                tag: "",
+                question: "UNICEF संयुक्त राष्ट्र प्रणाली का स्थायी भाग कब बना?",
+                options: [
+                    "1948",
+                    "1953",
+                    "1965",
+                    "1975"
+                ],
+                correct: 1,
+                explanation: "UNICEF को प्रारम्भ में अस्थायी आपातकालीन सहायता कोष के रूप में बनाया गया था। 1953 में इसके कार्यक्षेत्र का विस्तार करके इसे स्थायी संस्था बनाया गया।"
+            },
+            {
+                id: 13,
+                tag: "",
+                question: "UNICEF का मुख्यालय कहाँ है?",
+                options: [
+                    "जिनेवा",
+                    "रोम",
+                    "पेरिस",
+                    "न्यूयॉर्क"
+                ],
+                correct: 3,
+                explanation: "UNICEF का मुख्यालय न्यूयॉर्क में है। यह विश्व के अनेक देशों और क्षेत्रों में बच्चों के स्वास्थ्य, पोषण, शिक्षा, सुरक्षा और अधिकारों पर कार्य करता है।"
+            },
+            {
+                id: 14,
+                tag: "",
+                question: "UNICEF का प्रमुख कार्यक्षेत्र कौन-सा है?",
+                options: [
+                    "बच्चों के अधिकार, स्वास्थ्य, पोषण, शिक्षा और संरक्षण",
+                    "केवल अंतरराष्ट्रीय व्यापार को नियंत्रित करना",
+                    "केवल वयस्क रोगों पर अनुसंधान करना",
+                    "केवल मौसम संबंधी चेतावनी जारी करना"
+                ],
+                correct: 0,
+                explanation: "UNICEF बच्चों के जीवित रहने, विकास, शिक्षा, सुरक्षा और समान अवसरों के लिए राष्ट्रीय सरकारों तथा अन्य संस्थाओं के साथ कार्य करता है।"
+            },
+            {
+                id: 15,
+                tag: "",
+                question: "UNICEF को नोबेल शांति पुरस्कार किस वर्ष मिला?",
+                options: [
+                    "1953",
+                    "1965",
+                    "1978",
+                    "1989"
+                ],
+                correct: 1,
+                explanation: "UNICEF को बच्चों के कल्याण और देशों के बीच सहयोग बढ़ाने में योगदान के लिए 1965 का नोबेल शांति पुरस्कार दिया गया था।"
+            },
+            {
+                id: 16,
+                tag: "",
+                question: "ICMR की प्रमुख भूमिका क्या है?",
+                options: [
+                    "केवल अस्पतालों का संचालन करना",
+                    "केवल चिकित्सा महाविद्यालयों की परीक्षा कराना",
+                    "भारत में जैव-चिकित्सीय अनुसंधान का निर्माण, समन्वय और संवर्धन",
+                    "केवल खाद्य पदार्थों को लाइसेंस देना"
+                ],
+                correct: 2,
+                explanation: "भारतीय आयुर्विज्ञान अनुसंधान परिषद भारत की शीर्ष जैव-चिकित्सीय अनुसंधान संस्था है। यह राष्ट्रीय स्वास्थ्य प्राथमिकताओं पर अनुसंधान और वैज्ञानिक मार्गदर्शन प्रदान करती है।"
+            },
+            {
+                id: 17,
+                tag: "",
+                question: "ICMR की स्थापना किस वर्ष हुई थी?",
+                options: [
+                    "1911",
+                    "1918",
+                    "1949",
+                    "1958"
+                ],
+                correct: 0,
+                explanation: "इसकी स्थापना 1911 में Indian Research Fund Association के रूप में हुई थी। यह विश्व की सबसे पुरानी चिकित्सा अनुसंधान संस्थाओं में से एक है।"
+            },
+            {
+                id: 18,
+                tag: "",
+                question: "ICMR का प्रारम्भिक नाम क्या था?",
+                options: [
+                    "Indian Medical Science Association",
+                    "Imperial Council of Nutrition Research",
+                    "Indian Council of Public Health",
+                    "Indian Research Fund Association"
+                ],
+                correct: 3,
+                explanation: "1911 में स्थापित Indian Research Fund Association का पुनर्गठन करके 1949 में इसका नाम Indian Council of Medical Research रखा गया।"
+            },
+            {
+                id: 19,
+                tag: "",
+                question: "Indian Research Fund Association का नाम ICMR कब रखा गया?",
+                options: [
+                    "1947",
+                    "1949",
+                    "1953",
+                    "1969"
+                ],
+                correct: 1,
+                explanation: "स्वतंत्रता के बाद 1949 में संस्था के कार्यक्षेत्र का विस्तार करते हुए इसे भारतीय आयुर्विज्ञान अनुसंधान परिषद नाम दिया गया।"
+            },
+            {
+                id: 20,
+                tag: "",
+                question: "ICMR का मुख्यालय कहाँ है?",
+                options: [
+                    "नई दिल्ली",
+                    "हैदराबाद",
+                    "मुंबई",
+                    "चेन्नई"
+                ],
+                correct: 0,
+                explanation: "ICMR का मुख्यालय नई दिल्ली में है। इसके अंतर्गत देश के विभिन्न भागों में अनेक राष्ट्रीय अनुसंधान संस्थान कार्य करते हैं।"
+            },
+            {
+                id: 21,
+                tag: "",
+                question: "राष्ट्रीय पोषण संस्थान किस संस्था के अंतर्गत कार्य करता है?",
+                options: [
+                    "WHO",
+                    "UNICEF",
+                    "ICMR",
+                    "UNESCO"
+                ],
+                correct: 2,
+                explanation: "National Institute of Nutrition, हैदराबाद ICMR का संस्थान है। यह पोषण, खाद्य उपभोग, कुपोषण और सार्वजनिक स्वास्थ्य पोषण पर अनुसंधान करता है।"
+            },
+            {
+                id: 22,
+                tag: "",
+                question: "राष्ट्रीय पोषण संस्थान के संस्थापक कौन थे?",
+                options: [
+                    "डॉ. बी.सी. रॉय",
+                    "सर रॉबर्ट मैककैरिसन",
+                    "डॉ. होमी भाभा",
+                    "डॉ. एम.एस. स्वामीनाथन"
+                ],
+                correct: 1,
+                explanation: "सर रॉबर्ट मैककैरिसन ने 1918 में कूनूर स्थित पाश्चर संस्थान में बेरी-बेरी इन्क्वायरी यूनिट की स्थापना की थी।"
+            },
+            {
+                id: 23,
+                tag: "",
+                question: "राष्ट्रीय पोषण संस्थान की शुरुआत किस वर्ष हुई थी?",
+                options: [
+                    "1911",
+                    "1928",
+                    "1949",
+                    "1918"
+                ],
+                correct: 3,
+                explanation: "NIN की शुरुआत 1918 में एक छोटे बेरी-बेरी अनुसंधान यूनिट के रूप में हुई। बाद में इसका कार्यक्षेत्र अन्य पोषण-अल्पता रोगों तक बढ़ा।"
+            },
+            {
+                id: 24,
+                tag: "",
+                question: "NIN की प्रारम्भिक इकाई का नाम क्या था?",
+                options: [
+                    "बेरी-बेरी इन्क्वायरी यूनिट",
+                    "नेशनल फूड सेफ्टी यूनिट",
+                    "न्यूट्रिशन सर्वे ऑफ इंडिया",
+                    "विटामिन रिसर्च बोर्ड"
+                ],
+                correct: 0,
+                explanation: "यह इकाई कूनूर के पाश्चर इंस्टीट्यूट में स्थापित हुई थी। बाद में इसे Deficiency Disease Enquiry और फिर Nutrition Research Laboratories बनाया गया।"
+            },
+            {
+                id: 25,
+                tag: "",
+                question: "Nutrition Research Laboratories को हैदराबाद कब स्थानांतरित किया गया?",
+                options: [
+                    "1949",
+                    "1958",
+                    "1965",
+                    "1969"
+                ],
+                correct: 1,
+                explanation: "पोषण अनुसंधान प्रयोगशालाएँ 1958 में कूनूर से हैदराबाद स्थानांतरित हुईं। वर्तमान NIN का मुख्यालय हैदराबाद में है।"
+            },
+            {
+                id: 26,
+                tag: "",
+                question: "Nutrition Research Laboratories का नाम NIN कब रखा गया?",
+                options: [
+                    "1953",
+                    "1958",
+                    "1969",
+                    "1975"
+                ],
+                correct: 2,
+                explanation: "संस्थान की स्वर्ण जयंती के समय 1969 में इसका नाम National Institute of Nutrition रखा गया।"
+            },
+            {
+                id: 27,
+                tag: "",
+                question: "NIN का प्रमुख कार्यक्षेत्र क्या है?",
+                options: [
+                    "पोषण, खाद्य उपभोग और कुपोषण संबंधी अनुसंधान",
+                    "केवल टीकों का निर्माण",
+                    "केवल संक्रामक रोगों का उपचार",
+                    "केवल चिकित्सा महाविद्यालयों का निरीक्षण"
+                ],
+                correct: 0,
+                explanation: "NIN भारतीय जनसंख्या की पोषण समस्याओं, आहार आवश्यकता, खाद्य संरचना और पोषण कार्यक्रमों के वैज्ञानिक आधार पर कार्य करता है।"
+            },
+            {
+                id: 28,
+                tag: "",
+                question: "राष्ट्रीय स्वास्थ्य मिशन की दो उप-मिशन कौन-सी हैं?",
+                options: [
+                    "UIP और NTEP",
+                    "NACP और NLEP",
+                    "ICDS और PM POSHAN",
+                    "NRHM और NUHM"
+                ],
+                correct: 3,
+                explanation: "राष्ट्रीय स्वास्थ्य मिशन में राष्ट्रीय ग्रामीण स्वास्थ्य मिशन और राष्ट्रीय शहरी स्वास्थ्य मिशन शामिल हैं। इसका उद्देश्य सुलभ, समान, किफायती और गुणवत्तापूर्ण स्वास्थ्य सेवाएँ प्रदान करना है।"
+            },
+            {
+                id: 29,
+                tag: "",
+                question: "राष्ट्रीय ग्रामीण स्वास्थ्य मिशन कब प्रारम्भ किया गया?",
+                options: [
+                    "2002",
+                    "2005",
+                    "2011",
+                    "2013"
+                ],
+                correct: 1,
+                explanation: "NRHM ग्रामीण स्वास्थ्य प्रणाली को मजबूत करने और मातृ-शिशु स्वास्थ्य सहित प्राथमिक स्वास्थ्य सेवाओं की उपलब्धता सुधारने के लिए 2005 में प्रारम्भ हुआ।"
+            },
+            {
+                id: 30,
+                tag: "",
+                question: "राष्ट्रीय शहरी स्वास्थ्य मिशन का मुख्य केंद्र क्या है?",
+                options: [
+                    "शहरी आबादी, विशेष रूप से शहरी गरीबों को प्राथमिक स्वास्थ्य सेवाएँ",
+                    "केवल ग्रामीण क्षेत्रों में अस्पताल बनाना",
+                    "केवल निजी अस्पतालों का पंजीकरण",
+                    "केवल खाद्य सुदृढ़ीकरण करना"
+                ],
+                correct: 0,
+                explanation: "NUHM को 2013 में NHM के उप-मिशन के रूप में स्वीकृत किया गया। यह झुग्गी-बस्तियों और कमजोर शहरी आबादी की स्वास्थ्य आवश्यकताओं पर विशेष ध्यान देता है।"
+            },
+            {
+                id: 31,
+                tag: "",
+                question: "ASHA कार्यकर्ता की सबसे उपयुक्त भूमिका क्या है?",
+                options: [
+                    "केवल अस्पताल में प्रयोगशाला जाँच करना",
+                    "केवल औषधि निर्माण करना",
+                    "समुदाय और सार्वजनिक स्वास्थ्य व्यवस्था के बीच संपर्क स्थापित करना",
+                    "केवल निजी अस्पतालों का निरीक्षण करना"
+                ],
+                correct: 2,
+                explanation: "ASHA समुदाय में स्वास्थ्य जागरूकता, मातृ-शिशु सेवाओं, टीकाकरण और स्वास्थ्य संस्थानों तक पहुँच बढ़ाने में सहायता करती है।"
+            },
+            {
+                id: 32,
+                tag: "",
+                question: "ग्राम स्वास्थ्य, स्वच्छता एवं पोषण दिवस सामान्यतः किस मंच पर आयोजित होता है?",
+                options: [
+                    "केवल जिला अस्पताल में",
+                    "आंगनवाड़ी केंद्र पर सामुदायिक स्तर पर",
+                    "केवल मेडिकल कॉलेज में",
+                    "केवल निजी चिकित्सालय में"
+                ],
+                correct: 1,
+                explanation: "VHSND सामान्यतः मासिक रूप से आंगनवाड़ी केंद्र पर आयोजित होता है। इसमें पोषण, टीकाकरण, मातृ स्वास्थ्य, वृद्धि निगरानी और स्वास्थ्य शिक्षा जैसी सेवाएँ दी जाती हैं।"
+            },
+            {
+                id: 33,
+                tag: "",
+                question: "सार्वभौमिक टीकाकरण कार्यक्रम किस वर्ष प्रारम्भ किया गया था?",
+                options: [
+                    "1975",
+                    "1978",
+                    "1992",
+                    "1985"
+                ],
+                correct: 3,
+                explanation: "Universal Immunization Programme का उद्देश्य टीका-निवारणीय रोगों से बच्चों और गर्भवती महिलाओं की सुरक्षा करना है।"
+            },
+            {
+                id: 34,
+                tag: "",
+                question: "मिशन इंद्रधनुष का प्रमुख उद्देश्य क्या है?",
+                options: [
+                    "छूटे एवं आंशिक रूप से टीकाकृत बच्चों और गर्भवती महिलाओं की टीकाकरण कवरेज बढ़ाना",
+                    "केवल पोषण पुनर्वास केंद्र बनाना",
+                    "केवल तपेदिक रोगियों की पहचान करना",
+                    "केवल शहरी अस्पतालों का विस्तार करना"
+                ],
+                correct: 0,
+                explanation: "मिशन इंद्रधनुष नियमित टीकाकरण से छूटे लाभार्थियों तक पहुँचने के लिए केंद्रित अभियान के रूप में प्रारम्भ हुआ।"
+            },
+            {
+                id: 35,
+                tag: "",
+                question: "टीकों की ‘कोल्ड चेन’ का प्रमुख उद्देश्य क्या है?",
+                options: [
+                    "टीकों को स्थायी रूप से जमाकर रखना",
+                    "निर्माण से उपयोग तक निर्धारित तापमान बनाए रखकर प्रभावशीलता सुरक्षित करना",
+                    "सभी टीकों को कमरे के तापमान पर रखना",
+                    "टीकों में रोगजनकों की संख्या बढ़ाना"
+                ],
+                correct: 1,
+                explanation: "टीके तापमान-संवेदनशील जैविक उत्पाद हैं। तापमान में अनुचित परिवर्तन उनकी प्रभावशीलता घटा सकता है।"
+            },
+            {
+                id: 36,
+                tag: "",
+                question: "NTEP का पूर्व नाम क्या था?",
+                options: [
+                    "National Leprosy Control Programme",
+                    "National AIDS Control Programme",
+                    "Revised National Tuberculosis Control Programme",
+                    "National Vector Borne Disease Programme"
+                ],
+                correct: 2,
+                explanation: "RNTCP का नाम 2020 में बदलकर National Tuberculosis Elimination Programme किया गया। नाम परिवर्तन TB उन्मूलन पर बढ़े हुए ध्यान को दर्शाता है।"
+            },
+            {
+                id: 37,
+                tag: "",
+                question: "NTEP के चार रणनीतिक स्तंभ कौन-से हैं?",
+                options: [
+                    "Detect–Treat–Prevent–Build",
+                    "Search–Test–Isolate–Vaccinate",
+                    "Nutrition–Education–Water–Sanitation",
+                    "Survey–Research–Publish–Review"
+                ],
+                correct: 0,
+                explanation: "NTEP की रणनीति रोगी पहचान, उपचार, रोकथाम और स्वास्थ्य व्यवस्था की क्षमता बढ़ाने पर आधारित है।"
+            },
+            {
+                id: 38,
+                tag: "",
+                question: "NACO मुख्यतः किस क्षेत्र का नेतृत्व करता है?",
+                options: [
+                    "राष्ट्रीय पोषण अनुसंधान",
+                    "तपेदिक नियंत्रण",
+                    "कुष्ठ रोग उन्मूलन",
+                    "HIV/AIDS एवं यौन संचारित संक्रमण नियंत्रण"
+                ],
+                correct: 3,
+                explanation: "National AIDS Control Organisation स्वास्थ्य एवं परिवार कल्याण मंत्रालय का विभाग है। यह भारत में HIV/AIDS एवं STI नियंत्रण कार्यक्रम का नेतृत्व करता है।"
+            },
+            {
+                id: 39,
+                tag: "",
+                question: "भारत का पहला राष्ट्रीय एड्स नियंत्रण कार्यक्रम कब प्रारम्भ हुआ?",
+                options: [
+                    "1986",
+                    "1992",
+                    "2002",
+                    "2017"
+                ],
+                correct: 1,
+                explanation: "प्रथम National AIDS Control Programme 1992 में प्रारम्भ हुआ। उसी समय NACO को कार्यक्रम के कार्यान्वयन के लिए गठित किया गया।"
+            },
+            {
+                id: 40,
+                tag: "",
+                question: "राष्ट्रीय कुष्ठ रोग उन्मूलन कार्यक्रम का संबंध किस रोग से है?",
+                options: [
+                    "कुष्ठ रोग",
+                    "मलेरिया",
+                    "तपेदिक",
+                    "डेंगू"
+                ],
+                correct: 0,
+                explanation: "NLEP शीघ्र पहचान, निःशुल्क उपचार, जटिलताओं की रोकथाम, पुनर्वास और रोग से जुड़े भेदभाव को कम करने पर कार्य करता है।"
+            },
+            {
+                id: 41,
+                tag: "",
+                question: "संस्था को उसके प्रमुख कार्य से सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>1. WHO</td><td style='border:1px solid #cbd5e1; padding:6px;'>a. भारतीय पोषण अनुसंधान</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>2. UNICEF</td><td style='border:1px solid #cbd5e1; padding:6px;'>b. भारतीय जैव-चिकित्सीय अनुसंधान</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>3. ICMR</td><td style='border:1px solid #cbd5e1; padding:6px;'>c. वैश्विक स्वास्थ्य समन्वय</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>4. NIN</td><td style='border:1px solid #cbd5e1; padding:6px;'>d. बाल अधिकार एवं कल्याण</td></tr></table>",
+                options: [
+                    "1-a, 2-b, 3-c, 4-d",
+                    "1-d, 2-c, 3-a, 4-b",
+                    "1-c, 2-d, 3-b, 4-a",
+                    "1-b, 2-a, 3-d, 4-c"
+                ],
+                correct: 2,
+                explanation: "WHO वैश्विक स्वास्थ्य, UNICEF बच्चों, ICMR जैव-चिकित्सीय अनुसंधान और NIN पोषण अनुसंधान से संबंधित संस्था है।"
+            },
+            {
+                id: 42,
+                tag: "",
+                question: "कार्यक्रम को उसके प्रमुख उद्देश्य से सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>1. PM-JAY</td><td style='border:1px solid #cbd5e1; padding:6px;'>a. तपेदिक उन्मूलन</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>2. NTEP</td><td style='border:1px solid #cbd5e1; padding:6px;'>b. अस्पताल में माध्यमिक एवं तृतीयक उपचार हेतु वित्तीय सुरक्षा</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>3. NACP</td><td style='border:1px solid #cbd5e1; padding:6px;'>c. नियमित टीकाकरण</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>4. UIP</td><td style='border:1px solid #cbd5e1; padding:6px;'>d. HIV/AIDS नियंत्रण</td></tr></table>",
+                options: [
+                    "1-a, 2-c, 3-b, 4-d",
+                    "1-b, 2-a, 3-d, 4-c",
+                    "1-c, 2-d, 3-a, 4-b",
+                    "1-d, 2-b, 3-c, 4-a"
+                ],
+                correct: 1,
+                explanation: "PM-JAY पात्र लाभार्थियों को अस्पताल उपचार हेतु वित्तीय सुरक्षा देता है; NTEP तपेदिक, NACP HIV/AIDS और UIP टीकाकरण से संबंधित है।"
+            },
+            {
+                id: 43,
+                tag: "",
+                question: "संस्था अथवा कार्यक्रम को प्रारम्भ वर्ष से सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>1. WHO</td><td style='border:1px solid #cbd5e1; padding:6px;'>a. 1918</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>2. UNICEF</td><td style='border:1px solid #cbd5e1; padding:6px;'>b. 1992</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>3. NIN</td><td style='border:1px solid #cbd5e1; padding:6px;'>c. 1946</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>4. प्रथम NACP</td><td style='border:1px solid #cbd5e1; padding:6px;'>d. 1948</td></tr></table>",
+                options: [
+                    "1-a, 2-b, 3-d, 4-c",
+                    "1-c, 2-a, 3-b, 4-d",
+                    "1-b, 2-d, 3-c, 4-a",
+                    "1-d, 2-c, 3-a, 4-b"
+                ],
+                correct: 3,
+                explanation: "WHO 1948, UNICEF 1946, NIN की मूल इकाई 1918 और भारत का प्रथम NACP 1992 में प्रारम्भ हुआ।"
+            },
+            {
+                id: 44,
+                tag: "",
+                question: "संक्षिप्त नाम को उसके पूर्ण रूप से सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>1. NHM</td><td style='border:1px solid #cbd5e1; padding:6px;'>a. National Health Mission</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>2. NACO</td><td style='border:1px solid #cbd5e1; padding:6px;'>b. National AIDS Control Organisation</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>3. NTEP</td><td style='border:1px solid #cbd5e1; padding:6px;'>c. National Tuberculosis Elimination Programme</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>4. PM POSHAN</td><td style='border:1px solid #cbd5e1; padding:6px;'>d. Pradhan Mantri Poshan Shakti Nirman</td></tr></table>",
+                options: [
+                    "1-a, 2-b, 3-c, 4-d",
+                    "1-c, 2-a, 3-d, 4-b",
+                    "1-b, 2-d, 3-a, 4-c",
+                    "1-d, 2-c, 3-b, 4-a"
+                ],
+                correct: 0,
+                explanation: "ये भारत की प्रमुख स्वास्थ्य एवं पोषण योजनाओं और संस्थाओं के आधिकारिक संक्षिप्त नाम हैं।"
+            },
+            {
+                id: 45,
+                tag: "",
+                question: "कार्यक्रम को उसके प्रमुख लाभार्थी या कार्यक्षेत्र से सुमेलित कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>1. NUHM</td><td style='border:1px solid #cbd5e1; padding:6px;'>a. सरकारी एवं सहायता प्राप्त विद्यालयों के बच्चे</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>2. JSSK</td><td style='border:1px solid #cbd5e1; padding:6px;'>b. शहरी आबादी, विशेषकर शहरी गरीब</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>3. PM POSHAN</td><td style='border:1px solid #cbd5e1; padding:6px;'>c. छह वर्ष से कम बच्चे तथा गर्भवती एवं स्तनपान कराने वाली माताएँ</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>4. सक्षम आंगनवाड़ी एवं पोषण 2.0</td><td style='border:1px solid #cbd5e1; padding:6px;'>d. सार्वजनिक संस्थानों में गर्भवती महिलाएँ और बीमार नवजात</td></tr></table>",
+                options: [
+                    "1-a, 2-c, 3-d, 4-b",
+                    "1-b, 2-d, 3-a, 4-c",
+                    "1-c, 2-a, 3-b, 4-d",
+                    "1-d, 2-b, 3-c, 4-a"
+                ],
+                correct: 1,
+                explanation: "NUHM शहरी स्वास्थ्य, JSSK मातृ-नवजात सेवाओं, PM POSHAN विद्यालयी पोषण और पोषण 2.0 बच्चों एवं मातृ पोषण से संबंधित है।"
+            },
+            {
+                id: 46,
+                tag: "",
+                question: "<b>कथन I:</b> WHO संयुक्त राष्ट्र की स्वास्थ्य संबंधी विशिष्ट एजेंसी है।<br><b>कथन II:</b> WHO का मुख्यालय न्यूयॉर्क में स्थित है।<br><br>उपर्युक्त कथनों के आलोक में सही विकल्प चुनिए:",
+                options: [
+                    "कथन I और II दोनों सही हैं तथा कथन II, कथन I की सही व्याख्या है",
+                    "कथन I और II दोनों सही हैं, लेकिन कथन II, कथन I की सही व्याख्या नहीं है",
+                    "कथन I सही है, लेकिन कथन II गलत है",
+                    "कथन I गलत है, लेकिन कथन II सही है"
+                ],
+                correct: 2,
+                explanation: "WHO संयुक्त राष्ट्र की विशिष्ट स्वास्थ्य एजेंसी है, लेकिन इसका मुख्यालय जिनेवा में है। न्यूयॉर्क में UNICEF का मुख्यालय स्थित है।"
+            },
+            {
+                id: 47,
+                tag: "",
+                question: "<b>कथन I:</b> UNICEF आज भी अपने मूल नाम से बना संक्षिप्त रूप प्रयोग करता है।<br><b>कथन II:</b> स्थायी संस्था बनने पर नाम United Nations Children’s Fund हुआ, लेकिन UNICEF संक्षिप्त नाम बनाए रखा गया।<br><br>उपर्युक्त कथनों के आलोक में सही विकल्प चुनिए:",
+                options: [
+                    "कथन I और II दोनों सही हैं तथा कथन II, कथन I की सही व्याख्या है",
+                    "कथन I और II दोनों सही हैं, लेकिन कथन II, कथन I की सही व्याख्या नहीं है",
+                    "कथन I सही है, लेकिन कथन II गलत है",
+                    "कथन I गलत है, लेकिन कथन II सही है"
+                ],
+                correct: 0,
+                explanation: "UNICEF का मूल नाम United Nations International Children’s Emergency Fund था। नाम छोटा किए जाने के बाद भी पहचान के लिए पुराना संक्षिप्त रूप जारी रहा।"
+            },
+            {
+                id: 48,
+                tag: "",
+                question: "<b>कथन I:</b> राष्ट्रीय पोषण संस्थान की स्थापना 1918 में हैदराबाद में हुई थी।<br><b>कथन II:</b> इसकी मूल बेरी-बेरी इन्क्वायरी यूनिट कूनूर में स्थापित हुई और 1958 में हैदराबाद स्थानांतरित हुई।<br><br>उपर्युक्त कथनों के आलोक में सही विकल्प चुनिए:",
+                options: [
+                    "कथन I और II दोनों सही हैं तथा कथन II, कथन I की सही व्याख्या है",
+                    "कथन I और II दोनों सही हैं, लेकिन कथन II, कथन I की सही व्याख्या नहीं है",
+                    "कथन I सही है, लेकिन कथन II गलत है",
+                    "कथन I गलत है, लेकिन कथन II सही है"
+                ],
+                correct: 3,
+                explanation: "संस्थान की शुरुआत 1918 में कूनूर में हुई थी। हैदराबाद इसका प्रारम्भिक स्थान नहीं, बल्कि 1958 के बाद का स्थान है।"
+            },
+            {
+                id: 49,
+                tag: "",
+                question: "<b>कथन I:</b> राष्ट्रीय स्वास्थ्य मिशन में NRHM और NUHM दोनों सम्मिलित हैं।<br><b>कथन II:</b> ASHA कार्यकर्ता समुदाय और स्वास्थ्य व्यवस्था के बीच संपर्क स्थापित करती है।<br><br>उपर्युक्त कथनों के आलोक में सही विकल्प चुनिए:",
+                options: [
+                    "कथन I और II दोनों सही हैं तथा कथन II, कथन I की सही व्याख्या है",
+                    "कथन I और II दोनों सही हैं, लेकिन कथन II, कथन I की सही व्याख्या नहीं है",
+                    "कथन I सही है, लेकिन कथन II गलत है",
+                    "कथन I गलत है, लेकिन कथन II सही है"
+                ],
+                correct: 1,
+                explanation: "दोनों कथन NHM से संबंधित हैं, लेकिन दूसरा कथन NHM के दो उप-मिशनों की संरचना की व्याख्या नहीं करता।"
+            },
+            {
+                id: 50,
+                tag: "",
+                question: "<b>कथन I:</b> मिशन इंद्रधनुष का उद्देश्य टीकाकरण कवरेज बढ़ाना है।<br><b>कथन II:</b> यह नियमित टीकाकरण से छूटे या आंशिक रूप से टीकाकृत लाभार्थियों तक पहुँचने पर केंद्रित है।<br><br>उपर्युक्त कथनों के आलोक में सही विकल्प चुनिए:",
+                options: [
+                    "कथन I और II दोनों सही हैं तथा कथन II, कथन I की सही व्याख्या है",
+                    "कथन I और II दोनों सही हैं, लेकिन कथन II, कथन I की सही व्याख्या नहीं है",
+                    "कथन I सही है, लेकिन कथन II गलत है",
+                    "कथन I गलत है, लेकिन कथन II सही है"
+                ],
+                correct: 0,
+                explanation: "छूटे लाभार्थियों की पहचान और केंद्रित टीकाकरण सत्रों के माध्यम से पूर्ण टीकाकरण कवरेज बढ़ाना मिशन इंद्रधनुष का मुख्य उद्देश्य है।"
+            }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
