@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB / GS</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">40:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">धातु, अधातु एवं कार्बनिक रसायन</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        const QUIZ_KEY = "medhavi_paid_sc11"; 
+
+        const dataset = [
+            {
+                id: 1,
+                tag: "",
+                question: "निम्नलिखित में से कौन-सा गुण सामान्यतः धातुओं में पाया जाता है?",
+                options: [
+                    "भंगुरता एवं ऊष्मा की कुचालकता",
+                    "तन्यता एवं आघातवर्धनीयता",
+                    "इलेक्ट्रॉन ग्रहण करने की प्रवृत्ति",
+                    "अम्लीय ऑक्साइड बनाना"
+                ],
+                correct: 1,
+                explanation: "अधिकांश धातुओं को खींचकर तार बनाया जा सकता है, जिसे तन्यता कहते हैं। उन्हें पीटकर पतली चादर में भी बदला जा सकता है, जिसे आघातवर्धनीयता कहते हैं। सोना अत्यधिक आघातवर्धनीय और ताँबा अत्यधिक तन्य धातु है।"
+            },
+            {
+                id: 2,
+                tag: "",
+                question: "सामान्य तापमान पर द्रव अवस्था में पाई जाने वाली धातु है—",
+                options: [
+                    "पारा",
+                    "सोडियम",
+                    "एल्युमिनियम",
+                    "ताँबा"
+                ],
+                correct: 0,
+                explanation: "पारा सामान्य तापमान पर द्रव अवस्था में पाया जाता है। इसका रासायनिक प्रतीक Hg है। इसका उपयोग पुराने तापमापियों और कुछ वैज्ञानिक उपकरणों में किया जाता था, लेकिन विषाक्तता के कारण इसका उपयोग अब काफी सीमित किया जा रहा है।"
+            },
+            {
+                id: 3,
+                tag: "",
+                question: "सामान्य तापमान पर द्रव अवस्था में पाया जाने वाला अधातु है—",
+                options: [
+                    "आयोडीन",
+                    "सल्फर",
+                    "फॉस्फोरस",
+                    "ब्रोमीन"
+                ],
+                correct: 3,
+                explanation: "ब्रोमीन सामान्य तापमान पर लाल-भूरे रंग का द्रव अधातु है। अधिकांश अधातु सामान्य तापमान पर ठोस या गैस अवस्था में पाए जाते हैं। पारा द्रव धातु है, जबकि ब्रोमीन द्रव अधातु है—यह अंतर परीक्षाओं में अक्सर पूछा जाता है।"
+            },
+            {
+                id: 4,
+                tag: "",
+                question: "निम्नलिखित में से कौन-सा अधातु विद्युत का अच्छा चालक है?",
+                options: [
+                    "सल्फर",
+                    "फॉस्फोरस",
+                    "ग्रेफाइट",
+                    "आयोडीन"
+                ],
+                correct: 2,
+                explanation: "ग्रेफाइट कार्बन का एक अपररूप है और इसमें कुछ इलेक्ट्रॉन परतों के बीच स्वतंत्र रूप से गति कर सकते हैं। इस कारण यह विद्युत का चालक होता है। अन्य अधिकांश अधातु विद्युत के कुचालक होते हैं।"
+            },
+            {
+                id: 5,
+                tag: "",
+                question: "अधिकांश धातुओं के ऑक्साइड सामान्यतः किस प्रकृति के होते हैं?",
+                options: [
+                    "केवल उदासीन",
+                    "क्षारीय",
+                    "केवल अम्लीय",
+                    "सदैव गैसीय"
+                ],
+                correct: 1,
+                explanation: "अधिकांश धातु ऑक्साइड जल से अभिक्रिया करके क्षार बनाते हैं या अम्लों से अभिक्रिया करके लवण और जल बनाते हैं। उदाहरणतः मैग्नीशियम ऑक्साइड क्षारीय प्रकृति का है। हालांकि एल्युमिनियम ऑक्साइड और जिंक ऑक्साइड उभयधर्मी होते हैं।"
+            },
+            {
+                id: 6,
+                tag: "",
+                question: "निम्नलिखित में से कौन-सा उभयधर्मी ऑक्साइड है?",
+                options: [
+                    "एल्युमिनियम ऑक्साइड",
+                    "सोडियम ऑक्साइड",
+                    "कार्बन डाइऑक्साइड",
+                    "सल्फर डाइऑक्साइड"
+                ],
+                correct: 0,
+                explanation: "उभयधर्मी ऑक्साइड अम्ल तथा क्षार दोनों के साथ अभिक्रिया कर सकते हैं। एल्युमिनियम ऑक्साइड (Al₂O₃) और जिंक ऑक्साइड इसके प्रमुख उदाहरण हैं। सोडियम ऑक्साइड क्षारीय, जबकि कार्बन डाइऑक्साइड तथा सल्फर डाइऑक्साइड अम्लीय ऑक्साइड हैं।"
+            },
+            {
+                id: 7,
+                tag: "",
+                question: "सोडियम धातु को सामान्यतः मिट्टी के तेल में रखा जाता है क्योंकि—",
+                options: [
+                    "वह मिट्टी के तेल में घुल जाती है।",
+                    "वह वायु और नमी से तीव्र अभिक्रिया करती है।",
+                    "मिट्टी का तेल उसे अधिक कठोर बनाता है।",
+                    "इससे उसका द्रव्यमान बढ़ता है।"
+                ],
+                correct: 1,
+                explanation: "सोडियम अत्यधिक अभिक्रियाशील धातु है और यह वायु की ऑक्सीजन तथा नमी से तेजी से अभिक्रिया कर सकती है। इसलिए इसे वायु और जल के संपर्क से दूर रखने के लिए मिट्टी के तेल में रखा जाता है। पोटैशियम भी इसी कारण तेल में संरक्षित किया जाता है।"
+            },
+            {
+                id: 8,
+                tag: "",
+                question: "निम्नलिखित में से कौन-सी धातु तनु हाइड्रोक्लोरिक अम्ल से सामान्यतः हाइड्रोजन गैस नहीं निकालती?",
+                options: [
+                    "मैग्नीशियम",
+                    "जिंक",
+                    "लोहा",
+                    "ताँबा"
+                ],
+                correct: 3,
+                explanation: "अभिक्रियाशीलता श्रेणी में हाइड्रोजन से ऊपर स्थित धातुएँ तनु अम्ल से हाइड्रोजन को विस्थापित कर सकती हैं। ताँबा हाइड्रोजन से नीचे स्थित है, इसलिए यह तनु हाइड्रोक्लोरिक अम्ल से हाइड्रोजन गैस नहीं निकालता। जिंक, लोहा और मैग्नीशियम हाइड्रोजन से ऊपर हैं।"
+            },
+            {
+                id: 9,
+                tag: "",
+                question: "किसी उपयुक्त धातु की तनु अम्ल से अभिक्रिया कराने पर सामान्यतः बनते हैं—",
+                options: [
+                    "धातु ऑक्साइड और जल",
+                    "केवल धातु ऑक्साइड",
+                    "लवण और हाइड्रोजन गैस",
+                    "क्षार और ऑक्सीजन गैस"
+                ],
+                correct: 2,
+                explanation: "हाइड्रोजन से अधिक अभिक्रियाशील धातु तनु अम्ल से हाइड्रोजन को विस्थापित करती है। इस अभिक्रिया में संबंधित धातु का लवण और हाइड्रोजन गैस बनती है। उदाहरणतः जिंक और तनु सल्फ्यूरिक अम्ल से जिंक सल्फेट तथा हाइड्रोजन बनते हैं।"
+            },
+            {
+                id: 10,
+                tag: "",
+                question: "ठंडे जल के साथ अत्यधिक तीव्र अभिक्रिया करने वाली धातु है—",
+                options: [
+                    "पोटैशियम",
+                    "लोहा",
+                    "ताँबा",
+                    "चाँदी"
+                ],
+                correct: 0,
+                explanation: "पोटैशियम अभिक्रियाशीलता श्रेणी में सबसे ऊपर की धातुओं में है। यह ठंडे जल से अत्यधिक तीव्र अभिक्रिया करके पोटैशियम हाइड्रॉक्साइड और हाइड्रोजन बनाता है। सोडियम भी ठंडे जल से तीव्र अभिक्रिया करता है।"
+            },
+            {
+                id: 11,
+                tag: "",
+                question: "निम्नलिखित में से कौन अभिक्रियाशीलता श्रेणी में सबसे ऊपर स्थित है?",
+                options: [
+                    "सोना",
+                    "पोटैशियम",
+                    "ताँबा",
+                    "चाँदी"
+                ],
+                correct: 1,
+                explanation: "सामान्य अभिक्रियाशीलता श्रेणी में पोटैशियम, सोडियम और कैल्शियम ऊपर स्थित होते हैं। ये आसानी से इलेक्ट्रॉन त्यागकर धनायन बनाते हैं। सोना और चाँदी श्रेणी में नीचे होने के कारण कम अभिक्रियाशील हैं।"
+            },
+            {
+                id: 12,
+                tag: "",
+                question: "निम्नलिखित में से कौन-सी धातु सबसे कम अभिक्रियाशील है?",
+                options: [
+                    "सोना",
+                    "सोडियम",
+                    "कैल्शियम",
+                    "मैग्नीशियम"
+                ],
+                correct: 0,
+                explanation: "सोना अभिक्रियाशीलता श्रेणी में बहुत नीचे स्थित है। यह वायु, जल तथा सामान्य रसायनों से आसानी से अभिक्रिया नहीं करता। कम अभिक्रियाशीलता और चमक के कारण इसका उपयोग आभूषण बनाने में किया जाता है।"
+            },
+            {
+                id: 13,
+                tag: "",
+                question: "निम्नलिखित में से कौन-सी विस्थापन अभिक्रिया संभव है?",
+                options: [
+                    "Zn + MgSO₄",
+                    "Ag + CuSO₄",
+                    "Cu + FeSO₄",
+                    "Fe + CuSO₄"
+                ],
+                correct: 3,
+                explanation: "अधिक अभिक्रियाशील धातु अपने से कम अभिक्रियाशील धातु को उसके लवण के विलयन से विस्थापित कर देती है। लोहा ताँबे से अधिक अभिक्रियाशील है, इसलिए Fe, कॉपर सल्फेट से ताँबे को विस्थापित कर सकता है। जिंक मैग्नीशियम को तथा ताँबा लोहे को विस्थापित नहीं कर सकता।"
+            },
+            {
+                id: 14,
+                tag: "",
+                question: "सल्फाइड अयस्कों को ऑक्साइड में बदलने के लिए सामान्यतः अपनाई जाने वाली प्रक्रिया है—",
+                options: [
+                    "आसवन",
+                    "विद्युत अपघटन",
+                    "भर्जन",
+                    "निस्तापन"
+                ],
+                correct: 2,
+                explanation: "भर्जन में सल्फाइड अयस्क को वायु या ऑक्सीजन की उपस्थिति में गर्म किया जाता है। इससे वह सामान्यतः धातु ऑक्साइड में बदल जाता है और सल्फर डाइऑक्साइड निकलती है। ऑक्साइड से धातु प्राप्त करना अपेक्षाकृत आसान होता है।"
+            },
+            {
+                id: 15,
+                tag: "",
+                question: "कार्बोनेट अयस्क को सीमित या अनुपस्थित वायु में गर्म करके ऑक्साइड में बदलने की प्रक्रिया है—",
+                options: [
+                    "भर्जन",
+                    "निस्तापन",
+                    "मिश्रधातुकरण",
+                    "विद्युत लेपन"
+                ],
+                correct: 1,
+                explanation: "निस्तापन में कार्बोनेट अयस्क को सीमित या बिना वायु के गर्म किया जाता है। इस प्रक्रिया में धातु ऑक्साइड और कार्बन डाइऑक्साइड बनते हैं। भर्जन मुख्यतः सल्फाइड अयस्कों के लिए प्रयोग किया जाता है।"
+            },
+            {
+                id: 16,
+                tag: "",
+                question: "सोडियम तथा एल्युमिनियम जैसी अत्यधिक अभिक्रियाशील धातुओं को प्राप्त करने की प्रमुख विधि है—",
+                options: [
+                    "गलित यौगिक का विद्युत अपघटन",
+                    "कार्बन द्वारा साधारण अपचयन",
+                    "केवल जल में घोलना",
+                    "साधारण विस्थापन अभिक्रिया"
+                ],
+                correct: 0,
+                explanation: "अत्यधिक अभिक्रियाशील धातुओं के यौगिकों को कार्बन द्वारा आसानी से अपचयित नहीं किया जा सकता। इसलिए उनके गलित लवणों या ऑक्साइडों का विद्युत अपघटन किया जाता है। सोडियम और एल्युमिनियम औद्योगिक रूप से इसी सिद्धांत से प्राप्त किए जाते हैं।"
+            },
+            {
+                id: 17,
+                tag: "",
+                question: "आयनिक यौगिकों का गलनांक सामान्यतः अधिक होने का कारण है—",
+                options: [
+                    "उनमें आयन उपस्थित नहीं होते।",
+                    "विपरीत आवेशित आयनों के बीच प्रबल आकर्षण होता है।",
+                    "वे सदैव गैसीय होते हैं।",
+                    "उनके अणुओं के बीच कोई आकर्षण नहीं होता।"
+                ],
+                correct: 1,
+                explanation: "आयनिक यौगिकों में धनायन और ऋणायन के बीच मजबूत विद्युत स्थैतिक आकर्षण होता है। इस आकर्षण को तोड़ने के लिए अधिक ऊर्जा की आवश्यकता होती है। इसलिए इनके गलनांक और क्वथनांक सामान्यतः अधिक होते हैं।"
+            },
+            {
+                id: 18,
+                tag: "",
+                question: "आयनिक यौगिक विद्युत का संचालन कब करते हैं?",
+                options: [
+                    "केवल ठोस अवस्था में",
+                    "केवल अत्यधिक ठंडा करने पर",
+                    "किसी भी अवस्था में नहीं",
+                    "गलित अवस्था अथवा जलीय विलयन में"
+                ],
+                correct: 3,
+                explanation: "ठोस आयनिक यौगिक में आयन निश्चित स्थान पर बँधे होते हैं, इसलिए वे विद्युत का संचालन नहीं कर पाते। गलित अवस्था या जलीय विलयन में आयन स्वतंत्र रूप से गति कर सकते हैं। ये गतिशील आयन विद्युत धारा का संचालन करते हैं।"
+            },
+            {
+                id: 19,
+                tag: "",
+                question: "लोहे पर बनने वाली लाल-भूरी परत कहलाती है—",
+                options: [
+                    "मिश्रधातु",
+                    "अमलगम",
+                    "जंग",
+                    "स्लैग"
+                ],
+                correct: 2,
+                explanation: "लोहे का वायु की ऑक्सीजन तथा नमी के संपर्क में धीरे-धीरे ऑक्सीकरण होता है। इससे जलयोजित आयरन ऑक्साइड की लाल-भूरी परत बनती है, जिसे जंग कहते हैं। यह लोहे को कमजोर करती है और संक्षारण का प्रमुख उदाहरण है।"
+            },
+            {
+                id: 20,
+                tag: "",
+                question: "लोहे में जंग लगने के लिए मुख्यतः आवश्यक हैं—",
+                options: [
+                    "ऑक्सीजन और जल",
+                    "केवल नाइट्रोजन",
+                    "केवल कार्बन डाइऑक्साइड",
+                    "केवल सूर्य का प्रकाश"
+                ],
+                correct: 0,
+                explanation: "जंग लगने के लिए वायु की ऑक्सीजन तथा नमी दोनों आवश्यक होती हैं। नमकीन जल या अम्लीय वातावरण संक्षारण की गति बढ़ा सकता है। लोहे को इनमें से किसी एक से अलग रखकर जंग की प्रक्रिया धीमी की जा सकती है।"
+            },
+            {
+                id: 21,
+                tag: "",
+                question: "लोहे को जंग से बचाने के लिए उस पर जिंक की परत चढ़ाने की प्रक्रिया है—",
+                options: [
+                    "मिश्रधातुकरण",
+                    "यशदलेपन या गैल्वनीकरण",
+                    "निस्तापन",
+                    "भर्जन"
+                ],
+                correct: 1,
+                explanation: "गैल्वनीकरण में लोहे या इस्पात पर जिंक की सुरक्षात्मक परत चढ़ाई जाती है। यह परत लोहे को वायु और नमी के सीधे संपर्क से बचाती है। जिंक की परत क्षतिग्रस्त होने पर भी वह लोहे की अपेक्षा पहले ऑक्सीकृत होकर कुछ सुरक्षा देती है।"
+            },
+            {
+                id: 22,
+                tag: "",
+                question: "पीतल किसकी मिश्रधातु है?",
+                options: [
+                    "ताँबा और जिंक",
+                    "ताँबा और टिन",
+                    "लोहा और कार्बन",
+                    "सीसा और टिन"
+                ],
+                correct: 0,
+                explanation: "पीतल ताँबा और जिंक से बनी मिश्रधातु है। यह शुद्ध ताँबे की तुलना में अधिक कठोर होती है और इसका रंग सुनहरा-पीला होता है। इसका उपयोग बर्तन, सजावटी वस्तुएँ और वाद्य यंत्र बनाने में किया जाता है।"
+            },
+            {
+                id: 23,
+                tag: "",
+                question: "काँसा या ब्रॉन्ज किसकी मिश्रधातु है?",
+                options: [
+                    "लोहा और क्रोमियम",
+                    "जिंक और सीसा",
+                    "एल्युमिनियम और मैग्नीशियम",
+                    "ताँबा और टिन"
+                ],
+                correct: 3,
+                explanation: "काँसा ताँबा और टिन की मिश्रधातु है। यह ताँबे की तुलना में अधिक कठोर और संक्षारण के प्रति अधिक प्रतिरोधी होता है। इसका उपयोग मूर्तियों, पदकों और कुछ यांत्रिक भागों में किया जाता है।"
+            },
+            {
+                id: 24,
+                tag: "",
+                question: "स्टेनलेस स्टील में लोहे के साथ मुख्यतः मिलाए जाते हैं—",
+                options: [
+                    "ताँबा और टिन",
+                    "सीसा और पारा",
+                    "क्रोमियम और निकेल",
+                    "सोडियम और पोटैशियम"
+                ],
+                correct: 2,
+                explanation: "स्टेनलेस स्टील में लोहे के साथ क्रोमियम तथा सामान्यतः निकेल मिलाया जाता है। क्रोमियम सतह पर ऑक्साइड की एक पतली सुरक्षात्मक परत बनाता है। इससे मिश्रधातु में संक्षारण प्रतिरोध बढ़ता है।"
+            },
+            {
+                id: 25,
+                tag: "",
+                question: "कार्बन परमाणुओं का आपस में जुड़कर लंबी शृंखला बनाने का गुण कहलाता है—",
+                options: [
+                    "उदासीनीकरण",
+                    "श्रृंखलन",
+                    "विस्थापन",
+                    "संक्षारण"
+                ],
+                correct: 1,
+                explanation: "श्रृंखलन या कैटेनेशन कार्बन परमाणुओं की आपस में मजबूत सहसंयोजक बंध बनाने की क्षमता है। इससे सीधी, शाखित और चक्रीय शृंखलाएँ बन सकती हैं। यही कार्बनिक यौगिकों की अत्यधिक विविधता का एक प्रमुख कारण है।"
+            },
+            {
+                id: 26,
+                tag: "",
+                question: "कार्बन की सामान्य संयोजकता है—",
+                options: [
+                    "चार",
+                    "एक",
+                    "दो",
+                    "तीन"
+                ],
+                correct: 0,
+                explanation: "कार्बन के बाहरी कोश में चार इलेक्ट्रॉन होते हैं। स्थिर इलेक्ट्रॉनिक विन्यास प्राप्त करने के लिए यह चार सहसंयोजक बंध बना सकता है। इसलिए कार्बन को चतुःसंयोजी तत्व कहा जाता है।"
+            },
+            {
+                id: 27,
+                tag: "",
+                question: "कार्बन का कौन-सा अपररूप विद्युत का सुचालक है?",
+                options: [
+                    "हीरा",
+                    "ग्रेफाइट",
+                    "कोयला",
+                    "लकड़ी का कोयला"
+                ],
+                correct: 1,
+                explanation: "ग्रेफाइट की प्रत्येक परत में कार्बन परमाणु तीन अन्य कार्बन परमाणुओं से जुड़े रहते हैं। शेष इलेक्ट्रॉन परतों में गति कर सकते हैं, जिससे ग्रेफाइट विद्युत का संचालन करता है। हीरे में सभी संयोजक इलेक्ट्रॉन बंधों में लगे होते हैं।"
+            },
+            {
+                id: 28,
+                tag: "",
+                question: "हीरा अत्यधिक कठोर होता है क्योंकि—",
+                options: [
+                    "इसमें कार्बन परमाणु अलग-अलग रहते हैं।",
+                    "इसकी संरचना में केवल कमजोर बल होते हैं।",
+                    "यह एक आयनिक यौगिक है।",
+                    "प्रत्येक कार्बन चार अन्य कार्बन परमाणुओं से मजबूत बंध बनाता है।"
+                ],
+                correct: 3,
+                explanation: "हीरे में प्रत्येक कार्बन परमाणु चार अन्य कार्बन परमाणुओं से मजबूत सहसंयोजक बंध द्वारा जुड़ा रहता है। इससे त्रिविमीय कठोर जालक संरचना बनती है। इसी कारण हीरा प्राकृतिक रूप से पाए जाने वाले सबसे कठोर पदार्थों में है।"
+            },
+            {
+                id: 29,
+                tag: "",
+                question: "केवल कार्बन-कार्बन एकल बंध वाले हाइड्रोकार्बन कहलाते हैं—",
+                options: [
+                    "ऐल्कीन",
+                    "ऐल्काइन",
+                    "संतृप्त हाइड्रोकार्बन",
+                    "ऐल्कोहॉल"
+                ],
+                correct: 2,
+                explanation: "संतृप्त हाइड्रोकार्बन में कार्बन परमाणुओं के बीच केवल एकल सहसंयोजक बंध होते हैं। इन्हें ऐल्केन कहा जाता है। मीथेन, एथेन और प्रोपेन इसके सामान्य उदाहरण हैं।"
+            },
+            {
+                id: 30,
+                tag: "",
+                question: "जिन हाइड्रोकार्बनों में कार्बन-कार्बन द्विबंध या त्रिबंध उपस्थित हो, वे कहलाते हैं—",
+                options: [
+                    "असंतृप्त हाइड्रोकार्बन",
+                    "संतृप्त हाइड्रोकार्बन",
+                    "आयनिक यौगिक",
+                    "धात्विक यौगिक"
+                ],
+                correct: 0,
+                explanation: "कार्बन-कार्बन द्विबंध वाले यौगिक ऐल्कीन और त्रिबंध वाले यौगिक ऐल्काइन कहलाते हैं। ये दोनों असंतृप्त हाइड्रोकार्बन हैं। ये संतृप्त हाइड्रोकार्बनों की तुलना में सामान्यतः अधिक अभिक्रियाशील होते हैं।"
+            },
+            {
+                id: 31,
+                tag: "",
+                question: "मीथेन का रासायनिक सूत्र है—",
+                options: [
+                    "C₂H₆",
+                    "CH₄",
+                    "C₂H₄",
+                    "C₂H₂"
+                ],
+                correct: 1,
+                explanation: "मीथेन सबसे सरल संतृप्त हाइड्रोकार्बन है और इसका सूत्र CH₄ है। इसमें एक कार्बन चार हाइड्रोजन परमाणुओं से जुड़ा होता है। यह प्राकृतिक गैस और बायोगैस का प्रमुख घटक है।"
+            },
+            {
+                id: 32,
+                tag: "",
+                question: "एथीन का रासायनिक सूत्र है—",
+                options: [
+                    "C₂H₄",
+                    "C₂H₆",
+                    "CH₄",
+                    "C₂H₂"
+                ],
+                correct: 0,
+                explanation: "एथीन में दो कार्बन परमाणुओं के बीच एक द्विबंध होता है। इसलिए यह असंतृप्त हाइड्रोकार्बन और ऐल्कीन श्रेणी का सदस्य है। इसका उपयोग पॉलिथीन जैसे बहुलकों के निर्माण में किया जाता है।"
+            },
+            {
+                id: 33,
+                tag: "",
+                question: "एथाइन का रासायनिक सूत्र है—",
+                options: [
+                    "C₂H₆",
+                    "CH₄",
+                    "C₂H₄",
+                    "C₂H₂"
+                ],
+                correct: 3,
+                explanation: "एथाइन में दो कार्बन परमाणुओं के बीच त्रिबंध होता है। इसका सूत्र C₂H₂ है और इसका प्रचलित नाम एसीटिलीन है। यह ऐल्काइन श्रेणी का सबसे सरल सदस्य है।"
+            },
+            {
+                id: 34,
+                tag: "",
+                question: "किसी समजातीय श्रेणी के दो क्रमागत सदस्यों में सामान्यतः अंतर होता है—",
+                options: [
+                    "CH₄ का",
+                    "CO₂ का",
+                    "CH₂ का",
+                    "H₂O का"
+                ],
+                correct: 2,
+                explanation: "समजातीय श्रेणी के क्रमागत सदस्यों में −CH₂− इकाई का अंतर होता है। उनका प्रकार्यात्मक समूह और सामान्य रासायनिक गुण समान होते हैं। लेकिन आणविक द्रव्यमान बढ़ने के साथ उनके भौतिक गुणों में क्रमिक परिवर्तन आता है।"
+            },
+            {
+                id: 35,
+                tag: "",
+                question: "ऐल्कोहॉल का प्रकार्यात्मक समूह है—",
+                options: [
+                    "–COOH",
+                    "–OH",
+                    "–CHO",
+                    "–CO–"
+                ],
+                correct: 1,
+                explanation: "ऐल्कोहॉल में हाइड्रॉक्सिल (−OH) प्रकार्यात्मक समूह उपस्थित रहता है। एथेनॉल का सूत्र C₂H₅OH है। प्रकार्यात्मक समूह किसी कार्बनिक यौगिक के प्रमुख रासायनिक गुण निर्धारित करता है।"
+            },
+            {
+                id: 36,
+                tag: "",
+                question: "ऐल्डिहाइड का प्रकार्यात्मक समूह है—",
+                options: [
+                    "–CHO",
+                    "–OH",
+                    "–COOH",
+                    "–Cl"
+                ],
+                correct: 0,
+                explanation: "ऐल्डिहाइड में −CHO प्रकार्यात्मक समूह उपस्थित होता है। मेथेनल और एथेनल इसके सरल उदाहरण हैं। इसके विपरीत −COOH कार्बोक्सिलिक अम्ल तथा −OH ऐल्कोहॉल का प्रकार्यात्मक समूह है।"
+            },
+            {
+                id: 37,
+                tag: "",
+                question: "कार्बोक्सिलिक अम्ल का प्रकार्यात्मक समूह है—",
+                options: [
+                    "–OH",
+                    "–COOH",
+                    "–CHO",
+                    "–NH₂"
+                ],
+                correct: 1,
+                explanation: "कार्बोक्सिलिक अम्लों में कार्बोक्सिल समूह (−COOH) होता है। एथेनोइक अम्ल या एसीटिक अम्ल इसका सामान्य उदाहरण है। इस समूह में कार्बोनिल और हाइड्रॉक्सिल दोनों भाग उपस्थित होते हैं।"
+            },
+            {
+                id: 38,
+                tag: "",
+                question: "एथेनॉल के पूर्ण दहन से मुख्यतः बनते हैं—",
+                options: [
+                    "कार्बन मोनोऑक्साइड और हाइड्रोजन",
+                    "केवल कार्बन",
+                    "एथेनोइक अम्ल और जल",
+                    "कार्बन डाइऑक्साइड और जल"
+                ],
+                correct: 3,
+                explanation: "पर्याप्त ऑक्सीजन में एथेनॉल के पूर्ण दहन से कार्बन डाइऑक्साइड तथा जल बनते हैं और ऊष्मा निकलती है। ऑक्सीजन की कमी में अपूर्ण दहन से कार्बन मोनोऑक्साइड या कालिख बन सकती है। कार्बन मोनोऑक्साइड विषैली गैस है।"
+            },
+            {
+                id: 39,
+                tag: "",
+                question: "एथेनॉल के नियंत्रित ऑक्सीकरण से प्राप्त किया जा सकता है—",
+                options: [
+                    "मीथेन",
+                    "एथीन",
+                    "एथेनोइक अम्ल",
+                    "कैल्शियम कार्बोनेट"
+                ],
+                correct: 2,
+                explanation: "एथेनॉल का ऑक्सीकरण करने पर एथेनोइक अम्ल बनता है। एथेनोइक अम्ल को सामान्यतः एसीटिक अम्ल कहा जाता है। सिरके में इसका तनु जलीय विलयन पाया जाता है।"
+            },
+            {
+                id: 40,
+                tag: "",
+                question: "ऐल्कोहॉल और कार्बोक्सिलिक अम्ल की अभिक्रिया से सामान्यतः बनते हैं—",
+                options: [
+                    "एस्टर और जल",
+                    "लवण और हाइड्रोजन",
+                    "केवल कार्बन डाइऑक्साइड",
+                    "धातु ऑक्साइड और जल"
+                ],
+                correct: 0,
+                explanation: "ऐल्कोहॉल और कार्बोक्सिलिक अम्ल की अभिक्रिया से एस्टर तथा जल बनते हैं। इस प्रक्रिया को एस्टरीकरण कहा जाता है। अनेक एस्टरों में सुखद फल जैसी गंध होती है, इसलिए उनका उपयोग इत्र और स्वादकारी पदार्थों में किया जाता है।"
+            },
+            {
+                id: 41,
+                tag: "",
+                question: "धातु और उसके उपयोग का सही मिलान कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>P. ताँबा</td><td style='border:1px solid #cbd5e1; padding:6px;'>1. विद्युत तार</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>Q. एल्युमिनियम</td><td style='border:1px solid #cbd5e1; padding:6px;'>2. विमान का ढाँचा</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>R. टंगस्टन</td><td style='border:1px solid #cbd5e1; padding:6px;'>3. विद्युत बल्ब का तंतु</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>S. जिंक</td><td style='border:1px solid #cbd5e1; padding:6px;'>4. लोहे का गैल्वनीकरण</td></tr></table>",
+                options: [
+                    "P–2, Q–1, R–4, S–3",
+                    "P–1, Q–2, R–3, S–4",
+                    "P–4, Q–3, R–2, S–1",
+                    "P–3, Q–4, R–1, S–2"
+                ],
+                correct: 1,
+                explanation: "ताँबा विद्युत का अच्छा चालक होने के कारण तारों में प्रयुक्त होता है। एल्युमिनियम हल्का होने के कारण विमान निर्माण में उपयोगी है। टंगस्टन का गलनांक बहुत अधिक होता है, जबकि जिंक लोहे के गैल्वनीकरण में प्रयोग किया जाता है।"
+            },
+            {
+                id: 42,
+                tag: "",
+                question: "अयस्क और उससे प्राप्त प्रमुख धातु का सही मिलान कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>P. बॉक्साइट</td><td style='border:1px solid #cbd5e1; padding:6px;'>1. एल्युमिनियम</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>Q. हेमेटाइट</td><td style='border:1px solid #cbd5e1; padding:6px;'>2. लोहा</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>R. जिंक ब्लेंड</td><td style='border:1px solid #cbd5e1; padding:6px;'>3. जिंक</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>S. सिनेबार</td><td style='border:1px solid #cbd5e1; padding:6px;'>4. पारा</td></tr></table>",
+                options: [
+                    "P–1, Q–2, R–3, S–4",
+                    "P–2, Q–1, R–4, S–3",
+                    "P–3, Q–4, R–1, S–2",
+                    "P–4, Q–3, R–2, S–1"
+                ],
+                correct: 0,
+                explanation: "बॉक्साइट एल्युमिनियम और हेमेटाइट लोहे का प्रमुख अयस्क है। जिंक ब्लेंड का मुख्य घटक जिंक सल्फाइड तथा सिनेबार का मुख्य घटक मरकरी सल्फाइड होता है। अयस्क वह खनिज है जिससे धातु का निष्कर्षण आर्थिक रूप से संभव हो।"
+            },
+            {
+                id: 43,
+                tag: "",
+                question: "मिश्रधातु और उसके मुख्य घटकों का सही मिलान कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>P. पीतल</td><td style='border:1px solid #cbd5e1; padding:6px;'>1. ताँबा एवं जिंक</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>Q. काँसा</td><td style='border:1px solid #cbd5e1; padding:6px;'>2. ताँबा एवं टिन</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>R. सोल्डर</td><td style='border:1px solid #cbd5e1; padding:6px;'>3. सीसा एवं टिन</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>S. स्टेनलेस स्टील</td><td style='border:1px solid #cbd5e1; padding:6px;'>4. लोहा, क्रोमियम एवं निकेल</td></tr></table>",
+                options: [
+                    "P–3, Q–4, R–1, S–2",
+                    "P–2, Q–1, R–4, S–3",
+                    "P–4, Q–3, R–2, S–1",
+                    "P–1, Q–2, R–3, S–4"
+                ],
+                correct: 3,
+                explanation: "पीतल में ताँबा-जिंक और काँसे में ताँबा-टिन होते हैं। परंपरागत सोल्डर सीसा तथा टिन की मिश्रधातु है। स्टेनलेस स्टील में लोहा, क्रोमियम और सामान्यतः निकेल प्रमुख घटक होते हैं।"
+            },
+            {
+                id: 44,
+                tag: "",
+                question: "कार्बनिक यौगिक और उसके सूत्र का सही मिलान कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>P. मीथेन</td><td style='border:1px solid #cbd5e1; padding:6px;'>1. CH₄</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>Q. एथीन</td><td style='border:1px solid #cbd5e1; padding:6px;'>2. C₂H₄</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>R. एथेनॉल</td><td style='border:1px solid #cbd5e1; padding:6px;'>3. C₂H₅OH</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>S. एथेनोइक अम्ल</td><td style='border:1px solid #cbd5e1; padding:6px;'>4. CH₃COOH</td></tr></table>",
+                options: [
+                    "P–2, Q–1, R–4, S–3",
+                    "P–3, Q–4, R–1, S–2",
+                    "P–1, Q–2, R–3, S–4",
+                    "P–4, Q–3, R–2, S–1"
+                ],
+                correct: 2,
+                explanation: "मीथेन संतृप्त और एथीन असंतृप्त हाइड्रोकार्बन है। एथेनॉल में −OH तथा एथेनोइक अम्ल में −COOH प्रकार्यात्मक समूह होता है। सूत्र और प्रकार्यात्मक समूह दोनों से यौगिक की पहचान की जा सकती है।"
+            },
+            {
+                id: 45,
+                tag: "",
+                question: "अभिक्रिया और उसके प्रकार का सही मिलान कीजिए:<br><table style='width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:8px; border:1px solid #cbd5e1; font-size:14px;'><tr style='background:#f1f5f9;'><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-I</th><th style='border:1px solid #cbd5e1; padding:6px; text-align:left;'>सूची-II</th></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>P. मीथेन का ऑक्सीजन में जलना</td><td style='border:1px solid #cbd5e1; padding:6px;'>1. दहन</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>Q. एथीन में हाइड्रोजन का जुड़ना</td><td style='border:1px solid #cbd5e1; padding:6px;'>2. योगात्मक अभिक्रिया</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>R. मीथेन में H का Cl द्वारा हटना</td><td style='border:1px solid #cbd5e1; padding:6px;'>3. प्रतिस्थापन अभिक्रिया</td></tr><tr><td style='border:1px solid #cbd5e1; padding:6px;'>S. ऐल्कोहॉल और अम्ल से एस्टर बनना</td><td style='border:1px solid #cbd5e1; padding:6px;'>4. एस्टरीकरण</td></tr></table>",
+                options: [
+                    "P–2, Q–3, R–4, S–1",
+                    "P–1, Q–2, R–3, S–4",
+                    "P–4, Q–1, R–2, S–3",
+                    "P–3, Q–4, R–1, S–2"
+                ],
+                correct: 1,
+                explanation: "हाइड्रोकार्बन का ऑक्सीजन में जलना दहन है। असंतृप्त हाइड्रोकार्बन में किसी पदार्थ का जुड़ना योगात्मक अभिक्रिया है। संतृप्त हाइड्रोकार्बन में परमाणु का स्थान बदलना प्रतिस्थापन तथा एस्टर बनने की प्रक्रिया एस्टरीकरण कहलाती है।"
+            },
+            {
+                id: 46,
+                tag: "",
+                question: "अभिक्रियाशीलता श्रेणी के संबंध में विचार कीजिए—<br><br>1. सोडियम, ताँबे की तुलना में अधिक अभिक्रियाशील है।<br>2. अधिक अभिक्रियाशील धातु कम अभिक्रियाशील धातु को उसके लवण से विस्थापित कर सकती है।<br>3. सोना कम अभिक्रियाशील होने के कारण कभी-कभी प्रकृति में मुक्त अवस्था में मिलता है।<br><br>सही विकल्प चुनिए—",
+                options: [
+                    "1, 2 और 3 सभी सही हैं।",
+                    "केवल 1 और 2 सही हैं।",
+                    "केवल 2 और 3 सही हैं।",
+                    "केवल 1 सही है।"
+                ],
+                correct: 0,
+                explanation: "सोडियम अभिक्रियाशीलता श्रेणी में ताँबे से काफी ऊपर है। विस्थापन अभिक्रिया की दिशा भी इसी श्रेणी से निर्धारित होती है। सोना कम अभिक्रियाशील होने के कारण आसानी से यौगिक नहीं बनाता और मुक्त अवस्था में पाया जा सकता है।"
+            },
+            {
+                id: 47,
+                tag: "",
+                question: "आयनिक यौगिकों के संबंध में विचार कीजिए—<br><br>1. इनका निर्माण सामान्यतः इलेक्ट्रॉनों के स्थानांतरण से होता है।<br>2. ठोस अवस्था में इनके आयन स्वतंत्र रूप से गति नहीं कर सकते।<br>3. गलित अवस्था में ये विद्युत का संचालन कर सकते हैं।<br><br>सही विकल्प है—",
+                options: [
+                    "केवल 1 सही है।",
+                    "1, 2 और 3 सभी सही हैं।",
+                    "केवल 1 और 3 सही हैं।",
+                    "केवल 2 सही है।"
+                ],
+                correct: 1,
+                explanation: "धातु द्वारा इलेक्ट्रॉन त्यागने और अधातु द्वारा इलेक्ट्रॉन ग्रहण करने से विपरीत आवेशित आयन बनते हैं। ठोस अवस्था में ये आयन जालक में स्थिर रहते हैं। गलित अवस्था या जलीय विलयन में आयनों की गति संभव होने से विद्युत का संचालन होता है।"
+            },
+            {
+                id: 48,
+                tag: "",
+                question: "कार्बन के संबंध में विचार कीजिए—<br><br>1. कार्बन चतुःसंयोजी तत्व है।<br>2. कार्बन में श्रृंखलन का गुण पाया जाता है।<br>3. अधिकांश कार्बन यौगिक सहसंयोजक प्रकृति के होते हैं।<br><br>सही विकल्प है—",
+                options: [
+                    "1, 2 और 3 सभी सही हैं।",
+                    "केवल 1 और 2 सही हैं।",
+                    "केवल 2 और 3 सही हैं।",
+                    "केवल 1 सही है।"
+                ],
+                correct: 0,
+                explanation: "कार्बन चार बंध बना सकता है, इसलिए वह चतुःसंयोजी है। इसके परमाणु आपस में जुड़कर लंबी और शाखित शृंखलाएँ बना सकते हैं। कार्बन सामान्यतः इलेक्ट्रॉन साझा करके सहसंयोजक यौगिक बनाता है।"
+            },
+            {
+                id: 49,
+                tag: "",
+                question: "साबुन और अपमार्जक के संबंध में विचार कीजिए—<br><br>1. साबुन सामान्यतः लंबी शृंखला वाले वसीय अम्लों के सोडियम या पोटैशियम लवण होते हैं।<br>2. कठोर जल में साबुन मैल या अवक्षेप बनाकर कम प्रभावी हो जाता है।<br>3. संश्लिष्ट अपमार्जक कठोर जल में भी अपेक्षाकृत प्रभावी हो सकते हैं।<br><br>सही विकल्प है—",
+                options: [
+                    "केवल 1 सही है।",
+                    "केवल 1 और 2 सही हैं।",
+                    "केवल 2 और 3 सही हैं।",
+                    "1, 2 और 3 सभी सही हैं।"
+                ],
+                correct: 3,
+                explanation: "साबुन के अणु में जलस्नेही सिरा और जलविरोधी पूँछ होती है, जो मैल को माइसेल में घेरती है। कठोर जल के कैल्शियम और मैग्नीशियम आयन साबुन के साथ अघुलनशील पदार्थ बनाते हैं। अपमार्जक इन आयनों के साथ ऐसा अवक्षेप सामान्यतः नहीं बनाते।"
+            },
+            {
+                id: 50,
+                tag: "",
+                question: "हाइड्रोकार्बनों के संबंध में विचार कीजिए—<br><br>1. संतृप्त हाइड्रोकार्बनों में कार्बन-कार्बन के बीच केवल एकल बंध होते हैं।<br>2. असंतृप्त हाइड्रोकार्बन ब्रोमीन विलयन का रंग हटाने की अभिक्रिया कर सकते हैं।<br>3. मीथेन प्राकृतिक गैस और बायोगैस का प्रमुख घटक है।<br><br>सही विकल्प है—",
+                options: [
+                    "केवल 1 और 2 सही हैं।",
+                    "केवल 2 और 3 सही हैं।",
+                    "1, 2 और 3 सभी सही हैं।",
+                    "केवल 1 सही है।"
+                ],
+                correct: 2,
+                explanation: "ऐल्केन संतृप्त, जबकि ऐल्कीन और ऐल्काइन असंतृप्त हाइड्रोकार्बन हैं। असंतृप्त यौगिकों के द्विबंध या त्रिबंध पर योगात्मक अभिक्रिया होती है, इसलिए वे ब्रोमीन विलयन का रंग हटा सकते हैं। मीथेन प्राकृतिक गैस और जैविक अपघटन से बनने वाली बायोगैस में पाया जाता है।"
+            }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
