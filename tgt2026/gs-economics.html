@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>भारतीय अर्थव्यवस्था - TGT/GS पोर्टल</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f1f5f9; color: #1e293b; }
+        .brand-hero { background: linear-gradient(135deg, #0b1e47, #1e3a8a); color: white; padding: 30px 20px 25px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+        .brand-logo { width: 85px; height: 85px; border-radius: 50%; border: 3px solid #facc15; object-fit: cover; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .brand-title { font-size: 24px; font-weight: 900; color: #facc15; margin: 0; letter-spacing: 0.8px; text-transform: uppercase; }
+        .brand-tagline { font-size: 13px; color: #ffffff; opacity: 0.95; margin: 6px 0 15px 0; font-weight: 500; }
+        .page-badge { display: inline-block; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(250, 204, 21, 0.4); color: #ffffff; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+        .container { max-width: 800px; margin: 20px auto 40px; padding: 0 14px; }
+        .back-btn { display: inline-block; margin-bottom: 16px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 10px 18px; border-radius: 8px; font-weight: bold; font-size: 13px; transition: background 0.2s; }
+        .back-btn:hover { background: #cbd5e1; }
+        .section-title { font-size: 18px; color: #0b1e47; border-bottom: 2px solid #0b1e47; padding-bottom: 6px; margin: 28px 0 16px; font-weight: 800; }
+        
+        .grid { display: flex; flex-direction: column; gap: 14px; }
+        
+        /* PDF Card Style */
+        .card { 
+            background: #ffffff; 
+            border: 1.5px solid #e2e8f0; 
+            border-radius: 12px; 
+            padding: 18px 22px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            gap: 12px; 
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.04); 
+            transition: all 0.25s ease; 
+        }
+        @media (min-width: 600px) { .card { flex-direction: row; align-items: center; } }
+        .card:hover { border-color: #3b82f6; box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08); transform: translateY(-2px); }
+        .card h3 { font-size: 15px; margin: 0; color: #0b1e47; font-weight: 700; line-height: 1.4; }
+        .btn-action { text-align: center; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-size: 13.5px; font-weight: 800; min-width: 140px; cursor: pointer; border: none; color: white; white-space: nowrap; transition: background-color 0.2s; }
+        .btn-pdf { background-color: #d97706; }
+
+        /* चौड़ा, आकर्षक और प्रीमियम टेस्ट कार्ड */
+        .test-card-timer {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            color: #1e293b;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.03);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            gap: 12px;
+        }
+        .test-card-timer:hover {
+            border-color: #2563eb;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
+            transform: translateY(-2px);
+            background-color: #fafcff;
+        }
+        .test-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+        }
+
+        /* आकर्षक स्टेटस बैज */
+        .status-msg {
+            font-size: 13px;
+            font-weight: 800;
+            white-space: nowrap;
+            padding: 7px 14px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            letter-spacing: 0.3px;
+        }
+        
+        /* 🟢 Live Badge */
+        .status-live { 
+            color: #15803d; 
+            background: #dcfce7; 
+            border: 1px solid #86efac;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.25);
+            animation: liveGlow 1.8s infinite;
+        }
+        
+        /* ⏳ Coming Soon Badge */
+        .status-coming { 
+            color: #b45309; 
+            background: #fef3c7; 
+            border: 1px solid #fde68a;
+        }
+        
+        /* 🚫 Test Over Badge */
+        .status-over { 
+            color: #b91c1c; 
+            background: #fee2e2; 
+            border: 1px solid #fecaca;
+        }
+
+        @keyframes liveGlow {
+            0% { transform: scale(1); box-shadow: 0 0 0 rgba(34, 197, 94, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 0 12px rgba(34, 197, 94, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 0 0 rgba(34, 197, 94, 0.4); }
+        }
+
+        /* Modal Styles */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
+        .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+        .modal-box h3 { margin-top: 0; color: #0b1e47; font-size: 18px; }
+        .modal-box p { font-size: 13px; color: #64748b; margin-bottom: 15px; }
+        .modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; text-align: center; box-sizing: border-box; outline: none; }
+        .modal-box button { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        .btn-submit { background: #16a34a; color: white; margin-bottom: 8px; } 
+        .btn-close { background: #e2e8f0; color: #1e293b; margin-top: 6px; }
+    </style>
+</head>
+<body>
+
+    <div class="brand-hero">
+        <img src="logo.png" alt="Medhavi Logo" class="brand-logo" onerror="this.src='../logo.png'">
+        <h1 class="brand-title">MEDHAVI STUDY POINT</h1>
+        <p class="brand-tagline">ज्ञान, अनुशासन और सफलता का डिजिटल सारथी</p>
+        <div class="page-badge">📈 भारतीय अर्थव्यवस्था (Economy)</div>
+    </div>
+
+    <div class="container">
+        <a href="gs.html" class="back-btn">⬅️ GS मुख्य पेज पर जाएँ</a>
+        
+        <!-- PDF सेक्शन -->
+        <div class="section-title">📚 संपूर्ण भारतीय अर्थव्यवस्था नोट्स (PDF)</div>
+        <div class="grid">
+            <div class="card">
+                <div class="card-info">
+                    <h3>भारतीय अर्थव्यवस्था - संपूर्ण ई-बुक / नोट्स PDF</h3>
+                    <p style="font-size:12px; color:#64748b; margin:4px 0 0 0;">बजट, बैंकिंग, राष्ट्रीय आय एवं आर्थिक सर्वेक्षण सहित</p>
+                </div>
+                <button onclick="checkAccess('gspdf/economy-full.pdf')" class="btn-action btn-pdf" data-type="pdf">📖 PDF खोलें</button>
+            </div>
+        </div>
+
+        <div class="section-title">📝 ऑनलाइन मॉक टेस्ट (20 Tests)</div>
+        <div class="grid">
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-01T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec1.html"><span class="test-title">📝 टेस्ट 1: अर्थव्यवस्था का सामान्य परिचय</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-01T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec2.html"><span class="test-title">📝 टेस्ट 2: राष्ट्रीय आय एवं उसके माप</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-01T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec3.html"><span class="test-title">📝 टेस्ट 3: आर्थिक संवृद्धि, आर्थिक विकास एवं सतत विकास</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-13T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec4.html"><span class="test-title">📝 टेस्ट 4: अर्थव्यवस्था के क्षेत्रक</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-14T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec5.html"><span class="test-title">📝 टेस्ट 5: उद्योग, MSME एवं आधारभूत संरचना</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-15T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec6.html"><span class="test-title">📝 टेस्ट 6: राजकोषीय नीति एवं सरकारी बजट</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-16T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec7.html"><span class="test-title">📝 टेस्ट 7: कर व्यवस्था एवं वस्तु एवं सेवा कर (GST)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-17T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec8.html"><span class="test-title">📝 टेस्ट 8: बजटीय घाटे, सार्वजनिक ऋण एवं वित्तीय संघवाद</span><span class="status-msg">Loading...</span></a>
+            
+            <!-- 18-10-2026: रविवार (Sunday Holiday) -->
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-19T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec9.html"><span class="test-title">📝 टेस्ट 9: आर्थिक नियोजन, पंचवर्षीय योजनाएँ एवं नीति आयोग</span><span class="status-msg">Loading...</span></a>
+            
+            <!-- 20-10-2026: विजयदशमी / दशहरा (Dussehra Holiday) -->
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-21T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec10.html"><span class="test-title">📝 टेस्ट 10: मुद्रा, मुद्रास्फीति एवं मौद्रिक नीति</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-22T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec11.html"><span class="test-title">📝 टेस्ट 11: बैंकिंग व्यवस्था एवं वित्तीय समावेशन</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-23T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec12.html"><span class="test-title">📝 टेस्ट 12: मानव विकास, शिक्षा एवं स्वास्थ्य</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-24T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec13.html"><span class="test-title">📝 टेस्ट 13: रोजगार, बेरोजगारी एवं कल्याणकारी योजनाएँ</span><span class="status-msg">Loading...</span></a>
+            
+            <!-- 25-10-2026: रविवार (Sunday Holiday) -->
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-26T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec14.html"><span class="test-title">📝 टेस्ट 14: गरीबी, असमानता एवं समावेशी विकास</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-27T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec15.html"><span class="test-title">📝 टेस्ट 15: विदेश व्यापार, भुगतान संतुलन एवं विनिमय दर</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-28T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec16.html"><span class="test-title">📝 टेस्ट 16: विदेशी निवेश एवं अंतरराष्ट्रीय आर्थिक संगठन</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-29T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec17.html"><span class="test-title">📝 टेस्ट 17: वैश्विक सूचकांक, रैंकिंग एवं जनसांख्यिकी</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-30T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec18.html"><span class="test-title">📝 टेस्ट 18: भारत की जनगणना एवं उत्तर प्रदेश की जनसंख्या</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-31T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec19.html"><span class="test-title">📝 टेस्ट 19: भारतीय कृषि एवं कृषि उत्पादन</span><span class="status-msg">Loading...</span></a>
+            
+            <!-- 01-11-2026: रविवार (Sunday Holiday) -->
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-02T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ec20.html"><span class="test-title">📝 टेस्ट 20: कृषि मूल्य, विपणन, वित्त एवं संबद्ध क्षेत्र</span><span class="status-msg">Loading...</span></a>
+        </div>
+    </div>
+
+    <!-- ऑथेंटिकेशन / पेमेंट मॉडल -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3>🔒 GS पेड स्टूडेंट एक्सेस</h3>
+            <p>सामग्री अनलॉक करने के लिए अपना पंजीकृत मोबाइल नंबर दर्ज करें:</p>
+            <input type="tel" id="userMobileInput" placeholder="10 अंकों का मोबाइल नंबर दर्ज करें" maxlength="10">
+            <button onclick="verifyStudent()" class="btn-submit">अनलॉक करें</button>
+            <div id="paymentSection" style="display:none; margin-top:10px; border-top:1px solid #e2e8f0; padding-top:10px;">
+                <p style="color:#d97706; font-weight:bold; font-size:13px; margin-bottom:10px;">🔒 GS बैच फीस: <b>₹99</b></p>
+                <a href="upi://pay?pa=medhavistudypoint@okaxis&pn=MedhaviStudyPoint&am=99&cu=INR" style="display: block; background: #1a73e8; color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: bold; margin-bottom: 10px;">📲 Pay ₹99 via UPI</a>
+                <p style="font-size:11px; color:#64748b; margin: 4px 0;">— या QR Code स्कैन करके पे करें —</p>
+                <img src="qr.png" alt="Payment QR Code" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #cbd5e1; margin: 4px 0;">
+                <a href="https://wa.me/919415597889?text=नमस्ते%20सर,%20मैंने%20GS%20कोर्स%20का%20पेमेंट%20कर%20दिया%20है।" target="_blank" style="display: block; background: #25d366; color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; margin-top: 8px;">💬 WhatsApp पर स्क्रीनशॉट भेजें</a>
+            </div>
+            <p id="authMessage" style="margin: 8px 0; font-size:13px; font-weight:bold;"></p>
+            <button onclick="closeModal()" class="btn-close">बंद करें</button>
+        </div>
+    </div>
+
+<script>
+    // ✅ 1-Device Lock सुरक्षा वाला Apps Script URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3VolXNGLi8jlH7aAniR7v8_mbpH62Y6Dz4LvNakPpt7Z-FHEPcC8KNLRY7nlbh-gy/exec"; 
+    let pendingUrl = null;
+
+    // ✅ टाइमर और लाइव/कमिंग सून स्थिति हैंडलर
+    function initTestCards() {
+        const now = new Date().getTime();
+        const testCards = document.querySelectorAll('.test-card-timer');
+
+        testCards.forEach(card => {
+            const startStr = card.getAttribute('data-start');
+            const endStr = card.getAttribute('data-end');
+            const link = card.getAttribute('data-link');
+            const statusMsg = card.querySelector('.status-msg');
+
+            const startTime = new Date(startStr).getTime();
+            const endTime = new Date(endStr).getTime();
+
+            if (now < startTime) {
+                statusMsg.innerHTML = '⏳ Coming Soon';
+                statusMsg.className = 'status-msg status-coming';
+                card.onclick = () => alert('⏳ यह टेस्ट निर्धारित समय पर लाइव होगा!');
+            } else if (now >= startTime && now <= endTime) {
+                statusMsg.innerHTML = '🟢 Live Now';
+                statusMsg.className = 'status-msg status-live';
+                card.onclick = () => checkAccess(link);
+            } else {
+                statusMsg.innerHTML = '🚫 Test Over';
+                statusMsg.className = 'status-msg status-over';
+                card.onclick = () => alert('🚫 इस टेस्ट की समय सीमा समाप्त हो चुकी है!');
+            }
+        });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        initTestCards();
+        setInterval(initTestCards, 10000); // हर 10 सेकंड में ऑटो-रिफ्रेश
+    });
+
+    function checkAccess(url) {
+        pendingUrl = url;
+        const plan = localStorage.getItem('user_plan');
+
+        if (plan === 'FULL' || plan === 'GS') {
+            if (url === '#' || !url) {
+                alert('⏳ यह सामग्री जल्द ही उपलब्ध होगी!');
+            } else {
+                window.location.href = url;
+            }
+        } else {
+            document.getElementById('paymentSection').style.display = 'none';
+            document.getElementById('userMobileInput').value = '';
+            document.getElementById('authMessage').innerText = '';
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+    }
+
+    function verifyStudent() {
+        const mobile = document.getElementById('userMobileInput').value.trim();
+        const msgBox = document.getElementById('authMessage');
+        const paySec = document.getElementById('paymentSection');
+        paySec.style.display = "none";
+
+        if (mobile.length !== 10) {
+            msgBox.style.color = "#e11d48";
+            msgBox.innerText = "कृपया सही 10 अंकों का मोबाइल नंबर डालें!";
+            return;
+        }
+
+        let deviceId = localStorage.getItem('my_device_id');
+        if (!deviceId) {
+            deviceId = "DEV_" + Math.random().toString(36).substring(2, 11) + Date.now();
+            localStorage.setItem("my_device_id", deviceId);
+        }
+
+        msgBox.style.color = "#2563eb";
+        msgBox.innerText = "जाँच हो रही है...";
+
+        fetch(`${SCRIPT_URL}?mobile=${mobile}&deviceId=${deviceId}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.allowed) {
+                    if (data.plan === 'FULL' || data.plan === 'GS') {
+                        localStorage.setItem('user_plan', data.plan);
+                        localStorage.setItem('tgt_user_mobile', mobile);
+                        msgBox.style.color = "#16a34a";
+                        msgBox.innerText = data.message;
+                        setTimeout(() => {
+                            closeModal();
+                            if (pendingUrl === '#' || !pendingUrl) {
+                                alert('⏳ यह सामग्री जल्द ही उपलब्ध होगी!');
+                            } else if (pendingUrl) {
+                                window.location.href = pendingUrl;
+                            }
+                        }, 800);
+                    } else {
+                        msgBox.style.color = "#e11d48";
+                        msgBox.innerText = "इस सेक्शन के लिए आपका प्लान मान्य नहीं है!";
+                    }
+                } else {
+                    msgBox.style.color = "#e11d48";
+                    msgBox.innerText = data.message;
+                    if (data.reason === "NOT_FOUND") paySec.style.display = "block";
+                }
+            })
+            .catch(err => {
+                msgBox.style.color = "#e11d48";
+                msgBox.innerText = "नेटवर्क खराबी! पुनः प्रयास करें।";
+            });
+    }
+
+    function closeModal() {
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('authMessage').innerText = '';
+        document.getElementById('paymentSection').style.display = 'none';
+    }
+</script>
+</body>
+</html>
