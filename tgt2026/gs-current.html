@@ -6,30 +6,122 @@
     <title>करेंट अफेयर्स - TGT/GS पोर्टल</title>
     <style>
         * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f1f5f9; color: #1e293b; }
         .brand-hero { background: linear-gradient(135deg, #0b1e47, #1e3a8a); color: white; padding: 30px 20px 25px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
         .brand-logo { width: 85px; height: 85px; border-radius: 50%; border: 3px solid #facc15; object-fit: cover; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         .brand-title { font-size: 24px; font-weight: 900; color: #facc15; margin: 0; letter-spacing: 0.8px; text-transform: uppercase; }
         .brand-tagline { font-size: 13px; color: #ffffff; opacity: 0.95; margin: 6px 0 15px 0; font-weight: 500; }
         .page-badge { display: inline-block; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(250, 204, 21, 0.4); color: #ffffff; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; }
-        .container { max-width: 800px; margin: 20px auto 40px; padding: 0 12px; }
-        .back-btn { display: inline-block; margin-bottom: 16px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 13px; }
-        .section-title { font-size: 17px; color: #0b1e47; border-bottom: 2px solid #0b1e47; padding-bottom: 5px; margin: 25px 0 15px; font-weight: 800; }
-        .grid { display: flex; flex-direction: column; gap: 12px; }
-        .card { background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; gap: 12px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04); transition: all 0.2s ease-in-out; }
+        .container { max-width: 800px; margin: 20px auto 40px; padding: 0 14px; }
+        .back-btn { display: inline-block; margin-bottom: 16px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 10px 18px; border-radius: 8px; font-weight: bold; font-size: 13px; transition: background 0.2s; }
+        .back-btn:hover { background: #cbd5e1; }
+        .section-title { font-size: 18px; color: #0b1e47; border-bottom: 2px solid #0b1e47; padding-bottom: 6px; margin: 28px 0 16px; font-weight: 800; }
+        
+        .grid { display: flex; flex-direction: column; gap: 14px; }
+        
+        /* PDF Card Style */
+        .card { 
+            background: #ffffff; 
+            border: 1.5px solid #e2e8f0; 
+            border-radius: 12px; 
+            padding: 18px 22px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            gap: 12px; 
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.04); 
+            transition: all 0.25s ease; 
+        }
         @media (min-width: 600px) { .card { flex-direction: row; align-items: center; } }
-        .card:hover { border-color: #3b82f6; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08); transform: translateY(-2px); }
+        .card:hover { border-color: #3b82f6; box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08); transform: translateY(-2px); }
         .card h3 { font-size: 15px; margin: 0; color: #0b1e47; font-weight: 700; line-height: 1.4; }
-        .btn-action { text-align: center; text-decoration: none; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 800; min-width: 140px; cursor: pointer; border: none; color: white; white-space: nowrap; transition: background-color 0.2s; }
-        .btn-class { background-color: #2563eb; } .btn-test { background-color: #16a34a; } .btn-pdf { background-color: #d97706; }
-        .btn-disabled { background-color: #64748b !important; }
+        .btn-action { text-align: center; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-size: 13.5px; font-weight: 800; min-width: 140px; cursor: pointer; border: none; color: white; white-space: nowrap; transition: background-color 0.2s; }
+        .btn-pdf { background-color: #d97706; }
+
+        /* चौड़ा, आकर्षक और प्रीमियम टेस्ट कार्ड */
+        .test-card-timer {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            color: #1e293b;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.03);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            gap: 12px;
+        }
+        .test-card-timer:hover {
+            border-color: #2563eb;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
+            transform: translateY(-2px);
+            background-color: #fafcff;
+        }
+        .test-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+        }
+
+        /* आकर्षक स्टेटस बैज */
+        .status-msg {
+            font-size: 13px;
+            font-weight: 800;
+            white-space: nowrap;
+            padding: 7px 14px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            letter-spacing: 0.3px;
+        }
+        
+        /* 🟢 Live Badge */
+        .status-live { 
+            color: #15803d; 
+            background: #dcfce7; 
+            border: 1px solid #86efac;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.25);
+            animation: liveGlow 1.8s infinite;
+        }
+        
+        /* ⏳ Coming Soon Badge */
+        .status-coming { 
+            color: #b45309; 
+            background: #fef3c7; 
+            border: 1px solid #fde68a;
+        }
+        
+        /* 🚫 Test Over Badge */
+        .status-over { 
+            color: #b91c1c; 
+            background: #fee2e2; 
+            border: 1px solid #fecaca;
+        }
+
+        @keyframes liveGlow {
+            0% { transform: scale(1); box-shadow: 0 0 0 rgba(34, 197, 94, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 0 12px rgba(34, 197, 94, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 0 0 rgba(34, 197, 94, 0.4); }
+        }
+
+        /* Modal Styles */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
         .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .modal-box h3 { margin-top: 0; color: #0b1e47; font-size: 18px; }
         .modal-box p { font-size: 13px; color: #64748b; margin-bottom: 15px; }
         .modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; text-align: center; box-sizing: border-box; outline: none; }
         .modal-box button { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
-        .btn-submit { background: #16a34a; color: white; margin-bottom: 8px; } .btn-close { background: #e2e8f0; color: #1e293b; margin-top: 6px; }
+        .btn-submit { background: #16a34a; color: white; margin-bottom: 8px; } 
+        .btn-close { background: #e2e8f0; color: #1e293b; margin-top: 6px; }
     </style>
 </head>
 <body>
@@ -43,43 +135,48 @@
 
     <div class="container">
         <a href="gs.html" class="back-btn">⬅️ GS मुख्य पेज पर जाएँ</a>
-        <!---
+        
+        <!-- PDF सेक्शन -->
         <div class="section-title">📚 संपूर्ण करेंट अफेयर्स नोट्स (PDF)</div>
         <div class="grid">
-            <div class="card"><div class="card-info"><h3>वार्षिकी करेंट अफेयर्स - संपूर्ण नोट्स PDF</h3></div><button onclick="checkAccess('gspdf/ca-full.html')" class="btn-action btn-pdf" data-type="pdf">📖 PDF खोलें</button></div>
+            <div class="card">
+                <div class="card-info">
+                    <h3>वार्षिकी करेंट अफेयर्स - संपूर्ण ई-बुक / नोट्स PDF</h3>
+                    <p style="font-size:12px; color:#64748b; margin:4px 0 0 0;">राष्ट्रीय, अंतर्राष्ट्रीय, पुरस्कार, खेल एवं योजनाएँ</p>
+                </div>
+                <button onclick="checkAccess('gspdf/ca-full.html')" class="btn-action btn-pdf" data-type="pdf">📖 PDF खोलें</button>
+            </div>
         </div>
 
-        <div class="section-title">🎥 वीडियो क्लासेस (10 Classes)</div>
-        <div class="grid">
-            <div class="card"><div class="card-info"><h3>Current Affairs Class - 01</h3></div><button onclick="checkAccess('gsclass/c1.html')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Class - 02</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Class - 03</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Class - 04</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Class - 05</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-        </div>
---->
         <div class="section-title">📝 ऑनलाइन मॉक टेस्ट (20 Tests)</div>
         <div class="grid">
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 01</h3></div><button onclick="checkAccess('gstest/ct1.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 02</h3></div><button onclick="checkAccess('gstest/ct2.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 03</h3></div><button onclick="checkAccess('gstest/ct3.html'')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 04</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 05</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 06</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 07</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 08</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 09</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 10</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 11</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 12</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 13</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 14</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 15</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 16</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 17</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 18</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 19</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>Current Affairs Test - 20</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-01T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct1.html"><span class="test-title">📝 टेस्ट 1: करेंट अफेयर्स (01 मार्च से 15 मार्च)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-01T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct2.html"><span class="test-title">📝 टेस्ट 2: करेंट अफेयर्स (16 मार्च से 31 मार्च)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-01T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct3.html"><span class="test-title">📝 टेस्ट 3: करेंट अफेयर्स (01 अप्रैल से 15 अप्रैल)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-04T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct4.html"><span class="test-title">📝 टेस्ट 4: करेंट अफेयर्स (16 अप्रैल से 30 अप्रैल)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-05T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct5.html"><span class="test-title">📝 टेस्ट 5: करेंट अफेयर्स (01 मई से 15 मई)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-06T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct6.html"><span class="test-title">📝 टेस्ट 6: करेंट अफेयर्स (16 मई से 31 मई)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-07T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct7.html"><span class="test-title">📝 टेस्ट 7: करेंट अफेयर्स (01 जून से 15 जून)</span><span class="status-msg">Loading...</span></a>
+            
+            <!-- 08-11-2026: रविवार / दीपावली (Diwali Holiday) -->
+            <!-- 09-11-2026: गोवर्धन पूजा (Govardhan Puja Holiday) -->
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-10T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct8.html"><span class="test-title">📝 टेस्ट 8: करेंट अफेयर्स (16 जून से 30 जून)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-11T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct9.html"><span class="test-title">📝 टेस्ट 9: करेंट अफेयर्स (01 जुलाई से 15 जुलाई)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-12T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct10.html"><span class="test-title">📝 टेस्ट 10: करेंट अफेयर्स (16 जुलाई से 31 जुलाई)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-13T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct11.html"><span class="test-title">📝 टेस्ट 11: करेंट अफेयर्स (01 अगस्त से 15 अगस्त)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-14T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct12.html"><span class="test-title">📝 टेस्ट 12: करेंट अफेयर्स (16 अगस्त से 31 अगस्त)</span><span class="status-msg">Loading...</span></a>
+            
+            <!-- 15-11-2026: रविवार (Sunday Holiday) -->
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-16T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct13.html"><span class="test-title">📝 टेस्ट 13: करेंट अफेयर्स (01 सितंबर से 15 सितंबर)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-17T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct14.html"><span class="test-title">📝 टेस्ट 14: करेंट अफेयर्स (16 सितंबर से 30 सितंबर)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-18T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct15.html"><span class="test-title">📝 टेस्ट 15: करेंट अफेयर्स (01 अक्टूबर से 15 अक्टूबर)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-19T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct16.html"><span class="test-title">📝 टेस्ट 16: करेंट अफेयर्स (16 अक्टूबर से 31 अक्टूबर)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-20T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct17.html"><span class="test-title">📝 टेस्ट 17: करेंट अफेयर्स (01 नवंबर से 15 नवंबर)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-21T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct18.html"><span class="test-title">📝 टेस्ट 18: करेंट अफेयर्स (16 नवंबर से 30 नवंबर)</span><span class="status-msg">Loading...</span></a>
+            
+            <!-- 22-11-2026: रविवार (Sunday Holiday) -->
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-23T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct19.html"><span class="test-title">📝 टेस्ट 19: करेंट अफेयर्स (01 दिसंबर से 15 दिसंबर)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-24T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/ct20.html"><span class="test-title">📝 टेस्ट 20: करेंट अफेयर्स (16 दिसंबर से 31 दिसंबर)</span><span class="status-msg">Loading...</span></a>
         </div>
     </div>
 
@@ -103,38 +200,47 @@
     </div>
 
 <script>
-    // ✅ 1-Device Lock सुरक्षा वाला नया Apps Script URL
+    // ✅ 1-Device Lock सुरक्षा वाला Apps Script URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3VolXNGLi8jlH7aAniR7v8_mbpH62Y6Dz4LvNakPpt7Z-FHEPcC8KNLRY7nlbh-gy/exec"; 
     let pendingUrl = null;
 
-    window.addEventListener('DOMContentLoaded', () => {
-        const buttons = document.querySelectorAll('.btn-action');
-        buttons.forEach(btn => {
-            const onclickAttr = btn.getAttribute('onclick') || '';
-            const btnType = btn.getAttribute('data-type') || '';
+    // ✅ टाइमर और लाइव/कमिंग सून स्थिति हैंडलर
+    function initTestCards() {
+        const now = new Date().getTime();
+        const testCards = document.querySelectorAll('.test-card-timer');
 
-            if (onclickAttr.includes("'#'") || onclickAttr.includes('""')) {
-                btn.innerText = '⏳ Coming Soon';
-                btn.classList.add('btn-disabled');
+        testCards.forEach(card => {
+            const startStr = card.getAttribute('data-start');
+            const endStr = card.getAttribute('data-end');
+            const link = card.getAttribute('data-link');
+            const statusMsg = card.querySelector('.status-msg');
+
+            const startTime = new Date(startStr).getTime();
+            const endTime = new Date(endStr).getTime();
+
+            if (now < startTime) {
+                statusMsg.innerHTML = '⏳ Coming Soon';
+                statusMsg.className = 'status-msg status-coming';
+                card.onclick = () => alert('⏳ यह टेस्ट निर्धारित समय पर लाइव होगा!');
+            } else if (now >= startTime && now <= endTime) {
+                statusMsg.innerHTML = '🟢 Live Now';
+                statusMsg.className = 'status-msg status-live';
+                card.onclick = () => checkAccess(link);
             } else {
-                if (btnType === 'pdf') {
-                    btn.innerText = '📖 PDF खोलें';
-                    btn.classList.add('btn-pdf');
-                } else if (btnType === 'class') {
-                    btn.innerText = '▶️ क्लास देखें';
-                    btn.classList.add('btn-class');
-                } else if (btnType === 'test') {
-                    btn.innerText = '📝 टेस्ट दें';
-                    btn.classList.add('btn-test');
-                }
-                btn.classList.remove('btn-disabled');
+                statusMsg.innerHTML = '🚫 Test Over';
+                statusMsg.className = 'status-msg status-over';
+                card.onclick = () => alert('🚫 इस टेस्ट की समय सीमा समाप्त हो चुकी है!');
             }
         });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        initTestCards();
+        setInterval(initTestCards, 10000); // हर 10 सेकंड में ऑटो-रिफ्रेश
     });
 
     function checkAccess(url) {
         pendingUrl = url;
-        // ✅ मुख्य पृष्ठ से सेव होने वाले 'user_plan' की जाँच ('FULL' या 'GS')
         const plan = localStorage.getItem('user_plan');
 
         if (plan === 'FULL' || plan === 'GS') {
@@ -163,7 +269,6 @@
             return;
         }
 
-        // ✅ सही 'my_device_id' का उपयोग
         let deviceId = localStorage.getItem('my_device_id');
         if (!deviceId) {
             deviceId = "DEV_" + Math.random().toString(36).substring(2, 11) + Date.now();
