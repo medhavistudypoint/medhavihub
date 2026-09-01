@@ -20,9 +20,10 @@
         @media (min-width: 600px) { .card { flex-direction: row; align-items: center; } }
         .card:hover { border-color: #3b82f6; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08); transform: translateY(-2px); }
         .card h3 { font-size: 15px; margin: 0; color: #0b1e47; font-weight: 700; line-height: 1.4; }
+        .test-date-badge { font-size: 12px; color: #64748b; margin: 4px 0 0 0; font-weight: 500; }
         .btn-action { text-align: center; text-decoration: none; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 800; min-width: 140px; cursor: pointer; border: none; color: white; white-space: nowrap; transition: background-color 0.2s; }
         .btn-class { background-color: #2563eb; } .btn-test { background-color: #16a34a; } .btn-pdf { background-color: #d97706; }
-        .btn-disabled { background-color: #64748b !important; }
+        .btn-disabled { background-color: #64748b !important; cursor: not-allowed; }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
         .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .modal-box h3 { margin-top: 0; color: #0b1e47; font-size: 18px; }
@@ -43,54 +44,190 @@
 
     <div class="container">
         <a href="gs.html" class="back-btn">⬅️ GS मुख्य पेज पर जाएँ</a>
-<!---
-        <div class="section-title">📚 संपूर्ण इतिहास नोट्स (PDF)</div>
-        <div class="grid">
-            <div class="card">
-                <div class="card-info">
-                    <h3>भारतीय इतिहास - संपूर्ण ई-बुक / नोट्स PDF</h3>
-                    <p style="font-size:12px; color:#64748b; margin:4px 0 0 0;">प्राचीन, मध्यकालीन एवं आधुनिक इतिहास</p>
-                </div>
-                <button onclick="checkAccess('gspdf/history-full.pdf')" class="btn-action btn-pdf" data-type="pdf">📖 PDF खोलें</button>
-            </div>
-        </div>
 
-        <div class="section-title">🎥 वीडियो क्लासेस (10 Classes)</div>
-        <div class="grid">
-            <div class="card"><div class="card-info"><h3>History Class - 01 (प्राचीन भारत)</h3></div><button onclick="checkAccess('gsclass/h1.html')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>History Class - 02</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>History Class - 03</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>History Class - 04</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>History Class - 05</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>History Class - 06</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>History Class - 07</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>History Class - 08</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>History Class - 09</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-            <div class="card"><div class="card-info"><h3>History Class - 10</h3></div><button onclick="checkAccess('#')" class="btn-action btn-class" data-type="class">▶️ क्लास देखें</button></div>
-        </div>
---->
         <div class="section-title">📝 ऑनलाइन मॉक टेस्ट (20 Tests)</div>
         <div class="grid">
-            <div class="card"><div class="card-info"><h3>History Test - 01</h3></div><button onclick="checkAccess('gstest/ht1.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 02</h3></div><button onclick="checkAccess('gstest/ht2.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 03</h3></div><button onclick="checkAccess('gstest/ht3.html')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 04</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 05</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 06</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 07</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 08</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 09</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 10</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 11</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 12</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 13</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 14</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 15</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 16</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 17</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 18</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 19</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
-            <div class="card"><div class="card-info"><h3>History Test - 20</h3></div><button onclick="checkAccess('#')" class="btn-action btn-test" data-type="test">📝 टेस्ट दें</button></div>
+            
+            <!-- टेस्ट 1 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–1: प्रागैतिहासिक काल, ताम्रपाषाण संस्कृति एवं सिंधु घाटी सभ्यता</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 01/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht1.html" data-start="2026-09-01" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 2 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–2: वैदिक सभ्यता – ऋग्वैदिक एवं उत्तर वैदिक काल</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 01/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht2.html" data-start="2026-09-01" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 3 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–3: जैन धर्म, बौद्ध धर्म एवं प्राचीन धार्मिक संप्रदाय</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 01/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht3.html" data-start="2026-09-01" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 4 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–4: महाजनपद, मगध का उत्कर्ष एवं मौर्य साम्राज्य</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 02/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht4.html" data-start="2026-09-02" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 5 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–5: मौर्योत्तर काल, विदेशी राजवंश एवं गुप्त साम्राज्य</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 03/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht5.html" data-start="2026-09-03" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 6 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–6: संगम युग, दक्षिण भारतीय राजवंश एवं प्राचीन कला-स्थापत्य</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 04/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht6.html" data-start="2026-09-04" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 7 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–7: अरब-तुर्क आक्रमण एवं दिल्ली सल्तनत का गुलाम वंश</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 05/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht7.html" data-start="2026-09-05" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 8 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–8: खिलजी, तुगलक, सैयद एवं लोदी वंश</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 06/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht8.html" data-start="2026-09-06" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 9 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–9: विजयनगर साम्राज्य, बहमनी राज्य एवं सल्तनतकालीन प्रशासन-संस्कृति</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 07/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht9.html" data-start="2026-09-07" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 10 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–10: भक्ति आंदोलन एवं सूफी आंदोलन</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 08/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht10.html" data-start="2026-09-08" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 11 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–11: बाबर, हुमायूँ एवं शेरशाह सूरी</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 09/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht11.html" data-start="2026-09-09" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 12 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–12: अकबर का शासन, प्रशासन एवं धार्मिक नीति</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 10/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht12.html" data-start="2026-09-10" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 13 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–13: जहाँगीर एवं शाहजहाँ का शासनकाल</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 11/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht13.html" data-start="2026-09-11" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 14 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–14: औरंगजेब, मराठा शक्ति, सिख समुदाय एवं उत्तरकालीन मुगल</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 12/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht14.html" data-start="2026-09-12" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 15 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–15: यूरोपीय कंपनियों का आगमन एवं भारत में ब्रिटिश सत्ता की स्थापना</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 13/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht15.html" data-start="2026-09-13" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 16 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–16: ब्रिटिश साम्राज्य का विस्तार, प्रशासन एवं आर्थिक नीतियाँ</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 14/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht16.html" data-start="2026-09-14" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 17 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–17: 1857 की क्रांति एवं प्रमुख जनजातीय-किसान आंदोलन</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 15/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht17.html" data-start="2026-09-15" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 18 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–18: आधुनिक शिक्षा, प्रेस, सामाजिक-धार्मिक सुधार एवं कांग्रेस की स्थापना</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 16/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht18.html" data-start="2026-09-16" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 19 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–19: स्वदेशी आंदोलन, उग्र राष्ट्रवाद, क्रांतिकारी गतिविधियाँ एवं गांधीजी का प्रारंभिक संघर्ष</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 17/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht19.html" data-start="2026-09-17" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
+            <!-- टेस्ट 20 -->
+            <div class="card">
+                <div class="card-info">
+                    <h3>टेस्ट–20: गांधीयुग, संवैधानिक घटनाक्रम, आजाद हिंद फौज एवं भारत की स्वतंत्रता</h3>
+                    <p class="test-date-badge">📅 प्रारंभ: 18/09/2026 | ⏳ अंतिम तिथि: 30/08/2027</p>
+                </div>
+                <button class="btn-action" data-type="test" data-url="gstest/ht20.html" data-start="2026-09-18" data-end="2027-08-30">📝 टेस्ट दें</button>
+            </div>
+
         </div>
     </div>
 
@@ -114,38 +251,60 @@
     </div>
 
 <script>
-    // ✅ 1-Device Lock सुरक्षा वाला नया Apps Script URL
+    // ✅ 1-Device Lock सुरक्षा वाला Apps Script URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3VolXNGLi8jlH7aAniR7v8_mbpH62Y6Dz4LvNakPpt7Z-FHEPcC8KNLRY7nlbh-gy/exec"; 
     let pendingUrl = null;
 
     window.addEventListener('DOMContentLoaded', () => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // समय को मध्यरात्रि पर सेट करें ताकि केवल दिनांक की जाँच हो
+
         const buttons = document.querySelectorAll('.btn-action');
         buttons.forEach(btn => {
-            const onclickAttr = btn.getAttribute('onclick') || '';
             const btnType = btn.getAttribute('data-type') || '';
+            const startDateStr = btn.getAttribute('data-start');
+            const endDateStr = btn.getAttribute('data-end');
+            const targetUrl = btn.getAttribute('data-url');
 
-            if (onclickAttr.includes("'#'") || onclickAttr.includes('""')) {
-                btn.innerText = '⏳ Coming Soon';
-                btn.classList.add('btn-disabled');
-            } else {
-                if (btnType === 'pdf') {
-                    btn.innerText = '📖 PDF खोलें';
-                    btn.classList.add('btn-pdf');
-                } else if (btnType === 'class') {
-                    btn.innerText = '▶️ क्लास देखें';
-                    btn.classList.add('btn-class');
-                } else if (btnType === 'test') {
+            if (startDateStr && endDateStr) {
+                const startDate = new Date(startDateStr);
+                const endDate = new Date(endDateStr);
+                endDate.setHours(23, 59, 59, 999);
+
+                // तारीख प्रारूप तैयार करें (DD/MM)
+                const parts = startDateStr.split('-');
+                const displayStart = `${parts[2]}/${parts[1]}`;
+
+                if (today < startDate) {
+                    // टेस्ट अभी लाइव नहीं हुआ है
+                    btn.innerText = `⏳ Live on ${displayStart}`;
+                    btn.classList.add('btn-disabled');
+                    btn.onclick = () => alert(`⏳ यह टेस्ट ${displayStart}/${parts[0]} को सुबह 12:00 बजे लाइव होगा!`);
+                } else if (today > endDate) {
+                    // टेस्ट की अवधि समाप्त हो चुकी है
+                    btn.innerText = '❌ समाप्त';
+                    btn.classList.add('btn-disabled');
+                    btn.onclick = () => alert('⚠️ इस टेस्ट की समय सीमा समाप्त हो चुकी है!');
+                } else {
+                    // टेस्ट लाइव और सक्रिय है
                     btn.innerText = '📝 टेस्ट दें';
+                    btn.classList.remove('btn-disabled');
                     btn.classList.add('btn-test');
+                    btn.onclick = () => checkAccess(targetUrl);
                 }
-                btn.classList.remove('btn-disabled');
+            } else {
+                // PDF या अन्य सामान्य बटन
+                const onclickAttr = btn.getAttribute('onclick') || '';
+                if (onclickAttr.includes("'#'") || onclickAttr.includes('""') || !targetUrl) {
+                    btn.innerText = '⏳ Coming Soon';
+                    btn.classList.add('btn-disabled');
+                }
             }
         });
     });
 
     function checkAccess(url) {
         pendingUrl = url;
-        // ✅ मुख्य पृष्ठ से सेव होने वाले 'user_plan' की जाँच ('FULL' या 'GS')
         const plan = localStorage.getItem('user_plan');
 
         if (plan === 'FULL' || plan === 'GS') {
@@ -174,7 +333,6 @@
             return;
         }
 
-        // ✅ सही 'my_device_id' का उपयोग
         let deviceId = localStorage.getItem('my_device_id');
         if (!deviceId) {
             deviceId = "DEV_" + Math.random().toString(36).substring(2, 11) + Date.now();
@@ -224,5 +382,4 @@
     }
 </script>
 </body>
-                                                                                   </html>
-                    
+</html>
