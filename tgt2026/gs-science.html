@@ -6,47 +6,92 @@
     <title>सामान्य विज्ञान - TGT/GS पोर्टल</title>
     <style>
         * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f1f5f9; color: #1e293b; }
         .brand-hero { background: linear-gradient(135deg, #0b1e47, #1e3a8a); color: white; padding: 30px 20px 25px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
         .brand-logo { width: 85px; height: 85px; border-radius: 50%; border: 3px solid #facc15; object-fit: cover; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         .brand-title { font-size: 24px; font-weight: 900; color: #facc15; margin: 0; letter-spacing: 0.8px; text-transform: uppercase; }
         .brand-tagline { font-size: 13px; color: #ffffff; opacity: 0.95; margin: 6px 0 15px 0; font-weight: 500; }
         .page-badge { display: inline-block; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(250, 204, 21, 0.4); color: #ffffff; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; }
-        .container { max-width: 800px; margin: 20px auto 40px; padding: 0 12px; }
-        .back-btn { display: inline-block; margin-bottom: 16px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 13px; }
-        .section-title { font-size: 17px; color: #0b1e47; border-bottom: 2px solid #0b1e47; padding-bottom: 5px; margin: 25px 0 15px; font-weight: 800; }
-        .grid { display: flex; flex-direction: column; gap: 10px; }
+        .container { max-width: 800px; margin: 20px auto 40px; padding: 0 14px; }
+        .back-btn { display: inline-block; margin-bottom: 16px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 10px 18px; border-radius: 8px; font-weight: bold; font-size: 13px; transition: background 0.2s; }
+        .back-btn:hover { background: #cbd5e1; }
+        .section-title { font-size: 18px; color: #0b1e47; border-bottom: 2px solid #0b1e47; padding-bottom: 6px; margin: 28px 0 16px; font-weight: 800; }
         
-        /* ✅ TGT/PGT स्टाइल टाइमर कार्ड */
+        .grid { display: flex; flex-direction: column; gap: 14px; }
+        
+        /* चौड़ा, आकर्षक और प्रीमियम टेस्ट कार्ड */
         .test-card-timer {
             background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 14px 18px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             text-decoration: none;
             color: #1e293b;
-            font-weight: 600;
-            font-size: 14.5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
-            transition: all 0.2s ease-in-out;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.03);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            gap: 12px;
         }
         .test-card-timer:hover {
-            border-color: #3b82f6;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
-            transform: translateY(-1px);
+            border-color: #2563eb;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
+            transform: translateY(-2px);
+            background-color: #fafcff;
         }
+        .test-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+        }
+
+        /* आकर्षक स्टेटस बैज */
         .status-msg {
             font-size: 13px;
-            font-weight: 700;
+            font-weight: 800;
             white-space: nowrap;
+            padding: 7px 14px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            letter-spacing: 0.3px;
         }
-        .status-live { color: #16a34a; }
-        .status-coming { color: #d97706; }
-        .status-over { color: #ef4444; }
+        
+        /* Live Badge with Pulse */
+        .status-live { 
+            color: #15803d; 
+            background: #dcfce7; 
+            border: 1px solid #86efac;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.25);
+            animation: liveGlow 1.8s infinite;
+        }
+        
+        /* Coming Soon Badge */
+        .status-coming { 
+            color: #b45309; 
+            background: #fef3c7; 
+            border: 1px solid #fde68a;
+        }
+        
+        /* Test Over Badge */
+        .status-over { 
+            color: #b91c1c; 
+            background: #fee2e2; 
+            border: 1px solid #fecaca;
+        }
+
+        @keyframes liveGlow {
+            0% { transform: scale(1); box-shadow: 0 0 0 rgba(34, 197, 94, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 0 12px rgba(34, 197, 94, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 0 0 rgba(34, 197, 94, 0.4); }
+        }
 
         /* Modal Styles */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
@@ -73,29 +118,37 @@
 
         <div class="section-title">📝 ऑनलाइन मॉक टेस्ट (20 Tests)</div>
         <div class="grid">
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-08-30T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc1.html"><span>📝 टेस्ट 1: मात्रक, मापन एवं गति</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-02T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc2.html"><span>📝 टेस्ट 2: बल, दाब एवं तरल यांत्रिकी</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-03T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc3.html"><span>📝 टेस्ट 3: कार्य, ऊर्जा, शक्ति एवं गुरुत्वाकर्षण</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-04T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc4.html"><span>📝 टेस्ट 4: ऊष्मा एवं तापमान</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-05T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc5.html"><span>📝 टेस्ट 5: तरंग एवं ध्वनि</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-07T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc6.html"><span>📝 टेस्ट 6: प्रकाश एवं प्रकाशिक उपकरण</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-08T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc7.html"><span>📝 टेस्ट 7: विद्युत, चुंबकत्व एवं इलेक्ट्रॉनिकी</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-09T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc8.html"><span>📝 टेस्ट 8: पदार्थ एवं परमाणु संरचना</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-10T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc9.html"><span>📝 टेस्ट 9: आवर्त सारणी, रासायनिक बंध एवं रासायनिक अभिक्रियाएँ</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-11T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc10.html"><span>📝 टेस्ट 10: अम्ल, क्षार, लवण एवं दैनिक जीवन की रसायन</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-12T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc11.html"><span>📝 टेस्ट 11: धातु, अधातु एवं कार्बनिक रसायन</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-14T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc12.html"><span>📝 टेस्ट 12: कोशिका, ऊतक एवं सूक्ष्मजीव</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-15T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc13.html"><span>📝 टेस्ट 13: जीव-जगत का वर्गीकरण एवं पादप विज्ञान</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-16T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc14.html"><span>📝 टेस्ट 14: प्राणी विज्ञान, आनुवंशिकी एवं जैव-विकास</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-17T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc15.html"><span>📝 टेस्ट 15: अंतरिक्ष, परमाणु, रक्षा एवं ऊर्जा प्रौद्योगिकी</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-18T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc16.html"><span>📝 टेस्ट 16: जैव प्रौद्योगिकी, नैनो प्रौद्योगिकी एवं उभरती तकनीकें</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-19T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc17.html"><span>📝 टेस्ट 17: पारिस्थितिकी तंत्र एवं जैव विविधता</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-21T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc18.html"><span>📝 टेस्ट 18: पर्यावरण प्रदूषण एवं जलवायु परिवर्तन</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-22T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc19.html"><span>📝 टेस्ट 19: पर्यावरण संरक्षण एवं सतत विकास</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-23T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc20.html"><span>📝 टेस्ट 20: रिवीजन टेस्ट</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-01T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc1.html"><span class="test-title">📝 टेस्ट 1: मात्रक, मापन एवं गति</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-01T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc2.html"><span class="test-title">📝 टेस्ट 2: बल, दाब एवं तरल यांत्रिकी</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-01T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc3.html"><span class="test-title">📝 टेस्ट 3: कार्य, ऊर्जा, शक्ति एवं गुरुत्वाकर्षण</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-04T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc4.html"><span class="test-title">📝 टेस्ट 4: ऊष्मा एवं तापमान</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-05T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc5.html"><span class="test-title">📝 टेस्ट 5: तरंग एवं ध्वनि</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-06T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc6.html"><span class="test-title">📝 टेस्ट 6: प्रकाश एवं प्रकाशिक उपकरण</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-07T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc7.html"><span class="test-title">📝 टेस्ट 7: विद्युत, चुंबकत्व एवं इलेक्ट्रॉनिकी</span><span class="status-msg">Loading...</span></a>
+            
+            <!-- 08-11-2026: रविवार / दीपावली (Diwali Holiday) -->
+            <!-- 09-11-2026: गोवर्धन पूजा (Govardhan Puja Holiday) -->
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-10T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc8.html"><span class="test-title">📝 टेस्ट 8: पदार्थ एवं परमाणु संरचना</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-11T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc9.html"><span class="test-title">📝 टेस्ट 9: आवर्त सारणी, रासायनिक बंध एवं रासायनिक अभिक्रियाएँ</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-12T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc10.html"><span class="test-title">📝 टेस्ट 10: अम्ल, क्षार, लवण एवं दैनिक जीवन की रसायन</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-13T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc11.html"><span class="test-title">📝 टेस्ट 11: धातु, अधातु एवं कार्बनिक रसायन</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-14T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc12.html"><span class="test-title">📝 टेस्ट 12: कोशिका, ऊतक एवं सूक्ष्मजीव</span><span class="status-msg">Loading...</span></a>
+            
+            <!-- 15-11-2026: रविवार (Sunday Holiday) -->
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-16T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc13.html"><span class="test-title">📝 टेस्ट 13: जीव-जगत का वर्गीकरण एवं पादप विज्ञान</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-17T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc14.html"><span class="test-title">📝 टेस्ट 14: प्राणी विज्ञान, आनुवंशिकी एवं जैव-विकास</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-18T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc15.html"><span class="test-title">📝 टेस्ट 15: अंतरिक्ष, परमाणु, रक्षा एवं ऊर्जा प्रौद्योगिकी</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-19T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc16.html"><span class="test-title">📝 टेस्ट 16: जैव प्रौद्योगिकी, नैनो प्रौद्योगिकी एवं उभरती तकनीकें</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-20T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc17.html"><span class="test-title">📝 टेस्ट 17: पारिस्थितिकी तंत्र एवं जैव विविधता</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-21T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc18.html"><span class="test-title">📝 टेस्ट 18: पर्यावरण प्रदूषण एवं जलवायु परिवर्तन</span><span class="status-msg">Loading...</span></a>
+            
+            <!-- 22-11-2026: रविवार (Sunday Holiday) -->
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-23T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc19.html"><span class="test-title">📝 टेस्ट 19: पर्यावरण संरक्षण एवं सतत विकास</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-24T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/sc20.html"><span class="test-title">📝 टेस्ट 20: रिवीजन टेस्ट</span><span class="status-msg">Loading...</span></a>
         </div>
     </div>
 
+    <!-- ऑथेंटिकेशन / पेमेंट मॉडल -->
     <div id="loginModal" class="modal-overlay">
         <div class="modal-box">
             <h3>🔒 GS पेड स्टूडेंट एक्सेस</h3>
@@ -115,11 +168,11 @@
     </div>
 
 <script>
-    // ✅ 1-Device Lock सुरक्षा वाला Apps Script URL
+    // ✅ 1-Device Lock सपोर्टेड Apps Script URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3VolXNGLi8jlH7aAniR7v8_mbpH62Y6Dz4LvNakPpt7Z-FHEPcC8KNLRY7nlbh-gy/exec"; 
     let pendingUrl = null;
 
-    // ✅ टाइमर और स्टेटस हैंडलर
+    // ✅ टाइमर और लाइव/कमिंग सून स्थिति हैंडलर
     function initTestCards() {
         const now = new Date().getTime();
         const testCards = document.querySelectorAll('.test-card-timer');
@@ -138,7 +191,7 @@
                 statusMsg.className = 'status-msg status-coming';
                 card.onclick = () => alert('⏳ यह टेस्ट निर्धारित समय पर लाइव होगा!');
             } else if (now >= startTime && now <= endTime) {
-                statusMsg.innerHTML = '🟢 Live';
+                statusMsg.innerHTML = '🟢 Live Now';
                 statusMsg.className = 'status-msg status-live';
                 card.onclick = () => checkAccess(link);
             } else {
@@ -151,7 +204,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
         initTestCards();
-        setInterval(initTestCards, 10000); // हर 10 सेकंड में स्टेटस चेक
+        setInterval(initTestCards, 10000); // हर 10 सेकंड में ऑटो-रिफ्रेश
     });
 
     function checkAccess(url) {
