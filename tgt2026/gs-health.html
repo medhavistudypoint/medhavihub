@@ -39,7 +39,7 @@
         .btn-action { text-align: center; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-size: 13.5px; font-weight: 800; min-width: 140px; cursor: pointer; border: none; color: white; white-space: nowrap; transition: background-color 0.2s; }
         .btn-pdf { background-color: #d97706; }
 
-        /* चौड़ा और आकर्षक टेस्ट कार्ड */
+        /* चौड़ा, आकर्षक और प्रीमियम टेस्ट कार्ड */
         .test-card-timer {
             background: #ffffff;
             border: 1.5px solid #e2e8f0;
@@ -84,7 +84,7 @@
             letter-spacing: 0.3px;
         }
         
-        /* Live Badge */
+        /* 🟢 Live Badge */
         .status-live { 
             color: #15803d; 
             background: #dcfce7; 
@@ -93,14 +93,14 @@
             animation: liveGlow 1.8s infinite;
         }
         
-        /* Coming Soon Badge */
+        /* ⏳ Coming Soon Badge */
         .status-coming { 
             color: #b45309; 
             background: #fef3c7; 
             border: 1px solid #fde68a;
         }
         
-        /* Test Over Badge */
+        /* 🚫 Test Over Badge */
         .status-over { 
             color: #b91c1c; 
             background: #fee2e2; 
@@ -135,37 +135,47 @@
 
     <div class="container">
         <a href="gs.html" class="back-btn">⬅️ GS मुख्य पेज पर जाएँ</a>
-        <!---
+        
+        <!-- PDF सेक्शन -->
         <div class="section-title">📚 संपूर्ण स्वास्थ्य व पोषण नोट्स (PDF)</div>
         <div class="grid">
             <div class="card">
-                <div class="card-info"><h3>विटामिन, खनिज, रोग, हार्मोन व एंजाइम PDF</h3></div>
+                <div class="card-info">
+                    <h3>विटामिन, खनिज, रोग, हार्मोन व एंजाइम PDF</h3>
+                    <p style="font-size:12px; color:#64748b; margin:4px 0 0 0;">संपूर्ण थ्योरी नोट्स व वन-लाइनर तथ्य</p>
+                </div>
                 <button onclick="checkAccess('gspdf/health-full.html')" class="btn-action btn-pdf" data-type="pdf">📖 PDF खोलें</button>
             </div>
         </div>
---->
+
         <div class="section-title">📝 ऑनलाइन मॉक टेस्ट (20 Tests)</div>
         <div class="grid">
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-25T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h1.html"><span class="test-title">📝 टेस्ट 1: संतुलित आहार, मैक्रोन्यूट्रिएंट्स (कार्बोहाइड्रेट, प्रोटीन, वसा)</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-26T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h2.html"><span class="test-title">📝 टेस्ट 2: माइक्रोन्यूट्रिएंट्स (विटामिन्स एवं खनिज लवण) तथा हीनता जन्य रोग</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-28T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h3.html"><span class="test-title">📝 टेस्ट 3: जल, आहारीय रेशा (रफेज), BMR एवं ऊर्जा संतुलन</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-29T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h4.html"><span class="test-title">📝 टेस्ट 4: खाद्य संरक्षण, मिलावट एवं पोषण नीतियां (RDA & Food Standards)</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-30T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h5.html"><span class="test-title">📝 टेस्ट 5: मानव पाचन तंत्र एवं एंजाइम क्रियाप्रणाली</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-01T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h6.html"><span class="test-title">📝 टेस्ट 6: मानव श्वसन तंत्र एवं गैस विनिमय</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-02T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h7.html"><span class="test-title">📝 टेस्ट 7: मानव परिसंचरण तंत्र, हृदय की संरचना एवं रुधिर समूह</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-03T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h8.html"><span class="test-title">📝 टेस्ट 8: मानव उत्सर्जन तंत्र, वृक्क एवं मूत्र निर्माण</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-05T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h9.html"><span class="test-title">📝 टेस्ट 9: तंत्रिका तंत्र, मस्तिष्क एवं अंतःस्रावी ग्रंथियां</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-06T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h10.html"><span class="test-title">📝 टेस्ट 10: संक्रामक रोग, टीकाकरण एवं प्रतिरक्षा विज्ञान</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-07T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h11.html"><span class="test-title">📝 टेस्ट 11: मानव कंकाल तंत्र, संधियां एवं पेशीय कार्यप्रणाली</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-08T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h12.html"><span class="test-title">📝 टेस्ट 12: मानव प्रजनन तंत्र, भ्रूणीय विकास एवं आनुवंशिकी</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-09T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h13.html"><span class="test-title">📝 टेस्ट 13: कोशिका विज्ञान, ऊतक एवं कोशिकीय उपापचय</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-10T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h14.html"><span class="test-title">📝 टेस्ट 14: असंक्रामक एवं जीवनशैली रोग</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-12T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h15.html"><span class="test-title">📝 टेस्ट 15: व्यक्तिगत, घरेलू, भोजन एवं जल स्वच्छता</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-13T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h16.html"><span class="test-title">📝 टेस्ट 16: अल्पताजन्य रोग एवं कुपोषण</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-14T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h17.html"><span class="test-title">📝 टेस्ट 17: आनुवंशिक, जन्मजात, हार्मोनल एवं चयापचय रोग</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-15T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h18.html"><span class="test-title">📝 टेस्ट 18: रोग-संचरण, रोग-वाहक एवं सामुदायिक स्वच्छता</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-16T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h19.html"><span class="test-title">📝 टेस्ट 19: स्वास्थ्य कार्यक्रम एवं संस्थाएँ</span><span class="status-msg">Loading...</span></a>
-            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-10-17T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h20.html"><span class="test-title">📝 टेस्ट 20: सम्पूर्ण फुल मॉक टेस्ट</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-01T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h1.html"><span class="test-title">📝 टेस्ट 1: संतुलित आहार, मैक्रोन्यूट्रिएंट्स (कार्बोहाइड्रेट, प्रोटीन, वसा)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-01T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h2.html"><span class="test-title">📝 टेस्ट 2: माइक्रोन्यूट्रिएंट्स (विटामिन्स एवं खनिज लवण) तथा हीनता जन्य रोग</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-09-01T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h3.html"><span class="test-title">📝 टेस्ट 3: जल, आहारीय रेशा (रफेज), BMR एवं ऊर्जा संतुलन</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-25T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h4.html"><span class="test-title">📝 टेस्ट 4: खाद्य संरक्षण, मिलावट एवं पोषण नीतियां (RDA & Food Standards)</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-26T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h5.html"><span class="test-title">📝 टेस्ट 5: मानव पाचन तंत्र एवं एंजाइम क्रियाप्रणाली</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-27T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h6.html"><span class="test-title">📝 टेस्ट 6: मानव श्वसन तंत्र एवं गैस विनिमय</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-28T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h7.html"><span class="test-title">📝 टेस्ट 7: मानव परिसंचरण तंत्र, हृदय की संरचना एवं रुधिर समूह</span><span class="status-msg">Loading...</span></a>
+            
+            <!-- 29-11-2026: रविवार (Sunday Holiday) -->
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-11-30T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h8.html"><span class="test-title">📝 टेस्ट 8: मानव उत्सर्जन तंत्र, वृक्क एवं मूत्र निर्माण</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-12-01T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h9.html"><span class="test-title">📝 टेस्ट 9: तंत्रिका तंत्र, मस्तिष्क एवं अंतःस्रावी ग्रंथियां</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-12-02T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h10.html"><span class="test-title">📝 टेस्ट 10: संक्रामक रोग, टीकाकरण एवं प्रतिरक्षा विज्ञान</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-12-03T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h11.html"><span class="test-title">📝 टेस्ट 11: मानव कंकाल तंत्र, संधियां एवं पेशीय कार्यप्रणाली</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-12-04T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h12.html"><span class="test-title">📝 टेस्ट 12: मानव प्रजनन तंत्र, भ्रूणीय विकास एवं आनुवंशिकी</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-12-05T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h13.html"><span class="test-title">📝 टेस्ट 13: कोशिका विज्ञान, ऊतक एवं कोशिकीय उपापचय</span><span class="status-msg">Loading...</span></a>
+            
+            <!-- 06-12-2026: रविवार (Sunday Holiday) -->
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-12-07T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h14.html"><span class="test-title">📝 टेस्ट 14: असंक्रामक एवं जीवनशैली रोग</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-12-08T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h15.html"><span class="test-title">📝 टेस्ट 15: व्यक्तिगत, घरेलू, भोजन एवं जल स्वच्छता</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-12-09T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h16.html"><span class="test-title">📝 टेस्ट 16: अल्पताजन्य रोग एवं कुपोषण</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-12-10T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h17.html"><span class="test-title">📝 टेस्ट 17: आनुवंशिक, जन्मजात, हार्मोनल एवं चयापचय रोग</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-12-11T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h18.html"><span class="test-title">📝 टेस्ट 18: रोग-संचरण, रोग-वाहक एवं सामुदायिक स्वच्छता</span><span class="status-msg">Loading...</span></a>
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-12-12T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h19.html"><span class="test-title">📝 टेस्ट 19: स्वास्थ्य कार्यक्रम एवं संस्थाएँ</span><span class="status-msg">Loading...</span></a>
+            
+            <!-- 13-12-2026: रविवार (Sunday Holiday) -->
+            <a href="javascript:void(0);" class="test-card-timer" data-start="2026-12-14T10:00:00" data-end="2027-08-30T23:59:59" data-link="gstest/h20.html"><span class="test-title">📝 टेस्ट 20: सम्पूर्ण फुल मॉक टेस्ट</span><span class="status-msg">Loading...</span></a>
         </div>
     </div>
 
