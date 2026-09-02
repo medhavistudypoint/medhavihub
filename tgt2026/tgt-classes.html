@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TGT Home Science - क्लासेस एवं नोट्स</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f8fafc; color: #1e293b; }
+        
+        .brand-hero { 
+            background: linear-gradient(135deg, #0b1e47, #1e3a8a); 
+            color: white; 
+            padding: 30px 20px; 
+            text-align: center; 
+            border-bottom-left-radius: 20px; 
+            border-bottom-right-radius: 20px; 
+        }
+        
+        .brand-logo {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            border: 3px solid #facc15;
+            object-fit: cover;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .brand-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #facc15;
+            margin: 0;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .brand-tagline {
+            font-size: 13px;
+            color: #ffffff;
+            opacity: 0.95;
+            margin: 6px 0 12px 0;
+            font-weight: 500;
+        }
+
+        .container { max-width: 850px; margin: 20px auto 40px; padding: 0 15px; }
+        .back-btn { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #0b1e47; background: #e2e8f0; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 14px; }
+        
+        .section-title { font-size: 18px; color: #0b1e47; border-bottom: 2px solid #0b1e47; padding-bottom: 5px; margin: 25px 0 15px; }
+        
+        .grid { display: flex; flex-direction: column; gap: 12px; }
+        .card { background: white; padding: 15px 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; gap: 12px; }
+        @media (min-width: 650px) {
+            .card { flex-direction: row; align-items: center; }
+        }
+        .card h3 { font-size: 15px; margin: 0; color: #0b1e47; flex: 1; line-height: 1.4; }
+        .btn-group { display: flex; gap: 8px; }
+        .btn { text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; border: none; color: white; text-align: center; white-space: nowrap; }
+        
+        .btn-video { background-color: #2563eb; }
+        .btn-pdf { background-color: #d97706; }
+        .btn-disabled { background-color: #64748b !important; }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
+        .modal-box { background: white; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+        .modal-box h3 { margin-top: 0; color: #0b1e47; font-size: 18px; }
+        .modal-box p { font-size: 13px; color: #64748b; margin-bottom: 15px; }
+        .modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; text-align: center; box-sizing: border-box; outline: none; }
+        .modal-box button { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        .btn-submit { background: #16a34a; color: white; margin-bottom: 8px; }
+        .btn-close { background: #e2e8f0; color: #1e293b; margin-top: 6px; }
+    </style>
+</head>
+<body>
+
+    <div class="brand-hero">
+        <img src="../logo.png" alt="Medhavi Logo" class="brand-logo" onerror="this.src='logo.png'">
+        <h1 class="brand-title">MEDHAVI STUDY POINT</h1>
+        <p class="brand-tagline">ज्ञान, अनुशासन और सफलता का डिजिटल सारथी</p>
+    </div>
+
+    <div class="container">
+        <a href="tgt2026.html" class="back-btn">⬅️ TGT मुख्य पेज पर जाएँ</a>
+
+        <div class="section-title">🎥 चैप्टर-वाइज़ वीडियो क्लासेस एवं PDF नोट्स</div>
+        <div class="grid">
+            <div class="card"><h3>Class 01: पौष्टिकता की संकल्पना एवं आहार की परिभाषा</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p1.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 02: आहार की संरचना और भोजन के मुख्य कार्य</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p2.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 03: संतुलित आहार एवं इसे प्रभावित करने वाले कारक</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p3.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 04: खाद्य समूहों का वर्गीकरण एवं उनके स्रोत</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p4.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 05: कार्बोहाइड्रेट: रासायनिक संरचना, कार्य, स्रोत एवं अल्पता/अधिकता के प्रभाव</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p5.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 06: वसा एवं लिपिड्स: कार्य, स्रोत, संरचना और स्वास्थ्य पर प्रभाव</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p6.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 07: प्रोटीन एवं अमीनो अम्ल: कार्य, स्रोत और कमी से होने वाले रोग</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p7.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 08: जल में घुलनशील विटामिन: विटामिन B कॉम्प्लेक्स एवं विटामिन C (कार्य, स्रोत व अल्पता रोग)</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p8.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 09: वसा में घुलनशील विटामिन: विटामिन A, D, E एवं K (कार्य, स्रोत व अल्पता रोग)</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p9.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 10: खनिज लवण (कैल्शियम, आयरन, आयोडीन आदि) एवं अल्पता के रोग</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p10.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 11: भोजन पकाने की सामान्य विधियाँ (उबालना, भाप, भूनना, तलना आदि)</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p11.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 12: भोजन के पोषक तत्वों को संरक्षित करने के तरीके</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p12.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 13: खाद्य अपमिश्रण और मिलावट की पहचान</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p13.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 14: खाद्य संरक्षण के सिद्धांत एवं विधियाँ</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p14.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 15: मानव शरीर की संरचना एवं पाचन तंत्र</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p15.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 16: भोजन का अवशोषण एवं चयापचय</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p16.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 17: चिकित्सीय आहार: ज्वर एवं टाइफाइड के रोगियों का आहार</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p17.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 18: चिकित्सीय आहार: अल्सर एवं पेप्टिक रोगों में आहार</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p18.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 19: चिकित्सीय आहार: मधुमेह एवं मोटापा में आहार</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p19.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 20: चिकित्सीय आहार: गुर्दा एवं दिल के रोगियों का आहार</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p20.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 21: आहार नियोजन MCQ अभ्यास</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p21.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+
+            <div class="card"><h3>Class 22: गृह प्रबंधन का अर्थ, परिभाषा एवं प्रक्रिया</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p22.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 23: गृह प्रबंधन के उत्प्रेरक कारक: मूल्य, लक्ष्य एवं प्रतिमान</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p23.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 24: पारिवारिक आवश्यकताएँ और निर्णय लेने की प्रक्रिया</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p24.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 25: पारिवारिक संसाधन का वर्गीकरण एवं महत्व</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p25.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 26: समय एवं ऊर्जा का प्रबंधन</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p26.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 27: कार्य सरलीकरण के सिद्धांत एवं तकनीकें</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p27.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 28: धन का प्रबंधन एवं पारिवारिक बजट</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p28.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 29: पारिवारिक आय, व्यय एवं बचत के माध्यम</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p29.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 30: गृह एवं पारिवारिक स्वच्छता</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p30.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 31: आंतरिक सज्जा: रंग, प्रकाश एवं फर्नीचर</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p31.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 32: बाह्य सज्जा एवं पुष्प सज्जा</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p32.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 33: गृह एवं पारिवारिक यंत्र और उनका रखरखाव</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p33.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 34: गृह प्रबंधन: टीजीटी विगत वर्षों के प्रश्न एवं MCQ अभ्यास</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p34.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+
+            <div class="card"><h3>Class 35: स्वास्थ्य का अर्थ, परिभाषा एवं आयाम</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p35.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 36: व्यक्तिगत स्वास्थ्य एवं स्वच्छता</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p36.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 37: पर्यावरण का महत्व एवं पर्यावरण प्रदूषण</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p37.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 38: जल जनित रोग: कारण, लक्षण व बचाव</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p38.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 39: वायु जनित रोग: कारण, लक्षण व बचाव</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p39.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 40: स्वास्थ्य क्षेत्र में कार्यरत सरकारी संगठन (विश्व स्वास्थ्य संगठन, यूनिसेफ आदि)</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p40.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 41: स्वास्थ्य क्षेत्र में कार्यरत गैर-सरकारी संगठन</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p41.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 42: प्राथमिक स्वास्थ्य रक्षा के सिद्धांत</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p42.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 43: पारिवारिक सामान्य दुर्घटनाएँ एवं उनका निदान</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p43.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 44: विभिन्न प्रकार की पट्टियों का उपयोग एवं ड्रेसिंग</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p44.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 45: स्वास्थ्य एवं प्राथमिक चिकित्सा: महत्वपूर्ण अभ्यास प्रश्न</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p45.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+
+            <div class="card"><h3>Class 46: मानव विकास के सिद्धांत</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p46.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 47: बच्चों की वृद्धि एवं विकास</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p47.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 48: गर्भावस्था एवं प्रसव पूर्व विकास की अवस्थाएँ</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p48.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 49: शैशवावस्था एवं बाल्यावस्था में विकास</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p49.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 50: बच्चों की मृत्यु दर एवं इसके कारण</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p50.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 51: बच्चों में रुग्णता एवं निवारण</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p51.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 52: विद्यालयीय स्वास्थ्य कार्यक्रम</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p52.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 53: मानसिक स्वास्थ्य का अर्थ व महत्व</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p53.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 54: विवाह: अर्थ, उद्देश्य एवं प्रकार</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p54.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 55: परिवार: अर्थ, प्रकार एवं पारिवारिक कार्य</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p55.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 56: पारिवारिक समायोजन एवं समस्याएँ</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p56.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 57: बाल विकास: महत्वपूर्ण शब्दावली व सिद्धांत अभ्यास</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p57.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 58: बाल विकास: टीजीटी विगत वर्षों के MCQ प्रश्न</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p58.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+
+            <div class="card"><h3>Class 59: वस्त्र एवं रेशे का वर्गीकरण तथा परीक्षण</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p59.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 60: प्राकृतिक वानस्पतिक रेशे: कपास (Cotton) एवं लिनन (Linen)</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p60.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 61: प्राकृतिक जान्तव/प्रोटीन रेशे: रेशम (Silk) एवं ऊन (Wool)</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p61.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 62: पुनर्योजित रेशे (मानव-निर्मित सेल्युलोसिक): रेयान (Rayon)</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p62.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 63: संश्लेषित रेशे (सिंथेटिक): नायलॉन (Nylon)</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p63.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 64: संश्लेषित रेशे: पॉलिएस्टर, एक्रिलिक एवं अन्य रासायनिक रेशे</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p64.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 65: धागा निर्माण प्रक्रिया एवं सूत के प्रकार</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p65.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 66: वस्त्र निर्माण: बुनाई (Weaving) एवं इसके प्रकार</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p66.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 67: वस्त्र परिसज्जा (Finishes): यांत्रिक एवं रासायनिक परिष्करण</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p67.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 68: कपड़ों की रंगाई (Dyeing) एवं छपाई (Printing)</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p68.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 69: कपड़ों की धुलाई, दाग-धब्बे छुड़ाना एवं देखभाल</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p69.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 70: परिधान का चुनाव, सिलाई एवं पारंपरिक कढ़ाई</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p70.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 71: वस्त्र एवं परिधान: टीजीटी विगत वर्षों के प्रश्न व MCQ अभ्यास</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p71.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+
+            <div class="card"><h3>Class 72: गृह विज्ञान का अर्थ, परिभाषा एवं इतिहास</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p72.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 73: गृह विज्ञान का विषय क्षेत्र एवं इसकी विविध शाखाएँ</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p73.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 74: गृह विज्ञान की शाखाओं का आपस में अंतर्संबंध</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p74.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 75: प्रसार शिक्षा का अर्थ, दर्शन एवं आवश्यकता</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p75.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 76: प्रसार शिक्षक की आवश्यकता, भूमिका एवं गुण</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p76.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 77: प्रसार शिक्षण की विधियाँ (व्यक्तिगत, समूह एवं जन शिक्षण विधियाँ)</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p77.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 78: सामुदायिक विकास की अवधारणा</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p78.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 79: प्रमुख सामुदायिक विकास कार्यक्रम</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p79.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+            <div class="card"><h3>Class 80: प्रसार शिक्षा: महत्वपूर्ण प्रश्न MCQ अभ्यास</h3><div class="btn-group"><button onclick="checkAccess('tgtpdf/p80.html', 'पीडीएफ')" class="btn btn-pdf" data-type="pdf">📚 डाउनलोड PDF</button></div></div>
+        </div>
+    </div>
+
+    <!-- ऑथेंटिकेशन / लॉगिन पॉप-अप -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3>🔒 TGT पेड स्टूडेंट एक्सेस</h3>
+            <p>सामग्री अनलॉक करने के लिए अपना पंजीकृत मोबाइल नंबर दर्ज करें:</p>
+            <input type="tel" id="userMobileInput" placeholder="10 अंकों का मोबाइल नंबर दर्ज करें" maxlength="10">
+            <button onclick="verifyStudent()" class="btn-submit">अनलॉक करें</button>
+            
+            <div id="paymentSection" style="display:none; margin-top:10px; border-top:1px solid #e2e8f0; padding-top:10px;">
+                <p style="color:#d97706; font-weight:bold; font-size:13px; margin-bottom:10px;">
+                    🔒 संपूर्ण TGT कोर्स फीस: <b>₹299</b>
+                </p>
+
+                <a href="upi://pay?pa=medhavistudypoint@okaxis&pn=MedhaviStudyPoint&am=299&cu=INR" 
+                   style="display: block; background: #1a73e8; color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: bold; margin-bottom: 10px;">
+                    📲 Pay ₹299 via Google Pay / PhonePe / UPI
+                </a>
+
+                <p style="font-size:11px; color:#64748b; margin: 4px 0;">— या QR Code स्कैन करके पे करें —</p>
+
+                <img src="qr.png" alt="Payment QR Code" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #cbd5e1; margin: 4px 0;">
+                
+                <div style="font-size:11px; color:#334155; line-height: 1.4; margin-top:4px;">
+                    <b>पेमेंट के बाद क्या करें?</b><br>
+                    स्क्रीनशॉट और अपना मोबाइल नंबर नीचे बटन पर क्लिक करके व्हाट्सएप करें:
+                </div>
+
+                <a href="https://wa.me/919415597889?text=नमस्ते%20सर,%20मैंने%20TGT%20कोर्स%20का%20299%20का%20पेमेंट%20कर%20दिया%20है।%20मेरा%20रजिस्टर्ड%20नंबर%20यह%20है:%20" 
+                   target="_blank" 
+                   style="display: block; background: #25d366; color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; margin-top: 8px;">
+                    💬 WhatsApp पर स्क्रीनशॉट भेजें
+                </a>
+            </div>
+
+            <p id="authMessage" style="margin: 8px 0; font-size:13px; font-weight:bold;"></p>
+            <button onclick="closeModal()" class="btn-close">बंद करें</button>
+        </div>
+    </div>
+
+<script>
+    // ✅ 1-Device Lock सुरक्षा वाला Apps Script URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3VolXNGLi8jlH7aAniR7v8_mbpH62Y6Dz4LvNakPpt7Z-FHEPcC8KNLRY7nlbh-gy/exec"; 
+
+    let pendingUrl = null;
+
+    // 🤖 ऑटोमैटिक कमिंग सून डिटेक्शन स्क्रिप्ट
+    window.addEventListener('DOMContentLoaded', () => {
+        const buttons = document.querySelectorAll('button[onclick*="checkAccess"]');
+        buttons.forEach(btn => {
+            const onclickAttr = btn.getAttribute('onclick') || '';
+            const btnType = btn.getAttribute('data-type') || '';
+
+            if (onclickAttr.includes("'#'") || onclickAttr.includes('""')) {
+                btn.innerText = '⏳ Coming Soon';
+                btn.classList.add('btn-disabled');
+            } else {
+                if (btnType === 'pdf') {
+                    btn.innerText = '📚 डाउनलोड PDF';
+                    btn.classList.add('btn-pdf');
+                } else if (btnType === 'video') {
+                    btn.innerText = '▶️ देखें वीडियो';
+                    btn.classList.add('btn-video');
+                }
+                btn.classList.remove('btn-disabled');
+            }
+        });
+    });
+
+    function checkAccess(url, type) {
+        pendingUrl = url;
+        const plan = localStorage.getItem('user_plan');
+        
+        if (plan === 'FULL') {
+            if (url === '#' || !url) {
+                alert(`⏳ यह ${type || 'सामग्री'} जल्द ही उपलब्ध होगी!`);
+            } else {
+                window.location.href = url;
+            }
+        } else {
+            document.getElementById('paymentSection').style.display = 'none';
+            document.getElementById('userMobileInput').value = '';
+            document.getElementById('authMessage').innerText = '';
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+    }
+
+    function verifyStudent() {
+        const mobile = document.getElementById('userMobileInput').value.trim();
+        const msgBox = document.getElementById('authMessage');
+        const paySec = document.getElementById('paymentSection');
+
+        paySec.style.display = "none";
+
+        if (mobile.length !== 10) {
+            msgBox.style.color = "#e11d48";
+            msgBox.innerText = "कृपया सही 10 अंकों का मोबाइल नंबर डालें!";
+            return;
+        }
+
+        let deviceId = localStorage.getItem('my_device_id');
+        if (!deviceId) {
+            deviceId = "DEV_" + Math.random().toString(36).substring(2, 11) + Date.now();
+            localStorage.setItem("my_device_id", deviceId);
+        }
+
+        msgBox.style.color = "#2563eb";
+        msgBox.innerText = "जाँच हो रही है...";
+
+        fetch(`${SCRIPT_URL}?mobile=${mobile}&deviceId=${deviceId}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.allowed) {
+                    if (data.plan === 'FULL') {
+                        localStorage.setItem('user_plan', data.plan);
+                        localStorage.setItem('tgt_user_mobile', mobile);
+                        msgBox.style.color = "#16a34a";
+                        msgBox.innerText = data.message;
+                        setTimeout(() => {
+                            closeModal();
+                            if (pendingUrl === '#' || !pendingUrl) {
+                                alert('⏳ यह सामग्री जल्द ही उपलब्ध होगी!');
+                            } else if (pendingUrl) {
+                                window.location.href = pendingUrl;
+                            }
+                        }, 800);
+                    } else {
+                        msgBox.style.color = "#e11d48";
+                        msgBox.innerText = "गृह विज्ञान क्लासेस के लिए ₹299 वाला Full Batch आवश्यक है!";
+                        paySec.style.display = "block";
+                    }
+                } else {
+                    msgBox.style.color = "#e11d48";
+                    msgBox.innerText = data.message;
+                    if (data.reason === "NOT_FOUND") {
+                        paySec.style.display = "block";
+                    }
+                }
+            })
+            .catch(err => {
+                msgBox.style.color = "#e11d48";
+                msgBox.innerText = "नेटवर्क खराबी! पुनः प्रयास करें।";
+            });
+    }
+
+    function closeModal() {
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('authMessage').innerText = '';
+        document.getElementById('paymentSection').style.display = 'none';
+    }
+</script>
+</body>
+</html>
