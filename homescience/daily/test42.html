@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ CSS कंट्रोल फ़ाइल -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">गृह विज्ञान (Home Science)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Home Science Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY -->
+    <script>
+        // 1. इस टेस्ट की यूनिक KEY
+        const QUIZ_KEY = "medhavi_homescience_comm_models_05"; 
+
+        // 2. 50 प्रश्नों का डेटासेट (बिना टैग और बिना एक्सप्लेनेशन)
+        const dataset = [
+            { id: 1, tag: "", question: "अरस्तू के संचार प्रतिरूप में सबसे महत्वपूर्ण और केंद्रीय तत्व किसे माना गया है?<br>In Aristotle’s model of communication, which element is considered the most critical and central?", options: ["संदेश की संरचना और प्रारूप (Message structure and format)", "वक्ता का व्यक्तित्व और भाषण (Speaker's personality and speech)", "माध्यम की तकनीकी सटीकता (Technical precision of the channel)", "श्रोता की मानसिक तत्परता (Mental readiness of the audience)"], correct: 1 },
+            { id: 2, tag: "", question: "शैनन और वीवर के संचार प्रतिरूप को मूलतः किस रूप में जाना जाता है?<br>Shannon and Weaver’s communication model is primarily known as which type of model?", options: ["वृत्ताकार व्याख्यात्मक प्रतिरूप (Circular interpretive model)", "गत्यात्मक सर्पिलाकार प्रतिरूप (Dynamic helical spiral model)", "गणितीय एवं रेखीय प्रतिरूप (Mathematical and linear model)", "पारस्परिकता आधारित प्रतिरूप (Reciprocal transactional model)"], correct: 2 },
+            { id: 3, tag: "", question: "शैनन-वीवर प्रतिरूप में संचार रुकावट के किस घटक को पहली बार औपचारिक रूप से प्रस्तुत किया गया था?<br>Which component of communication breakdown was formally introduced for the first time in the Shannon-Weaver model?", options: ["प्रासंगिक प्रतिपुष्टि (Contextual feedback)", "तकनीकी भौतिक बाधा (Technical physical noise)", "मनोवैज्ञानिक पूर्वाग्रह (Psychological prejudice)", "अर्थ संबंधी अस्पष्टता (Semantic ambiguity)"], correct: 1 },
+            { id: 4, tag: "", question: "लासवेल के संचार सूत्र \"कौन, क्या कहता है, किस माध्यम से, किसे, किस प्रभाव के साथ\" में 'किस प्रभाव के साथ' का संबंध किससे है?<br>In Lasswell's communication formula \"Who, says what, in which channel, to whom, with what effect\", what does \"with what effect\" refer to?", options: ["माध्यम का तकनीकी विश्लेषण (Analysis of communication media)", "संदेश की संरचना का परीक्षण (Testing the message structure)", "श्रोता पर पड़ने वाला प्रभाव (Impact generated on audience)", "स्रोत की सामाजिक पृष्ठभूमि (Social background of source)"], correct: 2 },
+            { id: 5, tag: "", question: "डेविड बर्लो के संचार प्रतिरूप में कौन सा घटक शामिल नहीं है?<br>Which component is NOT included in David Berlo’s communication model?", options: ["स्रोत की क्षमता (Source capability)", "संदेश की सामग्री (Message content)", "माध्यम के संवेदी अंग (Channels of senses)", "निरंतर प्रतिपुष्टि (Continuous feedback)"], correct: 3 },
+            { id: 6, tag: "", question: "विल्बर श्राम के प्रतिरूप के अनुसार सफल संचार के लिए प्रेषक और प्राप्तकर्ता के बीच क्या आवश्यक है?<br>According to Wilbur Schramm’s model, what is essential between sender and receiver for successful communication?", options: ["समान तकनीकी दक्षता (Identical technical skills)", "सामान्य भौतिक परिवेश (Common physical environment)", "साझा अनुभव का क्षेत्र (Common field of experience)", "त्वरित प्रतिपुष्टि साधन (Instant feedback mechanism)"], correct: 2 },
+            { id: 7, tag: "", question: "ओसगुड और श्राम के संचार प्रतिरूप की सबसे प्रमुख विशेषता क्या है?<br>What is the most prominent feature of the Osgood-Schramm communication model?", options: ["यह संचार को रेखीय मानता है (It treats communication as linear)", "यह संचार को चक्रीय मानता है (It treats communication as circular)", "यह केवल लिखित रूप देखता है (It focuses solely on written form)", "यह बाधा को समाप्त करता है (It completely eliminates all noise)"], correct: 1 },
+            { id: 8, tag: "", question: "फ्रैंक डांस के सर्पिलाकार संचार प्रतिरूप के अनुसार संचार प्रक्रिया कैसी होती है?<br>According to Frank Dance's helical communication model, how does the communication process operate?", options: ["स्थिर एवं अपरिवर्तनीय रूप में (In a static and unchangeable form)", "केवल एकल दिशात्मक अनुक्रम में (Only in a single directional sequence)", "सतत गतिशील और संचयी रूप में (In a continuous dynamic, cumulative manner)", "पूर्णतः बंद एवं सीमित दायरे में (Strictly within a closed, limited scope)"], correct: 2 },
+            { id: 9, tag: "", question: "थियोडोर न्यूकॉम्ब का 'ए-बी-एक्स' प्रतिरूप मुख्य रूप से किस पर केंद्रित है?<br>Theodore Newcomb's 'A-B-X' model primarily focuses on which concept?", options: ["सूचना का तकनीकी प्रसारण (Technical transmission of data)", "पारस्परिक संबंधों का संतुलन (Balance in interpersonal relations)", "सामूहिक जनसंचार का प्रभाव (Effect of collective mass media)", "मौखिक भाषा का शुद्ध प्रयोग (Accurate use of oral language)"], correct: 1 },
+            { id: 10, tag: "", question: "वेस्टले और मैकलियन के संचार प्रतिरूप में 'द्वारपाल' की अवधारणा किस कार्य को दर्शाती है?<br>In the Westley-MacLean communication model, what does the concept of 'gatekeeper' signify?", options: ["केवल सूचना की गति बढ़ाना (Only accelerating the speed of data)", "सूचना का चयन और संपादन (Selection and filtering of message)", "भौतिक शोर को समाप्त करना (Total elimination of channel noise)", "प्रतिपुष्टि को पूरी तरह रोकना (Complete blocking of feedback path)"], correct: 1 },
+            { id: 11, tag: "", question: "बार्नलंड का संव्यवहार प्रतिरूप संचार को किस प्रकार परिभाषित करता है?<br>How does Barnlund's transactional model define the communication process?", options: ["केवल एकतरफा सूचना प्रवाह (Only a one-way flow of information)", "क्रमिक रूप से घटित प्रक्रिया (A sequentially occurring phenomenon)", "समकालिक और पारस्परिक प्रक्रिया (A simultaneous and reciprocal process)", "पूर्व-निर्धारित यांत्रिक प्रक्रिया (A pre-determined mechanical process)"], correct: 2 },
+            { id: 12, tag: "", question: "संचार प्रक्रिया में 'कूटलेखन' का वास्तविक तात्पर्य क्या है?<br>What is the actual meaning of 'encoding' in the communication process?", options: ["संदेश को प्राप्त कर समझना (Receiving and understanding signals)", "विचारों को प्रतीकों में बदलना (Converting thoughts into symbols)", "माध्यम में आई त्रुटि सुधारना (Correcting errors in transmission)", "प्रतिपुष्टि को दर्ज करना (Recording the incoming feedback)"], correct: 1 },
+            { id: 13, tag: "", question: "'कूटवाचन' की प्रक्रिया संचार चक्र में किसके द्वारा संपन्न की जाती है?<br>By whom is the process of 'decoding' performed in the communication cycle?", options: ["मूल संदेश प्रेषक द्वारा (By the primary message sender)", "संचार माध्यम वाहक द्वारा (By the medium or channel carrier)", "संदेश के प्राप्तकर्ता द्वारा (By the intended message recipient)", "बाहरी पर्यवेक्षक द्वारा (By an independent external viewer)"], correct: 2 },
+            { id: 14, tag: "", question: "जब शब्दों के अर्थ में भिन्नता के कारण संचार में भ्रांति उत्पन्न होती है, तो उसे क्या कहते हैं?<br>When confusion arises in communication due to differences in word meanings, what is it called?", options: ["भौतिक स्तर की बाधा (Physical environmental interference)", "शारीरिक स्तर की बाधा (Physiological structural barrier)", "अर्थ-संबंधी बाधा (Semantic interpretation barrier)", "यांत्रिक स्तर की बाधा (Mechanical instrumental failure)"], correct: 2 },
+            { id: 15, tag: "", question: "श्रोता की अत्यधिक थकान या सिरदर्द किस प्रकार की संचार बाधा का उदाहरण है?<br>A listener's extreme fatigue or severe headache is an example of which type of communication barrier?", options: ["मनोवैज्ञानिक बाधा (Psychological mindset barrier)", "शरीर-क्रियात्मक बाधा (Physiological body-state barrier)", "संस्थागत संरचना बाधा (Organizational structure barrier)", "तकनीकी चैनल बाधा (Technical communication medium barrier)"], correct: 1 },
+            { id: 16, tag: "", question: "संचार प्रक्रिया में 'प्रतिपुष्टि' का मुख्य उद्देश्य क्या होता है?<br>What is the primary objective of 'feedback' in the communication process?", options: ["संदेश की सफलता का आकलन (Assessing message understanding)", "प्रेषक के अधिकार को बढ़ाना (Enhancing the sender's authority)", "कूटवाचन प्रक्रिया को टालना (Delaying the decoding mechanism)", "नए माध्यम का त्वरित चयन (Instant selection of new channel)"], correct: 0 },
+            { id: 17, tag: "", question: "व्यक्ति का स्वयं से बात करना या आत्म-मंथन करना संचार के किस रूप में आता है?<br>Talking to oneself or self-introspection falls under which form of communication?", options: ["अंतर्वैयक्तिक संचार (Interpersonal communication)", "अंतःवैयक्तिक संचार (Intrapersonal communication)", "समूह स्तर का संचार (Group level communication)", "जनसंचार का माध्यम (Mass medium communication)"], correct: 1 },
+            { id: 18, tag: "", question: "दो सहकर्मियों के मध्य आमने-सामने होने वाले औपचारिक वार्तालाप को क्या कहा जाएगा?<br>What is a face-to-face formal conversation between two colleagues classified as?", options: ["अंतःवैयक्तिक संचार (Intrapersonal communication)", "अंतर्वैयक्तिक संचार (Interpersonal communication)", "विशाल जनसंचार (Massive public communication)", "परावैयक्तिक संचार (Transpersonal communication)"], correct: 1 },
+            { id: 19, tag: "", question: "शारीरिक भाषा, मुख-मुद्रा और आंखों के संपर्क के अध्ययन को क्या कहा जाता है?<br>What is the study of body language, facial expressions, and eye contact called?", options: ["सामीप्य विज्ञान (Proxemics study)", "अंग-विक्षेप विज्ञान (Kinesics behavior)", "स्पर्श भाषा विज्ञान (Haptics touch study)", "कालक्रम विज्ञान (Chronemics pattern)"], correct: 1 },
+            { id: 20, tag: "", question: "संचार प्रक्रिया में व्यक्तिगत स्थान और दूरी के उपयोग के अध्ययन को क्या कहते हैं?<br>What is the study of personal space and physical distance in communication called?", options: ["अंग-विक्षेप अध्ययन (Kinesics body posture)", "स्पर्श संचार अध्ययन (Haptics tactile signal)", "सामीप्य विज्ञान (Proxemics spatial study)", "स्वर विज्ञान अध्ययन (Paralanguage voice tone)"], correct: 2 },
+            { id: 21, tag: "", question: "स्पर्श के माध्यम से व्यक्त होने वाले अशाब्दिक संचार को किस श्रेणी में रखा जाता है?<br>Under which category is non-verbal communication expressed through touch classified?", options: ["स्पर्श विज्ञान (Haptics communication)", "सामीप्य विज्ञान (Proxemics distance)", "कालक्रम विज्ञान (Chronemics timing)", "दृश्य भाषा विज्ञान (Visual semiotics)"], correct: 0 },
+            { id: 22, tag: "", question: "संचार के संदर्भ में 'पराभाषा' का संबंध मुख्य रूप से किससे है?<br>In the context of communication, what does 'paralanguage' primarily relate to?", options: ["लिखित भाषा के व्याकरण से (Grammar of written language)", "वाणी के स्वर, गति और उतार-चढ़ाव से (Voice tone, pitch, and inflection)", "शरीर की विभिन्न मुद्राओं से (Physical bodily postures adopted)", "सांस्कृतिक मान्यताओं की समझ से (Understanding cultural values)"], correct: 1 },
+            { id: 23, tag: "", question: "संचार में समय के उपयोग, उसकी पाबंदी और महत्व के अध्ययन को क्या नाम दिया गया है?<br>What is the study of the use of time, punctuality, and pacing in communication called?", options: ["कालक्रम विज्ञान (Chronemics analysis)", "अंग-गति विज्ञान (Kinesics motion study)", "सामीप्य विज्ञान (Proxemics distance)", "वस्तु भाषा विज्ञान (Artifactual study)"], correct: 0 },
+            { id: 24, tag: "", question: "किसी संस्था में उच्च अधिकारी से अधीनस्थ कर्मचारी की ओर जाने वाला संचार क्या कहलाता है?<br>What is communication flowing from a higher authority to a subordinate employee called?", options: ["ऊर्ध्वगामी संचार (Upward communication)", "अधोगामी संचार (Downward communication)", "क्षैतिज संचार (Horizontal communication)", "तिर्यक संचार (Diagonal communication)"], correct: 1 },
+            { id: 25, tag: "", question: "अधीनस्थ कर्मचारियों द्वारा प्रबंधन को दी जाने वाली प्रगति रिपोर्ट किस संचार का हिस्सा है?<br>A progress report submitted by subordinate employees to management is part of which communication?", options: ["अधोगामी संचार (Downward communication)", "ऊर्ध्वगामी संचार (Upward communication)", "पार्श्वीय संचार (Lateral communication)", "अनौपचारिक गपशप (Informal grape-vine)"], correct: 1 },
+            { id: 26, tag: "", question: "समान पद या स्तर पर कार्य कर रहे दो प्रबंधकों के बीच संवाद को क्या माना जाता है?<br>What is the communication between two managers working at the same organizational level called?", options: ["क्षैतिज संचार (Horizontal communication)", "ऊर्ध्वगामी संचार (Upward communication)", "अधोगामी संचार (Downward communication)", "लंबवत संचार (Vertical communication)"], correct: 0 },
+            { id: 27, tag: "", question: "किसी संगठन में अनौपचारिक संचार के संजाल को सामान्यतः क्या संज्ञा दी जाती है?<br>What term is commonly used to describe an informal communication network in an organization?", options: ["सीधा संपर्क सूत्र (Direct command link)", "लता-तंतु या जनप्रवाद (Grapevine network)", "औपचारिक संदेश तंत्र (Formal message grid)", "परिपत्र संचार प्रणाली (Circular memo channel)"], correct: 1 },
+            { id: 28, tag: "", question: "जब संदेश भेजने वाले का सामाजिक पूर्वाग्रह संदेश की समझ को प्रभावित करे, तो वह कौन सी बाधा है?<br>When a sender’s social prejudice distorts the understanding of a message, which barrier is it?", options: ["भौतिक बाधा (Physical noise barrier)", "मनोवैज्ञानिक बाधा (Psychological barrier)", "यांत्रिक बाधा (Mechanical equipment barrier)", "व्याकरणिक बाधा (Syntactical rule barrier)"], correct: 1 },
+            { id: 29, tag: "", question: "अरस्तू के संचार सिद्धांत में कौन से तीन प्रेरक तत्व बताए गए हैं?<br>Which three persuasive appeals are outlined in Aristotle's communication theory?", options: ["स्रोत, माध्यम और प्रभाव (Source, Channel, and Effect)", "चरित्र, संवेग और तर्क (Ethos, Pathos, and Logos)", "कूट, संदेश और माध्यम (Code, Message, and Channel)", "संकेत, अर्थ और भाषा (Sign, Meaning, and Language)"], correct: 1 },
+            { id: 30, tag: "", question: "अरस्तू के अनुसार 'ईथॉस' का सीधा संबंध संचारक के किस गुण से है?<br>According to Aristotle, with which quality of the communicator is 'Ethos' directly related?", options: ["श्रोता की संवेदनशीलता (Emotional sensitivity of audience)", "वक्ता की विश्वसनीयता और चरित्र (Credibility and moral character of speaker)", "भाषण में दिए गए तार्किक तथ्य (Logical presentation of speech data)", "प्रयुक्त भाषा का कठिन स्तर (Complexity of language vocabulary)"], correct: 1 },
+            { id: 31, tag: "", question: "शैनन-वीवर प्रतिरूप में 'सूचना स्रोत' का मुख्य कार्य क्या होता है?<br>What is the primary function of the 'Information Source' in the Shannon-Weaver model?", options: ["संदेश को तरंगों में बदलना (Transforming signals into air waves)", "प्रेषित करने हेतु मूल संदेश चुनना (Selecting message to be transmitted)", "चैनल से व्यवधान हटाना (Eliminating disturbances from channel)", "प्रतिपुष्टि का विश्लेषण करना (Analyzing incoming audience feedback)"], correct: 1 },
+            { id: 32, tag: "", question: "शैनन-वीवर प्रतिरूप के अनुसार 'ट्रांसमीटर' का क्या कार्य होता है?<br>According to the Shannon-Weaver model, what is the exact function of the 'Transmitter'?", options: ["संदेश को संकेत रूप में बदलना (Encoding message into electrical signals)", "संदेश के अर्थ की व्याख्या करना (Interpreting deep meaning of message)", "प्राप्तकर्ता की राय दर्ज करना (Registering reactions of the receiver)", "शोर के स्तर को कम करना (Regulating noise levels in environment)"], correct: 0 },
+            { id: 33, tag: "", question: "बर्लो के 'एस-एम-सी-आर' प्रतिरूप में 'सी' घटक किसके लिए प्रयुक्त हुआ है?<br>In Berlo's 'S-M-C-R' model, what does the component 'C' explicitly stand for?", options: ["संचार का संदर्भ (Context of interaction)", "संदेश का कूट (Code of communication)", "प्रसारण का माध्यम (Channel of transmission)", "संचार सामग्री (Content of discussion)"], correct: 2 },
+            { id: 34, tag: "", question: "बर्लो के प्रतिरूप में स्रोत और प्राप्तकर्ता दोनों के पास कौन सी विशेषता समान होनी चाहिए?<br>In Berlo’s model, which characteristic must be shared by both source and receiver?", options: ["संचार कौशल और ज्ञान (Communication skills and knowledge)", "शारीरिक शक्ति और आयु (Physical strength and age bracket)", "एक ही राजनीतिक विचारधारा (Identical political orientation)", "समान प्रकार के उपकरण (Same category of mechanical tools)"], correct: 0 },
+            { id: 35, tag: "", question: "लासवेल का संचार प्रतिरूप मुख्यतः किस क्षेत्र के अध्ययन के लिए विकसित किया गया था?<br>Lasswell's communication model was primarily developed for studying which specific domain?", options: ["अंतःवैयक्तिक विचार प्रक्रिया (Intrapersonal thought mechanism)", "संगठनात्मक आंतरिक ढांचा (Organizational internal hierarchy)", "राजनीतिक प्रचार और जनसंचार (Political propaganda and mass media)", "छोटे समूह का अनौपचारिक संवाद (Informal discussion in small groups)"], correct: 2 },
+            { id: 36, tag: "", question: "किस संचार प्रतिरूप को संचार का 'घंटी के आकार' वाला या सर्पिल प्रतिरूप भी कहा जाता है?<br>Which communication model is also referred to as a helical or spiral-shaped model?", options: ["डांस का प्रतिरूप (Dance's model)", "बर्लो का प्रतिरूप (Berlo's model)", "श्राम का प्रतिरूप (Schramm's model)", "न्यूकॉम्ब का प्रतिरूप (Newcomb's model)"], correct: 0 },
+            { id: 37, tag: "", question: "वेस्टले और मैकलियन मॉडल में संचार प्रक्रिया को प्रारंभ करने वाला बाहरी तत्व क्या कहलाता है?<br>In the Westley-MacLean model, what is the external factor initiating the process called?", options: ["संवेदी वस्तु या घटना (Sensory object or environment event)", "आंतरिक प्रतिपुष्टि लूप (Internal feedback transmission loop)", "कूटवाचक का निर्णय (Deliberate choice made by decoder)", "भौतिक बाधा का प्रभाव (Direct impact of physical noise)"], correct: 0 },
+            { id: 38, tag: "", question: "प्रभावी संचार के 'सात सी' के सिद्धांत में 'संक्षिप्तता' का क्या अर्थ है?<br>In the '7 Cs' principle of effective communication, what does 'Conciseness' mean?", options: ["बिना आवश्यक शब्द जोड़े कम शब्दों में कहना (Expressing using fewest words cleanly)", "सभी व्याकरण नियमों की अनदेखी करना (Ignoring grammatical structuring rules)", "महत्वपूर्ण विवरणों को छिपा लेना (Hiding primary details from audience)", "केवल अशाब्दिक भाषा का प्रयोग करना (Exclusively utilizing bodily expressions)"], correct: 0 },
+            { id: 39, tag: "", question: "प्रभावी संचार के सिद्धांतों में 'मूर्तता' का क्या आशय है?<br>In the principles of effective communication, what does 'Concreteness' imply?", options: ["केवल अस्पष्ट विचारों का आदान-प्रदान (Exchanging completely vague statements)", "स्पष्ट तथ्यों और निश्चित आंकड़ों का प्रयोग (Using clear facts and specific figures)", "लंबे और जटिल वाक्यों का गठन (Forming lengthy and complicated sentences)", "श्रोता की स्थिति पर ध्यान न देना (Paying zero attention to listener context)"], correct: 1 },
+            { id: 40, tag: "", question: "संस्कृति के विभिन्न संदर्भों में संचार शैली की भिन्नता का अध्ययन क्या कहलाता है?<br>What is the study of variations in communication styles across cultural settings called?", options: ["अंतर-सांस्कृतिक संचार (Cross-cultural communication)", "अंतःवैयक्तिक संचार (Intrapersonal communication)", "यांत्रिक संचार प्रक्रिया (Mechanical communication system)", "ऊर्ध्वाधर संचार प्रणाली (Vertical communication channels)"], correct: 0 },
+            { id: 41, tag: "", question: "कक्षा में व्याख्यान दे रहे शिक्षक और विद्यार्थियों के बीच संचार प्रक्रिया मुख्यतः किस प्रकार की होती है?<br>What type of communication process primarily takes place between a lecturing teacher and students?", options: ["समूह संचार (Group communication)", "व्यापक जनसंचार (Massive public media)", "एकालाप संचार (Monologue transmission)", "अंतःवैयक्तिक विचार (Intrapersonal meditation)"], correct: 0 },
+            { id: 42, tag: "", question: "एक रेडियो स्टेशन से प्रसारित होने वाले समाचार को किस प्रकार का संचार माना जाएगा?<br>What kind of communication is a news bulletin broadcast from a radio station considered?", options: ["अंतर्वैयक्तिक संचार (Interpersonal interaction)", "जनसंचार (Mass communication)", "समूह संवाद (Small group debate)", "संगठनात्मक संचार (Internal corporate link)"], correct: 1 },
+            { id: 43, tag: "", question: "संचार में 'चयनात्मक अवधान' की अवधारणा किससे संबंधित है?<br>With what is the concept of 'Selective Attention' in communication associated?", options: ["तकनीकी त्रुटियों के सुधार से (Correcting technical hardware faults)", "श्रोता की अपनी पसंद के अनुसार सुनने से (Audience hearing what fits their choice)", "प्रेषक के संदेश को गोपनीय रखने से (Keeping the outgoing message confidential)", "संदेश के तुरंत प्रसारण की गति से (Speed of immediate signal transmission)"], correct: 1 },
+            { id: 44, tag: "", question: "यदि किसी संचार माध्यम में प्रेषक और प्राप्तकर्ता एक ही समय में उपस्थित न हों, तो वह क्या कहलाता है?<br>If sender and receiver are not interacting at the exact same moment, what is it termed?", options: ["समकालिक संचार (Synchronous communication)", "असमकालिक संचार (Asynchronous communication)", "प्रत्यक्ष मौखिक संचार (Direct live oral dialogue)", "चक्रीय तात्कालिक संचार (Circular instantaneous loop)"], correct: 1 },
+            { id: 45, tag: "", question: "ई-मेल का आदान-प्रदान किस संचार का सबसे सटीक उदाहरण है?<br>The exchange of electronic mail is the most accurate example of which communication?", options: ["समकालिक संचार (Synchronous communication)", "असमकालिक संचार (Asynchronous communication)", "परावैयक्तिक संचार (Transpersonal communication)", "आंगिक संचार (Body kinesics exchange)"], correct: 1 },
+            { id: 46, tag: "", question: "टेलीविज़न पर सीधा प्रसारण देखकर फोन द्वारा प्रतिक्रिया देना किस संचार व्यवस्था को दर्शाता है?<br>Watching a live broadcast on television and responding via phone represents which setup?", options: ["विलंबित प्रतिपुष्टि युक्त जनसंचार (Mass communication with delayed feedback)", "अंतःवैयक्तिक बंद चक्र (Intrapersonal closed-circuit flow)", "शुद्ध क्षैतिज औपचारिक ढांचा (Pure horizontal formal structure)", "बिना माध्यम का संचार (Unmediated pure social process)"], correct: 0 },
+            { id: 47, tag: "", question: "संचार के संव्यवहार प्रतिरूप के अनुसार संचार प्रक्रिया की प्रकृति कैसी होती है?<br>According to the transactional model of communication, what is the nature of the process?", options: ["प्रेषक और प्राप्तकर्ता दोनों एक साथ संदेश बदलते हैं (Both parties send and receive simultaneously)", "संदेश केवल एक दिशा में ही आगे बढ़ता है (The message strictly moves in a single pathway)", "प्रतिपुष्टि की प्रक्रिया पूरी तरह अनुपस्थित रहती है (Feedback mechanism is completely non-existent)", "केवल यांत्रिक माध्यम ही संचार नियंत्रित करता है (Solely mechanical machines regulate communication)"], correct: 0 },
+            { id: 48, tag: "", question: "प्रॉक्सेमिक्स के अनुसार 0 से 1.5 फीट तक की शारीरिक दूरी को किस श्रेणी में रखा जाता है?<br>According to proxemics, physical distance from 0 to 1.5 feet is categorized under which zone?", options: ["सामाजिक क्षेत्र (Social interaction distance)", "सार्वजनिक क्षेत्र (Public platform distance)", "अंतरंग क्षेत्र (Intimate relationship zone)", "औपचारिक क्षेत्र (Formal official boundary)"], correct: 2 },
+            { id: 49, tag: "", question: "संचार में 'उच्च संदर्भ संस्कृति' की मुख्य पहचान क्या होती है?<br>What is the primary indicator of a 'High-Context Culture' in human communication?", options: ["शब्दों से अधिक परिस्थिति और अशाब्दिक संकेतों का महत्व (Situations and non-verbal cues matter over words)", "सभी नियमों का अत्यधिक स्पष्ट लिखित रूप में होना (Every rule explicitly documented and written down)", "व्यक्तिगत स्वतंत्रता को समाज से ऊपर रखना (Placing individual independence over community)", "केवल तकनीकी माध्यमों से ही संपर्क साधना (Relying strictly on digital technological mediums)"], correct: 0 },
+            { id: 50, tag: "", question: "संचार प्रक्रिया के समापन और उसके पूर्ण होने का अंतिम प्रमाण क्या माना जाता है?<br>What is considered the final proof of the completion of the communication process?", options: ["प्रेषक द्वारा संदेश भेज देना (The sender successfully transmitting signal)", "प्राप्तकर्ता द्वारा उपयुक्त प्रतिपुष्टि देना (The receiver delivering appropriate feedback)", "माध्यम द्वारा तरंगों का संचार करना (The channel successfully routing data packets)", "संदेश का पूरी तरह कूटबद्ध होना (The message getting perfectly encoded into signs)"], correct: 1 }
+        ];
+    </script>
+
+    <!-- ✅ JS लॉजिक कंट्रोल फ़ाइल (ट्रांसलेशन बटन यहीं से ऑटोमैटिक लोड होगा) -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
