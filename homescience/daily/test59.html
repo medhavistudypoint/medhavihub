@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">वस्त्र एवं परिधान विज्ञान</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point <br> वस्त्रों का चयन, देखभाल और सिद्धांत</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 50 प्रश्नों का संपूर्ण डेटासेट -->
+    <script>
+        const QUIZ_KEY = "medhavi_free_test_d58"; 
+
+        const dataset = [
+            { 
+                id: 1, 
+                question: "जापानी पारम्परिक वेशभूषा के अन्तर्गत आते हैं—<br>I. किमोनो<br>II. यूकाटा<br>III. टाटामी<br>IV. जानशी", 
+                options: ["I, III और IV सही हैं।", "I, II और IV सही हैं।", "II, III और IV सही हैं।", "I, II और III सही हैं।"], 
+                correct: 1 
+            },
+            { 
+                id: 2, 
+                question: "प्लाज्मा तकनीक के निम्नलिखित लाभ हैं:<br>I. सूती कपड़ों में घर्षण प्रतिरोध का बढ़ना।<br>II. रंगाई की गति बढ़ना।<br>III. तरल रिपैलेंसी देता है।<br>IV. बायो-स्कॉरिंग को सहायता देता है।", 
+                options: ["IV, I, II", "III, IV, I", "II, III, IV", "I, II, III"], 
+                correct: 3 
+            },
+            { 
+                id: 3, 
+                question: "कपड़ों की देखभाल में आने वाले पदों को क्रमवार लिखिए:<br>(A) धोना<br>(B) साबुन में भिगोना<br>(C) सुखाना<br>(D) कपड़ों को छांटना", 
+                options: ["(A) (B) (C) (D)", "(B) (D) (C) (B) (A)", "(D) (B) (A) (C)", "(D) (C) (D) (B) (A)"], 
+                correct: 2 
+            },
+            { 
+                id: 4, 
+                question: "एल.ई.ए.एफ. (LEAF) का अभिप्राय है—", 
+                options: ["लास्टिंग इकॉलाजिकली अपैरल एन्ड फैब्रिक्स", "लेबलिंग इकॉलाजिकली एप्रूव्ड फैब्रिक्स", "लेंटेस्ट इकॉलाजिकली एप्रूव्ड फैशन", "लीन इकॉलाजिकल अपैरल एन्ड फैशन"], 
+                correct: 1 
+            },
+            { 
+                id: 5, 
+                question: "बच्चों के वस्त्रों के लिये कपड़े में निम्न गुण होना चाहिये :", 
+                options: ["रिब वीव एवं मोटाई", "चिकना एवं अधिक सोखने की शक्ति", "हाई डेनेसिटी एवं लचीलापन", "प्लेन बुनाई एवं चिकनापन"], 
+                correct: 1 
+            },
+            { 
+                id: 6, 
+                question: "वस्त्रों का चुनाव करते समय आवश्यक कारकों को ध्यान में रखना चाहिये :", 
+                options: ["व्यक्तित्व और त्वचा का रंग", "गुण एवं दाम", "चिकनापन एवं ठंडापन", "बुनाई एवं घनत्व"], 
+                correct: 0 
+            },
+            { 
+                id: 7, 
+                question: "नीचे दो कथन दिए गए हैं:<br><b>अभिकथन (A):</b> रेयान वस्त्र निरन्तर सिकुड़ते रहते हैं।<br><b>कारण (R):</b> इसलिये सुखाते एवं इस्त्री करते समय इसकी देखभाल करनी चाहिए।", 
+                options: ["दोनों (A) एवं (R) सही हैं।", "(A) सही है परन्तु (R) गलत है।", "(A) गलत है परन्तु (R) सही है।", "(A) एवं (R) सही हैं परन्तु (R) सही वर्णन नहीं है।"], 
+                correct: 0 
+            },
+            { 
+                id: 8, 
+                question: "कपड़ा काटने का उचित स्थान है—", 
+                options: ["हाथ में लेकर", "मेज या पटरे पर फैलाकर", "गोद में रखकर", "उपर्युक्त में से कोई नहीं"], 
+                correct: 1 
+            },
+            { 
+                id: 9, 
+                question: "रेडीमेड कपड़ों के निर्माण में नाप की किस विधि का प्रयोग किया जाता है?", 
+                options: ["चेस्ट सिस्टम", "डायरेक्ट सिस्टम", "चेस्ट व डायरेक्ट सिस्टम", "उपर्युक्त में से कोई नहीं"], 
+                correct: 0 
+            },
+            { 
+                id: 10, 
+                question: "एक नाटी महिला को निम्न प्रकार के वस्त्र पहनने चाहिए?", 
+                options: ["खड़ी रेखा वाले", "आड़ी रेखा वाले", "तिरछी रेखा वाले", "सादे"], 
+                correct: 0 
+            },
+            { 
+                id: 11, 
+                question: "नीचे दो कथन दिए गए हैं:<br><b>अभिकथन (A):</b> कॉलर का ब्रेक पॉइन्ट प्लैकेट के विस्तारित अंश पर चिह्नित किया जाता है।<br><b>कारण (R):</b> रोल लाइन मध्य अग्र रेखा से पीछे की ओर मुड़ती है।", 
+                options: ["(a) और (R) दोनों मिथ्या हैं।", "(A) और (R) दोनों सही हैं।", "(A) सही है, परन्तु (R) मिथ्या है।", "(A) मिथ्या है, परन्तु (R) सही है।"], 
+                correct: 2 
+            },
+            { 
+                id: 12, 
+                question: "पर्शियन कालीन तीन समूहों में विभाजित किये जाते हैं—<br>I. ओबी<br>II. फर्श/कालि<br>III. कालीचे<br>IV. जेलिम/जिलू<br>V. पागन", 
+                options: ["I, II और III सही हैं।", "II, IV और V सही हैं।", "III, IV और V सही हैं।", "II, III और IV सही हैं।"], 
+                correct: 3 
+            },
+            { 
+                id: 13, 
+                question: "'लम्बी गर्दन' वाली स्त्रियों के ब्लाउज का गला होना चाहिए:", 
+                options: ["बड़े गले का", "चौकोर गले का", "छोटे गले का", "तिकोन गले का"], 
+                correct: 1 
+            },
+            { 
+                id: 14, 
+                question: "वस्त्र में 'क्षैतिज या आड़ी रेखाओं' का प्रयोग:", 
+                options: ["व्यक्ति की मोटाई अधिक दिखाती है", "व्यक्ति की लम्बाई कम दिखाती है", "दोनों (a) व (b)", "इनमें से कोई नहीं"], 
+                correct: 2 
+            },
+            { 
+                id: 15, 
+                question: "लम्बा दिखने के लिए उपयुक्त परिधान है—", 
+                options: ["चौकोर डिजाइन के वस्त्र", "धारीदार (खड़ी) डिजाइन के वस्त्र", "बड़े डिजाइन के वस्त्र", "चौड़े बॉर्डर वाली साड़ी"], 
+                correct: 1 
+            },
+            { 
+                id: 16, 
+                question: "मोटी व नाटी महिला के लिए उपयुक्त वस्त्र है:", 
+                options: ["लम्बी धारियों वाले", "लटकनशील प्रकृति वाले", "आड़ी धारियों वाले", "कड़ेपन युक्त"], 
+                correct: 0 
+            },
+            { 
+                id: 17, 
+                question: "नमीयुक्त वस्त्रों पर लग जाती है—", 
+                options: ["फफूंदी", "कीड़े", "खमीर", "इनमें से कोई नहीं"], 
+                correct: 0 
+            },
+            { 
+                id: 18, 
+                question: "कपड़े की देख-रेख करना प्रमुख कर्तव्यों में से एक है—", 
+                options: ["गृहस्वामी के", "बच्चों के", "गृहिणी के", "दर्जी के"], 
+                correct: 2 
+            },
+            { 
+                id: 19, 
+                question: "निम्नलिखित में से कौन-सा कार्य वस्त्रों की देख-रेख एवं एहतियात के लिए आवश्यक नहीं है?", 
+                options: ["ब्रश करना एवं धूप-हवा दिखाना", "स्वयं संरक्षण तथा तत्क्षण मरम्मत", "दाग छुड़ाना तथा बार-बार धोना", "अनुचित ढंग से प्रयोग में लाना"], 
+                correct: 3 
+            },
+            { 
+                id: 20, 
+                question: "सूची-I में दी गई मदों का मिलान सूची-II में दी गई मदों के साथ करें:<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>(A) खाका बनाने के लिये चाहिए</td><td>(i) नारियल</td></tr><tr><td>(B) मुलायमपन या खुरदुरापन</td><td>(ii) नायलॉन</td></tr><tr><td>(C) यात्रा के लिए उपयुक्त कपड़ा</td><td>(iii) टेक्सचर (गठन)</td></tr><tr><td>(D) कॉयर प्राप्त होता है</td><td>(iv) विवरण</td></tr></tbody></table>", 
+                options: ["(a)-(i), (b)-(ii), (c)-(iv), (d)-(iii)", "(a)-(ii), (b)-(i), (c)-(iii), (d)-(iv)", "(a)-(iv), (b)-(iii), (c)-(ii), (d)-(i)", "(a)-(iii), (b)-(iv), (c)-(i), (d)-(ii)"], 
+                correct: 2 
+            },
+            { 
+                id: 21, 
+                question: "मानव शरीर में उभारों/ढलावों और रेखाओं के अनुकूल आकार देने के लिए पोशाक में प्रयुक्त करते हैं—", 
+                options: ["हेमिंग", "पाइपिंग", "डार्ट", "असम कच्चे टांके"], 
+                correct: 2 
+            },
+            { 
+                id: 22, 
+                question: "मैंडरिन (Mandarin) एक प्रकार का है:", 
+                options: ["कालर", "कफ", "आस्तीन", "योक"], 
+                correct: 0 
+            },
+            { 
+                id: 23, 
+                question: "लम्बे दिखने के लिये पहनना चाहिए—", 
+                options: ["एकरंगीय मैचिंग", "बड़े प्रिंट के कपड़े", "विपरीत रंग की मैचिंग", "साधारण डिजाइन"], 
+                correct: 0 
+            },
+            { 
+                id: 24, 
+                question: "फैशन उपभोक्ता की ......... से प्रभावित नहीं होता है।", 
+                options: ["उम्र", "पैसा चुकाने की इच्छा", "आय", "जाति"], 
+                correct: 3 
+            },
+            { 
+                id: 25, 
+                question: "फैशन एवं शैली का सर्वाधिक प्रभाव इनमें देखा जाता है –", 
+                options: ["बच्चों में", "वृद्धों में", "पुरुषों में", "युवाओं में"], 
+                correct: 3 
+            },
+            { 
+                id: 26, 
+                question: "फैशन को प्रभावित करने वाले घटकों में आता है –", 
+                options: ["मुद्रास्फीति और मंदी", "जनसंख्या", "आय", "उपर्युक्त सभी"], 
+                correct: 3 
+            },
+            { 
+                id: 27, 
+                question: "गरेबान जहाँ कालर मिलती है, उस रेखा को कहते हैं –", 
+                options: ["रोल लाइन", "नेक लाइन", "ब्रेक लाइन", "कालर लाइन"], 
+                correct: 1 
+            },
+            { 
+                id: 28, 
+                question: "'फैशन चक्र' में पहला सोपान कौन-सा है?", 
+                options: ["अप्रचलन", "वृद्धि", "गतिवर्धन", "नवप्रवर्तन (Introduction)"], 
+                correct: 3 
+            },
+            { 
+                id: 29, 
+                question: "वस्त्र निर्माण में पाइपिंग को किस कोण पर काटा जाता है?", 
+                options: ["75° वेफ्ट", "120° सेल्वेडज से", "45° बायस (Bias)", "55° वेफ्ट"], 
+                correct: 2 
+            },
+            { 
+                id: 30, 
+                question: "सीवन जिसका इस्तेमाल बिना सिले किनारों को छुपाने के लिए किया जाए, वह है –", 
+                options: ["फ्रेंच सीवन", "फ्लैट-फेल्ड सीवन", "डबल सीवन", "टॉप सीवन"], 
+                correct: 0 
+            },
+            { 
+                id: 31, 
+                question: "सूची-I को सूची-II से सुमेलित कीजिए (वस्त्र एवं गुंजाइश/Ease):<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I (वस्त्र)</th><th>सूची-II (गुंजाइश)</th></tr></thead><tbody><tr><td>A. साड़ी ब्लाउज</td><td>i. स्टाइल ईज़</td></tr><tr><td>B. जैकेट</td><td>ii. नकारात्मक ईज़</td></tr><tr><td>C. कुर्ता</td><td>iii. परती ईज़</td></tr><tr><td>D. तैरने की पोशाक</td><td>iv. कम्फर्ट (आराम) ईज़</td></tr></tbody></table>", 
+                options: ["A-i, B-iv, C-ii, D-iii", "A-ii, B-i, C-iii, D-iv", "A-iii, B-ii, C-iv, D-i", "A-iv, B-iii, C-i, D-ii"], 
+                correct: 3 
+            },
+            { 
+                id: 32, 
+                question: "निम्नलिखित में से कौन सा सादा वयन (Plain Weave) कपड़ा नहीं है?", 
+                options: ["परकेल", "कैलिको", "ड्रिल", "छींट (Chintz)"], 
+                correct: 2 
+            },
+            { 
+                id: 33, 
+                question: "निम्नलिखित में से कौन सी दोहरी नोक वाली डार्ट है?", 
+                options: ["फ्लांज", "फ्रेंच", "फिश डार्ट", "ड्रेस मेकर्स"], 
+                correct: 2 
+            },
+            { 
+                id: 34, 
+                question: "सूची-I को सूची-II से सुमेलित कीजिए (फैशन शब्दावली):<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>A. क्लासिक</td><td>i. सिर्फ अपने लिये फिट परिधान</td></tr><tr><td>B. फैड</td><td>ii. पहनने को तैयार (Ready-to-wear)</td></tr><tr><td>C. ओत् कुतूर</td><td>iii. बरसों चलते हैं</td></tr><tr><td>D. प्रेत-आँ-पॉर्टर</td><td>iv. थोड़े समय की ललक</td></tr></tbody></table>", 
+                options: ["A-i, B-ii, C-iii, D-iv", "A-iii, B-iv, C-i, D-ii", "A-ii, B-iii, C-iv, D-i", "A-iv, B-i, C-iii, D-ii"], 
+                correct: 1 
+            },
+            { 
+                id: 35, 
+                question: "परिधानों के औद्योगिक उत्पादन का सही अनुक्रम दीजिए:<br>(i) लेबल लगाना<br>(ii) संयोजन करना या जोड़ना<br>(iii) काटना<br>(iv) बण्डल बनाना", 
+                options: ["(iv), (ii), (i), (iii)", "(i), (iii), (ii), (iv)", "(iii), (i), (iv), (ii)", "(ii), (iv), (iii), (i)"], 
+                correct: 2 
+            },
+            { 
+                id: 36, 
+                question: "आई.एल.जी.डब्ल्यू.यू. (ILGWU) का पूर्ण रूप क्या है?", 
+                options: ["इंटरनेशनल लॉ एण्ड गारमेंट वर्कर्स यूनियन", "इंटरनेशनल लेबर एण्ड गवर्नमेंट वर्कफोर्स यूनियन", "इण्डियन लॉ एण्ड गवर्नमेंट वेलफेयर यूनियन", "इंटरनेशनल लेडीज गारमेंट वर्कर्स यूनियन"], 
+                correct: 3 
+            },
+            { 
+                id: 37, 
+                question: "किसी परिधान की अच्छी गुणवत्ता वाली अर्धवृत्तीय तुरपन (स्कैल्पड हेमलाइन) के लिए सर्वाधिक उपयुक्त है –", 
+                options: ["बायस फेसिंग", "बाइन्डिंग", "बैंड", "शेप्ड फेसिंग (Shaped facing)"], 
+                correct: 3 
+            },
+            { 
+                id: 38, 
+                question: "करघे (Loom) पर बाना (Weft) धागा डालने की क्रिया कहलाती है –", 
+                options: ["शेडिंग (Shedding)", "पिकिंग (Picking)", "बैटनिंग (Battening)", "टेकिंग-अप (Taking-up)"], 
+                correct: 1 
+            },
+            { 
+                id: 39, 
+                question: "वस्त्र की वह सतह जो प्रकाश को परावर्तित कर विशिष्ट चमक उत्पन्न करती है, साटिन वीव में किस धागे की प्रधानता से बनती है?", 
+                options: ["केवल ताना फ्लोट (Warp float)", "केवल बाना फ्लोट (Weft float)", "मिश्रित ट्विल", "लूप्स"], 
+                correct: 0 
+            },
+            { 
+                id: 40, 
+                question: "रासायनिक रूप से नायलॉन किस वर्ग का रेशा है?", 
+                options: ["पॉलिएस्टर", "पॉलियामाइड", "पॉलीएक्रीलिक", "सेल्युलोसिक"], 
+                correct: 1 
+            },
+            { 
+                id: 41, 
+                question: "ऊनी वस्त्रों की सतह से रोएँ या ढीले धागे जलाकर चिकना बनाने की प्रक्रिया है –", 
+                options: ["डिसाइजिंग (Desizing)", "सिंजिंग (Singeing)", "स्काउरिंग (Scouring)", "फुलिंग (Fulling)"], 
+                correct: 1 
+            },
+            { 
+                id: 42, 
+                question: "'मर्सराइजेशन' परिष्करण में मुख्य रूप से किस रसायन का प्रयोग किया जाता है?", 
+                options: ["कास्टिक सोडा (NaOH)", "हाइड्रोक्लोरिक अम्ल (HCl)", "सल्फ्यूरिक अम्ल (H2SO4)", "सोडियम कार्बोनेट"], 
+                correct: 0 
+            },
+            { 
+                id: 43, 
+                question: "बंधेज एवं रंगाई (Tie & Dye) में 'बाटिक' (Batik) प्रक्रिया के दौरान किसका उपयोग प्रतिरोधक (Resist) के रूप में किया जाता है?", 
+                options: ["मिट्टी", "मोम (Wax)", "स्टार्च पेस्ट", "रबर बैंड"], 
+                correct: 1 
+            },
+            { 
+                id: 44, 
+                question: "वस्त्रों की चौड़ाई के दोनों ओर बने सुरक्षित किनारों को क्या कहते हैं?", 
+                options: ["ग्रेन (Grain)", "सेल्वेज़ / किनारी (Selvedge)", "बायस (Bias)", "हेम (Hem)"], 
+                correct: 1 
+            },
+            { 
+                id: 45, 
+                question: "प्राकृतिक रेशों में सबसे लम्बा और अकेला फिलामेंट रेशा कौन-सा है?", 
+                options: ["ऊन", "कपास", "रेशम (Silk)", "लिनन"], 
+                correct: 2 
+            },
+            { 
+                id: 46, 
+                question: "'प्रिंसेस लाइन' सीवन का प्राथमिक उद्देश्य क्या होता है?", 
+                options: ["केवल जेब छिपाना", "डार्ट को स्टाइल लाइन में समाहित कर परिधान को शारीरिक उभार देना", "वस्त्र को ढीला बनाना", "हेमलाइन को सीधा रखना"], 
+                correct: 1 
+            },
+            { 
+                id: 47, 
+                question: "रंगों के मान (Value) से क्या तात्पर्य है?", 
+                options: ["रंग की शुद्धता", "रंग का हल्कापन या गहरापन (Lightness or Darkness)", "रंग का तापमान (उष्ण या शीतल)", "रंग का नाम (Hue)"], 
+                correct: 1 
+            },
+            { 
+                id: 48, 
+                question: "निम्नलिखित में से कौन-सी सिलाई हाथ की स्थायी सिलाई नहीं है?", 
+                options: ["हेमिंग", "कच्चा टांका (Basting)", "बखिया (Back stitch)", "काज सिलाई (Buttonhole stitch)"], 
+                correct: 1 
+            },
+            { 
+                id: 49, 
+                question: "ऊन के रेशों पर शल्क (Scales) पाए जाने के कारण उनमें कौन-सा अद्वितीय गुण होता है?", 
+                options: ["चमक", "फेल्टिंग (Felting / नमदा बनना)", "ज्वलनशीलता", "पारदर्शिता"], 
+                correct: 1 
+            },
+            { 
+                id: 50, 
+                question: "गारमेंट उद्योग में 'CAD' का पूर्ण रूप क्या है?", 
+                options: ["Computer Aided Design", "Clothes Automatic Dressing", "Control Apparel Drafting", "Computerized Apparel Development"], 
+                correct: 0 
+            }
+        ];
+    </script>
+
+    <!-- ✅ JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
