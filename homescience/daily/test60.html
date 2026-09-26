@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ CSS कंट्रोल फ़ाइल का पाथ -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ बैक बटन का पाथ -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 रिस्पॉन्सिव, सेंटर और 1-लाइन हेडर -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">धुलाई सामग्री एवं दाग-धब्बे छुड़ाना</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point <br> धुलाई सामग्री एवं दाग-धब्बे छुड़ाना</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ डैशबोर्ड का बैक बटन -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 50 प्रश्नों का संपूर्ण डेटासेट -->
+    <script>
+        const QUIZ_KEY = "medhavi_free_test_d60"; 
+
+        const dataset = [
+            { 
+                id: 1, 
+                question: "आपने अपने कपड़ों पर गलती से ज्यादा नील लगा दिया है, तो आप निम्नलिखित में से किस अभिकर्मक का उपयोग अपनी गलती को सुधारने के लिए करेंगे?", 
+                options: ["सोडियम क्लोराइड", "शुक्तिक अम्ल (सिरका)", "सुहागा", "ऑक्जैलिक एसिड"], 
+                correct: 1 
+            },
+            { 
+                id: 2, 
+                question: "सबसे अधिक प्रयुक्त होने वाला निर्वहन अभिकारक (Discharging Agent) कौन सा है?", 
+                options: ["सोडियम हाइड्रॉक्साइड", "सोडियम हाइड्रोसल्फाइड", "ग्लिसरीन", "रॉन्गालाइट"], 
+                correct: 3 
+            },
+            { 
+                id: 3, 
+                question: "पोटैशियम परमैंगनेट के प्रयोग के बाद भूरे धब्बे को छुटाने के लिए निम्नलिखित में से कौन-से अभिकर्मक इस्तेमाल किए जा सकते हैं?<br>1. नींबू का रस / नमक<br>2. एसीटिक अम्ल<br>3. ऑलिक अम्ल<br>4. ऑक्सालिक अम्ल", 
+                options: ["1 और 2", "1 और 4", "2 और 3", "3 और 4"], 
+                correct: 1 
+            },
+            { 
+                id: 4, 
+                question: "निम्नलिखित में से किसे जावेल वाटर (Javelle Water) कहते हैं?", 
+                options: ["पोटेशियम परमैंगनेट", "सोडियम परबोरेट", "सोडियम बाइसल्फाइट", "सोडियम हाइपोक्लोराइट"], 
+                correct: 3 
+            },
+            { 
+                id: 5, 
+                question: "निम्न में से शुष्क धुलाई (Dry Cleaning) प्रतिकर्मक है:", 
+                options: ["टॉलुईन", "प्रोटीन", "बेंजीन", "क्लोरीन"], 
+                correct: 2 
+            },
+            { 
+                id: 6, 
+                question: "वस्त्रों की धुलाई के लिए कौन-सा जल सर्वाधिक उत्तम होता है?", 
+                options: ["कठोर जल", "गरम जल", "समुद्र का जल", "मृदु जल"], 
+                correct: 3 
+            },
+            { 
+                id: 7, 
+                question: "लॉन्ड्री में प्रयुक्त कपड़े धोने की मशीनों में सामान्यतः किस तरह की गति होती है?", 
+                options: ["रोटेशन", "टम्बलिंग", "शेकिंग", "एजिटेशन"], 
+                correct: 1 
+            },
+            { 
+                id: 8, 
+                question: "सूती वस्त्रों की धुलाई के समय रंग निकलने से बचाने के लिये किसका प्रयोग किया जा सकता है?", 
+                options: ["साधारण नमक", "सिरका", "सोडियम कार्बोनेट", "लिसापोल"], 
+                correct: 0 
+            },
+            { 
+                id: 9, 
+                question: "कपड़ों से जानवरों के पुराने दागों (जैसे खून, अंडे, मांस) को छुड़ाने के लिए सबसे अच्छा उपाय क्या है?", 
+                options: ["गर्म करने का उपचार", "नमक के पानी या डाइल्यूटेड अमोनिया में भिगोना", "आधे घंटे के लिए गर्म दूध में डुबोना", "गर्म पानी और बोरेक्स में भिगोना"], 
+                correct: 1 
+            },
+            { 
+                id: 10, 
+                question: "धुलाई वाला सोडा (Washing Soda) किस धब्बे को मिटाने के लिए प्रयोग होता है?", 
+                options: ["चिकनाई", "मोम", "लिपस्टिक", "उपर्युक्त सभी"], 
+                correct: 0 
+            },
+            { 
+                id: 11, 
+                question: "दूध का प्रयोग किस धब्बे को मिटाने के लिए किया जाता है?", 
+                options: ["बॉल पेन की स्याही", "खून", "हल्दी", "नेल पॉलिश"], 
+                correct: 0 
+            },
+            { 
+                id: 12, 
+                question: "चिकनाई का धब्बा हटाने के लिए निम्नलिखित में से क्या-क्या प्रयोग में आते हैं?<br>I. फुलर अर्थ<br>II. बेन्जीन<br>III. ग्लिसरीन<br>IV. विनेगर (सिरका)", 
+                options: ["II और III", "I और II", "III और IV", "I और IV"], 
+                correct: 1 
+            },
+            { 
+                id: 13, 
+                question: "ड्रेस पर लिपस्टिक का दाग छुड़ाने के लिए निम्नलिखित अभिकर्मकों में से कौन-से अभिकर्मक प्रयोग किए जा सकते हैं?<br>(i) एसीटोन<br>(ii) ग्लिसरीन<br>(iii) बेंजीन<br>(iv) पेट्रोल<br>(v) मेथिलेटेड स्पिरिट", 
+                options: ["(i), (ii) और (iii)", "(ii), (iii) और (iv)", "(iii), (iv) और (v)", "(i), (ii) और (v)"], 
+                correct: 2 
+            },
+            { 
+                id: 14, 
+                question: "घास का धब्बा मिटाने के लिए निम्नलिखित में से किस प्रतिकर्मक (Reagent) का प्रयोग किया जाता है?", 
+                options: ["ऑक्जैलिक एसिड", "मिथाइलियुक्त स्पिरिट", "सोडियम हाइड्रोसल्फाइट", "बोरेक्स"], 
+                correct: 1 
+            },
+            { 
+                id: 15, 
+                question: "सूची-I में दिए गए धब्बों का मिलान सूची-II में दिए उनके प्रकार से कीजिए:<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I (धब्बा)</th><th>सूची-II (प्रकार)</th></tr></thead><tbody><tr><td>(A) कॉफी</td><td>(i) डाई</td></tr><tr><td>(B) दूध</td><td>(ii) चिकनाई</td></tr><tr><td>(C) स्याही</td><td>(iii) मिनरल</td></tr><tr><td>(D) लिपस्टिक</td><td>(iv) वैजिटेबल<br>(v) प्रोटीन<br>(vi) चिकनाई व रंग</td></tr></tbody></table>", 
+                options: ["(a)-(iv), (b)-(v), (c)-(iii), (d)-(vi)", "(a)-(iii), (b)-(iv), (c)-(i), (d)-(ii)", "(a)-(iv), (b)-(v), (c)-(i), (d)-(iii)", "(a)-(ii), (b)-(i), (c)-(vi), (d)-(v)"], 
+                correct: 0 
+            },
+            { 
+                id: 16, 
+                question: "कपड़े से लिपस्टिक का निशान मिटाने का सही अनुक्रम बताइए:<br>(a) गर्म साबुनी जल से धोना<br>(b) चिकनाई विलायक के साथ स्पंज करना<br>(c) निशान को ब्लीच करना<br>(d) गर्म जल से साफ करके धूप में सुखाना", 
+                options: ["(a), (b), (c), (d)", "(d), (c), (b), (a)", "(c), (d), (a), (b)", "(b), (a), (c), (d)"], 
+                correct: 3 
+            },
+            { 
+                id: 17, 
+                question: "सूती वस्त्र से पान का दाग किन रासायनिक पदार्थों से छुड़ाएंगे?", 
+                options: ["ग्लिसरीन व जावेल वाटर", "तनु पोटैशियम परमैंगनेट व सोडियम मेटाबाइसल्फाइट", "गर्म पानी व साबुन का घोल", "अल्कोहल, अमोनिया व तनु अम्ल से"], 
+                correct: 0 
+            },
+            { 
+                id: 18, 
+                question: "जावेल वाटर निर्मित किया जाता है इन रासायनिक पदार्थों से—", 
+                options: ["वाशिंग सोडा, सोडियम परबोरेट, उबला पानी", "वाशिंग सोडा, क्लोराइड ऑफ लाइम, उबला पानी", "पोटैशियम परमैंगनेट, उबला पानी, क्लोराइड ऑफ लाइम", "सोडियम हाइड्रोक्साइड, वाशिंग सोडा, क्लोराइड ऑफ लाइम, उबला पानी"], 
+                correct: 1 
+            },
+            { 
+                id: 19, 
+                question: "दाग धब्बे छुड़ाने में सर्वाधिक उपयोगी रासायनिक घोल है—", 
+                options: ["जावेल वाटर", "पोटैशियम डाई क्रोमेट", "सोडियम मेटा बाई-सल्फाइड", "मिथाइल एल्कोहल"], 
+                correct: 0 
+            },
+            { 
+                id: 20, 
+                question: "सफेद सूती वस्त्र से ताजे खून के धब्बे को हटाया जाता है—", 
+                options: ["तनु अमोनिया के घोल से", "तनु बोरेक्स विलयन द्वारा", "पोटैशियम परमैंगनेट के घोल से", "तनु आयोडीन विलयन द्वारा"], 
+                correct: 0 
+            },
+            { 
+                id: 21, 
+                question: "ग्रीस के दाग को हटाने के लिए किस प्रकार के अभिकर्मक का प्रयोग करना चाहिए?", 
+                options: ["क्षारीय", "अम्लीय", "बोरेक्स और नमक", "मुल्तानी मिट्टी या फ्रेंच चॉक"], 
+                correct: 3 
+            },
+            { 
+                id: 22, 
+                question: "जब हम कपड़े को धोने हेतु जल में डिटर्जेंट डालते हैं तब—", 
+                options: ["सतह का तनाव घट जाता है।", "सतह का तनाव बढ़ जाता है।", "सतह का तनाव वैसा ही रहता है।", "इनमें से कोई नहीं"], 
+                correct: 0 
+            },
+            { 
+                id: 23, 
+                question: "दाग धब्बा छुड़ाने का सबसे अच्छा और पर्यावरण-अनुकूल रासायनिक पदार्थ है—", 
+                options: ["जैवेली जल", "साइट्रिक अम्ल", "लवणयुक्त जल", "नमकयुक्त जल"], 
+                correct: 1 
+            },
+            { 
+                id: 24, 
+                question: "अत्यधिक ज्वलनशील रासायनिक विलायक जो सूखी धुलाई के लिए प्रयुक्त होता है—", 
+                options: ["कार्बन टेट्राक्लोराइड", "बेन्जीन", "पेट्रोल", "फॉर्मेल्डिहाइड"], 
+                correct: 2 
+            },
+            { 
+                id: 25, 
+                question: "रंगहीन गैर-ज्वलनशील विलायक जिसका उपयोग आधुनिक ड्राई क्लीनिंग में व्यापक रूप से होता है—", 
+                options: ["पर्कलोरोएथिलीन (Perc)", "अल्कोहल", "किरोसिन", "तारपीन का तेल"], 
+                correct: 0 
+            },
+            { 
+                id: 26, 
+                question: "ऊन एवं रेशमी वस्त्रों के लिए कौन-सा विरंजक (Bleach) सबसे सुरक्षित माना जाता है?", 
+                options: ["सोडियम हाइपोक्लोराइट", "हाइड्रोजन परॉक्साइड", "क्लोराइड ऑफ लाइम", "कास्टिक सोडा"], 
+                correct: 1 
+            },
+            { 
+                id: 27, 
+                question: "कपड़ों पर लगे लोहे के जंग (Rust) के धब्बे को हटाने के लिए किसका प्रयोग किया जाता है?", 
+                options: ["ऑक्जैलिक अम्ल एवं नींबू का रस", "अमोनिया", "कास्टिक पोटाश", "सोडा ऐश"], 
+                correct: 0 
+            },
+            { 
+                id: 28, 
+                question: "साबुन बनाने की रासायनिक प्रक्रिया को क्या कहा जाता है?", 
+                options: ["पॉलीमराइजेशन", "सैपोनिफिकेशन (Saponification)", "वल्कनीकरण", "उदासीनीकरण"], 
+                correct: 1 
+            },
+            { 
+                id: 29, 
+                question: "कठोर जल में उपस्थित किन लवणों के कारण साबुन झाग नहीं देता?", 
+                options: ["सोडियम एवं पोटैशियम के लवण", "कैल्शियम एवं मैग्नीशियम के घुलनशील लवण", "आयरन और जिंक", "नाइट्रोजन और फॉस्फोरस"], 
+                correct: 1 
+            },
+            { 
+                id: 30, 
+                question: "अंडे और रक्त जैसे प्रोटीन युक्त धब्बों पर कभी भी गर्म जल का प्रयोग क्यों नहीं करना चाहिए?", 
+                options: ["कपड़े का रंग उड़ जाता है", "प्रोटीन ताप से जम (Coagulate) जाता है और स्थायी हो जाता है", "कपड़े में छेद हो जाता है", "रेशा कमजोर हो जाता है"], 
+                correct: 1 
+            },
+            { 
+                id: 31, 
+                question: "स्टार्च (कलफ) का प्रयोग मुख्य रूप से किन वस्त्रों को कड़ापन और चमक देने के लिए किया जाता है?", 
+                options: ["ऊनी वस्त्रों में", "सूती एवं लिनन वस्त्रों में", "नायलॉन में", "पॉलिएस्टर में"], 
+                correct: 1 
+            },
+            { 
+                id: 32, 
+                question: "रेशमी और ऊनी वस्त्रों में कड़ापन लाने के लिए कलफ के रूप में किसका प्रयोग उपयुक्त होता है?", 
+                options: ["मैदा", "अरारोट", "गोंद का पानी (Gum Water)", "चावल का मांड"], 
+                correct: 2 
+            },
+            { 
+                id: 33, 
+                question: "कपड़ों पर लगे चाय अथवा कॉफी के ताजे दाग को हटाने के लिए सबसे सरल घरेलू उपाय क्या है?", 
+                options: ["उबलता हुआ गर्म पानी धार के रूप में डालना", "मिट्टी का तेल लगाना", "ब्लीचिंग पाउडर लगाना", "साबुन से रगड़ना"], 
+                correct: 0 
+            },
+            { 
+                id: 34, 
+                question: "पेंट (रंग) और वार्निश के ताजे धब्बों को घोलने के लिए उपयुक्त विलायक कौन-सा है?", 
+                options: ["तारपीन का तेल या मिट्टी का तेल", "सिरका", "ठंडा पानी", "नमक का घोल"], 
+                correct: 0 
+            },
+            { 
+                id: 35, 
+                question: "नील (Bluing) लगाने का मुख्य उद्देश्य क्या होता है?", 
+                options: ["कपड़े को मजबूत बनाना", "सफेद सूती कपड़ों का पीलापन दूर कर सफेदी व चमक लाना", "कपड़े की गंध दूर करना", "वस्त्र की सिलवटें हटाना"], 
+                correct: 1 
+            },
+            { 
+                id: 36, 
+                question: "सिंथेटिक डिटर्जेंट में मिलाया जाने वाला 'सोडियम ट्राइपॉलीफास्फेट' (STPP) मुख्य रूप से क्या कार्य करता है?", 
+                options: ["झाग को कम करना", "जल को मृदु बनाना और मैल को पुनः जमने से रोकना", "कपड़े को खुशबू देना", "कपड़े को रंगना"], 
+                correct: 1 
+            },
+            { 
+                id: 37, 
+                question: "ऊन के वस्त्रों की धुलाई में प्रयुक्त विधि कौन-सी है?", 
+                options: ["घर्षण विधि (रगड़कर धोना)", "दबाने और चूसने की विधि (Kneading and Squeezing)", "सक्शन वाशर विधि", "डंडे से पीटकर धोना"], 
+                correct: 1 
+            },
+            { 
+                id: 38, 
+                question: "धुलाई विज्ञान में 'एक्वा डस्टिंग' या 'स्कॉरिंग' से क्या आशय है?", 
+                options: ["वस्त्र को सुखाना", "वस्त्रों से प्राकृतिक अशुद्धियाँ, तेल व मोम हटाना", "वस्त्र पर प्रिंटिंग करना", "वस्त्र पर सिलाई करना"], 
+                correct: 1 
+            },
+            { 
+                id: 39, 
+                question: "अवशोषक विधि (Absorbent Method) द्वारा दाग छुड़ाने में निम्नलिखित में से किसका उपयोग नहीं होता?", 
+                options: ["टेलकम पाउडर", "फ्रेंच चॉक", "स्टार्च", "हाइड्रोक्लोरिक अम्ल"], 
+                correct: 3 
+            },
+            { 
+                id: 40, 
+                question: "कपड़ों पर लगे मोम (Wax) के धब्बे को छुड़ाने की सर्वोत्तम भौतिक विधि क्या है?", 
+                options: ["ब्लोटिंग पेपर रखकर गर्म इस्त्री फेरना", "ठंडे पानी से रगड़ना", "धूप में सुखाना", "अमोनिया लगाना"], 
+                correct: 0 
+            },
+            { 
+                id: 41, 
+                question: "कपड़ों से आयोडीन का दाग हटाने के लिए सर्वाधिक उपयुक्त रासायनिक अभिकर्मक है—", 
+                options: ["सोडियम थायोसल्फेट (हाइपो)", "कास्टिक सोडा", "नमक", "नींबू"], 
+                correct: 0 
+            },
+            { 
+                id: 42, 
+                question: "एंजाइम युक्त डिटर्जेंट किन दाग-धब्बों को हटाने में विशेष रूप से प्रभावी होते हैं?", 
+                options: ["खनिज दाग", "प्रोटीन एवं स्टार्च आधारित जैविक दाग", "वार्निश", "जंग"], 
+                correct: 1 
+            },
+            { 
+                id: 43, 
+                question: "सफेद ऊनी वस्त्रों के पीलेपन को दूर करने के लिए कौन-सा विरंजन अभिकर्मक उपयोग में लाया जाता है?", 
+                options: ["सल्फर डाइऑक्साइड या हाइड्रोजन परॉक्साइड", "क्लोरीन ब्लीच", "कास्टिक पोटाश", "ऑक्जैलिक एसिड"], 
+                correct: 0 
+            },
+            { 
+                id: 44, 
+                question: "दाग धब्बों के वर्गीकरण में 'वानस्पतिक धब्बों' (Vegetable Stains) के अंतर्गत आते हैं—", 
+                options: ["रक्त, अंडा, मांस", "चाय, कॉफी, फल, सब्जी", "ग्रीस, मोबिल ऑयल", "जंग, स्याही"], 
+                correct: 1 
+            },
+            { 
+                id: 45, 
+                question: "अमोनिया किस प्रकार का शोधक प्रतिकर्मक है?", 
+                options: ["तीव्र अम्ल", "मृदु क्षार", "तीव्र विरंजक", "उदासीन लवण"], 
+                correct: 1 
+            },
+            { 
+                id: 46, 
+                question: "कपड़ों की चमक व सफेदी बढ़ाने वाले यौगिक जिन्हें 'ऑप्टिकल ब्राइटनर' कहते हैं, किस सिद्धांत पर कार्य करते हैं?", 
+                options: ["पराबैंगनी किरणों को सोखकर नीले प्रकाश में परावर्तित करना", "कपड़े की सतह को काटना", "रेशों को आपस में चिपकाना", "मैल को पूरी तरह जला देना"], 
+                correct: 0 
+            },
+            { 
+                id: 47, 
+                question: "साधारण साबुन की तुलना में सिंथेटिक डिटर्जेंट का प्रमुख लाभ क्या है?", 
+                options: ["यह सस्ता होता है", "यह कठोर एवं मृदु दोनों प्रकार के जल में समान रूप से प्रभावी होता है", "यह केवल ठंडे जल में काम करता है", "यह प्राकृतिक तेलों से बनता है"], 
+                correct: 1 
+            },
+            { 
+                id: 48, 
+                question: "कपड़ों पर लगे कोलतार (Tar) के धब्बे को छुड़ाने के लिए किसका उपयोग किया जाता है?", 
+                options: ["मिट्टी का तेल अथवा ईथर/तारपीन", "गर्म पानी", "साबुन", "नमक"], 
+                correct: 0 
+            },
+            { 
+                id: 49, 
+                question: "दाग छुड़ाते समय ध्यान रखने योग्य सबसे महत्वपूर्ण नियम क्या है?", 
+                options: ["दाग को हमेशा पुराना होने देना चाहिए", "दाग को जितना जल्दी हो सके ताजी अवस्था में ही पहचान कर छुड़ाना", "हमेशा तीव्र अम्लों का प्रयोग सीधे करना", "वस्त्र को धूप में जला देना"], 
+                correct: 1 
+            },
+            { 
+                id: 50, 
+                question: "वस्त्रों की धुलाई में 'सॉफ्टनर' (Fabric Softener) का प्राथमिक कार्य क्या होता है?", 
+                options: ["कपड़ों को कड़ा करना", "वस्त्रों के रेशों को कोमलता प्रदान करना और स्थैतिक आवेश कम करना", "दाग को पक्का करना", "रंग उड़ाना"], 
+                correct: 1 
+            }
+        ];
+    </script>
+
+    <!-- ✅ JS लॉजिक कंट्रोल फ़ाइल का पाथ -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
+
+              
