@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">मार्च 2026 — करेंट अफेयर्स विशेष टेस्ट</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">करेंट अफेयर्स (मार्च 2026)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY (मार्च 2026 - 50 प्रश्न) -->
+    <script>
+        const QUIZ_KEY = "medhavi_march_2026_ca_test"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "मार्च 2026 में भारत–कनाडा वार्ता के संबंध में सही कथन चुनिए:<br>1. कनाडा के प्रधानमंत्री मार्क कार्नी भारत आए।<br>2. Cameco और भारत के परमाणु ऊर्जा विभाग के बीच यूरेनियम की दीर्घकालीन आपूर्ति का वाणिज्यिक समझौता हुआ।<br><br>सही कथन कौन-से हैं?", options: ["(a) केवल 1", "(b) केवल 2", "(c) 1 और 2 दोनों", "(d) न 1, न 2"], correct: 2, explanation: "मार्क कार्नी की भारत यात्रा 27 फरवरी से 2 मार्च तक चली। दोनों देशों के संयुक्त वक्तव्य में लगभग 2.6 अरब कनाडाई डॉलर के यूरेनियम आपूर्ति समझौते का उल्लेख है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2234572' target='_blank'>PIB Release</a>" },
+            
+            { id: 2, tag: "", question: "भारत–फिनलैंड संबंधों और रायसीना डायलॉग 2026 के बारे में सही संयोजन कौन-सा है?", options: ["(a) फिनलैंड के राष्ट्रपति अलेक्जेंडर स्टब — 11वें रायसीना डायलॉग के मुख्य अतिथि", "(b) कनाडा के प्रधानमंत्री मार्क कार्नी — 11वें रायसीना डायलॉग के मुख्य अतिथि", "(c) फिनलैंड के प्रधानमंत्री पेटेरी ओर्पो — 12वें रायसीना डायलॉग के मुख्य अतिथि", "(d) फिनलैंड के राष्ट्रपति अलेक्जेंडर स्टब — 12वें रायसीना डायलॉग के मुख्य अतिथि"], correct: 0, explanation: "राष्ट्रपति अलेक्जेंडर स्टब 4–7 मार्च को राजकीय यात्रा पर भारत आए। उन्होंने 5 मार्च को नई दिल्ली में आयोजित 11वें रायसीना डायलॉग में मुख्य अतिथि के रूप में उद्घाटन भाषण दिया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2235725' target='_blank'>PIB Release</a>" },
+            
+            { id: 3, tag: "", question: "मार्च में प्रस्तुत जनगणना 2027 के शुभंकर और प्रक्रिया के संबंध में सही विकल्प चुनिए।", options: ["(a) ‘प्रगति’ और ‘विकास’; पहली बार डिजिटल गणना और स्वयं गणना की सुविधा", "(b) ‘जल’ और ‘जीवन’; केवल कागजी प्रपत्रों से गणना", "(c) ‘प्रगति’ और ‘विकास’; स्वयं गणना की सुविधा नहीं", "(d) ‘भारत’ और ‘इंडिया’; केवल ऑनलाइन गणना"], correct: 0, explanation: "जनगणना 2027 के शुभंकर प्रगति और विकास हैं। सरकार के अनुसार यह पहली डिजिटल जनगणना होगी तथा लोगों को स्वयं विवरण भरने का विकल्प मिलेगा।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2235470' target='_blank'>PIB Release</a>" },
+            
+            { id: 4, tag: "", question: "निर्वाचन आयोग ने 15 मार्च 2026 को किन विधानसभाओं के चुनाव कार्यक्रम की घोषणा की?", options: ["(a) असम, केरल, पुडुचेरी, तमिलनाडु और पश्चिम बंगाल", "(b) बिहार, झारखंड, ओडिशा, महाराष्ट्र और हरियाणा", "(c) असम, गोवा, गुजरात, पंजाब और पश्चिम बंगाल", "(d) केरल, कर्नाटक, तेलंगाना, दिल्ली और पुडुचेरी"], correct: 0, explanation: "घोषित कार्यक्रम पाँच राज्यों/केंद्रशासित प्रदेशों की विधानसभाओं से संबंधित था: असम, केरल, पुडुचेरी, तमिलनाडु और पश्चिम बंगाल।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2240396' target='_blank'>PIB Release</a>" },
+            
+            { id: 5, tag: "", question: "जल जीवन मिशन 2.0 के बारे में निम्न कथनों पर विचार कीजिए:<br>1. इसकी अवधि दिसंबर 2028 तक बढ़ाने को मंजूरी मिली।<br>2. इसके लिए कुल परिव्यय बढ़ाकर ₹8.69 लाख करोड़ किया गया।<br>3. ‘सुजलम भारत’ डिजिटल ढाँचे का प्रस्ताव किया गया।<br><br>सही कथन कौन-से हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) 1, 2 और 3"], correct: 3, explanation: "10 मार्च को मंत्रिमंडल ने मिशन का पुनर्गठन मंजूर किया। ‘सुजलम भारत’ के अंतर्गत ग्रामीण जलापूर्ति व्यवस्था की डिजिटल पहचान और मानचित्रण प्रस्तावित है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2237548' target='_blank'>PIB Release</a>" },
+            
+            { id: 6, tag: "", question: "मार्च 2026 में किस हवाई अड्डे को अंतरराष्ट्रीय हवाई अड्डा घोषित करने की मंजूरी दी गई?", options: ["(a) मदुरै", "(b) कोटा", "(c) ग्वालियर", "(d) दरभंगा"], correct: 0, explanation: "केंद्रीय मंत्रिमंडल ने तमिलनाडु के मदुरै हवाई अड्डे को अंतरराष्ट्रीय हवाई अड्डा घोषित करने को मंजूरी दी।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2237552' target='_blank'>PIB Release</a>" },
+            
+            { id: 7, tag: "", question: "‘भारत औद्योगिक विकास योजना’—BHAVYA—के बारे में सही कथन चुनिए:<br>1. इसे 18 मार्च को मंजूरी मिली।<br>2. ₹33,660 करोड़ से 100 तैयार सुविधाओं वाले औद्योगिक पार्क विकसित करने का लक्ष्य है।<br>3. इसका प्रमुख उद्देश्य केवल हवाई अड्डों का संचालन है।<br><br>सही कथन कौन-से हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) तीनों"], correct: 0, explanation: "BHAVYA विनिर्माण इकाइयों को जमीन, बुनियादी सुविधाओं और आवश्यक व्यवस्थाओं से युक्त औद्योगिक परिसर देने की योजना है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2241785' target='_blank'>PIB Release</a>" },
+            
+            { id: 8, tag: "", question: "मार्च में मंजूर लघु जलविद्युत विकास योजना की सही अवधि और प्रस्तावित क्षमता कौन-सी है?", options: ["(a) 2026–27 से 2030–31; लगभग 1,500 मेगावाट", "(b) 2026–27 से 2035–36; लगभग 15,000 मेगावाट", "(c) 2027–28 से 2030–31; लगभग 500 मेगावाट", "(d) 2025–26 से 2027–28; लगभग 10,000 मेगावाट"], correct: 0, explanation: "₹2,584.60 करोड़ की यह योजना लगभग 1,500 मेगावाट लघु जलविद्युत क्षमता स्थापित करने के लिए मंजूर हुई (अवधि 2026–27 से 2030–31)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2241799' target='_blank'>PIB Release</a>" },
+            
+            { id: 9, tag: "", question: "संशोधित उड़ान योजना के संबंध में सही विकल्प चुनिए।", options: ["(a) ₹28,840 करोड़; 2026–27 से 2035–36; 100 हवाई अड्डों और 200 आधुनिक हेलीपैड का प्रस्ताव", "(b) ₹28,840 करोड़; केवल एक वर्ष; 200 हवाई अड्डों का प्रस्ताव", "(c) ₹2,884 करोड़; पाँच वर्ष; केवल महानगरों पर ध्यान", "(d) ₹33,660 करोड़; 100 औद्योगिक पार्कों का प्रस्ताव"], correct: 0, explanation: "25 मार्च को मंजूर Modified UDAN दस वर्ष की क्षेत्रीय हवाई संपर्क योजना है (₹28,840 करोड़)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/Pressreleaseshare.aspx?PRID=2245096' target='_blank'>PIB Release</a>" },
+            
+            { id: 10, tag: "", question: "मार्च में मंजूर भारत के 2031–35 राष्ट्रीय स्तर पर निर्धारित योगदान (NDC) के लक्ष्यों में क्या शामिल है:<br>1. 2005 के स्तर की तुलना में 2035 तक GDP की उत्सर्जन तीव्रता 47% घटाना।<br>2. 2035 तक स्थापित विद्युत क्षमता का 60% गैर-जीवाश्म स्रोतों से करना।<br>3. वन एवं वृक्ष आवरण से 3.5–4.0 अरब टन CO₂ समतुल्य कार्बन सिंक बनाना।<br><br>सही कथन कौन-से हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) तीनों"], correct: 3, explanation: "ये तीनों 25 मार्च को मंजूर नए जलवायु लक्ष्यों में हैं।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2245209' target='_blank'>PIB Release</a>" },
+            
+            { id: 11, tag: "", question: "भारत से स्थलीय सीमा साझा करने वाले देशों के निवेश संबंधी मार्च के निर्णय का सही विवरण क्या है?", options: ["(a) गैर-नियंत्रणकारी लाभकारी स्वामित्व 10% तक होने पर निर्धारित शर्तों के अधीन स्वतः मार्ग की अनुमति", "(b) ऐसे सभी निवेश पर बिना किसी शर्त के पूर्ण प्रतिबंध", "(c) प्रत्येक निवेश को अनिवार्यतः 180 दिन तक लंबित रखना", "(d) केवल कृषि क्षेत्र में विदेशी निवेश की अनुमति"], correct: 0, explanation: "सीमा-साझा देश से जुड़ा गैर-नियंत्रणकारी लाभकारी स्वामित्व 10% तक हो तो लागू क्षेत्रीय शर्तों और सूचना देने की व्यवस्था के साथ स्वतः मार्ग संभव होगा।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2237806' target='_blank'>PIB Release</a>" },
+            
+            { id: 12, tag: "", question: "मार्च में जारी पीएम-किसान की 22वीं किस्त के लिए सही संयोजन चुनिए।", options: ["(a) गुवाहाटी से जारी; 9.32 करोड़ किसानों के लिए ₹18,640 करोड़ से अधिक", "(b) जयपुर से जारी; 2 करोड़ किसानों के लिए ₹5,000 करोड़", "(c) गुवाहाटी से जारी; 1 करोड़ किसानों के लिए ₹1,864 करोड़", "(d) लखनऊ से जारी; 9.32 करोड़ किसानों के लिए ₹50,000 करोड़"], correct: 0, explanation: "प्रधानमंत्री ने 13 मार्च को असम के गुवाहाटी से 22वीं किस्त जारी की (9.32 करोड़ किसान, ₹18,640 करोड़ से अधिक)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2242295' target='_blank'>PIB Release</a>" },
+            
+            { id: 13, tag: "", question: "10 मार्च को मंजूर लगभग 192 किलोमीटर की दो रेलवे मल्टीट्रैकिंग परियोजनाएँ किन राज्यों से संबंधित थीं?", options: ["(a) पश्चिम बंगाल और झारखंड", "(b) असम और मेघालय", "(c) महाराष्ट्र और गुजरात", "(d) पंजाब और हरियाणा"], correct: 0, explanation: "रेल परियोजनाएँ पश्चिम बंगाल और झारखंड के पाँच जिलों से जुड़ी हैं (लागत लगभग ₹4,474 करोड़)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2237564' target='_blank'>PIB Release</a>" },
+            
+            { id: 14, tag: "", question: "मार्च में मंजूर NH-927 की बाराबंकी–बहराइच चार लेन परियोजना के बारे में सही कथन चुनिए:<br>1. यह उत्तर प्रदेश में है।<br>2. इसकी लंबाई लगभग 101.5 किलोमीटर है।<br>3. इससे रुपईडीहा स्थल बंदरगाह के रास्ते भारत–नेपाल संपर्क को लाभ होगा।<br><br>सही कथन कौन-से हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) तीनों"], correct: 3, explanation: "परियोजना की स्वीकृत लागत ₹6,969.04 करोड़ है। सड़क संपर्क सुधरने से भारत–नेपाल सीमा व्यापार को सुविधा मिलेगी।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2241794' target='_blank'>PIB Release</a>" },
+            
+            { id: 15, tag: "", question: "जेवर अंतरराष्ट्रीय हवाई अड्डे की संपर्क सड़क के लिए मार्च में लगभग कितनी संशोधित पूँजीगत लागत मंजूर की गई?", options: ["(a) ₹3,630.77 करोड़", "(b) ₹363.77 करोड़", "(c) ₹6,969.04 करोड़", "(d) ₹28,840 करोड़"], correct: 0, explanation: "स्वीकृति दिल्ली–मुंबई एक्सप्रेसवे से जेवर हवाई अड्डे को जोड़ने वाली ग्रीनफील्ड सड़क की संशोधित लागत (₹3,630.77 करोड़) के लिए थी।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2237579' target='_blank'>PIB Release</a>" },
+            
+            { id: 16, tag: "", question: "NH-752D के बदनावर–पेटलावद–थांदला–तिमरवानी चार लेन गलियारे की मंजूरी किस राज्य से संबंधित है?", options: ["(a) मध्य प्रदेश", "(b) राजस्थान", "(c) छत्तीसगढ़", "(d) गुजरात"], correct: 0, explanation: "यह सड़क खंड मध्य प्रदेश के सड़क संपर्क से जुड़ा है (लंबाई लगभग 80.45 किमी, लागत ₹3,839.42 करोड़)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2237568' target='_blank'>PIB Release</a>" },
+            
+            { id: 17, tag: "", question: "मार्च में प्रायोगिक आधार पर शुरू ‘रेल पार्सल’ ऐप आधारित सेवा के संबंध में सही विकल्प कौन-सा है?", options: ["(a) दक्षिण मध्य रेलवे; सात शहरों के 17 स्टेशन", "(b) उत्तर रेलवे; दो शहरों के 170 स्टेशन", "(c) पश्चिम रेलवे; केवल मुंबई का एक स्टेशन", "(d) पूर्वोत्तर रेलवे; केवल अंतरराष्ट्रीय पार्सल"], correct: 0, explanation: "यह ऐप आधारित लॉजिस्टिक्स सेवा दक्षिण मध्य रेलवे ने सात शहरों के 17 स्टेशनों पर प्रायोगिक तौर पर शुरू की।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2238920' target='_blank'>PIB Release</a>" },
+            
+            { id: 18, tag: "", question: "नीति आयोग द्वारा मार्च में जारी ‘Fiscal Health Index 2026’ की दूसरी वार्षिक रिपोर्ट के बारे में सही कथन क्या है?", options: ["(a) इसमें प्रमुख राज्यों के साथ पूर्वोत्तर और हिमालयी राज्यों का अलग मूल्यांकन भी जोड़ा गया।", "(b) इसमें केवल केंद्रीय मंत्रालयों का मूल्यांकन है।", "(c) यह केवल निजी बैंकों की रैंकिंग है।", "(d) इसका विषय खेल उपकरणों का निर्यात है।"], correct: 0, explanation: "दूसरी रिपोर्ट में 18 प्रमुख राज्यों के अलावा 10 पूर्वोत्तर और हिमालयी राज्यों को शामिल कर उनका अलग मूल्यांकन किया गया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2238302' target='_blank'>PIB Release</a>" },
+            
+            { id: 19, tag: "", question: "नीति आयोग की मार्च में जारी ‘Realising the Export Potential of India’s Sports Equipment Manufacturing Sector’ रिपोर्ट का मुख्य विषय क्या था?", options: ["(a) भारतीय खेल उपकरण निर्माण क्षेत्र की निर्यात क्षमता", "(b) सभी राज्यों की राजकोषीय स्थिति", "(c) राष्ट्रीय क्षय रोग उन्मूलन", "(d) घरेलू हवाई किरायों का निर्धारण"], correct: 0, explanation: "रिपोर्ट खेल उपकरण निर्माण तथा उसके निर्यात की संभावनाओं पर केंद्रित है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2242697' target='_blank'>PIB Release</a>" },
+            
+            { id: 20, tag: "", question: "मार्च में जारी QS विषयवार विश्वविद्यालय रैंकिंग 2026 में भारत के प्रदर्शन के संबंध में सही विकल्प चुनिए।", options: ["(a) वैश्विक शीर्ष 50 में भारत की 27 विषयवार प्रविष्टियाँ", "(b) वैश्विक शीर्ष 50 में भारत की केवल दो प्रविष्टियाँ", "(c) भारत के किसी संस्थान को रैंकिंग में स्थान नहीं मिला", "(d) यह केवल विद्यालयों की रैंकिंग थी"], correct: 0, explanation: "शिक्षा मंत्रालय के अनुसार भारत की 27 विषयवार प्रविष्टियाँ शीर्ष 50 में रहीं (99 भारतीय संस्थान शामिल)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2247945' target='_blank'>PIB Release</a>" },
+            
+            { id: 21, tag: "", question: "‘प्रकृति 2026’ सम्मेलन के दौरान किस डिजिटल मंच का शुभारंभ हुआ?", options: ["(a) भारतीय कार्बन बाजार पोर्टल", "(b) राष्ट्रीय जनगणना स्वयं गणना पोर्टल", "(c) रेल पार्सल ऐप", "(d) MyWAVES"], correct: 0, explanation: "भारतीय कार्बन बाजार पोर्टल आरंभ किया गया, जो देश के कार्बन बाजार के संचालन से जुड़ा केंद्रीय मंच है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2243377' target='_blank'>PIB Release</a>" },
+            
+            { id: 22, tag: "", question: "मार्च में शुरू ‘PRARAMBH 2026’ तथा ‘Kar Saathi’ का सही संबंध क्या है?", options: ["(a) नए आयकर अधिनियम पर जागरूकता अभियान और करदाताओं के लिए AI चैटबॉट", "(b) जनगणना अभियान और मतदान मशीन", "(c) टीबी अभियान और औषधि वितरण ऐप", "(d) खेल अभियान और खिलाड़ी रैंकिंग पोर्टल"], correct: 0, explanation: "वित्त मंत्री ने PRARAMBH 2026 जागरूकता अभियान और ‘कर साथी’ चैटबॉट प्रस्तुत किया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2243196' target='_blank'>PIB Release</a>" },
+            
+            { id: 23, tag: "", question: "मार्च में शुरू ruralaudit.dord.gov.in पोर्टल किस क्षेत्र में निगरानी और जवाबदेही बढ़ाने से जुड़ा है?", options: ["(a) ग्रामीण विकास कार्यक्रमों के लेखापरीक्षा कार्य", "(b) अंतरिक्ष प्रक्षेपण", "(c) अंतरराष्ट्रीय क्रिकेट चयन", "(d) विश्वविद्यालय प्रवेश"], correct: 0, explanation: "ग्रामीण विकास मंत्रालय का यह डिजिटल मंच लेखापरीक्षा संबंधी काम की निगरानी के लिए शुरू हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2243898' target='_blank'>PIB Release</a>" },
+            
+            { id: 24, tag: "", question: "23 मार्च को सूचना एवं प्रसारण मंत्रालय की घोषित पहलों का सही मिलान चुनिए:<br>1. MyWAVES — नागरिकों के लिए सामग्री बनाने और साझा करने का मंच<br>2. राष्ट्रीय AI कौशल पहल — मीडिया और रचनात्मक क्षेत्र का प्रशिक्षण<br>3. उन्नत कार्यक्रम गाइड तथा अंतर्निर्मित सैटेलाइट ट्यूनर — DD Free Dish तक पहुँच<br><br>सही कथन कौन-से हैं?", options: ["(a) केवल 1 सही", "(b) केवल 1 और 2 सही", "(c) केवल 2 और 3 सही", "(d) तीनों सही"], correct: 3, explanation: "तीनों पहल एक ही कार्यक्रम में प्रस्तुत की गईं (AI प्रशिक्षण के तहत 15,000 रचनाकारों को प्रशिक्षण)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2243949' target='_blank'>PIB Release</a>" },
+            
+            { id: 25, tag: "", question: "मार्च में सामने आए CATCH अनुदान कार्यक्रम का सही विस्तार और उद्देश्य कौन-सा है?", options: ["(a) Cancer AI & Technology Challenge; कैंसर जाँच और देखभाल में AI आधारित समाधान", "(b) Clean Aviation Technology Challenge; हवाई ईंधन उत्पादन", "(c) Census and Tax Challenge; कर निर्धारण", "(d) Cricket Analytics Training Challenge; खिलाड़ी चयन"], correct: 0, explanation: "CATCH कार्यक्रम IndiaAI Mission के अंतर्गत राष्ट्रीय कैंसर ग्रिड के सहयोग से शुरू किया गया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2244526' target='_blank'>PIB Release</a>" },
+            
+            { id: 26, tag: "", question: "1 मार्च को नए क्षेत्रीय कैंसर केंद्र भवन का उद्घाटन किस संस्थान में हुआ?", options: ["(a) JIPMER, पुडुचेरी", "(b) AIIMS, भोपाल", "(c) PGIMER, चंडीगढ़", "(d) NIMHANS, बेंगलुरु"], correct: 0, explanation: "प्रधानमंत्री ने पुडुचेरी स्थित JIPMER के क्षेत्रीय कैंसर केंद्र के नए भवन का उद्घाटन किया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2234212' target='_blank'>PIB Release</a>" },
+            
+            { id: 27, tag: "", question: "मार्च में भारतीय खाद्य निगम (FCI) की पहली खाद्यान्न मालगाड़ी किस रेलवे स्टेशन पहुँची?", options: ["(a) सैरांग, मिजोरम", "(b) सिलचर, असम", "(c) अगरतला, त्रिपुरा", "(d) ईटानगर, अरुणाचल प्रदेश"], correct: 0, explanation: "3 मार्च को FCI की पहली खाद्यान्न मालगाड़ी सैरांग पहुँची।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2235560' target='_blank'>PIB Release</a>" },
+            
+            { id: 28, tag: "", question: "मार्च के अंत में समाचार में रहा Kaynes Semicon संयंत्र कहाँ स्थित है और इसका प्रमुख कार्य क्या है?", options: ["(a) साणंद, गुजरात; सेमीकंडक्टर असेंबली और पैकेजिंग से जुड़ा उत्पादन", "(b) कोटा, राजस्थान; विमान निर्माण", "(c) पुणे, महाराष्ट्र; परमाणु ईंधन उत्पादन", "(d) रांची, झारखंड; खेल उपकरण निर्माण"], correct: 0, explanation: "साणंद स्थित संयंत्र में Intelligent Power Modules का वाणिज्यिक उत्पादन आरंभ करने की घोषणा हुई।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2246772' target='_blank'>PIB Release</a>" },
+            
+            { id: 29, tag: "", question: "मार्च में घोषित ‘निर्भय रहो’ पहल किससे संबंधित है?", options: ["(a) पंचायतों में महिलाओं की सुरक्षा मजबूत करना", "(b) समुद्री डकैती रोकना", "(c) स्कूलों में टीबी जाँच", "(d) छोटे जलविद्युत संयंत्र बनाना"], correct: 0, explanation: "पंचायती राज मंत्रालय ने निर्वाचित महिला पंचायत प्रतिनिधियों के सम्मेलन के दौरान इस पहल की घोषणा की।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2238655' target='_blank'>PIB Release</a>" },
+            
+            { id: 30, tag: "", question: "ASMITA लीग का प्रमुख उद्देश्य क्या है?", options: ["(a) महिलाओं की खेलों में भागीदारी बढ़ाना और नई प्रतिभा पहचानना", "(b) केवल पुरुष क्रिकेट खिलाड़ियों का चयन करना", "(c) सभी विश्वविद्यालयों को वित्तीय रैंक देना", "(d) जलविद्युत परियोजनाओं को स्वीकृति देना"], correct: 0, explanation: "मार्च में ASMITA लीग से जुड़ी व्यापक खेल गतिविधियों की घोषणा हुई (महिलाओं को अवसर और प्रतिभा पहचानना)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2234585' target='_blank'>PIB Release</a>" },
+            
+            { id: 31, tag: "", question: "पहले ‘खेलो इंडिया जनजातीय खेल 2026’ के बारे में सही विकल्प चुनिए।", options: ["(a) छत्तीसगढ़; 25 मार्च से 3 अप्रैल; रायपुर, बस्तर और सरगुजा क्षेत्र", "(b) मध्य प्रदेश; केवल 25 मार्च; भोपाल", "(c) गुजरात; 1 से 10 मार्च; अहमदाबाद", "(d) असम; 25 अप्रैल से 3 मई; गुवाहाटी"], correct: 0, explanation: "उद्घाटन संस्करण 25 मार्च को छत्तीसगढ़ में शुरू हुआ और 3 अप्रैल तक निर्धारित था।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2245447' target='_blank'>PIB Release</a>" },
+            
+            { id: 32, tag: "", question: "पुरुष T20 विश्व कप 2026 के फाइनल के संबंध में सही कथन चुनिए:<br>1. भारत ने न्यूजीलैंड को 96 रन से हराया।<br>2. फाइनल अहमदाबाद में खेला गया।<br>3. यह भारत का तीसरा पुरुष T20 विश्व कप खिताब था。<br><br>सही कथन कौन-से हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) तीनों"], correct: 3, explanation: "8 मार्च के फाइनल में भारत ने न्यूजीलैंड को हराकर तीसरा खिताब जीता और लगातार दो संस्करण जीतने वाली पहली टीम बनी।<br><br><b>स्रोत:</b> <a href='https://www.icc-cricket.com/tournaments/mens-t20-world-cup-2026/news/team-of-the-tournament-announced-for-t20-world-cup-2026' target='_blank'>ICC Official</a>" },
+            
+            { id: 33, tag: "", question: "मार्च 2026 में घोषित फरवरी के ‘ICC महिला प्लेयर ऑफ द मंथ’ पुरस्कार की विजेता कौन थीं?", options: ["(a) अरुंधति रेड्डी", "(b) स्मृति मंधाना", "(c) अमेलिया केर", "(d) बेथ मूनी"], correct: 0, explanation: "भारतीय तेज गेंदबाज अरुंधति रेड्डी के नाम की घोषणा 23 मार्च को हुई (ऑस्ट्रेलिया के विरुद्ध श्रृंखला में 8 विकेट)।<br><br><b>स्रोत:</b> <a href='https://www.icc-cricket.com/news/icc-women-s-player-of-the-month-for-february-2026-revealed' target='_blank'>ICC Official</a>" },
+            
+            { id: 34, tag: "", question: "मार्च 2026 में आयोजित 98वें अकादमी पुरस्कारों में सर्वश्रेष्ठ फ़िल्म का पुरस्कार किसे मिला?", options: ["(a) One Battle after Another", "(b) Sinners", "(c) F1", "(d) Hamnet"], correct: 0, explanation: "15 मार्च को आयोजित 98वें ऑस्कर समारोह में One Battle after Another सर्वश्रेष्ठ फ़िल्म रही।<br><br><b>स्रोत:</b> <a href='https://www.oscars.org/oscars/ceremonies/2026' target='_blank'>Oscars Official</a>" },
+            
+            { id: 35, tag: "", question: "मार्च में घोषित साहित्य अकादेमी पुरस्कार 2025 के हिंदी वर्ग का सही लेखक–कृति युग्म कौन-सा है?", options: ["(a) ममता कालिया — जीते जी इलाहाबाद", "(b) नवतेज सरना — क्रिमसन स्प्रिंग", "(c) राजू बाविस्कर — कल्याणीच्या रेषा", "(d) जिन्दर — सेफ्टी किट"], correct: 0, explanation: "हिंदी में ममता कालिया की संस्मरण कृति जीते जी इलाहाबाद चुनी गई (घोषणा 16 मार्च 2026)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2240704' target='_blank'>PIB Release</a>" },
+            
+            { id: 36, tag: "", question: "विश्व प्रसन्नता रिपोर्ट 2026 में लगातार नौवीं बार शीर्ष पर कौन-सा देश रहा?", options: ["(a) फिनलैंड", "(b) डेनमार्क", "(c) भारत", "(d) कनाडा"], correct: 0, explanation: "रिपोर्ट में फिनलैंड फिर शीर्ष स्थान पर रहा (लगातार नौवीं बार)।<br><br><b>स्रोत:</b> <a href='https://www.worldhappiness.report/news/world-happiness-report-2026-complex-global-picture-of-social-media-and-happiness/' target='_blank'>World Happiness Report</a>" },
+            
+            { id: 37, tag: "", question: "‘LAMITIYE 2026’ सैन्य अभ्यास किन देशों के बीच हुआ?", options: ["(a) भारत और सेशेल्स", "(b) भारत और फ्रांस", "(c) भारत और जापान", "(d) भारत और ऑस्ट्रेलिया"], correct: 0, explanation: "9–20 मार्च का यह भारत–सेशेल्स संयुक्त अभ्यास था (INS त्रिकंड ने भी हिस्सा लिया)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2243504' target='_blank'>PIB Release</a>" },
+            
+            { id: 38, tag: "", question: "मार्च में कोच्चि में आयोजित IMEX TTX 2026 किससे संबंधित था?", options: ["(a) हिंद महासागर नौसेना संगोष्ठी का समुद्री अभ्यास; भारत की 2026–28 अध्यक्षता", "(b) क्रिकेट विश्व कप का प्रशिक्षण शिविर", "(c) पर्वतीय जलविद्युत सम्मेलन", "(d) केवल वायुसेना का युद्धाभ्यास"], correct: 0, explanation: "भारतीय नौसेना ने 27 मार्च को कोच्चि में IONS Maritime Exercise Table Top Exercise आयोजित किया (भारत ने 2026–28 की अध्यक्षता संभाली)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2246627' target='_blank'>PIB Release</a>" },
+            
+            { id: 39, tag: "", question: "DRDO और नौसेना के ADC-150 परीक्षण किस क्षमता से जुड़े थे?", options: ["(a) विमान से लगभग 150 किलोग्राम सामग्री समुद्र में लक्षित स्थान तक पहुँचाना", "(b) 150 यात्रियों वाला नागरिक विमान बनाना", "(c) 150 किलोमीटर लंबी भूमिगत सुरंग बनाना", "(d) 150 उपग्रह एक साथ प्रक्षेपित करना"], correct: 0, explanation: "Air Droppable Container-150 के परीक्षण गोवा तट के पास हुए। उद्देश्य समुद्र में जहाजों के लिए सामग्री हवाई माध्यम से पहुँचाना है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2237814' target='_blank'>PIB Release</a>" },
+            
+            { id: 40, tag: "", question: "‘संयुक्त कवच’ सैन्य–नागरिक अभ्यास मार्च में कहाँ आयोजित हुआ?", options: ["(a) औंध सैन्य स्टेशन, पुणे", "(b) पोर्ट ब्लेयर", "(c) जैसलमेर", "(d) श्रीनगर"], correct: 0, explanation: "भारतीय सेना की दक्षिणी कमान के तहत सप्ताह भर चला अभ्यास पुणे के औंध सैन्य स्टेशन में आयोजित हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2236431' target='_blank'>PIB Release</a>" },
+            
+            { id: 41, tag: "", question: "विश्व वन्यजीव दिवस 2026 की विषयवस्तु क्या थी?", options: ["(a) औषधीय और सुगंधित पौधे: स्वास्थ्य, विरासत तथा आजीविका का संरक्षण", "(b) वन और अर्थव्यवस्था", "(c) जल और लैंगिक समानता", "(d) आज का अवलोकन, कल की सुरक्षा"], correct: 0, explanation: "3 मार्च को मनाए जाने वाले इस दिवस में 2026 के लिए औषधीय और सुगंधित पौधों की भूमिका पर ध्यान दिया गया।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/observances/world-wildlife-day' target='_blank'>UN Official</a>" },
+            
+            { id: 42, tag: "", question: "संयुक्त राष्ट्र के अंतरराष्ट्रीय महिला दिवस 2026 की आधिकारिक विषयवस्तु कौन-सी थी?", options: ["(a) Rights. Justice. Action. For ALL Women and Girls.", "(b) Forests and Economies", "(c) Together Against Loneliness", "(d) Observing Today, Protecting Tomorrow"], correct: 0, explanation: "8 मार्च की इस विषयवस्तु में अधिकार, न्याय तक पहुँच और कार्रवाई पर बल था।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2236243' target='_blank'>PIB Release</a>" },
+            
+            { id: 43, tag: "", question: "अंतरराष्ट्रीय वन दिवस 2026 की विषयवस्तु क्या थी?", options: ["(a) वन और अर्थव्यवस्थाएँ", "(b) वन और खेल", "(c) वन और कृत्रिम बुद्धिमत्ता", "(d) वन और अंतरिक्ष"], correct: 0, explanation: "21 मार्च के अंतरराष्ट्रीय वन दिवस की विषयवस्तु “Forests and Economies” थी।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/delegate/un-stamps-celebrate-international-day-forests' target='_blank'>UN Official</a>" },
+            
+            { id: 44, tag: "", question: "विश्व जल दिवस 2026 के मुख्य विषय और अभियान संदेश का सही मेल चुनिए।", options: ["(a) जल और लैंगिक समानता — Where water flows, equality grows", "(b) वन और अर्थव्यवस्था — Where water flows, equality grows", "(c) जल और अंतरिक्ष — Observing Today, Protecting Tomorrow", "(d) टीबी उन्मूलन — Together Against Loneliness"], correct: 0, explanation: "22 मार्च का विषय जल और लैंगिक समानता के संबंध पर केंद्रित था।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/node/240876' target='_blank'>UN Official</a>" },
+            
+            { id: 45, tag: "", question: "विश्व मौसम विज्ञान दिवस 2026 का विषय क्या था?", options: ["(a) Observing Today, Protecting Tomorrow", "(b) Forests and Economies", "(c) Water and Gender", "(d) Medicinal and Aromatic Plants"], correct: 0, explanation: "23 मार्च के लिए विश्व मौसम विज्ञान संगठन ने “Observing Today, Protecting Tomorrow” विषय चुना।<br><br><b>स्रोत:</b> <a href='https://wmo.int/site/world-meteorological-day-2026-23-march' target='_blank'>WMO Official</a>" },
+            
+            { id: 46, tag: "", question: "विश्व क्षय रोग दिवस 2026 की विषयवस्तु क्या थी?", options: ["(a) Yes! We Can End TB: Led by countries. Powered by people.", "(b) Forests and Economies", "(c) Give to Gain", "(d) Together Against Loneliness"], correct: 0, explanation: "WHO ने 24 मार्च के लिए देशों के नेतृत्व और लोगों की भागीदारी को विषय के केंद्र में रखा।<br><br><b>स्रोत:</b> <a href='https://www.who.int/campaigns/world-tb-day/2026' target='_blank'>WHO Official</a>" },
+            
+            { id: 47, tag: "", question: "विश्व डाउन सिंड्रोम दिवस 2026 की विषयवस्तु कौन-सी थी?", options: ["(a) Together Against Loneliness", "(b) Water and Gender", "(c) Rights. Justice. Action.", "(d) Forests and Economies"], correct: 0, explanation: "21 मार्च के इस दिवस ने डाउन सिंड्रोम तथा अन्य बौद्धिक दिव्यांगताओं से जुड़े लोगों और परिवारों के अकेलेपन पर ध्यान दिलाया।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/events/downsyndromeday/' target='_blank'>UN Official</a>" },
+            
+            { id: 48, tag: "", question: "जल जीवन मिशन से संबंधित ‘जल महोत्सव 2026’ की निर्धारित अवधि क्या थी?", options: ["(a) 8–22 मार्च", "(b) 1–3 मार्च", "(c) 23–31 मार्च", "(d) 1–15 अप्रैल"], correct: 0, explanation: "जल महोत्सव 8 मार्च से विश्व जल दिवस, 22 मार्च तक आयोजित किया गया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2236518' target='_blank'>PIB Release</a>" },
+            
+            { id: 49, tag: "", question: "7 मार्च को कोटा–बूंदी ग्रीनफील्ड हवाई अड्डा परियोजना के संबंध में कौन-सी घटना हुई?", options: ["(a) निर्माण के लिए भूमि पूजन और आधारशिला कार्यक्रम", "(b) नियमित अंतरराष्ट्रीय उड़ानों का शुभारंभ", "(c) हवाई अड्डे का निजीकरण पूरा हुआ", "(d) परियोजना को बंद करने की घोषणा"], correct: 0, explanation: "मार्च में परियोजना का भूमि पूजन और निर्माण आरंभ करने का कार्यक्रम हुआ था (लागत लगभग ₹1,500 करोड़)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2236473' target='_blank'>PIB Release</a>" },
+            
+            { id: 50, tag: "", question: "31 मार्च को महावीर जयंती के अवसर पर ‘सम्राट सम्प्रति संग्रहालय’ का उद्घाटन कहाँ हुआ?", options: ["(a) कोबा तीर्थ, गांधीनगर", "(b) सारनाथ, वाराणसी", "(c) श्रवणबेलगोला, कर्नाटक", "(d) पावापुरी, बिहार"], correct: 0, explanation: "प्रधानमंत्री ने गुजरात के गांधीनगर स्थित कोबा तीर्थ में जैन विरासत से जुड़े संग्रहालय का उद्घाटन किया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2247208' target='_blank'>PIB Release</a>" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
