@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ CSS Control File Path -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- Security Watermark Screen -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. Login Gate Screen -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ Back Button Path -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. Exam Workspace Screen -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 Responsive, Centered Header -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">बाल विकास के सिद्धान्त</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Report Dashboard Screen -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point <br> बाल विकास के सिद्धान्त</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ Dashboard Back Button -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 50 Questions Dataset (Without explanation) -->
+    <script>
+        const QUIZ_KEY = "medhavi_free_test_d66"; 
+
+        const dataset = [
+            { id: 1, question: "कोहलबर्ग के नैतिक तर्क सिद्धान्त के तीसरे स्तर में व्यक्ति नैतिक निर्णय किस आधार पर ले सकता है?", options: ["अन्य व्यक्तियों से मान्यता प्राप्त करने के उद्देश्य से", "सामाजिक सम्पर्क के आधार पर", "वैश्विक मूल्यों के आधार पर", "आज्ञापालन और अनुशासन के आधार पर"], correct: 2 },
+            { id: 2, question: "मानवीय अभिप्रेरणा सिद्धान्त किसने प्रतिपादित किया?", options: ["स्किनर", "पियाजे", "पैवलॉव", "मैस्लो"], correct: 3 },
+            { id: 3, question: "क्रियात्मक अनुबंधन की संकल्पना किसने दी?", options: ["स्किनर", "पैवलॉव", "मैस्लो", "इनमें से कोई नहीं"], correct: 0 },
+            { id: 4, question: "सूची-I का सूची-II से मिलान कीजिए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>A. वाइगोत्स्की</td><td>1. मनो-सामाजिक सिद्धान्त</td></tr><tr><td>B. एरिक्सन</td><td>2. सामाजिक-सांस्कृतिक सिद्धान्त</td></tr><tr><td>C. पियाजे</td><td>3. मनोविश्लेषणात्मक सिद्धान्त</td></tr><tr><td>D. फ्रायड</td><td>4. संज्ञानात्मक सिद्धान्त</td></tr></tbody></table>", options: ["A–2, B–3, C–4, D–1", "A–1, B–3, C–2, D–4", "A–2, B–1, C–4, D–3", "A–1, B–4, C–2, D–3"], correct: 2 },
+            { id: 5, question: "थार्नडाइक का माध्यमिक नियम किससे संबंधित है?", options: ["तत्परता के नियम से", "बहुप्रतिक्रिया के नियम से", "कार्यविधिका के नियम से", "प्रभाव के नियम से"], correct: 1 },
+            { id: 6, question: "बाल विहार अर्थात किंडरगार्टन प्रकार के पूर्वस्कूली कार्यक्रम की स्थापना किसने की?", options: ["मारिया मोंटेसरी", "फ्रेडरिक फ्रॉबेल", "रेशेल और मार्गरेट मैकमिलन", "ताराबाई मोडक"], correct: 1 },
+            { id: 7, question: "रोर्शाक इंकब्लॉट परीक्षण है—", options: ["सामाजिक सांख्यिकी तकनीक", "रचनात्मक तकनीक", "समष्टि तकनीक", "प्रक्षेपण तकनीक"], correct: 3 },
+            { id: 8, question: "पारिस्थितिक सिद्धान्त की रचना किसने की?", options: ["कॉनराड लॉरेंज", "अल्फ्रेड बंडूरा", "ब्रॉनफेनब्रेनर", "इवान पैवलॉव"], correct: 2 },
+            { id: 9, question: "किस मनोवैज्ञानिक ने सामाजिक आधार पर व्यक्तित्व का अध्ययन किया?", options: ["युंग", "फ्रायड", "एडलर", "कैरेन हॉर्नी"], correct: 2 },
+            { id: 10, question: "किसने विकसित विधि द्वारा शाला-पूर्व बच्चों को सिखाया जाता है?", options: ["फ्रायड", "एडलर", "युंग", "मैडम मोंटेसरी"], correct: 3 },
+            { id: 11, question: "निष्पत्ति प्रत्यय-प्रतिमान के प्रतिपादक थे—", options: ["डेवी", "ब्रूनर", "पियाजे", "ऑसुबेल"], correct: 3 },
+            { id: 12, question: "समायोजन अर्थात आत्मसातीकरण की संकल्पना किससे संबंधित है?", options: ["पियाजे", "वाटसन", "रोजर्स", "युंग"], correct: 0 },
+            { id: 13, question: "कोहलबर्ग के नैतिक सिद्धान्त के अन्तर्गत निम्न में से कौन-सी अवस्था नहीं है?", options: ["प्राक्-रूढ़िगत", "पियाजे संक्रियात्मक", "रूढ़िगत", "पश्च रूढ़िगत"], correct: 1 },
+            { id: 14, question: "पुनर्बलन का सिद्धान्त सम्बन्धित है—", options: ["पैवलॉव से", "स्किनर से", "कोहलबर्ग से", "थार्नडाइक से"], correct: 1 },
+            { id: 15, question: "जे. बी. वाटसन के अनुसार मनोविज्ञान अध्ययन है—", options: ["मानसिक अवस्था का", "व्यवहार का", "चेतना का", "मन का"], correct: 1 },
+            { id: 16, question: "प्रथम मनोविज्ञान प्रयोगशाला कहाँ स्थापित की गई थी?", options: ["बर्लिन", "वाटसन", "फ्रैंकफर्ट", "लाइपज़िग"], correct: 3 },
+            { id: 17, question: "सूची-I की इकाइयों को सूची-II से मिलाइए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>A. हॉवर्ड गार्डनर</td><td>i. अभिक्षमता मापन</td></tr><tr><td>B. रिफोल्फ-काडेल</td><td>ii. 1965</td></tr><tr><td>C. डॉ. विरजीनिया</td><td>iii. विकासात्मक कार्य</td></tr><tr><td>D. हेड स्टार्ट</td><td>iv. शीर्ष से पाद<br>v. बहुबुद्धीय बुद्धि</td></tr></tbody></table>", options: ["A–iii, B–i, C–ii, D–v", "A–ii, B–iv, C–iii, D–i", "A–v, B–iv, C–i, D–ii", "A–i, B–iv, C–v, D–iii"], correct: 2 },
+            { id: 18, question: "सूची-I के सिद्धान्तकारों को सूची-II की अवधारणाओं से मिलाइए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>A. वाइगोत्स्की</td><td>i. मनोवैज्ञानिक</td></tr><tr><td>B. कॉम्टे</td><td>ii. संज्ञानात्मक विकास</td></tr><tr><td>C. पियाजे</td><td>iii. मनोसामाजिक</td></tr><tr><td>D. फ्रायड</td><td>iv. समाजशास्त्र</td></tr><tr><td>E. एरिक्सन</td><td>v. सामाजिक-सांस्कृतिक</td></tr></tbody></table>", options: ["A–v, B–iv, C–ii, D–i, E–iii", "A–iii, B–iv, C–ii, D–v, E–i", "A–v, B–i, C–iv, D–ii, E–iii", "A–i, B–ii, C–v, D–iv, E–iii"], correct: 0 },
+            { id: 19, question: "कोहलबर्ग के नैतिक विकास की अवस्थाओं का सही क्रम चुनिए—<br>A. अच्छा लड़का, अच्छी लड़की अभिमुखीकरण<br>B. दण्ड तथा आज्ञाकारिता अभिमुखीकरण<br>C. सहायक या यंत्रीय प्रयोजन अभिमुखीकरण<br>D. सामाजिक संविदा अभिमुखीकरण<br>E. सामाजिक व्यवस्था बनाए रखने से सम्बन्धित अभिमुखीकरण", options: ["A, B, C, E, D", "B, C, A, E, D", "B, A, E, D, C", "C, B, A, E, D"], correct: 1 },
+            { id: 20, question: "सूची-I का सूची-II से मिलान कीजिए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>A. जॉन लॉक</td><td>i. कुलीन जंगली</td></tr><tr><td>B. रूसो</td><td>ii. टेबुला रासा</td></tr><tr><td>C. वाइगोत्स्की</td><td>iii. इद</td></tr><tr><td>D. पियाजे</td><td>iv. समीपवर्ती विकास क्षेत्र</td></tr><tr><td>E. फ्रायड</td><td>v. आत्मसातीकरण</td></tr></tbody></table>", options: ["A–i, B–iii, C–iv, D–v, E–ii", "A–ii, B–i, C–v, D–iii, E–iv", "A–ii, B–iv, C–v, D–iii, E–i", "A–ii, B–i, C–iv, D–v, E–iii"], correct: 3 },
+            { id: 21, question: "सूची-I का सूची-II से मिलान कीजिए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>I. व्यवहारवाद की शुरुआत कृति से हुई</td><td>1. जी. स्टेनले हॉल</td></tr><tr><td>II. किसने बच्चे को टेबुला रासा कहा</td><td>2. यूरी ब्रॉनफेनब्रेनर</td></tr><tr><td>III. बाल अध्ययन आंदोलन के संस्थापक कौन हैं</td><td>3. जॉन लॉक</td></tr><tr><td>IV. बच्चा समय की जटिल प्रणाली में विकसित होता है</td><td>4. जॉन वाटसन</td></tr></tbody></table>", options: ["I–1, II–2, III–3, IV–4", "I–2, II–1, III–4, IV–3", "I–4, II–3, III–1, IV–2", "I–3, II–2, III–4, IV–1"], correct: 2 },
+            { id: 22, question: "‘थेरब्लिग्स’ शब्द किसने प्रतिपादित किया था?", options: ["शांग", "गिलब्रैथ", "उन्मान डब्ल्यू रॉस", "फुडल"], correct: 1 },
+            { id: 23, question: "सिद्धान्तकार और उनकी अवधारणा का मिलान कीजिए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>I. स्किनर</td><td>A. आत्मसातीकरण सिद्धान्त</td></tr><tr><td>II. मैस्लो</td><td>B. व्यवहारवादी सिद्धान्त</td></tr><tr><td>III. पियाजे</td><td>C. मनो-सामाजिक सिद्धान्त</td></tr><tr><td>IV. वाइगोत्स्की</td><td>D. पारिस्थितिकीय प्रणाली सिद्धान्त</td></tr><tr><td>V. ब्रॉनफेनब्रेनर</td><td>E. सामाजिक-सांस्कृतिक सिद्धान्त<br>F. संज्ञानात्मक विकास सिद्धान्त</td></tr></tbody></table>", options: ["I–B, II–A, III–E, IV–C, V–D", "I–A, II–B, III–F, IV–E, V–D", "I–B, II–A, III–F, IV–E, V–D", "I–B, II–A, III–F, IV–D, V–E"], correct: 2 },
+            { id: 24, question: "सूची-I का सूची-II से मिलान कीजिए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>I. एम्नेशिया</td><td>A. आम तौर पर व्यग्र</td></tr><tr><td>II. एनोरेक्सिया नर्वोसा</td><td>B. हाइपरएक्टिविटी</td></tr><tr><td>III. डिस्फोरिया</td><td>C. श्रवण संबंधी समस्या</td></tr><tr><td>IV. न्यूरोसिस</td><td>D. भाषा की विकृति</td></tr><tr><td>V. ए. डी. एच. डी.</td><td>E. स्वयं भूखे रहना<br>F. स्मृति की हानि</td></tr></tbody></table>", options: ["I–C, II–E, III–D, IV–A, V–B", "I–F, II–E, III–D, IV–A, V–B", "I–F, II–E, III–A, IV–D, V–B", "I–F, II–A, III–D, IV–B, V–C"], correct: 1 },
+            { id: 25, question: "मानव व्यवहार के अधिगम को पूर्वानुभव प्रतिक्रियाओं से जोड़ने वाले सिद्धान्तों के प्रतिपादकों का सही समूह चुनिए—<br>(i) पैवलॉव का सिद्धान्त<br>(ii) स्किनर का सिद्धान्त<br>(iii) बंडूरा का सिद्धान्त<br>(iv) युंग का सिद्धान्त", options: ["(i), (ii) और (iii)", "(i), (iii) और (iv)", "(i), (ii) और (iv)", "(ii), (iii) और (iv)"], correct: 0 },
+            { id: 26, question: "मनोवैज्ञानिक ने यह निर्धारित किया कि 15 वर्षीय रीता संज्ञानात्मक क्षेत्र में अपनी आयु के लिए उपयुक्त है, क्योंकि वह—<br>(i) प्रतिदिन के तर्क का मूल्यांकन कर सकती है।<br>(ii) सिर्फ ठोस सूचना प्राप्ति की दशा में संगठित और तार्किक होती है।<br>(iii) ठोस परिस्थितियों के बारे में प्राक्कल्पना का परीक्षण कर सकती है।<br>(iv) संक्रियाओं पर प्रचालन कर सकती है।", options: ["(i), (ii) और (iii)", "(i), (ii) और (iv)", "(i), (iii) और (iv)", "(ii), (iii) और (iv)"], correct: 2 },
+            { id: 27, question: "सिद्धान्तकार और प्रमुख अवधारणा का मिलान कीजिए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>A. पियाजे</td><td>i. जीवन संरचना</td></tr><tr><td>B. ब्रॉनफेनब्रेनर</td><td>ii. उदारशील शैली</td></tr><tr><td>C. लेविन्सन</td><td>iii. समंजन</td></tr><tr><td>D. वाइगोत्स्की</td><td>iv. पारिस्थितिकी तंत्र</td></tr><tr><td>E. गार्डनर</td><td>vi. बहुबुद्धीय बुद्धि</td></tr></tbody></table>", options: ["A–iii, B–iv, C–i, D–v, E–vi", "A–v, B–iii, C–i, D–ii, E–iv", "A–iii, B–iv, C–i, D–ii, E–vi", "A–iii, B–iv, C–v, D–i, E–vi"], correct: 2 },
+            { id: 28, question: "सूची-I के सिद्धान्तों को सूची-II के प्रतिपादकों से मिलाइए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>A. सामाजिक संज्ञान सिद्धान्त</td><td>i. स्किनर</td></tr><tr><td>B. साइको-सेक्सुअल सिद्धान्त</td><td>ii. फ्रायड</td></tr><tr><td>C. इकोलॉजिकल सिद्धान्त</td><td>iii. ब्रॉनफेनब्रेनर</td></tr><tr><td>D. साइको-सोशल सिद्धान्त</td><td>iv. बंडूरा</td></tr><tr><td>E. सोशल-लर्निंग सिद्धान्त</td><td>v. एरिक्सन<br>vi. वाइगोत्स्की</td></tr></tbody></table>", options: ["A–iv, B–ii, C–iii, D–v, E–i", "A–vi, B–ii, C–i, D–v, E–iii", "A–iv, B–ii, C–iii, D–v, E–vi", "A–iii, B–v, C–i, D–ii, E–iv"], correct: 0 },
+            { id: 29, question: "सूची-I का सूची-II से मिलान कीजिए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>I. जॉन लॉक</td><td>A. नोबल सेवेज</td></tr><tr><td>II. रूसो</td><td>B. ओडिपस कॉम्प्लेक्स</td></tr><tr><td>III. ब्रॉनफेनब्रेनर</td><td>C. एसिमिलेशन-अकॉमोडेशन</td></tr><tr><td>IV. फ्रायड</td><td>D. टेबुला रासा</td></tr><tr><td>V. पियाजे</td><td>E. माइक्रो सिस्टम</td></tr></tbody></table>", options: ["I–A, II–D, III–E, IV–B, V–C", "I–D, II–A, III–F, IV–B, V–C", "I–A, II–D, III–F, IV–C, V–B", "I–D, II–A, III–E, IV–B, V–C"], correct: 3 },
+            { id: 30, question: "सूची-I को सूची-II से मिलाइए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>A. मैस्लो</td><td>i. एक्सोसिस्टम</td></tr><tr><td>B. ब्रॉनफेनब्रेनर</td><td>ii. पहचान बनाना</td></tr><tr><td>C. एरिक्सन</td><td>iii. जोन ऑफ प्रॉक्सिमल डेवलपमेंट</td></tr><tr><td>D. वाइगोत्स्की</td><td>iv. आवश्यकताओं की श्रेणीबद्धता</td></tr></tbody></table>", options: ["A–i, B–ii, C–iii, D–iv", "A–iv, B–i, C–iii, D–ii", "A–iv, B–iii, C–ii, D–i", "A–iv, B–i, C–ii, D–iii"], correct: 3 },
+            { id: 31, question: "मस्लो की आवश्यकताओं के क्रम को लिखिए—<br>I. सुरक्षात्मक आवश्यकताएँ<br>II. आत्म-सम्मान<br>III. शारीरिक सम्बन्धी आवश्यकताएँ<br>IV. आत्म-प्रत्ययीकरण", options: ["III, IV, I, II", "III, I, II, IV", "I, III, IV, II", "II, I, III, IV"], correct: 1 },
+            { id: 32, question: "सूची-I को सूची-II से मिलाइए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>A. पहली माहवारी, प्रथम रजोदर्शन</td><td>i. अल्फ्रेड बंडूरा</td></tr><tr><td>B. अधिकारपूर्ण अभिभावकता</td><td>ii. बालबाड़ी एवं डे-केयर केन्द्र</td></tr><tr><td>C. अवलोकन अधिगम</td><td>iii. प्रेम वर्ष खिलौना</td></tr><tr><td>D. आई.सी.डी.एस.</td><td>iv. लोकतांत्रिक अभिभावकता<br>v. मीनार्की</td></tr></tbody></table>", options: ["A–v, B–iv, C–i, D–ii", "A–iii, B–i, C–ii, D–iv", "A–iv, B–ii, C–iii, D–i", "A–v, B–iv, C–ii, D–i"], correct: 0 },
+            { id: 33, question: "इकोलॉजिकल सिद्धान्त की रचना की थी—", options: ["कॉनराड लॉरेंज", "अल्फ्रेड बंडूरा", "ब्रॉनफेनब्रेनर", "इवान पैवलॉव"], correct: 2 },
+            { id: 34, question: "‘बच्चा एक साफ स्लेट की तरह पैदा होता है’—यह किसने कहा?", options: ["फ्रॉबेल", "रूसो", "पेस्टालॉजी", "जॉन लॉक"], correct: 3 },
+            { id: 35, question: "कोई बालक नई वस्तु को अपनी पहले से बनी संज्ञानात्मक योजना में समझ लेता है। पियाजे इसे क्या कहेंगे?", options: ["समंजन", "आत्मसातीकरण", "पुनर्बलन", "अनुबंधन"], correct: 1 },
+            { id: 36, question: "नई जानकारी के कारण बालक अपनी पुरानी संज्ञानात्मक योजना बदलता है। यह है—", options: ["समंजन", "आत्मसातीकरण", "अनुकरण", "प्रतिगमन"], correct: 0 },
+            { id: 37, question: "परिवार और विद्यालय के बीच संबंध ब्रॉनफेनब्रेनर की किस प्रणाली में आएगा?", options: ["माइक्रोसिस्टम", "मेसोसिस्टम", "एक्सोसिस्टम", "मैक्रोसिस्टम"], correct: 1 },
+            { id: 38, question: "अभिभावक के कार्यस्थल की परिस्थिति बच्चे पर अप्रत्यक्ष प्रभाव डालती है। यह किसका उदाहरण है?", options: ["माइक्रोसिस्टम", "मेसोसिस्टम", "एक्सोसिस्टम", "मैक्रोसिस्टम"], correct: 2 },
+            { id: 39, question: "‘साथियों को देखकर व्यवहार सीखना’ किस सिद्धान्त का केंद्रीय उदाहरण है?", options: ["शास्त्रीय अनुबंधन", "मनोविश्लेषण", "सामाजिक अधिगम", "आवश्यकता-क्रम"], correct: 2 },
+            { id: 40, question: "सही मिलान चुनिए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सिद्धान्तकार</th><th>अवधारणा</th></tr></thead><tbody><tr><td>A. थार्नडाइक</td><td>i. प्रभाव का नियम</td></tr><tr><td>B. पैवलॉव</td><td>ii. शास्त्रीय अनुबंधन</td></tr><tr><td>C. स्किनर</td><td>iii. क्रियात्मक अनुबंधन</td></tr><tr><td>D. बंडूरा</td><td>iv. प्रेक्षणात्मक अधिगम</td></tr></tbody></table>", options: ["A–i, B–ii, C–iii, D–iv", "A–ii, B–i, C–iv, D–iii", "A–iii, B–iv, C–i, D–ii", "A–iv, B–iii, C–ii, D–i"], correct: 0 },
+            { id: 41, question: "मैस्लो की आवश्यकता-श्रृंखला में आत्म-सम्मान से ठीक पहले कौन-सी आवश्यकता रखी जाती है?", options: ["सुरक्षा", "शारीरिक आवश्यकता", "सम्बन्ध एवं अपनापन", "आत्म-सिद्धि"], correct: 2 },
+            { id: 42, question: "‘प्रतिबद्धता है, लेकिन विकल्पों की खोज नहीं हुई’—मार्सिया के अनुसार यह है—", options: ["पहचान उपलब्धि", "पहचान मोचन", "पहचान स्थगन", "पहचान विसरण"], correct: 1 },
+            { id: 43, question: "‘विकल्पों की खोज जारी है, लेकिन स्थिर प्रतिबद्धता नहीं बनी’—मार्सिया के अनुसार यह है—", options: ["पहचान उपलब्धि", "पहचान मोचन", "पहचान स्थगन", "पहचान विसरण"], correct: 2 },
+            { id: 44, question: "शिक्षा में वाइगोत्स्की के समीपवर्ती विकास क्षेत्र को समझने के लिए किसकी तुलना की जाती है?", options: ["स्वतंत्र कार्य और सहायता से संभव कार्य", "जन्म-वजन और वर्तमान वजन", "शिक्षक और विद्यार्थी की आयु", "घर और विद्यालय की दूरी"], correct: 0 },
+            { id: 45, question: "निम्न में से कौन-सा कथन ‘टेबलू रासा’ से जुड़ा है?", options: ["मनुष्य जन्म से सभी सामाजिक भूमिकाएँ जानता है।", "अनुभव ज्ञान के निर्माण में महत्वपूर्ण हैं।", "वृद्धि केवल शरीर के केंद्र से होती है।", "नैतिक निर्णय केवल दंड पर आधारित हैं।"], correct: 1 },
+            { id: 46, question: "बच्चे के प्रत्यक्ष परिवार, मित्र और विद्यालय के साथ संबंध किस पारिस्थितिक स्तर में आते हैं?", options: ["माइक्रोसिस्टम", "मेसोसिस्टम", "एक्सोसिस्टम", "मैक्रोसिस्टम"], correct: 0 },
+            { id: 47, question: "व्यापक सांस्कृतिक मान्यताओं का प्रभाव किस स्तर पर रखा जाता है?", options: ["माइक्रोसिस्टम", "मेसोसिस्टम", "एक्सोसिस्टम", "मैक्रोसिस्टम"], correct: 3 },
+            { id: 48, question: "निम्न कथनों में सही समूह चुनिए—<br>I. पियाजे ने आत्मसातीकरण और समंजन बताए।<br>II. स्किनर ने क्रियात्मक अनुबंधन पर कार्य किया।<br>III. पैवलॉव ने शास्त्रीय अनुबंधन पर कार्य किया।<br>IV. लॉक ने समीपवर्ती विकास क्षेत्र बताया।", options: ["केवल I और II", "केवल II और IV", "केवल I, II और III", "I, II, III और IV"], correct: 2 },
+            { id: 49, question: "सूची-I और सूची-II का सही मिलान कीजिए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>A. फ्रॉबेल</td><td>i. किंडरगार्टन</td></tr><tr><td>B. मोंटेसरी</td><td>ii. तैयार परिवेश</td></tr><tr><td>C. एडगर डेल</td><td>iii. अनुभव का शंकु</td></tr><tr><td>D. गटमैन</td><td>iv. स्केलोग्राम</td></tr></tbody></table>", options: ["A–i, B–ii, C–iii, D–iv", "A–ii, B–i, C–iv, D–iii", "A–iii, B–iv, C–i, D–ii", "A–iv, B–iii, C–ii, D–i"], correct: 0 },
+            { id: 50, question: "विकास की किसी अवस्था के बारे में एक स्पष्ट सही निष्कर्ष कौन-सा है?", options: ["प्रत्येक व्यक्ति समान दिन पर समान कौशल प्राप्त करता है।", "विकास के क्षेत्रों की गति अलग-अलग हो सकती है।", "परिपक्वता होने पर अनुभव का प्रभाव समाप्त हो जाता है।", "सामाजिक परिवेश का विकास पर कोई प्रभाव नहीं पड़ता।"], correct: 1 }
+        ];
+    </script>
+
+    <!-- ✅ JS Logic Control File Path -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
