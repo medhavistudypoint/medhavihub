@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">अप्रैल 2026 — करेंट अफेयर्स विशेष टेस्ट</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">करेंट अफेयर्स (अप्रैल 2026)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY (अप्रैल 2026 - 50 प्रश्न) -->
+    <script>
+        const QUIZ_KEY = "medhavi_april_2026_ca_test"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "अप्रैल 2026 में शुरू हुई जनगणना 2027 की प्रक्रिया के संबंध में सही कथन चुनिए:<br>1. पहले चरण में मकान सूचीकरण एवं आवास गणना शामिल है।<br>2. लोगों के लिए स्वयं गणना का ऑनलाइन विकल्प रखा गया।<br>3. जनगणना का पूरा काम केवल कागजी प्रपत्रों से होना था。<br><br>सही कथन कौन-से हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) तीनों"], correct: 0, explanation: "1 अप्रैल से पहले चरण की प्रक्रिया शुरू हुई। चुनिंदा क्षेत्रों में स्वयं गणना के बाद 16 अप्रैल से मकान सूचीकरण का मैदानी काम आरंभ हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2252332' target='_blank'>PIB Release</a>" },
+            
+            { id: 2, tag: "", question: "आठवें पोषण पखवाड़ा 2026 का सही विषय और आयोजन अवधि कौन-सी थी?", options: ["(a) किशोर स्वास्थ्य; 1–15 अप्रैल", "(b) जीवन के पहले छह वर्षों में मस्तिष्क विकास को अधिकतम करना; 9–23 अप्रैल", "(c) केवल मातृ एनीमिया; 16–30 अप्रैल", "(d) विद्यालयी खेल पोषण; 7–21 अप्रैल"], correct: 1, explanation: "महिला एवं बाल विकास मंत्रालय ने 9 अप्रैल को आठवें पोषण पखवाड़े का शुभारंभ किया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2250637' target='_blank'>PIB Release</a>" },
+            
+            { id: 3, tag: "", question: "अप्रैल में मंजूर जयपुर मेट्रो चरण-2 के बारे में सही कथन चुनिए:<br>1. प्रस्तावित गलियारा प्रह्लादपुरा से टोडी मोड़ तक है।<br>2. इसकी लंबाई लगभग 41 किलोमीटर और प्रस्तावित स्टेशनों की संख्या 36 है।<br>3. इसे राजस्थान मेट्रो रेल कॉरपोरेशन लागू करेगा。<br><br>सही कथन कौन-से हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) तीनों", "(d) केवल 1 और 3"], correct: 2, explanation: "8 अप्रैल को मंजूर इस उत्तर–दक्षिण गलियारे की अनुमानित लागत ₹13,037.66 करोड़ है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2250040' target='_blank'>PIB Release</a>" },
+            
+            { id: 4, tag: "", question: "8 अप्रैल को मंजूर अरुणाचल प्रदेश की जलविद्युत परियोजनाओं का सही मिलान कौन-सा है:<br>1. कमला परियोजना — 1,720 मेगावाट<br>2. कलाई-II परियोजना — 1,200 मेगावाट<br>3. कलाई-II परियोजना — लोहित नदी<br><br>सही विकल्प चुनिए:", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) तीनों"], correct: 3, explanation: "कमला परियोजना के लिए ₹26,069.50 करोड़ और कलाई-II के लिए ₹14,105.83 करोड़ निवेश मंजूर हुआ (लोहित नदी)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2250042' target='_blank'>PIB Release</a>" },
+            
+            { id: 5, tag: "", question: "खरीफ 2026 के लिए मंजूर पोषक तत्त्व आधारित उर्वरक सब्सिडी के संबंध में सही विकल्प चुनिए।", options: ["(a) फॉस्फेटिक और पोटाशिक उर्वरक; 1 अप्रैल से 30 सितंबर; अनुमानित आवश्यकता ₹41,533.81 करोड़", "(b) केवल यूरिया; पूरे कैलेंडर वर्ष के लिए; ₹4,153 करोड़", "(c) केवल जैव उर्वरक; 1 जनवरी से 31 मार्च; ₹41,533 करोड़", "(d) सभी कृषि यंत्र; अप्रैल से जून; ₹8,397 करोड़"], correct: 0, explanation: "मंत्रिमंडल ने डीएपी सहित फॉस्फेटिक और पोटाशिक उर्वरकों की सब्सिडी दरें खरीफ मौसम के लिए मंजूर कीं।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2250032' target='_blank'>PIB Release</a>" },
+            
+            { id: 6, tag: "", question: "HPCL राजस्थान रिफाइनरी की संशोधित लागत किस स्थान की परियोजना से संबंधित है?", options: ["(a) बाड़मेर शहर; ₹43,129 करोड़", "(b) पचपदरा, बालोतरा; ₹79,459 करोड़", "(c) कोटा; ₹8,962 करोड़", "(d) जयपुर; ₹13,037.66 करोड़"], correct: 1, explanation: "आर्थिक मामलों की मंत्रिमंडलीय समिति ने पचपदरा स्थित परियोजना की लागत ₹43,129 करोड़ से संशोधित कर ₹79,459 करोड़ की।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2250035' target='_blank'>PIB Release</a>" },
+            
+            { id: 7, tag: "", question: "‘भारत समुद्री बीमा पूल’ के बारे में सही कथन चुनिए:<br>1. इसके लिए ₹12,980 करोड़ की संप्रभु गारंटी मंजूर हुई।<br>2. उद्देश्य समुद्री जहाजों और माल ढुलाई के लिए बीमा की उपलब्धता बनाए रखना है।<br>3. इसमें युद्ध जोखिम सहित विभिन्न समुद्री जोखिमों को शामिल करने का प्रस्ताव है。<br><br>सही कथन कौन-से हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) तीनों"], correct: 3, explanation: "पश्चिम एशिया सहित जोखिम वाले समुद्री मार्गों से जुड़े बीमा दबाव के बीच घरेलू बीमा पूल का प्रस्ताव मंजूर हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2253242' target='_blank'>PIB Release</a>" },
+            
+            { id: 8, tag: "", question: "प्रधानमंत्री ग्राम सड़क योजना-III की अप्रैल में मंजूर निरंतरता के संबंध में सही विकल्प कौन-सा है?", options: ["(a) मार्च 2028 तक; संशोधित परिव्यय ₹83,977 करोड़", "(b) दिसंबर 2026 तक; संशोधित परिव्यय ₹8,397 करोड़", "(c) मार्च 2035 तक; संशोधित परिव्यय ₹13,037 करोड़", "(d) योजना को अप्रैल 2026 में समाप्त करने की मंजूरी"], correct: 0, explanation: "18 अप्रैल को योजना को मार्च 2028 तक जारी रखने की मंजूरी दी गई (संशोधित कुल परिव्यय ₹83,977 करोड़)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2253247' target='_blank'>PIB Release</a>" },
+            
+            { id: 9, tag: "", question: "अप्रैल में मंजूर लगभग 601 किलोमीटर की दो रेलवे मल्टीट्रैकिंग परियोजनाओं का सही मिलान चुनिए।", options: ["(a) गाजियाबाद–सीतापुर और निदादवोलु–दुव्वाडा", "(b) जयपुर–अजमेर और कोटा–बूंदी", "(c) सिलचर–शिलांग और मदुरै–कोच्चि", "(d) सैरांग–अगरतला और रांची–पटना"], correct: 0, explanation: "ये परियोजनाएँ उत्तर प्रदेश और आंध्र प्रदेश के 15 जिलों से जुड़ी हैं (लागत ₹24,815 करोड़)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2253250' target='_blank'>PIB Release</a>" },
+            
+            { id: 10, tag: "", question: "18 अप्रैल को मंजूर महँगाई भत्ते और महँगाई राहत की अतिरिक्त किस्त का सही विवरण क्या है?", options: ["(a) 58% से 60%; प्रभावी तिथि 1 जनवरी 2026", "(b) 50% से 58%; प्रभावी तिथि 1 अप्रैल 2026", "(c) 60% से 62%; प्रभावी तिथि 1 जनवरी 2025", "(d) 58% से 65%; प्रभावी तिथि 18 अप्रैल 2026"], correct: 0, explanation: "केंद्रीय कर्मचारियों के डीए में 2 प्रतिशत अंक की वृद्धि मंजूर हुई (मौजूदा 58% से बढ़कर 60%, प्रभावी 1 जनवरी 2026)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2253244' target='_blank'>PIB Release</a>" },
+            
+            { id: 11, tag: "", question: "अप्रैल में अधिसूचित Startup India Fund of Funds 2.0 के बारे में सही विकल्प चुनिए।", options: ["(a) ₹10,000 करोड़ का कोष; पात्र वैकल्पिक निवेश कोषों के माध्यम से स्टार्टअप निवेश", "(b) ₹1,000 करोड़ का कोष; केवल सरकारी विद्यालयों को अनुदान", "(c) ₹83,977 करोड़ का कोष; ग्रामीण सड़क निर्माण", "(d) ₹12,980 करोड़ का कोष; जहाजों का निर्माण"], correct: 0, explanation: "यह व्यवस्था डीप टेक और नवोन्मेषी विनिर्माण स्टार्टअप तक पूँजी पहुँचाने पर केंद्रित है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2251638' target='_blank'>PIB Release</a>" },
+            
+            { id: 12, tag: "", question: "अप्रैल 2026 में अटल पेंशन योजना ने कौन-सा पड़ाव पार किया?", options: ["(a) नौ करोड़ से अधिक सकल नामांकन", "(b) नौ लाख से अधिक सकल नामांकन", "(c) केवल नौ हजार नए पेंशन खाते", "(d) प्रत्येक सदस्य को नौ लाख रुपये पेंशन"], correct: 0, explanation: "21 अप्रैल को योजना के कुल सकल नामांकन नौ करोड़ से ऊपर पहुँचे।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2254487' target='_blank'>PIB Release</a>" },
+            
+            { id: 13, tag: "", question: "‘From Borrowers to Builders’ रिपोर्ट का सही विषय और तथ्य कौन-सा है?", options: ["(a) महिलाओं का ऋण बाजार; ₹76 लाख करोड़ का महिला ऋण पोर्टफोलियो", "(b) समुद्री बीमा; ₹76 लाख करोड़ की सरकारी गारंटी", "(c) खेल निर्यात; ₹76 करोड़ का उत्पादन", "(d) नगर प्रशासन; 76 शहरों की रैंकिंग"], correct: 0, explanation: "नीति आयोग ने अप्रैल में महिलाओं और बदलते ऋण बाजार पर रिपोर्ट जारी की (महिला ऋण पोर्टफोलियो ₹76 लाख करोड़)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2249957' target='_blank'>PIB Release</a>" },
+            
+            { id: 14, tag: "", question: "नीति आयोग के ‘DPI@2047 for Viksit Bharat’ रोडमैप में DPI का अर्थ क्या है?", options: ["(a) डिजिटल सार्वजनिक अवसंरचना", "(b) जिला पुलिस निरीक्षण", "(c) घरेलू पेट्रोलियम आयात", "(d) प्रत्यक्ष पेंशन निवेश"], correct: 0, explanation: "27 अप्रैल को प्रस्तुत रोडमैप डिजिटल सार्वजनिक अवसंरचना (Digital Public Infrastructure) के अगले चरण से संबंधित है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2256122' target='_blank'>PIB Release</a>" },
+            
+            { id: 15, tag: "", question: "अप्रैल में नीति आयोग की ‘Ease of Doing Research & Development in India’ रिपोर्टों का मुख्य उद्देश्य क्या था?", options: ["(a) अनुसंधान करने की प्रक्रियाओं और नवाचार पारिस्थितिकी को सुगम बनाना", "(b) केवल आयकर की दरें निर्धारित करना", "(c) केवल विदेशी विश्वविद्यालयों को बंद करना", "(d) चुनाव कार्यक्रम प्रकाशित करना"], correct: 0, explanation: "9 अप्रैल को इस विषय पर रिपोर्टें जारी हुईं, ताकि शोध में आने वाली व्यावहारिक अड़चनों पर नीति बनाई जा सके।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2250965' target='_blank'>PIB Release</a>" },
+            
+            { id: 16, tag: "", question: "नीति आयोग ने अप्रैल में किस केंद्रशासित प्रदेश के बागवानी विकास का रोडमैप जारी किया?", options: ["(a) जम्मू और कश्मीर", "(b) लक्षद्वीप", "(c) पुडुचेरी", "(d) अंडमान और निकोबार द्वीपसमूह"], correct: 0, explanation: "रिपोर्ट जम्मू और कश्मीर की बागवानी क्षमता विकसित करने पर है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2250306' target='_blank'>PIB Release</a>" },
+            
+            { id: 17, tag: "", question: "‘Moving Towards Effective City Government’ रिपोर्ट किस प्रकार के शहरों के प्रशासन पर केंद्रित है?", options: ["(a) दस लाख से अधिक आबादी वाले शहर", "(b) केवल सीमावर्ती गाँव", "(c) केवल नए औद्योगिक पार्क", "(d) केवल 50,000 से कम आबादी वाले नगर"], correct: 0, explanation: "नीति आयोग की रिपोर्ट दस लाख से अधिक आबादी वाले शहरों के लिए प्रभावी नगर प्रशासन की रूपरेखा प्रस्तुत करती है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2255581' target='_blank'>PIB Release</a>" },
+            
+            { id: 18, tag: "", question: "अप्रैल में शुरू ASISSE सर्वेक्षण के संबंध में सही कथन चुनिए:<br>1. इसे राष्ट्रीय सांख्यिकी कार्यालय ने शुरू किया।<br>2. यह निगमित सेवा क्षेत्र के उद्यमों से संबंधित है।<br>3. नमूना चयन के लिए GSTN आँकड़ों का उपयोग किया गया।<br><br>सही कथन कौन-से हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) तीनों"], correct: 3,explanation: "यह निगमित सेवा क्षेत्र उद्यमों का पहला वार्षिक सर्वेक्षण है (वित्त वर्ष 2024–25)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2249336' target='_blank'>PIB Release</a>" },
+            
+            { id: 19, tag: "", question: "नीति आयोग के अप्रैल में जारी सातवें ‘Trade Watch Quarterly’ के विषयगत भाग का केंद्र क्या था?", options: ["(a) रत्न एवं आभूषण क्षेत्र", "(b) केवल लघु जलविद्युत", "(c) प्राथमिक विद्यालयों की उपस्थिति", "(d) समुद्री मछलियों की गणना"], correct: 0, explanation: "विशेष भाग में रत्न–आभूषण निर्यात और प्रयोगशाला में तैयार हीरों जैसे उभरते क्षेत्रों को देखा गया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2253821' target='_blank'>PIB Release</a>" },
+            
+            { id: 20, tag: "", question: "विश्व बैंक के अप्रैल 2026 ‘India Development Update’ में वित्त वर्ष 2026–27 के लिए भारत की वृद्धि का अनुमान क्या था?", options: ["(a) 6.6%", "(b) 2.6%", "(c) 9.6%", "(d) 12.6%"], correct: 0, explanation: "विश्व बैंक ने वित्त वर्ष 2026–27 के लिए 6.6% वृद्धि का अनुमान दिया।<br><br><b>स्रोत:</b> <a href='https://www.worldbank.org/en/news/press-release/2026/04/09/india-remains-among-the-fastest-growing-economies' target='_blank'>World Bank</a>" },
+            
+            { id: 21, tag: "", question: "अप्रैल में RELIEF योजना का दायरा बढ़ाते समय किन दो देशों को पात्र गंतव्यों में जोड़ा गया?", options: ["(a) मिस्र और जॉर्डन", "(b) जापान और दक्षिण कोरिया", "(c) नेपाल और भूटान", "(d) ऑस्ट्रेलिया और कनाडा"], correct: 0, explanation: "निर्यातकों की मालभाड़ा तथा बीमा लागत पर दबाव को देखते हुए मिस्र और जॉर्डन जोड़े गए।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2253096' target='_blank'>PIB Release</a>" },
+            
+            { id: 22, tag: "", question: "अप्रैल में भारत की उन्नत 3D चिप पैकेजिंग इकाई की आधारशिला कहाँ रखी गई?", options: ["(a) इन्फो वैली, भुवनेश्वर", "(b) पचपदरा, बालोतरा", "(c) सैरांग, मिजोरम", "(d) प्रह्लादपुरा, जयपुर"], correct: 0, explanation: "19 अप्रैल को ओडिशा की इन्फो वैली में परियोजना की आधारशिला रखी गई।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2253549' target='_blank'>PIB Release</a>" },
+            
+            { id: 23, tag: "", question: "अप्रैल में प्रदर्शित सीमेंट रहित फ्लाई ऐश आधारित जियोपॉलिमर कंक्रीट सड़क किस संस्थान ने विकसित की?", options: ["(a) CSIR–AMPRI, भोपाल", "(b) JIPMER, पुडुचेरी", "(c) IIT मद्रास", "(d) भारतीय मौसम विज्ञान विभाग"], correct: 0, explanation: "CSIR–AMPRI ने अपने परिसर में यह सड़क बनाकर अप्रैल में उपयोग के लिए खोली।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2253023' target='_blank'>PIB Release</a>" },
+            
+            { id: 24, tag: "", question: "अप्रैल में शुरू ‘SMILE–Beggary Survey’ मोबाइल ऐप का प्रमुख काम क्या है?", options: ["(a) भीख माँगने में लगे व्यक्तियों के सर्वेक्षण का डिजिटल रिकॉर्ड और पुनर्वास कार्य की निगरानी", "(b) वन्यजीवों की अंतरराष्ट्रीय गणना", "(c) विश्वविद्यालय परीक्षाओं के अंक जारी करना", "(d) रेल मालगाड़ियों का किराया निर्धारित करना"], correct: 0, explanation: "सामाजिक न्याय मंत्रालय ने ऐप शुरू किया जिससे पुनर्वास कार्य की निगरानी हो सकेगी।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2255463' target='_blank'>PIB Release</a>" },
+            
+            { id: 25, tag: "", question: "अप्रैल में एशिया की पहली ‘UNESCO Chair on Gender Inclusion and Skill Development’ कहाँ शुरू की गई?", options: ["(a) पुणे", "(b) पटना", "(c) गुवाहाटी", "(d) जयपुर"], correct: 0, explanation: "24 अप्रैल को पुणे में इस यूनेस्को चेयर का शुभारंभ हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2255395' target='_blank'>PIB Release</a>" },
+            
+            { id: 26, tag: "", question: "अप्रैल में वस्त्र क्षेत्र की उत्पादन से जुड़ी प्रोत्साहन योजना के तीसरे दौर में कितने नए आवेदन मंजूर हुए?", options: ["(a) 25", "(b) 52", "(c) 75", "(d) 105"], correct: 1, explanation: "वस्त्र मंत्रालय ने 52 नए आवेदन मंजूर होने की जानकारी दी।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2250951' target='_blank'>PIB Release</a>" },
+            
+            { id: 27, tag: "", question: "15 अप्रैल को शुरू वाणिज्य विभाग की नई एकीकृत वेबसाइट का प्रमुख उपयोग किसके लिए है?", options: ["(a) निर्यातकों, आयातकों और अन्य व्यापार हितधारकों को संबंधित सेवाओं एवं जानकारी तक पहुँच देना", "(b) केवल खेल प्रतियोगिताओं का प्रसारण", "(c) केवल जनगणना की स्वयं गणना", "(d) केवल चिकित्सा नियुक्तियों की बुकिंग"], correct: 0, explanation: "वाणिज्य मंत्रालय ने वेबसाइट के साथ द्विभाषी मोबाइल ऐप भी प्रस्तुत किया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2252193' target='_blank'>PIB Release</a>" },
+            
+            { id: 28, tag: "", question: "अप्रैल में आयोजित SMOPS-2026 सम्मेलन का संबंध किस विषय से था?", options: ["(a) अंतरिक्ष यान मिशनों के संचालन और प्रबंधन से", "(b) केवल समुद्री बीमा से", "(c) केवल वन विरासत से", "(d) केवल कृषि उर्वरक से"], correct: 0, explanation: "8–10 अप्रैल को बेंगलुरु में Spacecraft Mission Operations सम्मेलन का दूसरा संस्करण आयोजित हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2250197' target='_blank'>PIB Release</a>" },
+            
+            { id: 29, tag: "", question: "NASA के Artemis II अभियान के बारे में सही कथन चुनिए:<br>1. इसे 1 अप्रैल 2026 को प्रक्षेपित किया गया।<br>2. चार अंतरिक्ष यात्रियों ने चंद्रमा की परिक्रमा कर वापसी की।<br>3. इस अभियान में चंद्रमा की सतह पर मनुष्यों को उतारा गया。<br><br>सही कथन कौन-से हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) केवल 1 और 3", "(d) तीनों"], correct: 0, explanation: "Artemis II ने Orion यान में चार यात्रियों को चंद्रमा के आसपास भेजा और वे अप्रैल में पृथ्वी पर लौटे।<br><br><b>स्रोत:</b> <a href='https://www.nasa.gov/news-release/nasa-welcomes-record-setting-artemis-ii-moonfarers-back-to-earth/' target='_blank'>NASA Official</a>" },
+            
+            { id: 30, tag: "", question: "29 अप्रैल को नौसेना और DRDO के NASM-SR परीक्षण की विशेषता क्या थी?", options: ["(a) नौसेना के हेलिकॉप्टर से दो जहाजरोधी मिसाइलें तेजी से एक के बाद एक दागी गईं।", "(b) पहली बार चंद्रमा से मिसाइल दागी गई।", "(c) केवल जमीन से उपग्रह प्रक्षेपित किया गया।", "(d) किसी जहाज पर यात्री विमान उतारा गया।"], correct: 0, explanation: "ओडिशा तट के पास नौसैनिक हेलिकॉप्टर से छोटी दूरी की नौसैनिक जहाजरोधी मिसाइलों का पहला सल्वो प्रक्षेपण हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2256722' target='_blank'>PIB Release</a>" },
+            
+            { id: 31, tag: "", question: "अप्रैल में T-72 और T-90 टैंकों के लिए खरीदी गई TRAWL Assembly का उद्देश्य क्या है?", options: ["(a) बारूदी सुरंग वाले क्षेत्रों से सुरक्षित रास्ता बनाने की क्षमता बढ़ाना", "(b) टैंकों को यात्री रेलगाड़ी में बदलना", "(c) समुद्री माल का बीमा करना", "(d) उर्वरक की गुणवत्ता जाँचना"], correct: 0, explanation: "रक्षा मंत्रालय ने लगभग ₹975 करोड़ के अनुबंध किए। यह उपकरण टैंकों को बारूदी सुरंग वाले क्षेत्र में रास्ता साफ करने में मदद करता है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2254141' target='_blank'>PIB Release</a>" },
+            
+            { id: 32, tag: "", question: "अप्रैल में ‘Cyclone-IV’ विशेष बल अभ्यास किन दो देशों के बीच और कहाँ आयोजित हुआ?", options: ["(a) भारत–मिस्र; अंशास, मिस्र", "(b) भारत–उज़्बेकिस्तान; नमंगान, उज़्बेकिस्तान", "(c) भारत–सेशेल्स; विक्टोरिया", "(d) भारत–फ्रांस; पेरिस"], correct: 0, explanation: "भारत और मिस्र के संयुक्त विशेष बल अभ्यास का चौथा संस्करण 9–17 अप्रैल के लिए अंशास में निर्धारित था।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2250186' target='_blank'>PIB Release</a>" },
+            
+            { id: 33, tag: "", question: "‘DUSTLIK’ अभ्यास के अप्रैल 2026 संस्करण का सही संयोजन क्या है?", options: ["(a) सातवाँ संस्करण; भारत–उज़्बेकिस्तान; नमंगान क्षेत्र", "(b) चौथा संस्करण; भारत–मिस्र; अंशास", "(c) तीसरा संस्करण; भारत–दक्षिण कोरिया; सियोल", "(d) पहला संस्करण; भारत–श्रीलंका; कोलंबो"], correct: 0, explanation: "भारत–उज़्बेकिस्तान संयुक्त सैन्य अभ्यास का सातवाँ संस्करण 12–25 अप्रैल के लिए नमंगान में निर्धारित था।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2251300' target='_blank'>PIB Release</a>" },
+            
+            { id: 34, tag: "", question: "दक्षिण कोरिया के राष्ट्रपति की अप्रैल 2026 भारत यात्रा के संबंध में सही कथन चुनिए:<br>1. राष्ट्रपति ली जे म्युंग भारत आए।<br>2. दोनों पक्षों ने 2026–30 के लिए विशेष रणनीतिक साझेदारी का संयुक्त दृष्टिपत्र प्रस्तुत किया।<br>3. सहयोग की चर्चाओं में उद्योग तथा जहाज निर्माण शामिल थे。<br><br>सही कथन कौन-से हैं?", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) तीनों", "(d) केवल 1 और 3"], correct: 2, explanation: "राष्ट्रपति ली जे म्युंग की यात्रा 19–21 अप्रैल को हुई (औद्योगिक सहयोग, महत्वपूर्ण खनिज और समुद्री क्षेत्र पर जोर)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2253977' target='_blank'>PIB Release</a>" },
+            
+            { id: 35, tag: "", question: "अप्रैल में भारत के उपराष्ट्रपति सी. पी. राधाकृष्णन ने किस पड़ोसी देश की द्विपक्षीय यात्रा की?", options: ["(a) श्रीलंका", "(b) नेपाल", "(c) भूटान", "(d) मालदीव"], correct: 0, explanation: "19–20 अप्रैल की श्रीलंका यात्रा को भारत के उपराष्ट्रपति की उस देश की पहली द्विपक्षीय यात्रा बताया गया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2253231' target='_blank'>PIB Release</a>" },
+            
+            { id: 36, tag: "", question: "अप्रैल के विधानसभा चुनाव कार्यक्रम में किन क्षेत्रों में 23 अप्रैल को मतदान निर्धारित था?", options: ["(a) तमिलनाडु और पश्चिम बंगाल का पहला चरण", "(b) केवल असम का अंतिम चरण", "(c) केवल केरल और पुडुचेरी", "(d) केवल पश्चिम बंगाल का दूसरा चरण"], correct: 0, explanation: "निर्वाचन आयोग के कार्यक्रम में तमिलनाडु तथा पश्चिम बंगाल के पहले चरण का मतदान 23 अप्रैल निर्धारित था।<br><br><b>स्रोत:</b> <a href='https://www.eci.gov.in/' target='_blank'>ECI Official</a>" },
+            
+            { id: 37, tag: "", question: "अप्रैल में समीक्षा की गई विश्वविद्यालयों और महाविद्यालयों की अंतरिक्ष प्रयोगशाला योजना के पहले चरण में कितनी प्रयोगशालाएँ प्रस्तावित थीं?", options: ["(a) सात", "(b) सत्रह", "(c) सत्तर", "(d) एक सौ सात"], correct: 0, explanation: "अंतरिक्ष प्रणालियों और मिशन डिजाइन का व्यावहारिक अनुभव देने के लिए पहले चरण में सात प्रयोगशालाएँ प्रस्तावित थीं।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2255657' target='_blank'>PIB Release</a>" },
+            
+            { id: 38, tag: "", question: "अप्रैल के Wisden सम्मान का सही मिलान कौन-सा है:<br>1. दीप्ति शर्मा — विश्व की अग्रणी महिला क्रिकेटर<br>2. अभिषेक शर्मा — विश्व के अग्रणी T20 क्रिकेटर<br><br>सही विकल्प चुनिए:", options: ["(a) केवल 1", "(b) केवल 2", "(c) 1 और 2 दोनों", "(d) न 1, न 2"], correct: 2, explanation: "Wisden Cricketers’ Almanack 2026 के प्रमुख सम्मानों में दीप्ति शर्मा और अभिषेक शर्मा के ये खिताब दर्ज हैं।<br><br><b>स्रोत:</b> <a href='https://www.wisden.com/cricket-news/indias-icc-ranking-record-breaker-abhishek-sharma-named-wisdens-leading-cricketer-in-the-world-twenty20' target='_blank'>Wisden Almanack</a>" },
+            
+            { id: 39, tag: "", question: "बैंकॉक 2026 विश्व पैरा तीरंदाजी शृंखला में भारत के प्रदर्शन के बारे में सही विकल्प चुनिए।", options: ["(a) भारत पदक तालिका में प्रथम; 7 स्वर्ण सहित 13 पदक; पायल नाग ने स्वर्ण जीता", "(b) भारत पदक तालिका में अंतिम; केवल एक कांस्य", "(c) भारत ने भाग नहीं लिया; पायल नाग ने रजत जीता", "(d) भारत दूसरे स्थान पर; कोई स्वर्ण नहीं"], correct: 0, explanation: "30 मार्च से 4 अप्रैल तक आयोजित प्रतियोगिता में भारत ने 7 स्वर्ण सहित 13 पदक जीते (पायल नाग ने स्वर्ण जीता)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2251614' target='_blank'>PIB Release</a>" },
+            
+            { id: 40, tag: "", question: "FIDE की अप्रैल 2026 रेटिंग सूची में बोधना शिवानंदन के बारे में सही कथन क्या है?", options: ["(a) वह इंग्लैंड का प्रतिनिधित्व करते हुए महिला शीर्ष 100 में पहुँचीं और इंग्लैंड की शीर्ष महिला खिलाड़ी बनीं।", "(b) वह भारत का प्रतिनिधित्व करते हुए विश्व की नंबर एक पुरुष खिलाड़ी बनीं।", "(c) उन्होंने अप्रैल में विश्व शतरंज चैंपियनशिप का खुला वर्ग जीता।", "(d) उन्होंने उसी महीने शतरंज से संन्यास लिया।"], correct: 0, explanation: "FIDE की अप्रैल रेटिंग सूची के अनुसार 11 वर्षीय बोधना इंग्लैंड का प्रतिनिधित्व करते हुए महिला शीर्ष 100 में पहुँचीं।<br><br><b>स्रोत:</b> <a href='https://www.fide.com/fide-april-2026-rating-list-published/' target='_blank'>FIDE Official</a>" },
+            
+            { id: 41, tag: "", question: "पहले खेलो इंडिया जनजातीय खेलों के अप्रैल में घोषित अंतिम पदक क्रम में कौन शीर्ष पर रहा?", options: ["(a) कर्नाटक — 23 स्वर्ण", "(b) ओडिशा — 23 स्वर्ण", "(c) झारखंड — 23 स्वर्ण", "(d) छत्तीसगढ़ — 23 स्वर्ण"], correct: 0, explanation: "आधिकारिक खेलो इंडिया पदक तालिका में कर्नाटक 23 स्वर्ण पदकों के साथ प्रथम रहा।<br><br><b>स्रोत:</b> <a href='https://dashboard.kheloindia.gov.in/' target='_blank'>Khelo India Dashboard</a>" },
+            
+            { id: 42, tag: "", question: "विश्व ऑटिज़्म जागरूकता दिवस 2026 की संयुक्त राष्ट्र विषयवस्तु कौन-सी थी?", options: ["(a) Autism and Humanity – Every Life Has Value", "(b) Our Power, Our Planet", "(c) Together for Health, Stand with Science", "(d) Living Heritage and Emergency Response"], correct: 0, explanation: "2 अप्रैल के इस दिवस ने ऑटिज़्म वाले व्यक्तियों की गरिमा और प्रत्येक जीवन के मूल्य को केंद्र में रखा।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/observances/autism-day/' target='_blank'>UN Official</a>" },
+            
+            { id: 43, tag: "", question: "विश्व स्वास्थ्य दिवस 2026 की WHO विषयवस्तु क्या थी?", options: ["(a) Together for health. Stand with science.", "(b) Driven to End Malaria: Now We Can. Now We Must.", "(c) Homoeopathy for Sustainable Health", "(d) IP and Sports: Ready, Set, Innovate"], correct: 0, explanation: "7 अप्रैल को WHO ने बेहतर स्वास्थ्य के लिए मिलकर काम करने और वैज्ञानिक प्रमाणों का साथ देने पर जोर दिया।<br><br><b>स्रोत:</b> <a href='https://www.who.int/news/item/06-04-2026-who-calls-for-action---together-for-health.-stand-with-science.--to-mark-world-health-day' target='_blank'>WHO Official</a>" },
+            
+            { id: 44, tag: "", question: "विश्व होम्योपैथी दिवस 2026 की भारत में आयोजित कार्यक्रमों की विषयवस्तु क्या थी?", options: ["(a) Homoeopathy for Sustainable Health", "(b) Autism and Humanity", "(c) Forests and Economies", "(d) Water and Gender"], correct: 0, explanation: "10 अप्रैल को आयुष मंत्रालय ने ‘Homoeopathy for Sustainable Health’ विषय के साथ कार्यक्रम आयोजित किया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2250827' target='_blank'>PIB Release</a>" },
+            
+            { id: 45, tag: "", question: "अंतरराष्ट्रीय स्मारक एवं स्थल दिवस 2026 की ICOMOS विषयवस्तु क्या थी?", options: ["(a) Living Heritage and Emergency Response", "(b) Our Power, Our Planet", "(c) IP and Sports", "(d) Together for Health"], correct: 0, explanation: "18 अप्रैल की विषयवस्तु में जीवंत विरासत और आपात स्थिति में उसकी सुरक्षा को जोड़ा गया।<br><br><b>स्रोत:</b> <a href='https://www.icomos.org/actualite/idms-2026/' target='_blank'>ICOMOS Official</a>" },
+            
+            { id: 46, tag: "", question: "पृथ्वी दिवस 2026 का वैश्विक विषय क्या था?", options: ["(a) Our Power, Our Planet", "(b) Water and Gender", "(c) Forests and Economies", "(d) Observing Today, Protecting Tomorrow"], correct: 0, explanation: "22 अप्रैल के लिए EARTHDAY.ORG ने “Our Power, Our Planet” विषय घोषित किया।<br><br><b>स्रोत:</b> <a href='https://www.earthday.org/' target='_blank'>Earth Day Official</a>" },
+            
+            { id: 47, tag: "", question: "23 अप्रैल 2026 से शुरू विश्व पुस्तक राजधानी वर्ष के लिए UNESCO ने किस शहर को चुना था?", options: ["(a) रबात, मोरक्को", "(b) रियो डी जेनेरो, ब्राज़ील", "(c) मेडेलिन, कोलंबिया", "(d) नई दिल्ली, भारत"], correct: 0, explanation: "रबात को विश्व पुस्तक राजधानी 2026 चुना गया था (शुरुआत 23 अप्रैल को)।<br><br><b>स्रोत:</b> <a href='https://www.unesco.org/en/articles/unesco-names-rabat-world-book-capital-2026' target='_blank'>UNESCO Official</a>" },
+            
+            { id: 48, tag: "", question: "विश्व मलेरिया दिवस 2026 के WHO अभियान का सही संदेश क्या था?", options: ["(a) Driven to End Malaria: Now We Can. Now We Must.", "(b) Together for health. Stand with science.", "(c) Autism and Humanity – Every Life Has Value", "(d) Our Power, Our Planet"], correct: 0, explanation: "25 अप्रैल के अभियान में मलेरिया समाप्त करने के लिए मौजूदा वैज्ञानिक साधनों और निवेश का उपयोग करने पर जोर था।<br><br><b>स्रोत:</b> <a href='https://www.who.int/campaigns/world-malaria-day/2026' target='_blank'>WHO Official</a>" },
+            
+            { id: 49, tag: "", question: "विश्व बौद्धिक संपदा दिवस 2026 की WIPO विषयवस्तु क्या थी?", options: ["(a) IP and Sports: Ready, Set, Innovate", "(b) Forests and Economies", "(c) Living Heritage and Emergency Response", "(d) Together Against Loneliness"], correct: 0, explanation: "26 अप्रैल के विषय में खेल जगत के आविष्कारों और बौद्धिक संपदा के योगदान को दिखाया गया।<br><br><b>स्रोत:</b> <a href='https://www.wipo.int/' target='_blank'>WIPO Official</a>" },
+            
+            { id: 50, tag: "", question: "अंतरराष्ट्रीय जैज़ दिवस 2026 के वैश्विक समारोह का मेजबान शहर कौन-सा था?", options: ["(a) शिकागो, अमेरिका", "(b) रबात, मोरक्को", "(c) बेंगलुरु, भारत", "(d) सियोल, दक्षिण कोरिया"], correct: 0, explanation: "30 अप्रैल 2026 को अंतरराष्ट्रीय जैज़ दिवस की 15वीं वर्षगाँठ के वैश्विक समारोह का आयोजन शिकागो में किया गया।<br><br><b>स्रोत:</b> <a href='https://www.unesco.org/' target='_blank'>UNESCO Official</a>" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
