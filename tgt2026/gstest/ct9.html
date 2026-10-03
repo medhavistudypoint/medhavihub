@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">मई 2026 — करेंट अफेयर्स विशेष टेस्ट</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">करेंट अफेयर्स (मई 2026)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY (मई 2026 - 50 प्रश्न) -->
+    <script>
+        const QUIZ_KEY = "medhavi_may_2026_ca_test"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "मई 2026 में स्वीकृत ‘मिशन फॉर कॉटन प्रोडक्टिविटी’ के संबंध में सही विकल्प कौन-सा है?", options: ["(a) अवधि 2026–27 से 2028–29; परिव्यय ₹3,900 करोड़", "(b) अवधि 2026–27 से 2030–31; परिव्यय ₹5,659.22 करोड़", "(c) अवधि 2025–26 से 2030–31; परिव्यय ₹8,500 करोड़", "(d) अवधि 2026–27 से 2035–36; परिव्यय ₹37,500 करोड़"], correct: 1, explanation: "केंद्रीय मंत्रिमंडल ने कपास की उत्पादकता, गुणवत्ता और वैश्विक बाजार में प्रतिस्पर्धा बढ़ाने के लिए यह मिशन मंजूर किया (अवधि 2026–27 से 2030–31, परिव्यय ₹5,659.22 करोड़)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2258111' target='_blank'>PIB Release</a>" },
+            
+            { id: 2, tag: "", question: "गन्ना सत्र 2026–27 के लिए मई 2026 में स्वीकृत उचित एवं लाभकारी मूल्य (FRP) तथा आधारभूत रिकवरी दर का सही युग्म क्या है?", options: ["(a) ₹355 प्रति क्विंटल — 10%", "(b) ₹365 प्रति क्विंटल — 10%", "(c) ₹375 प्रति क्विंटल — 10.25%", "(d) ₹365 प्रति क्विंटल — 10.25%"], correct: 3, explanation: "आर्थिक मामलों की मंत्रिमंडलीय समिति ने 10.25% आधारभूत चीनी रिकवरी पर FRP ₹365 प्रति क्विंटल तय किया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2258113' target='_blank'>PIB Release</a>" },
+            
+            { id: 3, tag: "", question: "मई 2026 में स्वीकृत दो अतिरिक्त सेमीकंडक्टर परियोजनाओं में कौन-सी सुविधा शामिल थी?", options: ["(a) GaN तकनीक आधारित व्यावसायिक मिनी/माइक्रो-LED डिस्प्ले सुविधा", "(b) देश का पहला अंतरिक्ष प्रक्षेपण केंद्र", "(c) केवल सिलिकॉन खनन संयंत्र", "(d) परमाणु ईंधन संवर्धन सुविधा"], correct: 0, explanation: "मंजूर परियोजनाओं में गैलियम नाइट्राइड (GaN) आधारित मिनी/माइक्रो-LED डिस्प्ले सुविधा और एक सेमीकंडक्टर पैकेजिंग सुविधा शामिल थीं。<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2258116' target='_blank'>PIB Release</a>" },
+            
+            { id: 4, tag: "", question: "मई 2026 में सर्वोच्च न्यायालय के न्यायाधीशों की स्वीकृत संख्या बढ़ाने के प्रस्ताव में, भारत के मुख्य न्यायाधीश को छोड़कर, संख्या कितनी से कितनी करने की बात थी?", options: ["(a) 31 से 35", "(b) 33 से 35", "(c) 33 से 37", "(d) 34 से 37"], correct: 2, explanation: "मंत्रिमंडल ने Supreme Court (Number of Judges) Amendment Bill, 2026 लाने के प्रस्ताव को मंजूरी दी (संख्या 33 से 37 करने की बात)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2258131' target='_blank'>PIB Release</a>" },
+            
+            { id: 5, tag: "", question: "मई 2026 में स्वीकृत जहाज मरम्मत सुविधा किस स्थान पर विकसित की जानी है?", options: ["(a) कोच्चि, केरल", "(b) वाडीनार, गुजरात", "(c) तूतीकोरिन, तमिलनाडु", "(d) पारादीप, ओडिशा"], correct: 1, explanation: "आर्थिक मामलों की मंत्रिमंडलीय समिति ने गुजरात के वाडीनार में आधुनिक जहाज मरम्मत सुविधा के विकास को मंजूरी दी।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2258115' target='_blank'>PIB Release</a>" },
+            
+            { id: 6, tag: "", question: "मई 2026 में मंजूर ECLGS 5.0 के बारे में सही कथन चुनिए।", options: ["(a) इसे केवल किसानों के फसल ऋण के लिए मंजूर किया गया।", "(b) इसमें कुल अतिरिक्त ऋण प्रवाह का लक्ष्य ₹25,500 करोड़ था।", "(c) इसमें विमानन कंपनियों के लिए कोई प्रावधान नहीं था।", "(d) इसमें ₹2,55,000 करोड़ अतिरिक्त ऋण प्रवाह का लक्ष्य था, जिसमें विमानन क्षेत्र के लिए ₹5,000 करोड़ शामिल थे।"], correct: 3, explanation: "Emergency Credit Line Guarantee Scheme 5.0 के तहत कुल लक्षित अतिरिक्त ऋण प्रवाह ₹2,55,000 करोड़ था (विमानन क्षेत्र के लिए ₹5,000 करोड़ शामिल)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2258114' target='_blank'>PIB Release</a>" },
+            
+            { id: 7, tag: "", question: "मई 2026 में स्वीकृत तीन रेलवे मल्टीट्रैकिंग परियोजनाओं के संबंध में सही विकल्प क्या है?", options: ["(a) लगभग ₹23,437 करोड़ लागत; रेल नेटवर्क में लगभग 901 किमी वृद्धि", "(b) लगभग ₹20,667 करोड़ लागत; रेल नेटवर्क में लगभग 901 किमी वृद्धि", "(c) लगभग ₹23,437 करोड़ लागत; रेल नेटवर्क में लगभग 90 किमी वृद्धि", "(d) लगभग ₹37,500 करोड़ लागत; रेल नेटवर्क में लगभग 901 किमी वृद्धि"], correct: 0, explanation: "लागत ₹23,437 करोड़ थी और इनके पूरा होने से मौजूदा रेलवे नेटवर्क में लगभग 901 किलोमीटर की वृद्धि अपेक्षित थी।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2258124' target='_blank'>PIB Release</a>" },
+            
+            { id: 8, tag: "", question: "सतही कोयला/लिग्नाइट गैसीकरण परियोजनाओं को बढ़ावा देने के लिए मई 2026 में मंजूर योजना का परिव्यय कितना था?", options: ["(a) ₹8,500 करोड़", "(b) ₹20,667 करोड़", "(c) ₹37,500 करोड़", "(d) ₹56,592 करोड़"], correct: 2, explanation: "इस योजना के लिए ₹37,500 करोड़ स्वीकृत हुए (2030 तक 100 मिलियन टन कोयला गैसीकरण लक्ष्य)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2260621' target='_blank'>PIB Release</a>" },
+            
+            { id: 9, tag: "", question: "मई 2026 में विपणन सत्र 2026–27 के लिए कितनी खरीफ फसलों के न्यूनतम समर्थन मूल्य में वृद्धि को मंजूरी दी गई?", options: ["(a) 12", "(b) 14", "(c) 16", "(d) 23"], correct: 1, explanation: "आर्थिक मामलों की मंत्रिमंडलीय समिति ने 14 खरीफ फसलों के MSP में वृद्धि मंजूर की।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2260617' target='_blank'>PIB Release</a>" },
+            
+            { id: 10, tag: "", question: "अहमदाबाद (सरखेज)–धोलेरा रेलवे परियोजना के बारे में सही कथन कौन-सा है?", options: ["(a) यह मुंबई–पुणे के बीच मेट्रो परियोजना है।", "(b) यह केवल माल ढुलाई के लिए एकल लाइन परियोजना है।", "(c) इसे नागपुर हवाई अड्डे से जोड़ने के लिए मंजूर किया गया।", "(d) यह लगभग ₹20,667 करोड़ की अर्ध-उच्च गति वाली दोहरी रेल लाइन परियोजना है।"], correct: 3, explanation: "PIB ने इसे भारत की पहली अर्ध-उच्च गति रेल परियोजना बताया (लागत लगभग ₹20,667 करोड़)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2260626' target='_blank'>PIB Release</a>" },
+            
+            { id: 11, tag: "", question: "मई 2026 में किस हवाई अड्डे के उन्नयन और आधुनिकीकरण से जुड़े सार्वजनिक–निजी भागीदारी प्रस्ताव को मंजूरी दी गई?", options: ["(a) नागपुर अंतरराष्ट्रीय हवाई अड्डा", "(b) गुवाहाटी अंतरराष्ट्रीय हवाई अड्डा", "(c) अगरतला हवाई अड्डा", "(d) श्रीनगर हवाई अड्डा"], correct: 0, explanation: "केंद्रीय मंत्रिमंडल ने नागपुर अंतरराष्ट्रीय हवाई अड्डे के उन्नयन एवं आधुनिकीकरण के लिए प्रस्ताव को स्वीकृति दी।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2260629' target='_blank'>PIB Release</a>" },
+            
+            { id: 12, tag: "", question: "‘सार्थक PDS’ योजना का मुख्य संबंध किससे है?", options: ["(a) विद्यालयों में डिजिटल पाठ्यपुस्तकों से", "(b) शहरी मेट्रो निर्माण से", "(c) सार्वजनिक वितरण प्रणाली में खाद्यान्न परिवहन, हैंडलिंग और स्वचालन से", "(d) निर्यातकों को ब्याज सहायता से"], correct: 2, explanation: "योजना का संबंध PDS के जरिए खाद्यान्न की अंतिम छोर तक आपूर्ति और स्वचालन से है (केंद्रीय हिस्सा ₹25,530 करोड़)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2265788' target='_blank'>PIB Release</a>" },
+            
+            { id: 13, tag: "", question: "जनगणना 2027 की मई 2026 में शुरू हुई स्व-गणना के बारे में सही कथन कौन-सा है?", options: ["(a) इसे केवल कागजी प्रपत्र पर किया जा सकता था।", "(b) इसमें नागरिकों को घर से ऑनलाइन जानकारी देने का विकल्प मिला।", "(c) इसमें केवल ग्राम पंचायतों की गणना होनी थी।", "(d) स्व-गणना 2027 के बाद शुरू होनी थी।"], correct: 1, explanation: "जनगणना से जुड़े गृह-सूचीकरण चरण में स्व-गणना के लिए ऑनलाइन पोर्टल उपलब्ध कराया गया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2257354' target='_blank'>PIB Release</a>" },
+            
+            { id: 14, tag: "", question: "मई 2026 में शुरू की गई स्वदेशी Cell Broadcast System का प्राथमिक उपयोग क्या है?", options: ["(a) खाद्यान्न भंडार का मूल्यांकन", "(b) उपग्रहों से टीवी प्रसारण", "(c) आयकर रिटर्न जमा करना", "(d) आपदा संबंधी चेतावनी बड़े क्षेत्र के मोबाइल उपयोगकर्ताओं तक पहुँचाना"], correct: 3, explanation: "इसका उद्देश्य आपदा की स्थिति में लक्षित क्षेत्र के लोगों को तेजी से चेतावनी पहुँचाने की क्षमता मजबूत करना है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2257499' target='_blank'>PIB Release</a>" },
+            
+            { id: 15, tag: "", question: "मई 2026 में जारी संशोधित eGramSwaraj नियोजन पोर्टल किस स्तर की विकास योजना से जुड़ा है?", options: ["(a) पंचायत विकास योजना", "(b) राष्ट्रीय राजमार्ग विकास योजना", "(c) रक्षा खरीद योजना", "(d) विश्वविद्यालय पाठ्यक्रम योजना"], correct: 0, explanation: "यह पोर्टल 2026–27 की पंचायत विकास योजनाओं (GPDP) के नियोजन से जुड़ा है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2257880' target='_blank'>PIB Release</a>" },
+            
+            { id: 16, tag: "", question: "मई 2026 में जारी ‘School Education System in India: Temporal Analysis and Policy Roadmap for Quality Enhancement’ रिपोर्ट किस संस्था से संबंधित है?", options: ["(a) विश्वविद्यालय अनुदान आयोग", "(b) भारतीय रिजर्व बैंक", "(c) नीति आयोग", "(d) निर्वाचन आयोग"], correct: 2, explanation: "नीति आयोग ने स्कूली शिक्षा व्यवस्था में गुणवत्ता सुधार की नीतिगत दिशा से संबंधित यह रिपोर्ट जारी की।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2258645' target='_blank'>PIB Release</a>" },
+            
+            { id: 17, tag: "", question: "स्वास्थ्य मंत्रालय के ‘JANANI’ प्लेटफॉर्म के बारे में कौन-सा कथन सही है?", options: ["(a) यह केवल शिशुओं के टीकाकरण प्रमाणपत्र का पोर्टल है।", "(b) यह महिलाओं के प्रजनन काल में मातृ और शिशु स्वास्थ्य सेवाओं का डिजिटल रिकॉर्ड रखने वाला प्लेटफॉर्म है।", "(c) यह आयुष दवाओं के निर्यात का मंच है।", "(d) यह अस्पतालों के अग्नि सुरक्षा निरीक्षण का मंच है।"], correct: 1, explanation: "JANANI (Journey of Antenatal, Natal and Neonatal Integrated Care) मातृ और शिशु स्वास्थ्य सेवाओं का डिजिटल रिकॉर्ड रखने वाला प्लेटफॉर्म है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2258625' target='_blank'>PIB Release</a>" },
+            
+            { id: 18, tag: "", question: "मई 2026 में शुरू किए गए ‘Swasth Bharat Portal’ का प्रमुख उद्देश्य क्या था?", options: ["(a) सभी सरकारी अस्पतालों को निजी बनाना", "(b) केवल अंतरराष्ट्रीय यात्रियों के वीजा जारी करना", "(c) विद्यालयों में खेल प्रतियोगिताएँ आयोजित करना", "(d) विभिन्न राष्ट्रीय स्वास्थ्य कार्यक्रमों के डिजिटल कामकाज को एकीकृत करना"], correct: 3, explanation: "नया पोर्टल विभिन्न राष्ट्रीय स्वास्थ्य कार्यक्रमों के सेवा वितरण, रिपोर्टिंग और निगरानी से जुड़े डिजिटल काम को एकीकृत करने के लिए शुरू हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2258283' target='_blank'>PIB Release</a>" },
+            
+            { id: 19, tag: "", question: "मई 2026 में जारी RBSK 2.0 दिशानिर्देश किस क्षेत्र से संबंधित हैं?", options: ["(a) बच्चों के स्वास्थ्य की जाँच और संबंधित सेवाएँ", "(b) रेलवे स्टेशन सुरक्षा", "(c) कपास का न्यूनतम समर्थन मूल्य", "(d) समुद्री प्रदूषण का आकलन"], correct: 0, explanation: "राष्ट्रीय बाल स्वास्थ्य कार्यक्रम (RBSK) के अद्यतन दिशानिर्देश बाल स्वास्थ्य जाँच कार्यक्रम को मजबूत करने के लिए जारी हुए।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2257617' target='_blank'>PIB Release</a>" },
+            
+            { id: 20, tag: "", question: "मई 2026 में आरंभ ‘SEHAT’ मिशन के बारे में सही युग्म चुनिए।", options: ["(a) ISRO–DRDO; समुद्री निगरानी", "(b) RBI–NABARD; डिजिटल ऋण", "(c) ICAR–ICMR; कृषि, पोषण और सार्वजनिक स्वास्थ्य का समन्वय", "(d) UGC–AICTE; तकनीकी शिक्षा में प्रवेश"], correct: 2, explanation: "SEHAT (Science Excellence for Health through Agricultural Transformation) को ICAR और ICMR ने संयुक्त रूप से आरंभ किया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2259959' target='_blank'>PIB Release</a>" },
+            
+            { id: 21, tag: "", question: "मई 2026 के ‘Fire Safety Week’ के दौरान केंद्रीय स्वास्थ्य मंत्रालय ने किस प्रकार के संस्थानों के लिए राष्ट्रीय अग्नि एवं जीवन सुरक्षा दिशानिर्देश जारी किए?", options: ["(a) केवल औद्योगिक गोदाम", "(b) स्वास्थ्य सेवा संस्थान", "(c) रेलवे माल गोदाम", "(d) समुद्री बंदरगाह"], correct: 1, explanation: "स्वास्थ्य सेवा संस्थानों में आग की रोकथाम तथा जीवन सुरक्षा से संबंधित राष्ट्रीय दिशानिर्देश जारी किए गए।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2257800' target='_blank'>PIB Release</a>" },
+            
+            { id: 22, tag: "", question: "मई 2026 में आरंभ ‘भारतीय भाषा समर कैंप’ का प्रमुख उद्देश्य क्या था?", options: ["(a) केवल संस्कृत की विश्वविद्यालय परीक्षा आयोजित करना", "(b) विदेशी भाषाओं के लिए पासपोर्ट प्रशिक्षण देना", "(c) विद्यालयों में केवल अंग्रेजी माध्यम लागू करना", "(d) विद्यार्थियों के बीच भारतीय भाषाओं और बहुभाषिकता को प्रोत्साहन देना"], correct: 3, explanation: "यह पहल विद्यार्थियों को भारत की भाषाई विविधता से परिचित कराने और बहुभाषिकता को प्रोत्साहन देने से जुड़ी है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/' target='_blank'>PIB Official</a>" },
+            
+            { id: 23, tag: "", question: "‘School Management Committee Guidelines 2026’ का घोषित उद्देश्य किसे मजबूत करना था?", options: ["(a) स्कूली शिक्षा में समुदाय की भागीदारी", "(b) विश्वविद्यालयों की विदेशी रैंकिंग", "(c) रक्षा विद्यालयों की भर्ती", "(d) केवल बोर्ड परीक्षा के अंकन का तरीका"], correct: 0, explanation: "इन दिशानिर्देशों का केंद्र विद्यालय के संचालन और शिक्षा में स्थानीय समुदाय की भागीदारी को अधिक प्रभावी बनाना है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2263719' target='_blank'>PIB Release</a>" },
+            
+            { id: 24, tag: "", question: "12 मई 2026 को शुरू किए गए मौसम पूर्वानुमान उत्पादों का सही संयोजन क्या है?", options: ["(a) चक्रवात नामकरण और समुद्री मत्स्य गणना", "(b) हिमस्खलन चेतावनी और राष्ट्रीय वन सर्वेक्षण", "(c) मानसून की प्रगति का AI आधारित पूर्वानुमान और उत्तर प्रदेश के लिए उच्च स्थानिक विभेदन वाला वर्षा पूर्वानुमान", "(d) केवल दिल्ली का तापमान पूर्वानुमान और वायु गुणवत्ता सूचकांक"], correct: 2, explanation: "पृथ्वी विज्ञान मंत्रालय के उत्पादों में मानसून की प्रगति का AI आधारित पूर्वानुमान और यूपी के लिए उच्च स्थानिक विभेदन वाला वर्षा पूर्वानुमान शामिल था।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2260258' target='_blank'>PIB Release</a>" },
+            
+            { id: 25, tag: "", question: "मई 2026 में शुरू State Water Reforms Framework का मुख्य प्रयोजन क्या है?", options: ["(a) केवल अंतरराष्ट्रीय समुद्री सीमाएँ निर्धारित करना", "(b) राज्यों और केंद्रशासित प्रदेशों के जल क्षेत्र के सुधारों को प्रोत्साहित तथा आकलित करना", "(c) सभी नदियों का नाम बदलना", "(d) केवल एक राज्य में भूजल कर लागू करना"], correct: 1, explanation: "जल शक्ति मंत्रालय का यह ढाँचा राज्यों और केंद्रशासित प्रदेशों में जल शासन संबंधी सुधारों को दिशा देने तथा प्रगति आकलित करने के लिए है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2262787' target='_blank'>PIB Release</a>" },
+            
+            { id: 26, tag: "", question: "मई 2026 में PMGSY-IV की शुरुआत किस राज्य के सीहोर जिले में हुई?", options: ["(a) राजस्थान", "(b) छत्तीसगढ़", "(c) उत्तर प्रदेश", "(d) मध्य प्रदेश"], correct: 3, explanation: "प्रधानमंत्री ग्राम सड़क योजना की 25वीं वर्षगाँठ पर सीहोर जिले के भैरूंदा में PMGSY-IV शुरू की गई।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2259554' target='_blank'>PIB Release</a>" },
+            
+            { id: 27, tag: "", question: "मई 2026 में शुरू ‘PM-AJAY’ पोर्टल किस योजना के क्रियान्वयन से संबंधित है?", options: ["(a) प्रधानमंत्री अनुसूचित जाति अभ्युदय योजना", "(b) प्रधानमंत्री फसल बीमा योजना", "(c) प्रधानमंत्री मत्स्य संपदा योजना", "(d) प्रधानमंत्री ग्राम सड़क योजना"], correct: 0, explanation: "सामाजिक न्याय मंत्रालय ने प्रधानमंत्री अनुसूचित जाति अभ्युदय योजना के लिए PM-AJAY पोर्टल और ऐप शुरू किए।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2265530' target='_blank'>PIB Release</a>" },
+            
+            { id: 28, tag: "", question: "भारत और IFAD ने मई 2026 में किस अवधि के लिए Country Strategic Opportunities Programme शुरू किया?", options: ["(a) 2026–2028", "(b) 2026–2030", "(c) 2026–2033", "(d) 2027–2047"], correct: 2, explanation: "भारत सरकार और IFAD ने 2026–2033 का आठ वर्षीय कार्यक्रम शुरू किया (ग्रामीण आय और जलवायु अनुकूलन पर जोर)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/' target='_blank'>PIB Official</a>" },
+            
+            { id: 29, tag: "", question: "मई 2026 में जारी औद्योगिक उत्पादन सूचकांक (IIP) से संबंधित तकनीकी रिपोर्ट के संदर्भ में प्रस्तावित नया आधार वर्ष क्या था?", options: ["(a) 2004–05", "(b) 2022–23", "(c) 2011–12", "(d) 2025–26"], correct: 1, explanation: "सांख्यिकी मंत्रालय IIP के आधार वर्ष को 2011–12 से 2022–23 करने की प्रक्रिया पर काम कर रहा था (रिपोर्ट 25 मई को जारी)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2265637' target='_blank'>PIB Release</a>" },
+            
+            { id: 30, tag: "", question: "मई 2026 में जारी LEADS 2025 रिपोर्ट का मुख्य क्षेत्र क्या है?", options: ["(a) राज्यों की चुनावी भागीदारी", "(b) प्राथमिक स्वास्थ्य केंद्रों की संख्या", "(c) विश्वविद्यालयों की प्रवेश क्षमता", "(d) राज्यों में लॉजिस्टिक्स का प्रदर्शन"], correct: 3, explanation: "LEADS (Logistics Ease Across Different States) रिपोर्ट राज्यों में लॉजिस्टिक्स व्यवस्था के प्रदर्शन के आकलन से है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2260854' target='_blank'>PIB Release</a>" },
+            
+            { id: 31, tag: "", question: "अंतरराष्ट्रीय जैव विविधता दिवस 2026 की तारीख और विषय का सही युग्म कौन-सा है?", options: ["(a) 22 मई — Acting locally for global impact", "(b) 5 जून — Acting locally for global impact", "(c) 22 मई — Unmasking the appeal", "(d) 31 मई — Acting locally for global impact"], correct: 0, explanation: "अंतरराष्ट्रीय जैव विविधता दिवस 22 मई को मनाया जाता है (विषय: स्थानीय स्तर पर कार्य, वैश्विक प्रभाव)।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/observances/biological-diversity-day' target='_blank'>UN Official</a>" },
+            
+            { id: 32, tag: "", question: "विश्व तंबाकू निषेध दिवस 2026 के बारे में सही विकल्प चुनिए।", options: ["(a) 22 मई; विषय ‘Healthy Farms’", "(b) 5 जून; विषय ‘Unmasking the Appeal’", "(c) 31 मई; विषय ‘Unmasking the Appeal – Countering Nicotine and Tobacco Addiction’", "(d) 31 मई; विषय ‘Acting Locally for Global Impact’"], correct: 2, explanation: "31 मई को मनाए जाने वाले विश्व तंबाकू निषेध दिवस 2026 का विषय 'Unmasking the Appeal – Countering Nicotine and Tobacco Addiction' था।<br><br><b>स्रोत:</b> <a href='https://www.who.int/' target='_blank'>WHO Official</a>" },
+            
+            { id: 33, tag: "", question: "मई 2026 में प्रधानमंत्री की नीदरलैंड यात्रा के संबंध में सही विकल्प क्या है?", options: ["(a) यात्रा 19–20 मई को हुई और मेजबान प्रधानमंत्री जॉर्जिया मेलोनी थीं।", "(b) यात्रा 16–17 मई को हुई और मेजबान प्रधानमंत्री रॉब जेटन थे।", "(c) यात्रा 15 मई को हुई और इसका विषय केवल समुद्री अभ्यास था।", "(d) यात्रा 22 मई को हुई और इसमें भारत–कनाडा CEPA पर हस्ताक्षर हुए।"], correct: 1, explanation: "प्रधानमंत्री नरेंद्र मोदी ने 16–17 मई को नीदरलैंड की आधिकारिक यात्रा की (मेजबान प्रधानमंत्री रॉब जेटन)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2261884' target='_blank'>PIB Release</a>" },
+            
+            { id: 34, tag: "", question: "मई 2026 में भारत और स्वीडन द्वारा अपनाई गई संयुक्त कार्ययोजना की अवधि क्या थी?", options: ["(a) 2026–2027", "(b) 2026–2028", "(c) 2026–2035", "(d) 2026–2030"], correct: 3, explanation: "भारत और स्वीडन ने रणनीतिक साझेदारी को आगे बढ़ाने के लिए संयुक्त कार्ययोजना 2026–2030 अपनाई।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2262096' target='_blank'>PIB Release</a>" },
+            
+            { id: 35, tag: "", question: "19–20 मई 2026 को प्रधानमंत्री की इटली यात्रा के दौरान भारत और इटली ने 2029 तक द्विपक्षीय व्यापार के लिए किस लक्ष्य की बात की?", options: ["(a) €20 अरब", "(b) €5 अरब", "(c) €50 अरब", "(d) €100 अरब"], correct: 0, explanation: "भारत और इटली ने 2029 तक €20 अरब के द्विपक्षीय व्यापार लक्ष्य का उल्लेख किया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2263405' target='_blank'>PIB Release</a>" },
+            
+            { id: 36, tag: "", question: "मई 2026 में प्रधानमंत्री की UAE यात्रा के परिणामों में निम्नलिखित में से कौन-सा सहयोग शामिल था?", options: ["(a) नेपाल के साथ जलविद्युत संधि", "(b) जापान के साथ बुलेट ट्रेन संचालन समझौता", "(c) कोचीन शिपयार्ड, ड्राइडॉक्स वर्ल्ड और CEMS के बीच जहाज मरम्मत कौशल विकास संबंधी समझौता", "(d) केवल भारत–नीदरलैंड कृषि अनुसंधान समझौता"], correct: 2, explanation: "यात्रा के परिणामों में जहाज मरम्मत के लिए कुशल कार्यबल तैयार करने संबंधी त्रिपक्षीय समझौता शामिल था।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2261385' target='_blank'>PIB Release</a>" },
+            
+            { id: 37, tag: "", question: "भारत–कनाडा प्रस्तावित CEPA वार्ता का दूसरा दौर मई 2026 में कहाँ आयोजित हुआ?", options: ["(a) ओटावा", "(b) वाणिज्य भवन, नई दिल्ली", "(c) मुंबई", "(d) जिनेवा"], correct: 1, explanation: "प्रस्तावित CEPA पर दूसरे दौर की बातचीत 4–8 मई 2026 को नई दिल्ली के वाणिज्य भवन में हुई।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2259188' target='_blank'>PIB Release</a>" },
+            
+            { id: 38, tag: "", question: "मई 2026 में भारत और किस देश के बीच CEPA के उन्नयन पर 12वें दौर की वार्ता नई दिल्ली में हुई?", options: ["(a) कनाडा", "(b) इटली", "(c) UAE", "(d) दक्षिण कोरिया"], correct: 3, explanation: "भारत–कोरिया CEPA उन्नयन वार्ता का 12वाँ दौर 25–27 मई को नई दिल्ली में हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2266170' target='_blank'>PIB Release</a>" },
+            
+            { id: 39, tag: "", question: "मई 2026 में MIRV प्रणाली युक्त उन्नत अग्नि मिसाइल का सफल उड़ान परीक्षण कहाँ से किया गया?", options: ["(a) डॉ. ए.पी.जे. अब्दुल कलाम द्वीप, ओडिशा", "(b) पोखरण, राजस्थान", "(c) श्रीहरिकोटा, आंध्र प्रदेश", "(d) चाँदीपुर के निकट समुद्री पोत से"], correct: 0, explanation: "8 मई 2026 को ओडिशा के डॉ. ए.पी.जे. अब्दुल कलाम द्वीप से उन्नत अग्नि मिसाइल का परीक्षण हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2259380' target='_blank'>PIB Release</a>" },
+            
+            { id: 40, tag: "", question: "मई 2026 में DRDO और भारतीय वायुसेना द्वारा परीक्षण किया गया TARA किससे संबंधित है?", options: ["(a) दूरसंचार प्रसारण उपग्रह", "(b) नई पनडुब्बी श्रेणी", "(c) Tactical Advanced Range Augmentation हथियार", "(d) जनगणना का मोबाइल ऐप"], correct: 2, explanation: "DRDO और वायुसेना ने TARA (Tactical Advanced Range Augmentation) हथियार का परीक्षण किया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/' target='_blank'>PIB Official</a>" },
+            
+            { id: 41, tag: "", question: "मई 2026 में DRDO के हाइपरसोनिक मिसाइल विकास से जुड़े स्क्रैमजेट कम्बस्टर परीक्षण ने कितने समय से अधिक की अवधि हासिल की?", options: ["(a) 120 सेकंड", "(b) 1,200 सेकंड", "(c) 12,000 सेकंड", "(d) 70 सेकंड"], correct: 1, explanation: "स्क्रैमजेट कम्बस्टर का परीक्षण 1,200 सेकंड से अधिक अवधि तक चला।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/' target='_blank'>PIB Official</a>" },
+            
+            { id: 42, tag: "", question: "मई 2026 में DRDO द्वारा परीक्षण की गई ULPGM-V3 के बारे में सही कथन कौन-सा है?", options: ["(a) यह पानी के नीचे से छोड़ा जाने वाला टॉरपीडो है।", "(b) इसका परीक्षण केवल अंतरिक्ष में हुआ।", "(c) इसे केवल भूमि-से-समुद्र भूमिका में परखा गया।", "(d) यह UAV से छोड़ी जाने वाली सटीक निर्देशित मिसाइल है, जिसका वायु-से-भूमि और वायु-से-वायु परीक्षण हुआ।"], correct: 3, explanation: "यह UAV से छोड़ी जाने वाली सटीक निर्देशित मिसाइल है (वायु-से-भूमि और वायु-से-वायु परीक्षण संपन्न)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2263045' target='_blank'>PIB Release</a>" },
+            
+            { id: 43, tag: "", question: "‘CINBAX-II 2026’ संयुक्त सैन्य अभ्यास किन देशों के बीच और कहाँ आयोजित हुआ?", options: ["(a) भारत–कंबोडिया; कंबोडिया", "(b) भारत–भूटान; मेघालय", "(c) भारत–नेपाल; उत्तराखंड", "(d) भारत–इंडोनेशिया; अंडमान"], correct: 0, explanation: "भारत–कंबोडिया द्विपक्षीय सैन्य अभ्यास कंबोडिया के कम्पोंग स्पेउ प्रांत में आयोजित हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2257604' target='_blank'>PIB Release</a>" },
+            
+            { id: 44, tag: "", question: "मई 2026 के बहुपक्षीय सैन्य अभ्यास ‘PRAGATI 2026’ का स्थान और स्वरूप क्या था?", options: ["(a) राजस्थान; नौसेना का द्विपक्षीय अभ्यास", "(b) केरल; वायुसेना का द्विपक्षीय अभ्यास", "(c) उमरोई, मेघालय; अनेक देशों की भागीदारी वाला सैन्य अभ्यास", "(d) ओडिशा; केवल मिसाइल परीक्षण"], correct: 2, explanation: "यह अभ्यास मेघालय के उमरोई सैन्य स्टेशन में आयोजित हुआ जिसमें 12 मित्र देशों ने भाग लिया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2266978' target='_blank'>PIB Release</a>" },
+            
+            { id: 45, tag: "", question: "31 मई 2026 को भारतीय नौसेना के 27वें नौसेना प्रमुख का कार्यभार किसने संभाला?", options: ["(a) एडमिरल दिनेश कुमार त्रिपाठी", "(b) एडमिरल कृष्णा स्वामीनाथन", "(c) वाइस एडमिरल अजय कोचर", "(d) वाइस एडमिरल संजय वात्स्यायन"], correct: 1, explanation: "एडमिरल कृष्णा स्वामीनाथन ने 31 मई को 27वें नौसेना प्रमुख का पद संभाला।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/' target='_blank'>PIB Official</a>" },
+            
+            { id: 46, tag: "", question: "मई 2026 में कोलकाता में लॉन्च ‘संगमित्र’ किस प्रकार का पोत है?", options: ["(a) परमाणु चालित विमानवाहक पोत", "(b) शोध पनडुब्बी", "(c) नदी में चलने वाला यात्री पोत", "(d) अगली पीढ़ी का अपतटीय गश्ती पोत"], correct: 3, explanation: "संगमित्र भारतीय नौसेना के लिए बनाया जा रहा Next Generation Offshore Patrol Vessel है (GRSE, कोलकाता)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2263508' target='_blank'>PIB Release</a>" },
+            
+            { id: 47, tag: "", question: "आपके PDF में उल्लिखित IPL 2026 फाइनल का सही परिणाम कौन-सा है?", options: ["(a) रॉयल चैलेंजर्स बेंगलुरु ने गुजरात टाइटंस को पाँच विकेट से हराया।", "(b) गुजरात टाइटंस ने रॉयल चैलेंजर्स बेंगलुरु को पाँच विकेट से हराया।", "(c) मुंबई इंडियंस ने गुजरात टाइटंस को छह विकेट से हराया।", "(d) रॉयल चैलेंजर्स बेंगलुरु ने पंजाब किंग्स को सात रन से हराया।"], correct: 0, explanation: "31 मई 2026 के फाइनल में रॉयल चैलेंजर्स बेंगलुरु ने गुजरात टाइटंस को पाँच विकेट से हराकर खिताब जीता।<br><br><b>स्रोत:</b> <a href='https://www.iplt20.com/' target='_blank'>IPL Official</a>" },
+            
+            { id: 48, tag: "", question: "मई 2026 में संपन्न भारतीय महिला लीग (IWL) 2025–26 का खिताब किस क्लब ने जीता?", options: ["(a) गोकुलम केरल FC", "(b) श्रीभूमि FC", "(c) ईस्ट बंगाल FC", "(d) ओडिशा FC"], correct: 2, explanation: "ईस्ट बंगाल FC ने IWL 2025–26 का खिताब अपने नाम किया।<br><br><b>स्रोत:</b> <a href='https://www.the-aiff.com/' target='_blank'>AIFF Official</a>" },
+            
+            { id: 49, tag: "", question: "मई 2026 में I-League 2 का चैंपियन बनकर अगले स्तर के लिए पदोन्नति पाने वाला क्लब कौन-सा था?", options: ["(a) यूनाइटेड SC", "(b) दिल्ली FC", "(c) एफसी बेंगलुरु यूनाइटेड", "(d) ईस्ट बंगाल FC"], correct: 1, explanation: "दिल्ली FC ने I-League 2 2025–26 का खिताब जीता (FC Bengaluru United के साथ पदोन्नति पाई)।<br><br><b>स्रोत:</b> <a href='https://www.the-aiff.com/' target='_blank'>AIFF Official</a>" },
+            
+            { id: 50, tag: "", question: "आपके PDF में दिए गए 39वें राष्ट्रीय खेलों के संबंध में सही कथन चुनिए।", options: ["(a) मेजबान गोवा है और आयोजन वर्ष 2026 है।", "(b) मेजबान उत्तराखंड है और आयोजन वर्ष 2027 है।", "(c) मेजबान मेघालय है और आयोजन वर्ष 2026 है।", "(d) मेजबान मेघालय है और आयोजन वर्ष 2027 है।"], correct: 3, explanation: "2027 के 39वें राष्ट्रीय खेलों के लिए मेघालय मेजबान है (मई 2026 में तैयारियों की समीक्षा)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2266991' target='_blank'>PIB Release</a>" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
