@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">जुलाई 2026 — करेंट अफेयर्स विशेष टेस्ट</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">करेंट अफेयर्स (जुलाई 2026)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY (जुलाई 2026 - 50 प्रश्न) -->
+    <script>
+        const QUIZ_KEY = "medhavi_july_2026_ca_test"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "जुलाई 2026 में हुए 16वें भारत–जापान शिखर सम्मेलन के बारे में निम्न कथनों पर विचार कीजिए:<br>1. जापान की प्रधानमंत्री साने ताकाइची ने भारत की यात्रा की।<br>2. दोनों पक्षों ने रक्षा, आर्थिक सुरक्षा और उभरती प्रौद्योगिकी में सहयोग पर चर्चा की।<br>3. वर्ष 2027 को भारत–जापान संबंधों में साझा इतिहास का वर्ष मनाने पर सहमति बनी।<br><br>सही विकल्प चुनिए:", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) 1, 2 और 3", "(d) केवल 1 और 3"], correct: 2, explanation: "जापान की प्रधानमंत्री साने ताकाइची 1–3 जुलाई को भारत आईं और 16वें शिखर सम्मेलन में शामिल हुईं (तीनों कथन सही हैं)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2280587' target='_blank'>PIB Release</a>" },
+            
+            { id: 2, tag: "", question: "जुलाई 2026 में राष्ट्र को समर्पित भारत का पहला ग्रीनफील्ड एकीकृत रिफाइनरी-सह-पेट्रोकेमिकल परिसर कहाँ स्थित है?", options: ["(a) पारादीप, ओडिशा", "(b) पचपदरा, राजस्थान", "(c) पानिपत, हरियाणा", "(d) नागपट्टिनम, तमिलनाडु"], correct: 1, explanation: "HPCL राजस्थान रिफाइनरी का परिसर राजस्थान के बालोतरा जिले के पचपदरा में है (4 जुलाई को राष्ट्र को समर्पित)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2280619' target='_blank'>PIB Release</a>" },
+            
+            { id: 3, tag: "", question: "भारत की पहली निजी ‘पॉइंट-इन-स्पेस’ यानी PinS इंस्ट्रूमेंट अप्रोच प्रक्रिया को जुलाई 2026 में किस स्थान के हेलीकॉप्टर परिचालन के लिए मंजूरी मिली?", options: ["(a) उंडावल्ली हेलीपोर्ट, आंध्र प्रदेश", "(b) जुहू हेलीपोर्ट, महाराष्ट्र", "(c) सफदरजंग हेलीपोर्ट, दिल्ली", "(d) गंगटोक हेलीपोर्ट, सिक्किम"], correct: 0, explanation: "मंजूरी आंध्र प्रदेश के उंडावल्ली हेलीपोर्ट के लिए दी गई।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2280128' target='_blank'>PIB Release</a>" },
+            
+            { id: 4, tag: "", question: "‘विकसित भारत–रोजगार और आजीविका मिशन (ग्रामीण)’ के जुलाई 2026 के राष्ट्रीय आरंभ के संबंध में सही राज्य कौन-सा है?", options: ["(a) बिहार", "(b) मध्य प्रदेश", "(c) तेलंगाना", "(d) आंध्र प्रदेश"], correct: 3, explanation: "इस ग्रामीण रोजगार एवं आजीविका मिशन का राष्ट्रीय आरंभ आंध्र प्रदेश से जुड़ा था।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2279995' target='_blank'>PIB Release</a>" },
+            
+            { id: 5, tag: "", question: "जुलाई 2026 में घोषित कानपुर–कबरई परियोजना के बारे में सही युग्म चुनिए:", options: ["(a) राष्ट्रीय राजमार्ग 19 — बिहार", "(b) राष्ट्रीय राजमार्ग 34 — उत्तर प्रदेश", "(c) राष्ट्रीय राजमार्ग 44 — राजस्थान", "(d) राष्ट्रीय राजमार्ग 48 — गुजरात"], correct: 1, explanation: "मंत्रिमंडल ने उत्तर प्रदेश में राष्ट्रीय राजमार्ग 34 के कानपुर–कबरई खंड के विकास को मंजूरी दी।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2279819' target='_blank'>PIB Release</a>" },
+            
+            { id: 6, tag: "", question: "जुलाई 2026 में मंजूर वरुणा नदी एलिवेटेड कॉरिडोर किस शहर की परिवहन व्यवस्था से संबंधित है?", options: ["(a) प्रयागराज", "(b) कानपुर", "(c) वाराणसी", "(d) अयोध्या"], correct: 2, explanation: "वरुणा नदी वाराणसी से जुड़ी है और स्वीकृत एलिवेटेड कॉरिडोर का उद्देश्य शहर में संपर्क सुधारना है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2284781' target='_blank'>PIB Release</a>" },
+            
+            { id: 7, tag: "", question: "जुलाई 2026 में मंजूर NH-19–वाराणसी रिंग रोड गंगा एलिवेटेड कनेक्टर का मुख्य उद्देश्य क्या है?", options: ["(a) राष्ट्रीय राजमार्ग और रिंग रोड के बीच बेहतर संपर्क", "(b) गंगा में नया अंतरदेशीय बंदरगाह बनाना", "(c) नदी पर केवल पैदल यात्रियों का पुल बनाना", "(d) वाराणसी से दिल्ली तक नई रेल लाइन बिछाना"], correct: 0, explanation: "यह स्वीकृति सड़क संपर्क से संबंधित है (NH-19 और वाराणसी रिंग रोड को जोड़ने वाला एलिवेटेड कनेक्टर)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2284783' target='_blank'>PIB Release</a>" },
+            
+            { id: 8, tag: "", question: "‘न्यू इन्वेस्टमेंट पॉलिसी फॉर यूरिया 2026’ का संबंध किस क्षेत्र से है?", options: ["(a) दूरसंचार उपकरण", "(b) खाद्य तेल आयात", "(c) रक्षा निर्यात", "(d) उर्वरक उत्पादन"], correct: 3, explanation: "जुलाई में मंजूर नई निवेश नीति का संबंध देश में यूरिया उत्पादन क्षमता और इस क्षेत्र में निवेश से है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2284800' target='_blank'>PIB Release</a>" },
+            
+            { id: 9, tag: "", question: "‘इंडिया सेमीकंडक्टर मिशन 2.0’ के लिए जुलाई 2026 में स्वीकृत परिव्यय कितना था?", options: ["(a) ₹12,750 करोड़", "(b) ₹62,500 करोड़", "(c) ₹1,27,500 करोड़", "(d) ₹3,15,000 करोड़"], correct: 2, explanation: "इंडिया सेमीकंडक्टर मिशन 2.0 के लिए स्वीकृत परिव्यय ₹1,27,500 करोड़ था।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2284784' target='_blank'>PIB Release</a>" },
+            
+            { id: 10, tag: "", question: "जुलाई 2026 की मोबाइल फोन विनिर्माण योजना के लिए स्वीकृत राशि कौन-सी है?", options: ["(a) ₹62,500 करोड़", "(b) ₹1,27,500 करोड़", "(c) ₹5,070 करोड़", "(d) ₹84,084 करोड़"], correct: 0, explanation: "मोबाइल फोन विनिर्माण योजना के लिए ₹62,500 करोड़ स्वीकृत किए गए।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2284789' target='_blank'>PIB Release</a>" },
+            
+            { id: 11, tag: "", question: "‘भाव्य रसायन’ पहल के तहत जुलाई 2026 में क्या स्वीकृत किया गया?", options: ["(a) तीन समर्पित रासायनिक पार्क", "(b) पाँच नए पेट्रोलियम भंडार", "(c) चार कृषि निर्यात क्षेत्र", "(d) दो परमाणु ऊर्जा संयंत्र"], correct: 0, explanation: "‘भाव्य रसायन’ के अंतर्गत तीन समर्पित रासायनिक पार्क विकसित करने का निर्णय लिया गया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2288863' target='_blank'>PIB Release</a>" },
+            
+            { id: 12, tag: "", question: "बल्लारी–गुंतकल तीसरी एवं चौथी रेल लाइन परियोजना किन राज्यों से संबंधित है?", options: ["(a) महाराष्ट्र और गोवा", "(b) ओडिशा और झारखंड", "(c) तमिलनाडु और केरल", "(d) कर्नाटक और आंध्र प्रदेश"], correct: 3, explanation: "बल्लारी कर्नाटक में और गुंतकल आंध्र प्रदेश में है (इस मार्ग की क्षमता बढ़ाने से जुड़ी परियोजना)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2288858' target='_blank'>PIB Release</a>" },
+            
+            { id: 13, tag: "", question: "जुलाई में स्वीकृत लगभग 145 किलोमीटर की दो रेल मल्टीट्रैकिंग परियोजनाएँ किन राज्यों से संबंधित थीं?", options: ["(a) पंजाब और हरियाणा", "(b) ओडिशा और झारखंड", "(c) गुजरात और राजस्थान", "(d) असम और मेघालय"], correct: 1, explanation: "ये दो रेल परियोजनाएँ ओडिशा और झारखंड से संबंधित थीं (लगभग 145 किमी लंबाई)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2284807' target='_blank'>PIB Release</a>" },
+            
+            { id: 14, tag: "", question: "‘समुद्र मंथन’ राष्ट्रीय अपतटीय अन्वेषण योजना के बारे में सही विकल्प चुनिए:", options: ["(a) यह केवल अंतर्देशीय नदी परिवहन की योजना है।", "(b) यह केवल समुद्र तटों की सफाई का अभियान है।", "(c) यह अपतटीय अन्वेषण से संबंधित है और इसका परिव्यय ₹84,084 करोड़ है।", "(d) यह ₹5,070 करोड़ की तैरती सौर ऊर्जा योजना है।"], correct: 2, explanation: "जुलाई के अंत में मंजूर ‘समुद्र मंथन’ योजना अपतटीय अन्वेषण से संबंधित है और इसका परिव्यय ₹84,084 करोड़ है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2292445' target='_blank'>PIB Release</a>" },
+            
+            { id: 15, tag: "", question: "जुलाई 2026 में पीएम-किसान को किस अवधि तक जारी रखने की मंजूरी दी गई?", options: ["(a) 2026–27 से 2030–31", "(b) केवल 2026–27", "(c) 2027–28 से 2035–36", "(d) केवल दिसंबर 2026 तक"], correct: 0, explanation: "पीएम-किसान योजना को 2026–27 से 2030–31 की अवधि के लिए जारी रखने की मंजूरी मिली।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2292437' target='_blank'>PIB Release</a>" },
+            
+            { id: 16, tag: "", question: "‘पीएम सूर्य सरोवर योजना’ का सही विवरण क्या है?", options: ["(a) रेगिस्तान में केवल सौर पैनल लगाना", "(b) हर घर में सौर लालटेन बाँटना", "(c) केवल पनबिजली परियोजनाएँ बनाना", "(d) जलाशयों पर तैरती सौर ऊर्जा को ऊर्जा भंडारण से जोड़ना"], correct: 3, explanation: "इस योजना का केंद्र जलाशय की सतह पर स्थापित सौर ऊर्जा प्रणाली (फ्लोटिंग सोलर) और उससे जुड़ा ऊर्जा भंडारण है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2292433' target='_blank'>PIB Release</a>" },
+            
+            { id: 17, tag: "", question: "जुलाई के अंत में स्वीकृत ‘खेलो इंडिया’ और राष्ट्रीय खेल महासंघों से संबंधित प्रस्ताव का परिव्यय क्या था?", options: ["(a) ₹3,644 करोड़", "(b) ₹36,441 करोड़", "(c) ₹62,500 करोड़", "(d) ₹1,27,500 करोड़"], correct: 1, explanation: "खेलते इंडिया और राष्ट्रीय खेल महासंघों से जुड़े प्रस्ताव के लिए ₹36,441 करोड़ का परिव्यय स्वीकृत हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2292439' target='_blank'>PIB Release</a>" },
+            
+            { id: 18, tag: "", question: "जुलाई 2026 में नीति आयोग की ‘आयुर्वेद को वैश्विक बनाने का रणनीतिक रोडमैप’ रिपोर्ट का प्रमुख विषय क्या था?", options: ["(a) आयुर्वेद के अंतरराष्ट्रीय विस्तार की रणनीति", "(b) केवल आयुष कॉलेजों की परीक्षा तिथियाँ", "(c) निजी अस्पतालों की शुल्क सूची", "(d) खाद्यान्न खरीद के न्यूनतम समर्थन मूल्य"], correct: 0, explanation: "नीति आयोग की रिपोर्ट आयुर्वेद की वैश्विक पहुँच बढ़ाने के लिए रणनीतिक रोडमैप प्रस्तुत करती है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2280540' target='_blank'>PIB Release</a>" },
+            
+            { id: 19, tag: "", question: "नीति आयोग ने जुलाई 2026 में राज्यों से संबंधित कौन-सा सूचकांक जारी किया?", options: ["(a) वैश्विक भूख सूचकांक", "(b) जिला वर्षा सूचकांक", "(c) निवेश अनुकूलता सूचकांक", "(d) समुद्री जैव विविधता सूचकांक"], correct: 2, explanation: "नीति आयोग ने 'Investment Friendliness Index' (निवेश अनुकूलता सूचकांक) जारी किया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2285847' target='_blank'>PIB Release</a>" },
+            
+            { id: 20, tag: "", question: "जुलाई 2026 में जारी आठ प्रमुख उद्योगों के संशोधित सूचकांक का नया आधार वर्ष क्या था?", options: ["(a) 2011–12", "(b) 2017–18", "(c) 2024–25", "(d) 2022–23"], correct: 3, explanation: "आठ प्रमुख उद्योगों के संशोधित सूचकांक के लिए आधार वर्ष 2022–23 रखा गया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2286615' target='_blank'>PIB Release</a>" },
+            
+            { id: 21, tag: "", question: "जुलाई 2026 में जारी सेवा उत्पादन सूचकांक के परीक्षण संस्करण का आधार वर्ष क्या था?", options: ["(a) 2011–12", "(b) 2024–25", "(c) 2022–23", "(d) 2018–19"], correct: 1, explanation: "Index of Services Production के परीक्षण संस्करण का आधार वर्ष 2024–25 था।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2284450' target='_blank'>PIB Release</a>" },
+            
+            { id: 22, tag: "", question: "जुलाई 2026 में प्रकाशित PGI-S और PGI-D रिपोर्ट किस क्षेत्र में प्रदर्शन से संबंधित हैं?", options: ["(a) स्कूली शिक्षा", "(b) बंदरगाह संचालन", "(c) वन्यजीव संरक्षण", "(d) ग्रामीण बैंकिंग"], correct: 0, explanation: "ये प्रदर्शन ग्रेडिंग सूचकांक (PGI-S राज्यों/केंद्रशासित प्रदेशों के लिए और PGI-D जिलों के लिए) से संबंधित स्कूली शिक्षा की रिपोर्टें हैं।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2282148' target='_blank'>PIB Release</a>" },
+            
+            { id: 23, tag: "", question: "‘भारत टेक्स 2026’ मुख्यतः किस उद्योग से जुड़ा आयोजन था?", options: ["(a) इस्पात", "(b) जहाज निर्माण", "(c) कपड़ा एवं वस्त्र", "(d) उर्वरक"], correct: 2, explanation: "भारत टेक्स कपड़ा और वस्त्र उद्योग से जुड़ा अंतरराष्ट्रीय स्तर का आयोजन है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2284603' target='_blank'>PIB Release</a>" },
+            
+            { id: 24, tag: "", question: "‘गोल्डन स्पाइस’ लाकाडोंग हल्दी मिशन किस राज्य से संबंधित है?", options: ["(a) केरल", "(b) सिक्किम", "(c) नागालैंड", "(d) मेघालय"], correct: 3, explanation: "लाकाडोंग हल्दी मेघालय से जुड़ी है (जुलाई में इससे संबंधित ‘गोल्डन स्पाइस’ मिशन की घोषणा)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2287186' target='_blank'>PIB Release</a>" },
+            
+            { id: 25, tag: "", question: "जुलाई 2026 की ‘वन हेल्थ’ पहल में प्राथमिकता वाले जूनोटिक रोगों की संख्या कितनी बताई गई?", options: ["(a) 5", "(b) 10", "(c) 15", "(d) 20"], correct: 1, explanation: "पहल में 10 प्राथमिकता वाले जूनोटिक रोगों के लिए संसाधन और ई-लर्निंग सामग्री की जानकारी दी गई।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2281860' target='_blank'>PIB Release</a>" },
+            
+            { id: 26, tag: "", question: "ICMR–राष्ट्रीय पोषण संस्थान की ‘लेट्स फिक्स आवर फूड’ पहल का विशेष संबंध किससे था?", options: ["(a) बच्चों और किशोरों के भोजन एवं पोषण से", "(b) केवल खाद्यान्न निर्यात से", "(c) समुद्री मत्स्य उत्पादन से", "(d) उर्वरक सब्सिडी से"], correct: 0, explanation: "इस पहल में बच्चों और किशोरों के बेहतर भोजन व पोषण पर जोर दिया गया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2287825' target='_blank'>PIB Release</a>" },
+            
+            { id: 27, tag: "", question: "जुलाई 2026 में शुरू राष्ट्रीय मानव–वन्यजीव संघर्ष पोर्टल किस समस्या से संबंधित है?", options: ["(a) समुद्र में प्लास्टिक अपशिष्ट", "(b) शहरों में ध्वनि प्रदूषण", "(c) मनुष्यों और वन्यजीवों के बीच संघर्ष", "(d) कृषि मंडियों में मूल्य विवाद"], correct: 2, explanation: "पोर्टल का विषय मानव और वन्यजीवों के बीच होने वाले संघर्ष से संबंधित प्रबंधन है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2283188' target='_blank'>PIB Release</a>" },
+            
+            { id: 28, tag: "", question: "जुलाई 2026 में घोषित ‘म्यूजियम ऑफ वर्ड’ के लिए कौन-सा स्थान चुना गया?", options: ["(a) राष्ट्रीय अभिलेखागार, नई दिल्ली", "(b) सालार जंग संग्रहालय, हैदराबाद", "(c) भारतीय संग्रहालय, कोलकाता", "(d) राष्ट्रीय पुस्तकालय, कोलकाता"], correct: 3, explanation: "भारत के भाषा संबंधी इस संग्रहालय के लिए राष्ट्रीय पुस्तकालय, कोलकाता का स्थान चुना गया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2286386' target='_blank'>PIB Release</a>" },
+            
+            { id: 29, tag: "", question: "कर्मचारी भविष्य निधि संगठन ने जुलाई 2026 में किन दो एकमुश्त योजनाओं की घोषणा की?", options: ["(a) विश्वास और एमनेस्टी", "(b) सुरक्षा और समृद्धि", "(c) श्रम और शक्ति", "(d) प्रयास और प्रगति"], correct: 0, explanation: "EPFO की घोषित एकमुश्त योजनाओं के नाम VISHWAS और AMNESTY थे।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2291296' target='_blank'>PIB Release</a>" },
+            
+            { id: 30, tag: "", question: "जुलाई 2026 में भारत ने अत्यंत सटीक भारतीय मानक समय के प्रदर्शन हेतु किस प्रौद्योगिकी पर आधारित नेटवर्क दिखाया?", options: ["(a) ब्लूटूथ मेश", "(b) व्हाइट रैबिट", "(c) लोरा कृषि नेटवर्क", "(d) उपग्रह टेलीविजन नेटवर्क"], correct: 1, explanation: "प्रदर्शन में White Rabbit प्रौद्योगिकी पर आधारित नेटवर्क का उपयोग हुआ (अत्यंत सटीक समय समन्वय)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2286094' target='_blank'>PIB Release</a>" },
+            
+            { id: 31, tag: "", question: "प्रधानमंत्री की जुलाई 2026 की इंडोनेशिया यात्रा के दौरान किस प्राचीन भारतीय शिक्षण केंद्र से संबंधित ताम्रपत्र की प्रतिकृति का उल्लेख हुआ?", options: ["(a) विक्रमशिला", "(b) तक्षशिला", "(c) नालंदा", "(d) वल्लभी"], correct: 2, explanation: "यात्रा के दौरान नालंदा से संबंधित ताम्रपत्र की प्रतिकृति का उल्लेख हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2282084' target='_blank'>PIB Release</a>" },
+            
+            { id: 32, tag: "", question: "जुलाई 2026 के भारत–ऑस्ट्रेलिया शिखर सम्मेलन के परिणामों में किस विषय पर सहयोग विशेष रूप से सामने आया?", options: ["(a) केवल ध्रुवीय पर्यटन", "(b) केवल साझा मुद्रा", "(c) केवल अंतरिक्ष पर्यटन", "(d) ऊर्जा सुरक्षा"], correct: 3, explanation: "सम्मेलन के घोषित परिणामों में ऊर्जा सुरक्षा सहयोग का विषय विशेष रूप से सामने आया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2282739' target='_blank'>PIB Release</a>" },
+            
+            { id: 33, tag: "", question: "प्रधानमंत्री की जुलाई 2026 की यात्रा के संदर्भ में निम्न देश–तिथि युग्मों में सही कौन-सा है?", options: ["(a) न्यूजीलैंड — 10–11 जुलाई", "(b) न्यूजीलैंड — 1–3 जुलाई", "(c) इंडोनेशिया — 20–23 जुलाई", "(d) जापान — 29–31 जुलाई"], correct: 0, explanation: "प्रधानमंत्री की न्यूजीलैंड यात्रा 10–11 जुलाई को निर्धारित थी।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2283527' target='_blank'>PIB Release</a>" },
+            
+            { id: 34, tag: "", question: "जुलाई 2026 की ब्रिक्स महिला मंत्रिस्तरीय बैठक भारत के किस शहर में आयोजित हुई?", options: ["(a) नागपुर", "(b) कोच्चि", "(c) गुवाहाटी", "(d) जयपुर"], correct: 1, explanation: "ब्रिक्स महिला मंत्रिस्तरीय बैठक कोच्चि में 8–9 जुलाई को आयोजित हुई।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2281868' target='_blank'>PIB Release</a>" },
+            
+            { id: 35, tag: "", question: "भारत–ब्रिटेन मुक्त व्यापार समझौते के संबंध में जुलाई 2026 की प्रमुख प्रगति क्या थी?", options: ["(a) वार्ता पहली बार शुरू हुई।", "(b) समझौता हमेशा के लिए स्थगित हुआ।", "(c) समझौता प्रभावी हुआ।", "(d) केवल खेल सहयोग की घोषणा हुई।"], correct: 2, explanation: "भारत–ब्रिटेन मुक्त व्यापार समझौता 15 जुलाई 2026 से प्रभावी हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2284889' target='_blank'>PIB Release</a>" },
+            
+            { id: 36, tag: "", question: "जु जुलाई 2026 में भारत–इजराइल मुक्त व्यापार समझौते की दूसरे दौर की वार्ता कहाँ हुई?", options: ["(a) मुंबई", "(b) तेल अवीव", "(c) यरुशलम", "(d) नई दिल्ली"], correct: 3, explanation: "भारत-इजराइल FTT के दूसरे दौर की वार्ता नई दिल्ली में 20–23 जुलाई को हुई।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2288849' target='_blank'>PIB Release</a>" },
+            
+            { id: 37, tag: "", question: "जुलाई 2026 की ब्रिक्स आपदा जोखिम न्यूनीकरण बैठक किस शहर से संबंधित थी?", options: ["(a) नई दिल्ली", "(b) कोच्चि", "(c) नागपुर", "(d) गुवाहाटी"], correct: 0, explanation: "आपदा जोखिम न्यूनीकरण विषयक ब्रिक्स बैठक नई दिल्ली में आयोजित हुई।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2288849' target='_blank'>PIB Release</a>" },
+            
+            { id: 38, tag: "", question: "जुलाई 2026 में ब्रिक्स परिवहन मंत्रियों की बैठक का आयोजन किस शहर में हुआ?", options: ["(a) पुणे", "(b) नागपुर", "(c) भोपाल", "(d) विशाखापत्तनम"], correct: 1, explanation: "ब्रिक्स परिवहन मंत्रियों की बैठक नागपुर में 11–12 जुलाई को आयोजित हुई।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2288849' target='_blank'>PIB Release</a>" },
+            
+            { id: 39, tag: "", question: "जुलाई 2026 में लंबी दूरी की सतह-से-हवा में मार करने वाली ‘कुश’ प्रणाली का पहला परीक्षण कहाँ हुआ?", options: ["(a) पोखरण, राजस्थान", "(b) श्रीहरिकोटा, आंध्र प्रदेश", "(c) अब्दुल कलाम द्वीप, ओडिशा", "(d) चांदीपुर, ओडिशा"], correct: 2, explanation: "‘कुश’ प्रणाली के पहले परीक्षण का स्थान अब्दुल कलाम द्वीप, ओडिशा था।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2288526' target='_blank'>PIB Release</a>" },
+            
+            { id: 40, tag: "", question: "जुलाई 2026 में लंबी दूरी के निर्देशित ‘पिनाका’ रॉकेट का परीक्षण कहाँ किया गया?", options: ["(a) कोच्चि", "(b) कारवार", "(c) विशाखापत्तनम", "(d) चांदीपुर"], correct: 3, explanation: "निर्देशित पिनाका रॉकेट का परीक्षण चांदीपुर, ओडिशा में हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2282572' target='_blank'>PIB Release</a>" },
+            
+            { id: 41, tag: "", question: "जुलाई 2026 में नौसेना में शामिल INS महेंद्रगिरि के संबंध में सही विकल्प चुनिए:", options: ["(a) यह प्रोजेक्ट 17A का छठा जहाज है।", "(b) यह केवल पनडुब्बी बचाव पोत है।", "(c) यह माहे श्रेणी का पहला पोत है।", "(d) यह तटरक्षक बल का गश्ती विमान है।"], correct: 0, explanation: "INS महेंद्रगिरि प्रोजेक्ट 17A का छठा जहाज है और जुलाई में इसे नौसेना में शामिल किया गया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2283586' target='_blank'>PIB Release</a>" },
+            
+            { id: 42, tag: "", question: "INS मालवन किस श्रेणी और भूमिका का पोत है?", options: ["(a) विमानवाहक पोत — विक्रांत श्रेणी", "(b) उथले जल में पनडुब्बीरोधी पोत — माहे श्रेणी", "(c) तेलवाहक पोत — दीपक श्रेणी", "(d) मिसाइल विध्वंसक — विशाखापत्तनम श्रेणी"], correct: 1, explanation: "INS मालवन माहे श्रेणी का दूसरा उथले जल में पनडुब्बीरोधी युद्धपोत है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2287788' target='_blank'>PIB Release</a>" },
+            
+            { id: 43, tag: "", question: "‘ऑपरेशन सदर्न रेडीनेस 26-2’ का जुलाई 2026 में भारत में पहला आयोजन कहाँ हुआ?", options: ["(a) मुंबई", "(b) चेन्नई", "(c) कोच्चि", "(d) पोर्ट ब्लेयर"], correct: 2, explanation: "इस अभ्यास का भारत में पहला आयोजन कोच्चि में हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2287015' target='_blank'>PIB Release</a>" },
+            
+            { id: 44, tag: "", question: "जुलाई 2026 में सौंपा गया ‘निपुण’ किस प्रकार का स्वदेशी नौसैनिक पोत है?", options: ["(a) विमानवाहक पोत", "(b) परमाणु पनडुब्बी", "(c) मिसाइल विध्वंसक", "(d) डाइविंग सपोर्ट वेसल"], correct: 3, explanation: "‘निपुण’ दूसरा स्वदेशी डाइविंग सपोर्ट वेसल है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2292073' target='_blank'>PIB Release</a>" },
+            
+            { id: 45, tag: "", question: "ISRO का ‘युविका’ कार्यक्रम मुख्यतः किस वर्ग के लिए है?", options: ["(a) स्कूली विद्यार्थियों के लिए", "(b) केवल सेवानिवृत्त वैज्ञानिकों के लिए", "(c) केवल अंतरिक्ष यात्रियों के लिए", "(d) केवल विदेशी निवेशकों के लिए"], correct: 0, explanation: "‘युविका’ ISRO का स्कूली विद्यार्थियों को अंतरिक्ष विज्ञान और प्रौद्योगिकी से परिचित कराने वाला कार्यक्रम है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2291081' target='_blank'>PIB Release</a>" },
+            
+            { id: 46, tag: "", question: "जुलाई 2026 के ‘ग्लासगो खेल’ किस बहु-खेल आयोजन से संबंधित थे?", options: ["(a) एशियाई खेल", "(b) राष्ट्रमंडल खेल", "(c) ओलंपिक खेल", "(d) विश्व विश्वविद्यालय खेल"], correct: 1, explanation: "राष्ट्रमंडल खेल 2026 का आयोजन ग्लासगो में 23 जुलाई से 2 अगस्त तक निर्धारित था।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2289962' target='_blank'>PIB Release</a>" },
+            
+            { id: 47, tag: "", question: "ICC महिला टी20 विश्व कप 2026 के फाइनल के बारे में सही युग्म चुनिए:", options: ["(a) इंग्लैंड ने ऑस्ट्रेलिया को हराया — मेलबर्न", "(b) भारत ने इंग्लैंड को हराया — लॉर्ड्स", "(c) ऑस्ट्रेलिया ने इंग्लैंड को हराया — लॉर्ड्स", "(d) न्यूजीलैंड ने ऑस्ट्रेलिया को हराया — ऑकलैंड"], correct: 2, explanation: "फाइनल लॉर्ड्स में खेला गया और ऑस्ट्रेलिया ने इंग्लैंड को सात विकेट से हराकर खिताब जीता।<br><br><b>स्रोत:</b> <a href='https://www.icc-cricket.com/' target='_blank'>ICC Official</a>" },
+            
+            { id: 48, tag: "", question: "फाहा पुरुष विश्व कप 2026 के फाइनल का सही परिणाम क्या था?", options: ["(a) अर्जेंटीना ने स्पेन को 2–1 से हराया।", "(b) फ्रांस ने ब्राजील को 1–0 से हराया।", "(c) इंग्लैंड ने अर्जेंटीना को पेनल्टी पर हराया।", "(d) स्पेन ने अर्जेंटीना को अतिरिक्त समय के बाद 1–0 से हराया।"], correct: 3, explanation: "फीफा के फाइनल विवरण के अनुसार स्पेन ने अर्जेंटीना को अतिरिक्त समय के बाद 1–0 से हराया।<br><br><b>स्रोत:</b> <a href='https://www.fifa.com/' target='_blank'>FIFA Official</a>" },
+            
+            { id: 49, tag: "", question: "विम्बलडन 2026 के पुरुष और महिला एकल विजेताओं का सही युग्म कौन-सा है?", options: ["(a) यानिक सिनर — लिंडा नोस्कोवा", "(b) अलेक्जेंडर ज्वेरेव — कैरोलिना मुचोवा", "(c) कार्लोस अल्काराज़ — आर्यना सबालेंका", "(d) यानिक सिनर — कैरोलिना मुचोवा"], correct: 0, explanation: "पुरुष एकल खिताब यानिक सिनर ने जीता और महिला एकल में लिंडा नोस्कोवा विजयी रहीं।<br><br><b>स्रोत:</b> <a href='https://www.wimbledon.com/' target='_blank'>Wimbledon Official</a>" },
+            
+            { id: 50, tag: "", question: "जुलाई 2026 में ग्लासगो राष्ट्रमंडल खेलों में वल्लूरी अजय बाबू ने किस खेल और वर्ग में रजत पदक जीता?", options: ["(a) मुक्केबाजी — पुरुष 79 किलोग्राम", "(b) भारोत्तोलन — पुरुष 79 किलोग्राम", "(c) कुश्ती — पुरुष 79 किलोग्राम", "(d) जूडो — पुरुष 79 किलोग्राम"], correct: 1, explanation: "वल्लूरी अजय बाबू का रजत पदक भारोत्तोलन के पुरुष 79 किलोग्राम वर्ग में था।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2290352' target='_blank'>PIB Release</a>" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
