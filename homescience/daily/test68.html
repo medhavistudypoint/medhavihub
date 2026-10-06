@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ CSS Control File Path -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- Security Watermark Screen -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. Login Gate Screen -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ Back Button Path -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. Exam Workspace Screen -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 Responsive, Centered Header -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">गर्भाधान, गर्भकालीन विकास एवं प्रजनन</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Report Dashboard Screen -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point <br> गर्भाधान, गर्भकालीन विकास एवं प्रजनन</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ Dashboard Back Button -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 50 Questions Dataset (1-Line Format) -->
+    <script>
+        const QUIZ_KEY = "medhavi_free_test_d68"; 
+
+        const dataset = [
+            { id: 1, question: "जाइगोट किसे कहते हैं?", options: ["शुक्राणु", "अंडाणु", "निषेचन से बनी नई कोशिका", "गुणसूत्रों का एक जोड़ा"], correct: 2 },
+            { id: 2, question: "गर्भकालीन अवस्था की अवधि कौन-सी है?", options: ["गर्भधारण से दो सप्ताह तक", "गर्भधारण से जन्म तक", "गर्भधारण से आठ सप्ताह तक", "जन्म से चौदह सप्ताह तक"], correct: 1 },
+            { id: 3, question: "जन्मपूर्व जीवन का आरंभ किस घटना से माना जाता है?", options: ["जन्म से", "निषेचन से", "भ्रूण की वृद्धि से", "प्रसव से"], correct: 1 },
+            { id: 4, question: "सामान्यतः एक ही युग्मनज से विकसित समरूपी जुड़वाँ बच्चे कैसे हो सकते हैं?", options: ["केवल दो लड़के", "केवल दो लड़कियाँ", "दोनों लड़के अथवा दोनों लड़कियाँ", "अनिवार्यतः एक लड़का और एक लड़की"], correct: 2 },
+            { id: 5, question: "सामान्यतः अंडाणु का निषेचन कहाँ होता है?", options: ["गर्भाशय में", "अंडवाहिनी में", "अंडाशय में", "गर्भाशय ग्रीवा में"], correct: 1 },
+            { id: 6, question: "जैविक संतान प्राप्त करने में असमर्थ दंपती को परिस्थितियों के अनुसार किन विकल्पों की जानकारी दी जा सकती है?<br>1. आई.वी.एफ.<br>2. कानून के अनुरूप परोपकारी सरोगेसी<br>3. दत्तक ग्रहण<br>4. बिना चिकित्सकीय मूल्यांकन के निश्चित परिणाम का दावा", options: ["1, 2 और 3", "1, 2 और 4", "1, 3 और 4", "2, 3 और 4"], correct: 0 },
+            { id: 7, question: "मानव जीवन-चक्र का आरंभ और अंत दर्शाने वाला सही युग्म कौन-सा है?", options: ["जन्म — किशोरावस्था", "गर्भधारण — वृद्धावस्था", "शैशवावस्था — वृद्धावस्था", "गर्भधारण — मृत्यु"], correct: 3 },
+            { id: 8, question: "गर्भस्थ शिशु के शरीर को ढकने वाले कोमल रोम क्या कहलाते हैं?", options: ["टेराटोजेन", "एम्नियॉन", "वर्निक्स केसिओसा", "लेनुगो"], correct: 3 },
+            { id: 9, question: "मनुष्यों में गर्भावधि की औसत लंबाई लगभग कितने दिन मानी जाती है?", options: ["180 दिन", "200 दिन", "280 दिन", "300 दिन"], correct: 2 },
+            { id: 10, question: "गर्भधारण के बाद विकास की किस अवधि के अंत तक विकसित जीव को भ्रूण कहा जाता है?", options: ["लगभग दूसरे माह तक", "लगभग तीसरे माह तक", "लगभग चौथे माह तक", "जन्म तक"], correct: 0 },
+            { id: 11, question: "किस अंग के माध्यम से गर्भस्थ शिशु को माता के रक्त से पोषक तत्व मिलते हैं?", options: ["अंडाशय", "अंडवाहिनी", "अपरा", "गर्भाशय ग्रीवा"], correct: 2 },
+            { id: 12, question: "गर्भकालीन अवस्था किस अवधि को कहते हैं?", options: ["गर्भधारण से जन्म तक", "जन्म के बाद पहले 30 दिन", "जन्म के बाद पहले दो वर्ष", "दो वर्ष से छह वर्ष तक"], correct: 0 },
+            { id: 13, question: "निषेचित भ्रूण गर्भाशय के बाहर विकसित होने लगे, तो इस स्थिति को क्या कहते हैं?", options: ["आर.एच. असंगति", "सामान्य गर्भावस्था", "सरोगेसी", "अस्थानिक गर्भावस्था"], correct: 3 },
+            { id: 14, question: "गर्भावस्था में निम्न फोलेट स्तर किन प्रतिकूल परिणामों के जोखिम से संबंधित हो सकता है?", options: ["कम जन्म-भार और समयपूर्व जन्म", "केवल आँखों के रंग में परिवर्तन", "केवल भ्रूण के लिंग में परिवर्तन", "केवल दाँत निकलने में विलंब"], correct: 0 },
+            { id: 15, question: "अंडाणु का निषेचन अंडवाहिनी के किस भाग में सामान्यतः होता है?", options: ["एम्पुला", "एंडोमेट्रियम", "गर्भाशय ग्रीवा", "कॉर्पस ल्यूटियम"], correct: 0 },
+            { id: 16, question: "आरोपण का सही अर्थ क्या है?", options: ["शुक्राणु का गर्भाशय में संग्रह होना", "शुक्राणु का अंडवाहिनी की दीवार में जुड़ना", "विकसित होते भ्रूण का गर्भाशय की अंतःपरत से जुड़ना", "अंडाणु का अंडवाहिनी से बाहर निकलना"], correct: 2 },
+            { id: 17, question: "स्थायी गर्भनिरोध की शल्य विधि कौन-सी है?", options: ["नसबंदी", "डायफ्राम", "गर्भनिरोधक गोली", "कंडोम"], correct: 0 },
+            { id: 18, question: "आकार की तुलना में सामान्य मानव शुक्राणु किसके बच्चे जैसा दिखाई देता है?", options: ["शिशु", "शुक्रवाहिनी", "मेढक", "इनमें से कोई नहीं"], correct: 2 },
+            { id: 19, question: "संतान प्राप्ति में कठिनाई के लिए किसका प्रजनन स्वास्थ्य कारण हो सकता है?", options: ["केवल पुरुष का", "केवल स्त्री का", "अनिवार्यतः स्त्री और पुरुष दोनों का एक साथ", "स्त्री या पुरुष, किसी एक अथवा दोनों का"], correct: 3 },
+            { id: 20, question: "जन्मपूर्व विकास की दूसरी अवस्था कौन-सी है?", options: ["बीजावस्था", "गर्भस्थ शिशु अवस्था", "भ्रूणावस्था", "जन्मोत्तर अवस्था"], correct: 2 },
+            { id: 21, question: "भ्रूणावस्था सामान्यतः कब मानी जाती है?", options: ["गर्भधारण से दूसरे सप्ताह तक", "दूसरे सप्ताह से आठवें सप्ताह तक", "आठवें सप्ताह से चौबीसवें सप्ताह तक", "आठवें सप्ताह से जन्म तक"], correct: 1 },
+            { id: 22, question: "डिंब अथवा बीजावस्था की अवधि कौन-सी है?", options: ["गर्भधारण से लगभग दो सप्ताह तक", "तीसरे सप्ताह से दूसरे माह तक", "तीसरे माह से जन्म तक", "जन्म के बाद पहले दो सप्ताह तक"], correct: 0 },
+            { id: 23, question: "गर्भाशय की सबसे भीतरी परत क्या कहलाती है?", options: ["स्नायु", "एंडोमेट्रियम", "हाइमन", "योनि"], correct: 1 },
+            { id: 24, question: "टेराटोजेन के बारे में कौन-सा कथन सही है?<br>1. यह जन्मपूर्व विकास को हानि पहुँचाने वाला कारक हो सकता है।<br>2. इसका प्रभाव केवल तत्काल दिखाई देने वाली शारीरिक क्षति तक सीमित होता है।", options: ["केवल 1", "केवल 2", "1 और 2 दोनों", "न 1, न 2"], correct: 0 },
+            { id: 25, question: "गर्भकाल की प्रारंभिक अवस्था में हानिकारक विकिरण के संपर्क से किस असामान्यता का जोखिम हो सकता है?", options: ["हाइड्रोसेफली", "माइक्रोसेफली", "सामान्य अंडोत्सर्जन", "सामान्य आरोपण"], correct: 1 },
+            { id: 26, question: "गर्भावस्था के प्रथम तीन महीने कौन-सी तिमाही कहलाते हैं?", options: ["प्रथम तिमाही", "द्वितीय तिमाही", "तृतीय तिमाही", "प्रसवोत्तर तिमाही"], correct: 0 },
+            { id: 27, question: "सूची I का सूची II से सही मिलान कीजिए।<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची I</th><th>सूची II</th></tr></thead><tbody><tr><td>A. बबलिंग और गू-गू ध्वनि</td><td>i. गर्भस्थ शिशु की गति</td></tr><tr><td>B. आत्म-वास्तविकीकरण</td><td>ii. स्नायुतंत्र का तीव्र विकास</td></tr><tr><td>C. यांत्रिक साहचर्य</td><td>iii. बच्चे की भाषा</td></tr><tr><td>D. भ्रूणावस्था</td><td>iv. मैस्लो<br>v. बी.एफ. स्किनर</td></tr></tbody></table>", options: ["A–i, B–ii, C–v, D–iii", "A–iii, B–iv, C–v, D–ii", "A–ii, B–i, C–iii, D–iv", "A–iv, B–v, C–ii, D–i"], correct: 1 },
+            { id: 28, question: "सामान्य गर्भावस्था में कॉर्पस ल्यूटियम के कार्य को आगे बनाए रखने में प्रारंभ में कौन-सा हार्मोन सहायता करता है?", options: ["ऑक्सीटोसिन", "प्रोलैक्टिन", "एच.सी.जी.", "थायरॉक्सिन"], correct: 2 },
+            { id: 29, question: "गर्भावस्था की पुष्टि के लिए किए जाने वाले सामान्य परीक्षण मुख्यतः किस हार्मोन की उपस्थिति जाँचते हैं?", options: ["एच.सी.जी.", "इंसुलिन", "ऑक्सीटोसिन", "एड्रेनालिन"], correct: 0 },
+            { id: 30, question: "स्तन ग्रंथियों में दूध के निर्माण और दूध को बाहर निकालने से संबंधित हार्मोनों का सही युग्म कौन-सा है?", options: ["एस्ट्रोजन—दूध निर्माण; इंसुलिन—दूध निष्कासन", "ऑक्सीटोसिन—दूध निर्माण; प्रोलैक्टिन—दूध निष्कासन", "प्रोजेस्टेरोन—दूध निर्माण; थायरॉक्सिन—दूध निष्कासन", "प्रोलैक्टिन—दूध निर्माण; ऑक्सीटोसिन—दूध निष्कासन"], correct: 3 },
+            { id: 31, question: "एक अंडाणु के दो अलग-अलग शुक्राणुओं से सामान्य निषेचन होने के बजाय सामान्य निषेचन में क्या होता है?", options: ["दो शुक्राणुओं की आनुवंशिक सामग्री नियमित रूप से मिलती है", "सामान्यतः एक शुक्राणु की आनुवंशिक सामग्री मिलती है", "शुक्राणु की आवश्यकता के बिना निषेचन पूरा होता है", "केवल गर्भाशय कोशिका की आनुवंशिक सामग्री मिलती है"], correct: 1 },
+            { id: 32, question: "असमरूपी जुड़वाँ बनने की सामान्य प्रक्रिया कौन-सी है?", options: ["एक निषेचित अंडाणु का बाद में दो भागों में विभाजन", "बिना निषेचन के दो भ्रूणों का विकसित होना", "दो अलग अंडाणुओं का अलग शुक्राणुओं से निषेचन", "एक शुक्राणु का एक साथ दो गर्भाशयों में पहुँचना"], correct: 2 },
+            { id: 33, question: "एम्नियॉटिक द्रव की मुख्य भूमिका से कौन-सा कथन संबंधित है?", options: ["गर्भस्थ शिशु के चारों ओर सुरक्षा देने वाला वातावरण बनाना", "अंडाशय में नए अंडाणु बनाना", "शुक्राणुओं को अधिवृषण में परिपक्व करना", "स्तन ग्रंथियों में दूध बनाना"], correct: 0 },
+            { id: 34, question: "अपरा के बारे में सबसे सही कथन कौन-सा है?", options: ["माता और भ्रूण का रक्त हमेशा सीधे एक ही नली में बहता है", "यह केवल भ्रूण का लिंग तय करने वाला अंग है", "यह केवल प्रसव के बाद बनता है", "यह माता और भ्रूण के बीच पदार्थों के आदान-प्रदान में सहायक है"], correct: 3 },
+            { id: 35, question: "गर्भनाल मुख्यतः किन्हें जोड़ती है?", options: ["अंडाशय और अंडवाहिनी को", "भ्रूण और अपरा को", "गर्भाशय और मूत्राशय को", "स्तन ग्रंथि और गर्भाशय को"], correct: 1 },
+            { id: 36, question: "भ्रूणावस्था को जन्मपूर्व विकास का विशेष संवेदनशील चरण क्यों माना जाता है?", options: ["इस चरण में अंगों की आधारभूत संरचनाएँ विकसित होती हैं", "इस चरण में प्रसव की सभी क्रियाएँ समाप्त हो जाती हैं", "इस चरण में भ्रूण में कोई परिवर्तन नहीं होता", "इस चरण में अंडाणु का निर्माण पहली बार होता है"], correct: 0 },
+            { id: 37, question: "अंडोत्सर्जन के तुरंत बाद अंडाणु किस संरचना की ओर बढ़ता है?", options: ["गर्भाशय ग्रीवा", "मूत्रवाहिनी", "अंडवाहिनी", "अधिवृषण"], correct: 2 },
+            { id: 38, question: "गर्भाशय ग्रीवा के खुलने और फैलने का प्रमुख संबंध प्रसव के किस चरण से है?", options: ["अपरा के बाहर निकलने वाले अंतिम चरण से ही", "प्रसव के प्रथम चरण से", "जन्म के बाद स्तनपान शुरू होने से", "गर्भधारण के तुरंत बाद की बीजावस्था से"], correct: 1 },
+            { id: 39, question: "शिशु के जन्म के बाद अपरा के बाहर निकलने को प्रसव का कौन-सा चरण माना जाता है?", options: ["प्रथम चरण", "गर्भधारण चरण", "अंडोत्सर्जन चरण", "तृतीय चरण"], correct: 3 },
+            { id: 40, question: "कॉर्पस ल्यूटियम से प्रमुख रूप में स्रावित हार्मोन कौन-सा है?", options: ["प्रोजेस्टेरोन", "इंसुलिन", "थायरॉक्सिन", "एड्रेनालिन"], correct: 0 },
+            { id: 41, question: "निम्न में से कौन-सा गर्भस्थ शिशु के विकास से संबंधित «टेराटोजेन» का संभावित उदाहरण है?", options: ["आयु के अनुसार निर्धारित सामान्य वृद्धि माप", "जन्म के बाद नियमित वजन मापना", "गर्भावस्था में हानिकारक विकिरण का संपर्क", "जन्म के बाद साफ सूती कपड़ा पहनाना"], correct: 2 },
+            { id: 42, question: "युग्मनज और सामान्य देह कोशिका में गुणसूत्रों की तुलना में सही कथन कौन-सा है?", options: ["युग्मनज में सामान्यतः आधे गुणसूत्र होते हैं", "युग्मनज में सामान्यतः 46 गुणसूत्र होते हैं", "युग्मनज में कोई लैंगिक गुणसूत्र नहीं होता", "युग्मनज में केवल माता के गुणसूत्र होते हैं"], correct: 1 },
+            { id: 43, question: "मानव के सामान्य शुक्राणु और अंडाणु में गुणसूत्रों की संख्या कितनी होती है?", options: ["प्रत्येक में 46", "प्रत्येक में 44", "प्रत्येक में 22", "प्रत्येक में 23"], correct: 3 },
+            { id: 44, question: "नीचे दिए कथनों में भ्रूण और गर्भस्थ शिशु की अवस्थाओं के बारे में सही विकल्प चुनिए।<br>1. भ्रूणावस्था मुख्यतः दूसरे से आठवें सप्ताह तक मानी जाती है।<br>2. गर्भस्थ शिशु की अवस्था लगभग नौवें सप्ताह से जन्म तक मानी जाती है।<br>3. दोनों अवस्थाएँ जन्म के बाद शुरू होती हैं।", options: ["केवल 1 और 2", "केवल 1 और 3", "केवल 2 और 3", "1, 2 और 3"], correct: 0 },
+            { id: 45, question: "भ्रूण का आरोपण सामान्यतः कहाँ होता है?", options: ["अंडाशय की बाहरी सतह पर", "अधिवृषण की नलिका में", "गर्भाशय की अंतःपरत में", "मूत्राशय की अंतःपरत में"], correct: 2 },
+            { id: 46, question: "गर्भाशय के बाहर, विशेषकर अंडवाहिनी में विकसित होने वाली गर्भावस्था का नाम क्या है?", options: ["बहुगर्भावस्था", "अस्थानिक गर्भावस्था", "सामान्य गर्भावस्था", "प्रसवोत्तर अवस्था"], correct: 1 },
+            { id: 47, question: "गर्भावस्था के दौरान माँ में आयरन की पर्याप्त उपलब्धता मुख्यतः किसके लिए महत्त्वपूर्ण है?", options: ["केवल भ्रूण की आँखों का रंग तय करने के लिए", "केवल प्रसव का दिन निर्धारित करने के लिए", "केवल बच्चे का जैविक लिंग तय करने के लिए", "रक्त में हीमोग्लोबिन निर्माण और बढ़ी हुई आवश्यकता पूरी करने के लिए"], correct: 3 },
+            { id: 48, question: "गर्भावस्था की किस अवस्था में विकसित हो रहे प्रमुख अंगों की आधारभूत रचना के कारण हानिकारक संपर्क के प्रति विशेष सावधानी रखी जाती है?", options: ["भ्रूणावस्था", "वृद्धावस्था", "प्रसवोत्तर अवस्था", "जन्म के बाद शैशवावस्था"], correct: 0 },
+            { id: 49, question: "सामान्यतः एक ही युग्मनज के विभाजन से बने जुड़वाँ की आनुवंशिक समानता के बारे में सबसे उचित कथन कौन-सा है?", options: ["वे दो अलग अंडाणुओं से बनते हैं", "उनका गुणसूत्र संयोजन हमेशा अलग होता है", "वे सामान्यतः अत्यधिक आनुवंशिक समानता रखते हैं", "उनमें अनिवार्यतः एक लड़का और एक लड़की होते हैं"], correct: 2 },
+            { id: 50, question: "जन्मपूर्व विकास की तीन मुख्य अवस्थाओं का सही क्रम कौन-सा है?", options: ["गर्भस्थ शिशु अवस्था → बीजावस्था → भ्रूणावस्था", "बीजावस्था → भ्रूणावस्था → गर्भस्थ शिशु अवस्था", "भ्रूणावस्था → गर्भस्थ शिशु अवस्था → बीजावस्था", "गर्भस्थ शिशु अवस्था → भ्रूणावस्था → बीजावस्था"], correct: 1 }
+        ];
+    </script>
+
+    <!-- ✅ JS Logic Control File Path -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+                  </html>
+  
