@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ CSS Control File Path -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- Security Watermark Screen -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. Login Gate Screen -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ Back Button Path -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. Exam Workspace Screen -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 Responsive, Centered Header -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">प्रसव, नवजात देखभाल एवं शिशु पोषण</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Report Dashboard Screen -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point <br> प्रसव, नवजात देखभाल एवं शिशु पोषण</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ Dashboard Back Button -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 50 Questions Dataset (बिना explanation, 1-Line Format) -->
+    <script>
+        const QUIZ_KEY = "medhavi_free_test_d69"; 
+
+        const dataset = [
+            { id: 1, question: "प्रसव में पहले नितंब आना, इसके बाद टांगे और बाहें और अन्त में सिर आना, वह स्थिति है—", options: ["ब्रीच जन्म", "उपकरण जन्म", "प्राकृतिक जन्म", "सहज जन्म"], correct: 0 },
+            { id: 2, question: "माता की रक्त धारा से गर्भ को अलग करने वाला अंग होता है—", options: ["अण्डाणु", "नाभि-नाड़ी", "गर्भाशय", "खेड़ी"], correct: 3 },
+            { id: 3, question: "निम्न पर विचार कीजिए तथा सही उत्तर चुनिए:<br>1. प्रसव के पश्चात प्रथम तीन दिन तक स्रावित होने वाला तरल कोलोस्ट्रम कहलाता है।<br>2. इसमें प्रोटीन की उच्च मात्रा होने का कारण ग्लोब्युलिन की उपस्थिति है।", options: ["केवल 1", "केवल 2", "1 तथा 2 दोनों", "न ही 1, न ही 2"], correct: 2 },
+            { id: 4, question: "प्राकृतिक प्रसव को कहते हैं:", options: ["स्वाभाविक प्रसव", "कृत्रिम प्रसव", "इन्स्ट्रुमेन्टल प्रसव", "जटिलतापूर्ण प्रसव"], correct: 0 },
+            { id: 5, question: "प्रसव के बाद दो-तीन दिन तक जो पीला गाढ़ा तरल पदार्थ स्तन से स्रावित होता है, वह है—", options: ["दूध", "स्टेरॉइड", "कोलेस्ट्रॉम", "खीस (कोलोस्ट्रम)"], correct: 3 },
+            { id: 6, question: "उन तीन प्रतिवर्ती क्रियाओं का चयन कीजिए जो एक सामान्य शिशु में चार माह की आयु के पश्चात समाप्त हो जाती हैं:<br>(A) टॉनिक नेक<br>(B) पामर ग्रेस्प<br>(C) इनवालंटरी सकिंग<br>(D) बबिनस्की<br>(E) पलक झपकना (आई-ब्लिंक)", options: ["(A), (B), (C)", "(A), (B), (D)", "(B), (C), (D)", "(B), (D), (E)"], correct: 0 },
+            { id: 7, question: "संस्थाओं में पाले शिशु........होने की देखभाल करते हैं—<br>i. शांत<br>ii. निष्क्रिय<br>iii. उदास<br>iv. भावनात्मक रूप से बेचैन", options: ["i, ii, iii, iv", "i, ii, iii", "i, ii", "i, iv"], correct: 0 },
+            { id: 8, question: "किस उम्र के बच्चे के लिए, नवजात शब्द प्रयुक्त किया जाता है?", options: ["छः सप्ताह से एक वर्ष तक", "जन्म से चार सप्ताह तक", "जन्म से एक वर्ष तक", "जन्म से दो वर्ष तक"], correct: 1 },
+            { id: 9, question: "शुरुआती पोषणगत हस्तक्षेप पर कार्रवाई किया जाना क्यों महत्वपूर्ण था?<br>1. बाल उत्तरजीविता को बढ़ावा देने के लिए<br>2. बच्चों में कुपोषण कम करने के लिए<br>3. बाल आहार कार्यक्रमों के वैश्विक लक्ष्यों को हासिल करने के लिए<br>4. बच्चों में रूद्धविकास को कम करने के लिए", options: ["1, 2 और 3", "1, 2 और 4", "1, 3 और 4", "2, 3 और 4"], correct: 1 },
+            { id: 10, question: "संस्थाएं जो दो वर्ष से कम उम्र के बच्चों की संरक्षा व देखभाल करती हैं उन्हें कहते हैं—", options: ["क्रेच", "बालवाड़ी", "शिशु स्कूल (धायघर)", "रिमाण्ड घर"], correct: 0 },
+            { id: 11, question: "शिशु के कपड़ों में यह गला आरामदायक होता है—", options: ["कालर गला", "गोल गला", "बड़ा गला", "चौकोर गला"], correct: 1 },
+            { id: 12, question: "एक वर्ष की उम्र में शिशु का वजन जन्म भार का ..........गुना हो जाता है।", options: ["दो", "तीन", "चार", "पाँच"], correct: 1 },
+            { id: 13, question: "एक शिशु (6 से 12 माह) की सामान्य हृदय गति होती है—", options: ["70–100 प्रति मिनट", "100–160 प्रति मिनट", "80–140 प्रति मिनट", "50–80 प्रति मिनट"], correct: 2 },
+            { id: 14, question: "बच्चों के जीवन में कई ध्यान देने वाले हों तो:<br>1. बच्चों का ज्यादा ध्यान केन्द्रित होता है।<br>2. बच्चों को अनुशासित करने में भ्रम पैदा करता है।", options: ["1 सही है और 2 गलत है।", "1 गलत है और 2 सही है।", "1 और 2 दोनों सही हैं।", "1 और 2 दोनों गलत हैं।"], correct: 0 },
+            { id: 15, question: "माँ बाप का बच्चों के पालन करने के तरीके में अभिभावकों के नियन्त्रण दिखाने का तरीका है:", options: ["सत्तावादी प्रणाली", "प्राधिकार पूर्ण प्रणाली", "अनुशापक प्रणाली", "उपेक्षित प्रणाली"], correct: 1 },
+            { id: 16, question: "शिशु के उचित पोषण के लिए किस वसीय अम्ल की अधिक आवश्यकता होती है?", options: ["ब्यूटिरिक एसिड", "लिनोलिक एसिड", "कैप्रॉइक एसिड", "एरैकीडोनिक एसिड"], correct: 1 },
+            { id: 17, question: "स्तनपान संक्रमण रोगों की घटनाएं और समूह कम कर देता है जिससे शिशु का विचलन और मृत्यु दोनों में कमी आती है—", options: ["सत्य", "असत्य", "असम्बन्धिक", "असंगत"], correct: 0 },
+            { id: 18, question: "लैक्टेशन वह प्रक्रिया है जिसके द्वारा दुग्ध..........द्वारा संश्लेषित और स्रावित होता है।", options: ["पीयूष ग्रंथि", "लार ग्रंथियाँ", "स्तन ग्रंथियाँ", "उक्त में से कोई नहीं"], correct: 2 },
+            { id: 19, question: "कोलोस्ट्रम बहुत अच्छा होता क्योंकि इसमें..........बहुतायत में होता है।", options: ["विटामिन", "प्रतिजीव", "खनिज", "कार्बोहाइड्रेट"], correct: 1 },
+            { id: 20, question: "एक शिशु को दूध छुड़ाने व भोजन शुरू करने की सही आयु है—", options: ["3 माह", "6 माह", "9 माह", "12 माह"], correct: 1 },
+            { id: 21, question: "कोलोस्ट्रम क्या है?", options: ["फॉर्मूला दूध", "प्रथम स्तन दूध", "शारीरिक वसा", "फैटी एसिड"], correct: 1 },
+            { id: 22, question: "WHO के अनुसार, शिशुओं के भोजन के लिए स्तनपान एकमात्र इष्टतम तरीका है। इसे कब तक किया जाना चाहिए?", options: ["जन्म से छः माह तक", "छः माह से एक वर्ष तक", "जन्म से एक वर्ष तक", "जन्म से दो वर्ष तक"], correct: 0 },
+            { id: 23, question: "शिशुओं की दूध छोड़ने की प्रक्रिया क्या है?", options: ["स्तनपान छोड़ना और घुटने चलना शुरू करना", "स्तनपान छोड़ना और कम कड़ा भोजन खाना शुरू करना", "मुस्कुराना और परिवार के सदस्यों को पहचानना शुरू करना", "स्वयं बैठना"], correct: 1 },
+            { id: 24, question: "नीचे दो कथन दिए गए हैं:<br><b>अभिकथन (A):</b> शिशु के जन्म के पश्चात पहले कुछ दिनों तक स्रावित होने वाले कोलोस्ट्रम से शिशु में रोग प्रतिरोधक क्षमता निर्मित होती है।<br><b>कारण (R):</b> कोलोस्ट्रम में गामा-ग्लोब्युलिन और विटामिन A भरपूर मात्रा में पाए जाते हैं।", options: ["(A) सही है और (R) गलत है।", "(A) गलत है और (R) सही है।", "(A) और (R) दोनों सही हैं।", "(A) और (R) दोनों गलत हैं।"], correct: 2 },
+            { id: 25, question: "नीचे दो कथन दिए गए हैं:<br><b>अभिकथन (A):</b> अतिसार के रोगी को प्रोबायोटिक से आहारीय हस्तक्षेप करने की सलाह दी जाती है।<br><b>कारण (R):</b> प्रोबायोटिक की प्रचुर मात्रा वाले खाद्य पदार्थ आँतों में सूक्ष्मजीवों को परिवर्तित करते हैं।", options: ["(A) और (R) दोनों सही हैं।", "(A) सही है और (R) गलत है।", "(A) गलत है और (R) सही है।", "(A) और (R) दोनों गलत हैं।"], correct: 0 },
+            { id: 26, question: "किसी खाद्य पदार्थ में एक या एक से अधिक आवश्यक पोषक-तत्त्वों को मिलाने की प्रक्रिया को कहते हैं—", options: ["फोर्टीफिकेशन", "अनुपूरण (सप्लीमेंटेशन)", "संवर्धन (एनरिचमेंट)", "मिलावट"], correct: 0 },
+            { id: 27, question: "जन्म के बाद स्तनपान आरंभ करने का अनुशंसित समय क्या है?", options: ["पहले एक घंटे के भीतर", "पहले छह घंटे के बाद", "दूसरे दिन से", "तीसरे दिन से"], correct: 0 },
+            { id: 28, question: "‘केवल स्तनपान’ में सामान्यतः क्या शामिल है?", options: ["दूध के साथ नियमित पानी", "दूध के साथ फल-रस", "केवल माँ का दूध, बिना अतिरिक्त भोजन-पेय", "दूध के साथ दलिया"], correct: 2 },
+            { id: 29, question: "शिशु को सामान्यतः पूरक आहार कब शुरू कराया जाता है?", options: ["जन्म से", "लगभग छह महीने पूरे होने पर", "केवल एक वर्ष पूरा होने पर", "केवल दो वर्ष पूरा होने पर"], correct: 1 },
+            { id: 30, question: "छह महीने के बाद स्तनपान के बारे में कौन-सा कथन सही है?", options: ["उसी दिन पूर्णतः बंद कर देना चाहिए", "पूरक आहार के साथ जारी रखा जा सकता है", "केवल पानी देना चाहिए", "केवल फलों का रस देना चाहिए"], correct: 1 },
+            { id: 31, question: "प्लेसेंटा और गर्भस्थ शिशु को कौन-सी संरचना जोड़ती है?", options: ["डिंबवाहिनी", "नाभि-नाड़ी", "गर्भाशय ग्रीवा", "अंडाशय"], correct: 1 },
+            { id: 32, question: "एक सामान्य नाभि-नाड़ी में सामान्यतः कितनी धमनियाँ और शिराएँ होती हैं?", options: ["एक धमनी और दो शिराएँ", "दो धमनियाँ और एक शिरा", "दो धमनियाँ और दो शिराएँ", "एक धमनी और एक शिरा"], correct: 1 },
+            { id: 33, question: "शिशु के जन्म के बाद मिलने वाला पहला दूध क्या है?", options: ["परिपक्व दूध", "संक्रमणकालीन दूध", "कोलोस्ट्रम", "फॉर्मूला दूध"], correct: 2 },
+            { id: 34, question: "शिशु की पामर ग्रेस्प प्रतिवर्त क्रिया में क्या दिखाई देता है?", options: ["हथेली में स्पर्श पर उँगलियाँ मोड़ना", "बिना सहारे चलना", "स्पष्ट शब्द बोलना", "भोजन चबाना"], correct: 0 },
+            { id: 35, question: "रूटिंग प्रतिवर्त का मुख्य संबंध किससे है?", options: ["भोजन के लिए स्तन खोजने से", "चलने के लिए पैर उठाने से", "वस्तु का रंग पहचानने से", "स्वयं भोजन पकाने से"], correct: 0 },
+            { id: 36, question: "शिशु को गोद में उठाते समय सिर और गर्दन को सहारा क्यों दिया जाता है?", options: ["गर्दन का नियंत्रण अभी पूरी तरह विकसित नहीं होता", "शिशु के सिर में कोई हड्डी नहीं होती", "इससे शिशु का वजन घटता है", "इससे दूध बनना बढ़ता है"], correct: 0 },
+            { id: 37, question: "‘सुरक्षित पूरक आहार’ के लिए कौन-सा समूह सबसे उपयुक्त है?", options: ["स्वच्छ, पर्याप्त और आयु-अनुकूल भोजन", "केवल रंगीन पैकेट वाला भोजन", "केवल मीठा और पतला पेय", "केवल एक खाद्य पदार्थ"], correct: 0 },
+            { id: 38, question: "पहले छह महीनों में केवल स्तनपान की अनुशंसा का कौन-सा निष्कर्ष सही है?", options: ["छह महीने बाद माँ का दूध हानिकारक हो जाता है", "छह महीने बाद दूध के साथ पूरक भोजन जोड़ा जाता है", "छह महीने बाद शिशु को भोजन नहीं चाहिए", "छह महीने तक दूध के साथ पानी अनिवार्य है"], correct: 1 },
+            { id: 39, question: "जन्म के तुरंत बाद माँ और शिशु का त्वचा-से-त्वचा संपर्क किसमें सहायता कर सकता है?", options: ["शुरुआती स्तनपान में", "गुणसूत्रों की संख्या बदलने में", "शिशु को एक वर्ष का बनाने में", "पूरक आहार की जरूरत समाप्त करने में"], correct: 0 },
+            { id: 40, question: "स्तन ग्रंथियों द्वारा दूध बनने की प्रक्रिया क्या कहलाती है?", options: ["निषेचन", "लैक्टेशन", "प्रत्यारोपण", "अंडोत्सर्जन"], correct: 1 },
+            { id: 41, question: "माँ के प्रथम दूध में मौजूद प्रतिरक्षी शिशु को किस प्रकार की सहायता देते हैं?", options: ["प्रारंभिक निष्क्रिय प्रतिरक्षा", "रक्त समूह परिवर्तन", "स्थायी दाँत निर्माण", "गुणसूत्र संख्या परिवर्तन"], correct: 0 },
+            { id: 42, question: "शिशु की वृद्धि देखने के लिए कौन-सा तरीका अधिक उपयोगी है?", options: ["अलग-अलग समय पर आयु के साथ वजन दर्ज करना", "केवल कपड़ों के रंग की तुलना करना", "केवल एक बार वजन करना", "केवल खिलौनों की संख्या गिनना"], correct: 0 },
+            { id: 43, question: "बच्चे को अनुशासित करते हुए उसकी बात सुनना और नियम का कारण समझाना किस पालन शैली का लक्षण है?", options: ["प्राधिकारिक शैली", "उपेक्षित शैली", "केवल दंडात्मक शैली", "बिना सीमा वाली शैली"], correct: 0 },
+            { id: 44, question: "लैक्टेशन में पीयूष ग्रंथि और स्तन ग्रंथियों की भूमिका का सही अंतर क्या है?", options: ["पीयूष ग्रंथि हार्मोन देती है; स्तन ग्रंथियाँ दूध बनाती हैं", "पीयूष ग्रंथि दूध बनाती है; स्तन ग्रंथियाँ अंडाणु", "दोनों केवल रक्त बनाती हैं", "दोनों का दूध से कोई संबंध नहीं"], correct: 0 },
+            { id: 45, question: "शिशु के पूरक भोजन की बनावट किस आधार पर बदलनी चाहिए?", options: ["आयु और खाने की विकसित होती क्षमता", "केवल बर्तन के रंग", "केवल परिवार की पसंद", "केवल भोजन की कीमत"], correct: 0 },
+            { id: 46, question: "शिशु देखभाल में क्रेच और बालवाड़ी के बीच मुख्य अंतर क्या है?", options: ["क्रेच छोटे बच्चों की देखभाल पर, बालवाड़ी पूर्व-विद्यालयी गतिविधियों पर केंद्रित होती है", "दोनों केवल किशोरों के लिए हैं", "क्रेच केवल अस्पताल है", "बालवाड़ी केवल प्रसव कराने की जगह है"], correct: 0 },
+            { id: 47, question: "एक वर्ष में जन्म-वजन लगभग तीन गुना होने के नियम को कैसे समझना चाहिए?", options: ["सामान्य वृद्धि का अनुमान, सभी बच्चों के लिए कठोर सीमा नहीं", "सभी शिशुओं के लिए उसी दिन अनिवार्य परिणाम", "बीमारी का निश्चित प्रमाण", "केवल कपड़े का आकार चुनने का नियम"], correct: 0 },
+            { id: 48, question: "स्तनपान कराने वाली माँ बीमार हो तो सबसे उचित सामान्य निर्णय क्या है?", options: ["बीमारी और उपचार के अनुसार स्वास्थ्यकर्मी से विशेष सलाह लेना", "हर बीमारी में स्तनपान तुरंत बंद कर देना", "शिशु को बिना जाँच कोई दवा दे देना", "माँ का पोषण रोक देना"], correct: 0 },
+            { id: 49, question: "खाने योग्य पदार्थ में पोषक तत्व जोड़ने को सामान्यतः क्या कहते हैं?", options: ["फोर्टीफिकेशन", "निर्जलीकरण", "नसबंदी", "अंडोत्सर्जन"], correct: 0 },
+            { id: 50, question: "जन्म से छह महीने और उसके बाद के शिशु पोषण का सही क्रम क्या है?", options: ["पहले केवल स्तनपान; फिर पूरक भोजन के साथ स्तनपान जारी", "पहले केवल पानी; फिर केवल दूध", "जन्म से केवल ठोस भोजन", "छह महीने पर दूध और भोजन दोनों बंद"], correct: 0 }
+        ];
+    </script>
+
+    <!-- ✅ JS Logic Control File Path -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
