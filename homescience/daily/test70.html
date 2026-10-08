@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ CSS Control File Path -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- Security Watermark Screen -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. Login Gate Screen -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ Back Button Path -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. Exam Workspace Screen -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 Responsive, Centered Header -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">शिशु स्वास्थ्य, टीकाकरण एवं विकास</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Report Dashboard Screen -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point <br> शिशु स्वास्थ्य, टीकाकरण एवं विकास</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ Dashboard Back Button -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 50 Questions Dataset (1-Line Format) -->
+    <script>
+        const QUIZ_KEY = "medhavi_free_test_d70"; 
+
+        const dataset = [
+            { id: 1, question: "शिशु को खसरे का टीका इस उम्र पर लगाया जाता है—", options: ["जन्म के समय", "1½ माह पर", "2½ माह पर", "9 माह पर"], correct: 3 },
+            { id: 2, question: "जन्म के समय शिशु को यह टीका लगाया जाता है—", options: ["बी.सी.जी.", "डी.पी.टी.", "खसरा", "एम.एम.आर."], correct: 0 },
+            { id: 3, question: "कुकर खाँसी से बचने के लिए कौन-सा टीका लगाया जाता है?", options: ["बी.सी.जी.", "डी.पी.टी.", "एम.एम.आर.", "पोलियो"], correct: 1 },
+            { id: 4, question: "खसरा, गलसुआ और रूबेला के लिए एम.एम.आर. का टीका किस आयु में लगता है?", options: ["3½ माह में", "9–12 माह में", "15–18 माह में", "16–24 माह में"], correct: 2 },
+            { id: 5, question: "बच्चों में अस्थमा का अटैक सामान्यतः निम्न के कारण बढ़ता है—<br>(A) शारीरिक एवं भावनात्मक दबाव<br>(B) टेलीविजन देखना<br>(C) खाद्य एलर्जी<br>(D) मौसमी परिवर्तन", options: ["(A), (B), (C)", "(A), (B), (D)", "(A), (C), (D)", "(B), (C), (D)"], correct: 2 },
+            { id: 6, question: "टीकाकरण बच्चों के लिए आवश्यक है—<br>(i) विशिष्ट रोगों के विरुद्ध प्रतिरक्षा विकसित करने के लिए।<br>(ii) सीधे पोषणीय स्थिति बढ़ाने के लिए।<br>(iii) सीधे बेचैनी कम करने के लिए।<br>(iv) टीके से रोके जा सकने वाले संक्रामक रोगों का जोखिम कम करने के लिए।", options: ["केवल (i) और (ii)", "केवल (i) और (iv)", "केवल (ii) और (iv)", "केवल (ii) और (iii)"], correct: 1 },
+            { id: 7, question: "0–6 माह के शिशु के लिए प्रोटीन की अनुशंसित मात्रा लगभग कितनी है?", options: ["0.50 ग्राम/किग्रा शारीरिक भार प्रतिदिन", "0.80 ग्राम/किग्रा शारीरिक भार प्रतिदिन", "1.16 ग्राम/किग्रा शारीरिक भार प्रतिदिन", "2.05 ग्राम/किग्रा शारीरिक भार प्रतिदिन"], correct: 2 },
+            { id: 8, question: "निम्नलिखित में से कौन-सा टीका इंट्रामस्क्युलर मार्ग द्वारा दिया जाता है?", options: ["खसरा", "MMR", "BCG", "DPT"], correct: 3 },
+            { id: 9, question: "डायपर वाले क्षेत्र में यीस्ट संक्रमण के कारण होने वाले चकत्ते से कौन संबंधित है?", options: ["यीस्ट संक्रमण", "वायरस संक्रमण", "हेल्मिन्थ", "प्रोटोजोअल संक्रमण"], correct: 0 },
+            { id: 10, question: "इम्युनोग्लोबुलिन जो शिशुओं में एलर्जी के लिए उत्तरदायी है, इनमें से क्या है?", options: ["IgM", "IgE", "IgG", "IgD"], correct: 1 },
+            { id: 11, question: "DPT का अर्थ क्या है?", options: ["डिप्थीरिया, पर्टुसिस और टॉक्सिन", "डिप्थीरिया, पर्टुसिस और टेटनस", "डिप्थीरिया, पोलियो और टेटनस", "डिप्थीरिया, पोलियो और टॉक्सॉइड"], correct: 1 },
+            { id: 12, question: "निम्न में से जन्म पर दिया जाने वाला कौन-सा टीका क्षयरोग से सुरक्षा के लिए है?", options: ["BCG", "DPT", "पोलियो", "खसरा"], correct: 0 },
+            { id: 13, question: "BCG एक टीका है जो मुख्य रूप से तपेदिक के विरुद्ध प्रयुक्त किया जाता है। BCG का क्या अर्थ है?", options: ["बेबी क्योर ग्यूरिन", "बैसिलस कैल्मेट ग्यूरिन", "बैक्टीरियम क्योर ग्यूरिन", "बेबी केयर ग्यूरिन"], correct: 1 },
+            { id: 14, question: "इनमें से कौन-सा टीका मौखिक रूप से दिया जाता है?", options: ["DPT", "BCG", "पोलियो", "हेपेटाइटिस A"], correct: 2 },
+            { id: 15, question: "बी.सी.जी. का टीका बचाव करता है—", options: ["कॉलरा से", "गठिया से", "खसरा से", "क्षयरोग से"], correct: 3 },
+            { id: 16, question: "किस वर्ष ‘पल्स पोलियो इम्युनाइजेशन प्रोग्राम’ लागू किया गया था?", options: ["2001", "2005", "1995", "1990"], correct: 2 },
+            { id: 17, question: "नवजात शिशु आम तौर पर इनमें से किस स्थिति से प्रभावित हो सकते हैं?", options: ["आँतों के संक्रमण से", "माता द्वारा यौन संक्रमित रोग से", "नवजात पीलिया से", "अतिसक्रियता से"], correct: 2 },
+            { id: 18, question: "बी.सी.जी. का टीका लगाने की आयु है—", options: ["जन्म के तुरंत बाद", "3 महीने के बाद", "5 महीने के बाद", "6 महीने के बाद"], correct: 0 },
+            { id: 19, question: "खसरे से प्रतिरक्षण करने की आयु है—", options: ["जन्म के तुरंत बाद", "5 महीने पर", "9 महीने पर", "12 महीने पर"], correct: 2 },
+            { id: 20, question: "सूची-I की इकाइयों का सूची-II से मिलान कीजिए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>(A) टी.ए.टी.</td><td>(i) जन्म के तुरंत बाद</td></tr><tr><td>(B) सहयोगी एवं मददगार व्यवहार</td><td>(ii) मात्रात्मक</td></tr><tr><td>(C) बी.सी.जी.</td><td>(iii) प्रक्षेपीय तकनीक</td></tr><tr><td>(D) विकास</td><td>(iv) समाज-अनुकूल व्यवहार<br>(v) बुद्धि परीक्षण<br>(vi) गुणात्मक</td></tr></tbody></table>", options: ["A–iii, B–iv, C–i, D–vi", "A–ii, B–iii, C–v, D–iv", "A–iii, B–ii, C–iv, D–ii", "A–ii, B–iii, C–i, D–v"], correct: 0 },
+            { id: 21, question: "आशा की क्या भूमिका है?", options: ["गृहस्थी स्तर पर गर्भवती महिलाओं को स्वास्थ्य देख-रेख की सुविधा उपलब्ध कराना", "नकद अंतरण उपलब्ध कराना", "प्रसव-पूर्व देख-रेख की सुविधा उपलब्ध कराना", "अनुपूरक देख-रेख सुविधा उपलब्ध कराना"], correct: 0 },
+            { id: 22, question: "जननी सुरक्षा योजना के अंतर्गत गर्भवती महिलाओं को देख-रेख सुविधा प्रदान करने के पीछे क्या तर्क है?<br>(a) संस्थानिक प्रसव सुविधा उपलब्ध कराना<br>(b) मातृ-मृत्यु दर में कमी लाना<br>(c) नवजात शिशु मृत्यु-दर में कमी लाना<br>(d) प्रसव से पहले नकद सुविधा उपलब्ध कराना", options: ["(a), (b), (d)", "(a), (c), (d)", "(b), (c), (d)", "(a), (b), (c)"], correct: 3 },
+            { id: 23, question: "जननी सुरक्षा योजना के अंतर्गत प्रसूति के दौरान महिलाओं को अंतरित की जाने वाली नकद धनराशि में निम्नलिखित में से कौन-सा दृश्य लागत-व्यय शामिल है?", options: ["सह-परिचर पर आने वाला व्यय", "औषधि की आपूर्ति", "अस्पताल कर्मी का संदत्त शुल्क", "भोजन पर किया गया व्यय"], correct: 1 },
+            { id: 24, question: "जननी सुरक्षा योजना के घटक निम्न हैं—<br>(a) अस्पताल में प्रसूति को बढ़ावा देना<br>(b) प्रसूति देख-रेख संबंधी उन्नत सुविधा<br>(c) नकद अंतरण<br>(d) गृह-प्रसूति को बढ़ावा देना", options: ["(b), (c), (d)", "(a), (b), (d)", "(a), (b), (c)", "(a), (c), (d)"], correct: 2 },
+            { id: 25, question: "पिन्सर ग्रास्प इस उम्र के आसपास विकसित होता है—", options: ["18–24 माह", "15–18 माह", "9–12 माह", "3–6 माह"], correct: 2 },
+            { id: 26, question: "दूसरों के अनुसार स्वयं के व्यवहार को ढालने की क्षमता होती है—", options: ["सामाजिक विकास से", "गत्यात्मक विकास से", "भावात्मक विकास से", "बौद्धिक विकास से"], correct: 0 },
+            { id: 27, question: "शिशु के तलवे की बाहरी ओर एड़ी से पंजे की दिशा में सहलाने पर पैर की उँगलियाँ फैलती हैं। यह प्रतिक्रिया क्या कहलाती है?", options: ["पामर ग्रास्प", "मोरो", "रूटिंग", "बेबिन्स्की"], correct: 3 },
+            { id: 28, question: "शिशु किस आयु में वास्तविक वियोग-आसक्ति बंधन के साथ वियोग व्यग्रता प्रदर्शित करते हैं?", options: ["जन्म से", "4–6 माह पर", "6–8 माह पर", "8–10 माह पर"], correct: 3 },
+            { id: 29, question: "समाजमिति एक बच्चे का ........ मापने का एक उपकरण है—", options: ["बुद्धिमत्ता स्तर", "व्यवहार समस्याएँ", "समूहों के साथ संबंध", "अभिभावकों के साथ संबंध"], correct: 2 },
+            { id: 30, question: "“शिशु विकास अध्ययन का वह क्षेत्र है जो मानव वर्धन और विकास के सभी पहलुओं को समझने के लिए समर्पित है।” यह परिभाषा किसने दी है?", options: ["हरलॉक", "पैपलिया और ओल्ड्स", "हेविगर्स्ट", "बर्क"], correct: 0 },
+            { id: 31, question: "वह प्रक्रिया जिसमें बच्चे को संस्कृति में ढाला जाता है और वह समाज में स्वीकृत व्यवहार सीखता है, कहलाती है—", options: ["समाजीकरण", "विकास", "परिपक्वता", "अन्योन्य क्रिया"], correct: 0 },
+            { id: 32, question: "विशिष्ट उम्र में कौशल और बर्ताव का जो पैटर्न अपेक्षित होता है, उसे कहते हैं—", options: ["नारी-सुलभ कार्य", "पुरुष-सुलभ कार्य", "विकासात्मक कार्य", "श्रेणी"], correct: 2 },
+            { id: 33, question: "नीचे दो कथन दिए गए हैं:<br><b>अभिकथन (A):</b> ‘एक तरफ कर देना’ एक प्रकार का दंड है, जिसमें बच्चों को उनके निकटस्थ परिवेश से कुछ समय हटाया जाता है, जब तक वे उचित व्यवहार के लिए तैयार न हों।<br><b>कारण (R):</b> यह उपयोगी तकनीक नहीं है, क्योंकि यह बच्चों को अपना व्यवहार बदलने के लिए पर्याप्त समय नहीं देती।", options: ["A और R दोनों सत्य", "A सत्य, R असत्य", "A असत्य, R सत्य", "दोनों असत्य"], correct: 1 },
+            { id: 34, question: "एनेरेसिस व्यवहार में कौन-सी समस्या होती है?", options: ["नींद में चलना", "चोरी करना", "अंगूठा चूसना", "बिस्तर गीला करना"], correct: 3 },
+            { id: 35, question: "बच्चों से संबंधित दार्शनिक/ऐतिहासिक सोच को शुरुआत से अंत तक क्रम में लगाएँ—<br>(A) प्रामाणिक अवधि<br>(B) टैबुला रासा<br>(C) नोबल सैवेज<br>(D) परफॉर्मेशनिज्म<br>(E) मनोवैज्ञानिक परिप्रेक्ष्य", options: ["D, B, C, A, E", "D, C, B, A, E", "B, D, C, A, E", "A, B, C, D, E"], correct: 2 },
+            { id: 36, question: "नीचे दो कथन दिए गए हैं:<br><b>अभिकथन (A):</b> सहभागी विकास के लिए नैतिक मानकों की पहचान करते समय यह स्पष्ट करना महत्वपूर्ण है कि संबंधित व्यक्ति कौन है।<br><b>कारण (R):</b> संबंधित व्यक्ति कोई व्यक्ति, विशेष समूह या संस्थान हो सकता है जिसके हस्तक्षेप में निहित स्वार्थ हो।", options: ["A सही, R गलत", "A गलत, R सही", "A और R दोनों सही", "दोनों गलत"], correct: 2 },
+            { id: 37, question: "OPV की जन्म पर दी जाने वाली खुराक को सामान्यतः किस नाम से लिखा जाता है?", options: ["OPV-0", "DPT-1", "MR-2", "BCG-2"], correct: 0 },
+            { id: 38, question: "IPV और OPV के बारे में सही कथन कौन-सा है?", options: ["दोनों हमेशा मुँह से दिए जाते हैं", "IPV इंजेक्शन से और OPV मुँह से दिया जाता है", "IPV मुँह से और OPV इंजेक्शन से दिया जाता है", "दोनों BCG के अन्य नाम हैं"], correct: 1 },
+            { id: 39, question: "MR टीके के नाम में ‘R’ किस रोग को दर्शाता है?", options: ["रेबीज", "रोटावायरस", "रूबेला", "रेचक रोग"], correct: 2 },
+            { id: 40, question: "निम्न में BCG के देने का सही मार्ग कौन-सा है?", options: ["मुँह से", "नस के भीतर", "आँख की बूँद के रूप में", "त्वचा के भीतर"], correct: 3 },
+            { id: 41, question: "जन्म के समय दी जाने वाली हेपेटाइटिस-B की खुराक का लक्ष्य किस संक्रमण से सुरक्षा देना है?", options: ["हेपेटाइटिस-B वायरस", "पोलियो वायरस", "तपेदिक जीवाणु", "पर्टुसिस जीवाणु"], correct: 0 },
+            { id: 42, question: "सामुदायिक प्रतिरक्षा का सही अर्थ क्या है?", options: ["केवल एक बच्चे को टीका लगाना", "पर्याप्त लोगों के सुरक्षित होने पर संक्रमण का फैलना कठिन होना", "सभी टीकों को जमा देना", "जन्म पर सभी रोग समाप्त हो जाना"], correct: 1 },
+            { id: 43, question: "टीकों की ‘कोल्ड चेन’ का प्रमुख उद्देश्य क्या है?", options: ["बच्चे के शरीर का तापमान घटाना", "सभी टीकों को बर्फ में जमा देना", "परिवहन और भंडारण में निर्धारित तापमान बनाए रखना", "टीके के बाद ठंडा भोजन देना"], correct: 2 },
+            { id: 44, question: "बूस्टर खुराक देने का मुख्य उद्देश्य क्या है?", options: ["बच्चे का रक्त समूह बदलना", "पहली खुराक को निरर्थक करना", "भोजन की मात्रा घटाना", "पहले बनी प्रतिरक्षा को मजबूत या बनाए रखना"], correct: 3 },
+            { id: 45, question: "संस्थागत प्रसव बढ़ाने का जननी सुरक्षा योजना से संबंध क्यों है?", options: ["इससे मातृ और नवजात मृत्यु कम करने का लक्ष्य जुड़ा है", "इससे टीकों की आवश्यकता समाप्त होती है", "इसका लक्ष्य केवल घर पर प्रसव बढ़ाना है", "इससे प्रसवपूर्व देखभाल निषिद्ध हो जाती है"], correct: 0 },
+            { id: 46, question: "‘पिन्सर ग्रास्प’ किस प्रकार का कौशल है?", options: ["केवल सकल गतिक", "सूक्ष्म गतिक", "केवल भाषिक", "केवल श्रवण"], correct: 1 },
+            { id: 47, question: "निम्न में सकल गतिक कौशल का सबसे स्पष्ट उदाहरण कौन-सा है?", options: ["छोटी वस्तु में धागा डालना", "अंगूठे से दाना उठाना", "बिना सहारे चलना", "पेंसिल से छोटा चिह्न बनाना"], correct: 2 },
+            { id: 48, question: "बच्चे में ‘वस्तु स्थायित्व’ विकसित होने का संकेत क्या है?", options: ["केवल चमकदार रंग देखना", "हर वस्तु का वजन बताना", "वस्तु को कभी न छूना", "छिपे खिलौने को खोजने का प्रयास करना"], correct: 3 },
+            { id: 49, question: "समाजमिति के माध्यम से किस जानकारी का अध्ययन सबसे सीधे किया जा सकता है?", options: ["समूह में साथियों की पसंद और संबंध", "रक्त में हीमोग्लोबिन की मात्रा", "हड्डियों की लंबाई", "शरीर का तापमान"], correct: 0 },
+            { id: 50, question: "बच्चे के विकास का मूल्यांकन करने का सबसे उपयुक्त तरीका क्या है?", options: ["केवल एक दिन का व्यवहार देखकर अंतिम निष्कर्ष देना", "सभी बच्चों से एक ही तारीख पर समान कौशल की अपेक्षा करना", "आयु के साथ विभिन्न कौशलों और समग्र व्यवहार को देखना", "केवल वजन देखकर भाषा और सामाजिक विकास तय करना"], correct: 2 }
+        ];
+    </script>
+
+    <!-- ✅ JS Logic Control File Path -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+                                                                                                    </html>
+                                                                                                    
