@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ CSS Control File Path -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- Security Watermark Screen -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. Login Gate Screen -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ Back Button Path -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. Exam Workspace Screen -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 Responsive, Centered Header -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">अंतःस्रावी ग्रंथियां </span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Report Dashboard Screen -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point <br> अंतःस्रावी ग्रथियां </div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ Dashboard Back Button -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 50 Questions Dataset (बिना explanation, 1-Line Format) -->
+    <script>
+        const QUIZ_KEY = "medhavi_free_test_d74"; 
+
+        const dataset = [
+            { id: 1, question: "यकृत का मुख्य क्या कार्य होता है?", options: ["पित्त संग्रह करना", "अग्न्याशय स्राव बनाना", "पित्त बनाना", "इनमें से कोई नहीं"], correct: 2 },
+            { id: 2, question: "मानव शरीर में पाचन का अधिकांश भाग किस अंग में सम्पन्न होता है?", options: ["बड़ी आंत", "छोटी आंत", "आमाशय", "पैंक्रियाज"], correct: 1 },
+            { id: 3, question: "थाइमस ग्रंथि ........ के निर्माण में लिप्त होती है।", options: ["लिम्फोसाइट्स", "अस्थि", "लसिका", "इन्सुलिन"], correct: 0 },
+            { id: 4, question: "प्रोजेस्टेरोन एवं एस्ट्रोजन हार्मोन कहाँ से स्रावित होता है?", options: ["कॉर्पस कैलोसस", "कॉर्पस ल्यूटियम", "कॉर्पस यूटेरस", "कॉर्पस पेल्विकस"], correct: 1 },
+            { id: 5, question: "वृद्धि हार्मोन का संश्लेषण किसके द्वारा होता है?", options: ["बेसोफिल कोशिकाओं द्वारा", "एडीनोहाइपोफाइसिस द्वारा", "हाइपोथैलेमस द्वारा", "मध्य मस्तिष्क द्वारा"], correct: 1 },
+            { id: 6, question: "प्रसव के समय गर्भाशय की मांसपेशियों में संकुचन पैदा करने वाला हार्मोन है—", options: ["वैसो प्रेसिन", "ल्यूटेनाइजिंग हार्मोन", "गोनाडोट्रोपिन", "ऑक्सीटोसिन हार्मोन"], correct: 3 },
+            { id: 7, question: "शुक्राणुजनन का नियमन करने वाला हार्मोन है—", options: ["इन्सुलिन", "ग्लूकागान", "थायराइड", "एण्ड्रोजन"], correct: 3 },
+            { id: 8, question: "वैसोप्रेसिन को ........ नाम से भी जाना जाता है।", options: ["ऑक्सीटोसिन", "एण्टी डाइयूरेटिक हार्मोन", "ल्यूटेनाइजिंग हार्मोन", "वृद्धि हार्मोन"], correct: 1 },
+            { id: 9, question: "निम्नलिखित में से अग्न्याशय का कौन-सा स्राव सीधे रक्त में प्रवेश कर जाता है?", options: ["एमाइलेज", "इन्सुलिन", "लाइपेज", "ट्रिप्सिनोजन"], correct: 1 },
+            { id: 10, question: "अग्न्याशयी रस में निम्नलिखित नहीं होता है—", options: ["पेप्सिन", "लाइपेज", "एमाइलेज", "ट्रिप्सिन"], correct: 0 },
+            { id: 11, question: "किस हार्मोन में आयोडिन होता है?", options: ["ग्रोथ हार्मोन", "थायरॉक्सिन", "इन्सुलिन", "एड्रेनलिन"], correct: 1 },
+            { id: 12, question: "निम्न में से किस हार्मोन को वसा उत्पन्न करने वाला हार्मोन भी कहा जाता है?", options: ["एस्ट्रोजन", "इन्सुलिन", "प्रोजेस्टेरोन", "थायरॉक्सिन"], correct: 1 },
+            { id: 13, question: "लड़ने या उड़ान के हार्मोन हैं—", options: ["एड्रीनलीन और नॉरएड्रीनलीन", "थायराइड हार्मोन", "प्रोलैक्टिन", "ग्रोथ हार्मोन"], correct: 0 },
+            { id: 14, question: "महिला लिंग हार्मोन है—", options: ["एण्ड्रोजन", "प्रोलैक्टिन", "एस्ट्रोजन", "ऑक्सीटोसिन"], correct: 2 },
+            { id: 15, question: "ग्रन्थियों को उनके अपने-अपने हार्मोनों के साथ सुमेलित करें—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>A. α सेल पैंक्रियाज</td><td>1. एड्रीनल कॉर्टिकल स्टेरॉयड</td></tr><tr><td>B. एड्रीनल कॉर्टेक्स</td><td>2. इन्सुलिन</td></tr><tr><td>C. β सेल पैंक्रियाज</td><td>3. प्रोलैक्टिन</td></tr><tr><td>D. पिट्यूटरी</td><td>4. ग्लूकागोन</td></tr></tbody></table>", options: ["A–4, B–1, C–2, D–3", "A–2, B–4, C–3, D–1", "A–3, B–1, C–4, D–2", "A–1, B–3, C–2, D–4"], correct: 0 },
+            { id: 16, question: "स्टेरॉयड हार्मोन का उदाहरण है—", options: ["इन्सुलिन", "एपिनेफ्रिन", "ग्लूकागोन", "एस्ट्रोजन"], correct: 3 },
+            { id: 17, question: "ए. सी. टी. एच. का विस्तार करें।", options: ["एड्रेनोकार्डियोट्रोपिक हार्मोन", "एड्रेनोकोर्टिकोट्रोपिक हार्मोन", "एड्रेन्यूटेड सेल ट्रोपिक हार्मोन", "एड्रेनाइड सेल ट्रोपिक हार्मोन"], correct: 1 },
+            { id: 18, question: "लेडिग कोशिकाओं को टेस्टोस्टेरोन के स्रावण के लिए उत्तेजित करता है—", options: ["एफ. एस. एच.", "ए. सी. टी. एच.", "एल. एच.", "ए. डी. एच."], correct: 2 },
+            { id: 19, question: "एक पूर्ण हृदय चक्र की अवधि होती है—", options: ["5 सेकण्ड", "0.8 सेकण्ड", "0.2 सेकण्ड", "2 सेकण्ड"], correct: 1 },
+            { id: 20, question: "हृदय सेप्टम की सहायता से दो भागों में विभक्त होता है, जिसके घटक हैं, मायोकार्डियम एवं ........ ऊतक।", options: ["एण्डोकार्डियम", "वसीय", "रेशेदार", "नलिकाएँ"], correct: 2 },
+            { id: 21, question: "पित्त के निर्माण और उसके संग्रह का सही क्रम क्या है?", options: ["पित्ताशय–यकृत", "यकृत–पित्ताशय", "अग्न्याशय–यकृत", "आमाशय–पित्ताशय"], correct: 1 },
+            { id: 22, question: "पचे हुए भोजन के अधिकांश पोषक पदार्थ कहाँ अवशोषित होते हैं?", options: ["मुख गुहा में", "आमाशय में", "बड़ी आंत में", "छोटी आंत में"], correct: 3 },
+            { id: 23, question: "आमाशय में पेप्सिन किस निष्क्रिय पदार्थ से बनता है?", options: ["पेप्सिनोजन से", "ट्रिप्सिनोजन से", "ग्लाइकोजन से", "काइमोजन से"], correct: 0 },
+            { id: 24, question: "मुख में लार का एमाइलेज मुख्यतः किस पर क्रिया करता है?", options: ["वसा पर", "प्रोटीन पर", "स्टार्च पर", "लैक्टोज पर"], correct: 2 },
+            { id: 25, question: "छोटी आंत की विलाइ का प्रमुख कार्य क्या है?", options: ["अम्ल स्राव बढ़ाना", "अवशोषक सतह बढ़ाना", "भोजन को चबाना", "पित्त का संग्रह करना"], correct: 1 },
+            { id: 26, question: "वसा की बड़ी बूंदों को छोटी बूंदों में फैलाने में कौन सहायता करता है?", options: ["जठर का पेप्सिन", "लार का एमाइलेज", "अग्न्याशयी ट्रिप्सिन", "पित्त के लवण"], correct: 3 },
+            { id: 27, question: "नलिकाविहीन ग्रंथि का स्राव सामान्यतः किसमें पहुँचता है?", options: ["आहारनाल में", "बाहरी सतह पर", "रक्त में", "पित्ताशय में"], correct: 2 },
+            { id: 28, question: "पीयूष ग्रंथि के अग्र भाग के हार्मोनों को नियंत्रित करने वाले मुक्तकारी हार्मोन कहाँ बनते हैं?", options: ["हाइपोथैलेमस में", "थायराइड में", "थाइमस में", "अग्न्याशय में"], correct: 0 },
+            { id: 29, question: "पश्च पीयूष में संग्रहित ऑक्सीटोसिन का निर्माण मुख्यतः कहाँ होता है?", options: ["अंडाशय में", "थाइमस में", "थायराइड में", "हाइपोथैलेमस में"], correct: 3 },
+            { id: 30, question: "बचपन में वृद्धि हार्मोन का अत्यधिक स्राव किससे संबंधित है?", options: ["बौनापन", "विशालकायता", "मधुमेह", "रक्ताल्पता"], correct: 1 },
+            { id: 31, question: "वयस्क में वृद्धि हार्मोन का अत्यधिक स्राव किस अवस्था से संबंधित है?", options: ["रक्ताल्पता", "घेंघा", "एक्रोमेगली", "मधुमेह इन्सिपिडस"], correct: 2 },
+            { id: 32, question: "हाइपोथैलेमस का सोमैटोस्टैटिन किस हार्मोन का स्राव रोकता है?", options: ["वृद्धि हार्मोन", "थायरॉक्सिन", "ऑक्सीटोसिन", "इन्सुलिन"], correct: 0 },
+            { id: 33, question: "स्तन ग्रंथियों में दूध के निर्माण से मुख्यतः कौन-सा हार्मोन संबंधित है?", options: ["ऑक्सीटोसिन", "प्रोलैक्टिन", "वैसोप्रेसिन", "ग्लूकागोन"], correct: 1 },
+            { id: 34, question: "स्तन से दूध बाहर निकलने की क्रिया मुख्यतः किस हार्मोन से जुड़ी है?", options: ["एस्ट्रोजन", "प्रोजेस्टेरोन", "प्रोलैक्टिन", "ऑक्सीटोसिन"], correct: 3 },
+            { id: 35, question: "वैसोप्रेसिन गुर्दों में मुख्यतः किस प्रक्रिया को बढ़ाता है?", options: ["ग्लूकोज निर्माण", "रक्त कोशिका निर्माण", "जल का पुनःअवशोषण", "पित्त का स्राव"], correct: 2 },
+            { id: 36, question: "पीयूष ग्रंथि का कौन-सा हार्मोन थायराइड ग्रंथि को प्रेरित करता है?", options: ["थायराइड प्रेरक हार्मोन", "वृद्धि हार्मोन", "प्रोलैक्टिन", "ऑक्सीटोसिन"], correct: 0 },
+            { id: 37, question: "एड्रेनोकोर्टिकोट्रोपिक हार्मोन का प्रमुख लक्ष्य कौन-सा भाग है?", options: ["अग्न्याशय की बीटा कोशिका", "थायराइड का पुटक", "थाइमस का बाहरी भाग", "अधिवृक्क का बाह्य भाग"], correct: 3 },
+            { id: 38, question: "रक्त में कैल्शियम का स्तर बढ़ाने में किस हार्मोन की प्रमुख भूमिका है?", options: ["कैल्सिटोनिन", "पैराथॉर्मोन", "इन्सुलिन", "ग्लूकागोन"], correct: 1 },
+            { id: 39, question: "रक्त में कैल्शियम का स्तर घटाने वाला हार्मोन कौन-सा है?", options: ["थायरॉक्सिन", "प्रोलैक्टिन", "कैल्सिटोनिन", "वैसोप्रेसिन"], correct: 2 },
+            { id: 40, question: "थाइमस के हार्मोन मुख्यतः किन कोशिकाओं के विकास से संबंधित हैं?", options: ["टी-लिम्फोसाइट", "लाल रक्त कोशिका", "प्लेटलेट", "वसा कोशिका"], correct: 0 },
+            { id: 41, question: "दिन-रात की जैविक लय के नियमन से कौन-सा हार्मोन विशेष रूप से जुड़ा है?", options: ["गैस्ट्रिन", "टेस्टोस्टेरोन", "ग्लूकागोन", "मेलाटोनिन"], correct: 3 },
+            { id: 42, question: "अग्न्याशय की अल्फा कोशिकाएँ कौन-सा हार्मोन बनाती हैं?", options: ["इन्सुलिन", "ग्लूकागोन", "सोमैटोस्टैटिन", "ऑक्सीटोसिन"], correct: 1 },
+            { id: 43, question: "भोजन के बाद रक्त में बढ़े ग्लूकोज को कम करने में कौन-सा हार्मोन प्रमुख है?", options: ["ग्लूकागोन", "थायरॉक्सिन", "इन्सुलिन", "एड्रीनलिन"], correct: 2 },
+            { id: 44, question: "हृदय के आलिंद से स्रावित हार्मोन किस प्रभाव से जुड़ा है?", options: ["रक्तदाब घटाना", "रक्त शर्करा बढ़ाना", "दूध निष्कासन कराना", "वृद्धि तेज करना"], correct: 0 },
+            { id: 45, question: "गुर्दे का एरिथ्रोपोइटिन मुख्यतः किसका निर्माण बढ़ाता है?", options: ["श्वेत रक्त कोशिकाएँ", "प्लेटलेट", "पित्त", "लाल रक्त कोशिकाएँ"], correct: 3 },
+            { id: 46, question: "आमाशय की अम्ल-स्रावी गतिविधि को प्रेरित करने वाला हार्मोन कौन-सा है?", options: ["सीक्रेटिन", "गैस्ट्रिन", "इन्सुलिन", "कैल्सिटोनिन"], correct: 1 },
+            { id: 47, question: "वयस्क में लाल रक्त कोशिकाओं के निर्माण का प्रमुख स्थान कौन-सा है?", options: ["लाल अस्थि मज्जा", "पीली अस्थि मज्जा", "पित्ताशय", "आमाशय"], correct: 0 },
+            { id: 48, question: "मानव रक्त का लगभग कितना भाग प्लाज्मा होता है?", options: ["लगभग एक चौथाई", "लगभग एक तिहाई", "लगभग आधे से अधिक", "लगभग पूरा रक्त"], correct: 2 },
+            { id: 49, question: "रक्त का थक्का बनने में कौन-सा निर्मित घटक प्रमुख सहायता देता है?", options: ["लाल रक्त कोशिका", "प्लेटलेट", "लसीका कोशिका", "वसा कोशिका"], correct: 1 },
+            { id: 50, question: "हृदय की सामान्य धड़कन का विद्युत संकेत सबसे पहले कहाँ शुरू होता है?", options: ["एट्रियोवेंट्रिकुलर गाँठ", "हिज का बंडल", "पुरकिंजे तंतु", "साइनोएट्रियल गाँठ"], correct: 3 }
+        ];
+    </script>
+
+    <!-- ✅ JS Logic Control File Path -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
