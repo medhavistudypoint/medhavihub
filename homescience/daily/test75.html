@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ CSS Control File Path -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- Security Watermark Screen -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. Login Gate Screen -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ Back Button Path -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. Exam Workspace Screen -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 Responsive, Centered Header -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">परिसंचरण तंत्र</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Report Dashboard Screen -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point <br>परिसंचरण तंत्र</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ Dashboard Back Button -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 50 Questions Dataset (बिना explanation, 1-Line Format) -->
+    <script>
+        const QUIZ_KEY = "medhavi_free_test_d75"; 
+
+        const dataset = [
+            { id: 1, question: "निलय द्वारा प्रत्येक मिनट में निष्पादित की गई रक्त की मात्रा को .......... कहते हैं।", options: ["हृदय गति", "इलेक्ट्रोकार्डियोग्राम", "रिदम", "कार्डिएक आउटपुट"], correct: 3 },
+            { id: 2, question: "‘O’ (ओ) रक्त समूह में कौन-से एंटीजन पाये जाते हैं?", options: ["‘ए’", "‘बी’", "‘ए’ एवं ‘बी’", "कोई नहीं"], correct: 3 },
+            { id: 3, question: "लाल रक्त कणिकाओं का व्यास लगभग .......... होता है।", options: ["2 सेंटीमीटर", "7 माइक्रोमीटर", "15 माइक्रोमीटर", "1 सेंटीमीटर"], correct: 1 },
+            { id: 4, question: "रक्त को जमने में कौन सहायता करता है?", options: ["एल्बुमिन", "ग्लोबुलिन", "फाइब्रिनोजन", "इनमें से कोई नहीं"], correct: 2 },
+            { id: 5, question: "हृदय का प्राकृतिक पेसमेकर किसे कहा जाता है?", options: ["सिनोएट्रियल नोड", "एट्रियोवेंट्रिकुलर नोड", "हिज़ का बंडल", "पर्किंजे तंतु"], correct: 0 },
+            { id: 6, question: "एक हीमोग्लोबिन के अणु में .......... ऑक्सीजन बंधक स्थान होते हैं।", options: ["6", "7", "2", "4"], correct: 3 },
+            { id: 7, question: "मेगालोब्लास्टिक रक्तअल्पता निम्न की कमी से होती है—<br>i. विटामिन B₁₂<br>ii. लौह तत्व<br>iii. विटामिन सी<br>iv. फोलिक अम्ल", options: ["i, ii एवं iv", "ii एवं iii", "i एवं iv", "i एवं ii"], correct: 2 },
+            { id: 8, question: "रक्त कोशिकाएँ, जो मोनोसाइट से छोटी होती हैं और जिनमें बड़ा केन्द्रक पाया जाता है, हैं—", options: ["एरिथ्रोसाइट", "लिम्फोसाइट", "बेसोफिल", "प्लेटलेट"], correct: 1 },
+            { id: 9, question: "पर्किन्जे तन्तु होते हैं—", options: ["हृदय में", "वृक्क के नेफ्रॉन में", "मस्तिष्क में", "त्वचा में"], correct: 0 },
+            { id: 10, question: "हृदय से फेफड़ों तक ऑक्सीजन-रहित रक्त कौन-सी वाहिका ले जाती है?", options: ["महाधमनी", "फुफ्फुसीय शिरा", "फुफ्फुसीय धमनी", "ऊर्ध्व महाशिरा"], correct: 2 },
+            { id: 11, question: "रक्त में ऑक्सीजन ढोने वाले प्रोटीन का नाम क्या है?", options: ["हीमोग्लोबिन", "एल्बुमिन", "फाइब्रिनोजन", "ग्लोबुलिन"], correct: 0 },
+            { id: 12, question: "‘एथेरोस्क्लेरोसिस’ नामक रोग सम्बन्धित होता है—", options: ["श्वसन तन्त्र से", "रक्त परिसंचरण से", "पाचन तन्त्र से", "प्रजनन तन्त्र से"], correct: 1 },
+            { id: 13, question: "S.G.P.T. सम्बन्धित है—", options: ["फेफड़ों से", "लीवर से", "हृदय से", "इनमें से सभी"], correct: 1 },
+            { id: 14, question: "एक वयस्क मनुष्य के शरीर में डब्ल्यू. बी. सी. संख्या पायी जाती है—", options: ["6,000–10,000", "5,000–10,000", "3,000–5,000", "7,000–8,000"], correct: 1 },
+            { id: 15, question: "लाल रक्त कोशिकाओं का मुख्य कार्य क्या है?", options: ["रक्त का थक्का बनाना", "हार्मोन का निर्माण", "रोगाणुओं का भक्षण", "ऑक्सीजन का परिवहन"], correct: 3 },
+            { id: 16, question: "सम्पूर्ण शरीर से दूषित रक्त एकत्रित करती है—", options: ["शिरायें", "धमनियाँ", "केशवाहिनी", "केशा"], correct: 0 },
+            { id: 17, question: "निम्नलिखित में से कौन से घटक हीमोग्लोबिन तैयार करते हैं?<br>I. विटामिन सी<br>II. लोह<br>III. विटामिन B₁₂<br>IV. प्रोटीन", options: ["II तथा III सही हैं", "I तथा IV सही हैं", "I, II तथा III सही हैं", "सभी सही हैं"], correct: 3 },
+            { id: 18, question: ".......... फाइब्रिनोजन को फाइब्रिन में बदल देता है।", options: ["थ्रोम्बोप्लास्टिन", "प्रोथ्रोम्बिन", "थ्रोम्बोकाइनेज", "थ्रोम्बिन"], correct: 3 },
+            { id: 19, question: "थ्रोम्बोसाइट्स को .......... भी कहते हैं।", options: ["लिम्फोसाइट्स", "डब्ल्यू. बी. सी.", "आर. बी. सी.", "प्लेटलेट्स"], correct: 3 },
+            { id: 20, question: "ABO रक्त समूह किस आधार पर निर्धारित होता है?", options: ["लाल कोशिकाओं के एंटीजन पर", "प्लाज्मा के रंग पर", "प्लेटलेट्स की संख्या पर", "शिराओं के व्यास पर"], correct: 0 },
+            { id: 21, question: ".......... एक संयोजक ऊतक है।", options: ["आमाशय", "कार्डियक ऊतक", "रक्त", "इनमें से कोई नहीं"], correct: 2 },
+            { id: 22, question: "ऑक्सीजन अणु हीमोग्लोबिन के .......... भाग से जुड़ते हैं।", options: ["ग्लोब्युलिन", "आर. बी. सी.", "हीम", "इनमें से कोई नहीं"], correct: 2 },
+            { id: 23, question: "हृदय .......... मांसपेशियों का बना होता है।", options: ["कार्डिएक", "खुरदार", "मृदु", "इनमें से कोई नहीं"], correct: 0 },
+            { id: 24, question: "जब रक्त में हीमोग्लोबिन की कमी हो जाती है, तो हमें .......... हो जाता है।", options: ["बुखार", "सिरदर्द", "चेचक", "अनीमिया"], correct: 3 },
+            { id: 25, question: "हृदय का कौन-सा कक्ष रक्त को महाधमनी में भेजता है?", options: ["दायाँ आलिंद", "दायाँ निलय", "बायाँ आलिंद", "बायाँ निलय"], correct: 3 },
+            { id: 26, question: "लाल रक्त कणों का निर्माण होता है—", options: ["हृदय में", "गुर्दे में", "अस्थि-मज्जा में", "पित्ताशय में"], correct: 2 },
+            { id: 27, question: "स्वस्थ मानव लाल रक्त कोशिका का औसत जीवनकाल लगभग कितना होता है?", options: ["60 दिन", "90 दिन", "120 दिन", "150 दिन"], correct: 2 },
+            { id: 28, question: "रोग उत्पन्न करने वाले जीवाणुओं का नाश निम्न में से कौन करता है?", options: ["लाल रक्त कणिकाएँ", "श्वेत रक्त कणिकाएँ", "विषाणु", "उपरोक्त में से कोई नहीं"], correct: 1 },
+            { id: 29, question: "श्वेत रक्तकणिकाओं का मुख्य कार्य है—", options: ["शरीर को ऑक्सीजन देना", "शरीर को सूक्ष्म जीवों से बचाना", "ऊर्जा देना", "उपरोक्त में कोई नहीं"], correct: 1 },
+            { id: 30, question: "रक्त के किस घटक के घटने से चोट पर रक्त जमने में समस्या हो सकती है?", options: ["एल्बुमिन", "हीमोग्लोबिन", "प्लेटलेट्स", "लाल रक्त कोशिकाएँ"], correct: 2 },
+            { id: 31, question: "सर्वग्राही रुधिर का ग्रुप है—", options: ["‘ए’", "‘बी’", "‘एबी’", "‘ओ’"], correct: 2 },
+            { id: 32, question: "लाल रक्त कोशिकाओं का निर्माण के लिए आवश्यक है—", options: ["प्रोटीन", "फोलिक एसिड", "विटामिन सी", "विटामिन डी"], correct: 1 },
+            { id: 33, question: "आराम की अवस्था में एक स्वस्थ व्यक्ति के हृदय से प्रति मिनट प्रवाहित होने वाली रक्त की मात्रा होती है—", options: ["लगभग 2 लीटर", "लगभग 3 लीटर", "लगभग 4 लीटर", "लगभग 5 लीटर"], correct: 3 },
+            { id: 34, question: "पल्मोनरी शिरा रक्त की संचार करती है—", options: ["अशुद्ध रक्त हृदय की", "शुद्ध रक्त हृदय की", "अशुद्ध रक्त हृदय से", "शुद्ध रक्त हृदय से"], correct: 1 },
+            { id: 35, question: "निलयों के संकुचन के दौरान आलिंद-निलय कपाटों का क्या होता है?", options: ["वे बंद हो जाते हैं", "वे खुले रहते हैं", "वे सिकुड़ जाते हैं", "वे अनुपस्थित रहते हैं"], correct: 0 },
+            { id: 36, question: "सिस्टोलिक दाब होता है जब—", options: ["रक्त दाब निम्न होता है", "रक्त दाब सर्वाधिक होता है", "रक्त दाब नहीं के बराबर होता है", "इनमें से कोई नहीं"], correct: 1 },
+            { id: 37, question: "हृदय में द्विकपर्दी कपाट कहाँ स्थित होता है?", options: ["दाएँ आलिंद और दाएँ निलय के बीच", "बाएँ निलय और महाधमनी के बीच", "दाएँ निलय और फुफ्फुसीय धमनी के बीच", "बाएँ आलिंद और बाएँ निलय के बीच"], correct: 3 },
+            { id: 38, question: "थ्रोम्बिन की उपस्थिति से—", options: ["रक्त में लाल रंग अलग होता है", "रक्त जमता है", "रक्त में आवश्यक एंजाइम बनते हैं", "रक्त में आवश्यक हार्मोन बनते हैं"], correct: 1 },
+            { id: 39, question: "एक सामान्य स्वस्थ व्यक्ति का हृदय एक मिनट में कितनी बार धड़कता है?", options: ["72", "80", "84", "70"], correct: 0 },
+            { id: 40, question: "रक्त में घुलकर अधिकांश कार्बन डाइऑक्साइड किस रूप में चलती है?", options: ["बाइकार्बोनेट आयन", "कार्बोनेट आयन", "कार्बोक्सीहीमोग्लोबिन", "घुलित ऑक्सीजन"], correct: 0 },
+            { id: 41, question: "मनुष्य में कितने रक्त समूह पाये जाते हैं?", options: ["A, B, AB, O", "A, B, C, D", "AB, K, D", "Rh, Rd, Rc"], correct: 0 },
+            { id: 42, question: "ई.सी.जी. किसकी सही जानकारी देता है?", options: ["मस्तिष्क", "यकृत", "फेफड़े", "हदय"], correct: 3 },
+            { id: 43, question: "शरीर की सबसे बड़ी धमनी कौन-सी है?", options: ["फुफ्फुसीय धमनी", "कोरोनरी धमनी", "महाधमनी", "वृक्क धमनी"], correct: 2 },
+            { id: 44, question: "एल्बुमिन का कार्य है—", options: ["जीवाणुओं से लड़ने में सहायता प्रदान करना", "प्लाज्मा में पानी के अंश को नियमित रखना", "रक्त जमने में सहायता करना", "कोशिकाओं को भोजन पहुँचाना"], correct: 1 },
+            { id: 45, question: "रक्त में फाइब्रिनोजन हट जाने पर शेष द्रव क्या कहलाता है?", options: ["प्लाज्मा", "लसीका", "सीरम", "ऊतक द्रव"], correct: 2 },
+            { id: 46, question: "रुधिर की शुद्धि किस अंग में होती है?", options: ["पाचन-तन्त्र में", "फुफ्फुस में", "श्वास प्रणाली में", "हृदय में"], correct: 1 },
+            { id: 47, question: "लाल रक्त कोशिका के हीम समूह में कौन-सा तत्व आवश्यक है?", options: ["कैल्सियम", "सोडियम", "लौह", "आयोडीन"], correct: 2 },
+            { id: 48, question: "रक्त के प्लाज्मा का सबसे बड़ा घटक कौन-सा है?", options: ["वसा", "प्रोटीन", "जल", "लवण"], correct: 2 },
+            { id: 49, question: "ऊतकों से लौटे रक्त में किस गैस की मात्रा अधिक होती है?", options: ["नाइटोजन", "ऑक्सीजन", "कार्बन डाइऑक्साइड", "हाइड्रोजन"], correct: 2 },
+            { id: 50, question: "रक्त का तरल आधार पदार्थ किसे कहते हैं?", options: ["प्लाज्मा", "सीरम", "फाइब्रिन", "लसीका"], correct: 0 }
+        ];
+    </script>
+
+    <!-- ✅ JS Logic Control File Path -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
