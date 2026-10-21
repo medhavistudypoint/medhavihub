@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ CSS Control File Path -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- Security Watermark Screen -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. Login Gate Screen -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ Back Button Path -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. Exam Workspace Screen -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 Responsive, Centered Header -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">तंत्रिका तंत्र</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Report Dashboard Screen -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point <br> तंत्रिका तंत्र एवं उत्सर्जन तंत्र</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ Dashboard Back Button -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 50 Questions Dataset (बिना explanation, 1-Line Format) -->
+    <script>
+        const QUIZ_KEY = "medhavi_free_test_d76"; 
+
+        const dataset = [
+            { id: 1, question: "शरीर को संतुलित अवस्था में रखने वाली सभी प्रकार की पेशियों पर नियंत्रण एवं नियमन किसके द्वारा होता है ?", options: ["सेरिब्रम", "थैलेमस", "ऑल्फेक्टरी लोब", "सेरीबेलम"], correct: 3 },
+            { id: 2, question: "परिधीय तंत्रिका तंत्र में कौन-सी तंत्रिकाएँ आती हैं?", options: ["मस्तिष्क और मेरुरज्जु से जुड़ी नसें", "केवल प्रमस्तिष्क की झिल्लियाँ", "केवल मस्तिष्क की कोशिकाएँ", "केवल मेरुरज्जु की कोशिकाएँ"], correct: 0 },
+            { id: 3, question: "त्वचा की रक्त वाहिनियों में संकुचन लाने का कार्य किसके द्वारा होता है?", options: ["परानुकम्पी तंत्रिका तंत्र", "प्राण तंत्रिका", "अनुकम्पी तंत्रिका तंत्र", "दृष्टि तंत्रिका"], correct: 2 },
+            { id: 4, question: "अपवाही तंतु सामान्यतः आवेग कहाँ से कहाँ पहुँचाते हैं?", options: ["अंगों से मेरुरज्जु की ओर", "केंद्रीय तंत्र से अंगों की ओर", "त्वचा से मस्तिष्क की ओर", "ग्राहियों से मेरुरज्जु की ओर"], correct: 1 },
+            { id: 5, question: "नीचे दो कथन दिए गए हैं:<br><b>अभिकथन (A):</b> यकृत एन्सेफेलोपैथी में मस्तिष्क में अवक्षयी बदलाव और तंत्रिकीय लक्षण दिखाई देते हैं।<br><b>कारण (R):</b> कमजोर जिगर कुछ पदार्थों में मेटाबोलाइज या निष्क्रिय या उनका निर्विषीकरण नहीं कर सकता।", options: ["दोनों सही हैं, पर कारण सही स्पष्टीकरण नहीं है", "अभिकथन और कारण दोनों गलत हैं", "अभिकथन गलत है, पर कारण सही है", "दोनों सही हैं और कारण सही स्पष्टीकरण है"], correct: 3 },
+            { id: 6, question: "कायिक तंत्रिका तंत्र का ऐच्छिक गति में प्रमुख कार्य क्या है?", options: ["पुतली का आकार बदलना", "कंकाली पेशियों तक संकेत पहुँचाना", "हृदय की गति धीमी करना", "जठर ग्रंथियों का स्राव बढ़ाना"], correct: 1 },
+            { id: 7, question: "मनुष्य के मस्तिष्क का वजन........होता है-", options: ["1400 ग्राम", "1200 ग्राम", "1000 ग्राम", "900 ग्राम"], correct: 0 },
+            { id: 8, question: "स्वायत्त तंत्रिका तंत्र के प्रमुख दो विभाजन कौन-से हैं?", options: ["कपाल और मेरु", "डेंड्राइट और अक्षतंतु", "अनुकंपी और परानुकंपी", "संवेदी और प्रेरक"], correct: 2 },
+            { id: 9, question: "‘ब्रोका क्षेत्र’ मस्तिष्क का वह क्षेत्र है जो योगदान करता है—", options: ["भाषा को समझने में", "वाणी उत्पन्न करने में", "गत्यात्मक क्रिया में", "क्रोध उत्पादन में"], correct: 1 },
+            { id: 10, question: "डेंड्राइट का प्रमुख कार्य क्या है?", options: ["मूत्र को संग्रह करना", "मांसपेशी को पोषण देना", "संकेत कोशिका काय तक लाना", "संकेत वृक्क तक पहुँचाना"], correct: 2 },
+            { id: 11, question: "मस्तिष्क का सबसे बड़ा भाग कौन सा है?", options: ["पोन्स वैरोलि", "सेरिब्रम", "सेरीबेलम", "मेडुला"], correct: 1 },
+            { id: 12, question: "माइलिन आवरण बनाने में किस कोशिका का योगदान होता है?", options: ["श्वान की कोशिका", "यकृत की कोशिका", "पेशी की कोशिका", "बोमन की कोशिका"], correct: 0 },
+            { id: 13, question: "मस्तिष्क से निकलने वाली कपाल तंत्रिकाओं की संख्या होती हैं:", options: ["12 जोड़े", "10 जोड़े", "15 जोड़े", "8 जोड़े"], correct: 0 },
+            { id: 14, question: "द्विध्रुवी न्यूरॉन किस स्थान पर पाया जाता है?", options: ["अस्थि मज्जा में", "नेत्र के दृष्टि पटल में", "वृक्क नलिका में", "मस्तिष्क की झिल्ली में"], correct: 1 },
+            { id: 15, question: "शारीरिक एवं मानसिक के पूर्ण रूप से कार्य करने की अवस्था को कहते हैं:", options: ["सकारात्मक स्वास्थ्य", "पूर्ण स्वास्थ्य", "अच्छा स्वास्थ्य", "उत्तम स्वास्थ्य"], correct: 1 },
+            { id: 16, question: "तंत्रिका आवेग प्रारंभ होने पर अक्षतंतु की झिल्ली में किस आयन का प्रवेश तेजी से बढ़ता है?", options: ["सोडियम आयन", "पोटैशियम आयन", "क्लोराइड आयन", "कैल्सियम आयन"], correct: 0 },
+            { id: 17, question: "मस्तिष्क की तीनों झिल्लियों को संयुक्त रूप में कहते हैं:", options: ["फिसर", "मेनिन्जीज", "माइलिन", "सेरेब्रुम"], correct: 1 },
+            { id: 18, question: "विद्युत सिनैप्स में आवेग का संचरण रासायनिक सिनैप्स की तुलना में कैसा होता है?", options: ["सदैव रुक जाता है", "समान गति से होता है", "सदैव धीमा होता है", "अधिक तेज होता है"], correct: 3 },
+            { id: 19, question: "प्रतिवर्ती क्रियाओं का नियंत्रण केन्द्र कहाँ होता है?", options: ["अनुमस्तिष्क में", "कशेरुकरज्जु", "तंत्रिका कोशिका", "प्रमस्तिष्क में"], correct: 1 },
+            { id: 20, question: "प्रमस्तिष्क की बाहरी प्रांतस्था धूसर क्यों दिखाई देती है?", options: ["कैल्सियम के अधिक होने से", "माइलिन के अधिक जमाव से", "रक्त के कम प्रवाह से", "कोशिका काय के अधिक होने से"], correct: 3 },
+            { id: 21, question: "नेत्र की सबसे बाहरी परत है—", options: ["रेटिना", "उपरोक्त में से कोई नहीं", "कोरायड", "स्क्लेरा"], correct: 3 },
+            { id: 22, question: "थैलेमस की एक प्रमुख भूमिका क्या है?", options: ["संवेदी संकेतों का समन्वय करना", "मूत्र को संग्रह करना", "रक्त को छानना", "आहार को पचाना"], correct: 0 },
+            { id: 23, question: "सूची-I में दिए गए वर्णन को सूची-II में दिए गए पदों के साथ सुमेलित करें—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>A. कुछ मशीनों को सूचना सम्प्रेषित करने के लिए एक उपकरण</td><td>1. डिस्प्ले</td></tr><tr><td>B. ध्वनि की तीव्रता का मापन</td><td>2. हर्ट्ज</td></tr><tr><td>C. मानव गति एवं इसके शारीरिक पहलुओं का अध्ययन</td><td>3. इलेक्ट्रोमायोग्राफी</td></tr><tr><td>D. ध्वनि की आवृत्ति का मापन</td><td>4. कंट्रोल</td></tr><tr><td>E. एक प्रणाली की दशा के बारे में सूचना प्रस्तुत करने की तकनीक</td><td>5. बायोमैकेनिक्स<br>6. डेसिबल</td></tr></tbody></table>", options: ["4, 5, 3, 1, 2", "4, 6, 5, 2, 1", "2, 3, 4, 5, 1", "3, 2, 4, 1, 5"], correct: 1 },
+            { id: 24, question: "पश्च मस्तिष्क में कौन-से तीन भाग सम्मिलित होते हैं?", options: ["सेतु, थैलेमस और मेडुला", "थैलेमस, प्रमस्तिष्क और सेतु", "प्रमस्तिष्क, अनुमस्तिष्क और सेतु", "सेतु, अनुमस्तिष्क और मेडुला"], correct: 3 },
+            { id: 25, question: "कॉक्लिया की रचना किस प्रकार की होती है?", options: ["लम्बी गुहा के रूप में", "टेढ़ी-मेढ़ी तंग गली के रूप में", "एक सर्पिल ट्यूब के समान", "उपरोक्त में से कोई नहीं"], correct: 2 },
+            { id: 26, question: "लिम्बिक तंत्र और हाइपोथैलेमस साथ मिलकर किस कार्य में योगदान देते हैं?", options: ["आवेगों का केवल श्रवण", "भावनाओं और प्रेरणा का नियमन", "वृक्क में मूत्र निस्यंदन", "मूत्राशय में मूत्र संचय"], correct: 1 },
+            { id: 27, question: "रेटिना किस अंग का भाग है?", options: ["नाक का", "आँख का", "कान का", "सिर का"], correct: 1 },
+            { id: 28, question: "मानव उत्सर्जन तंत्र का सही अंग समूह कौन-सा है?", options: ["वृक्क, मूत्रवाहिनी, मूत्राशय, मूत्रमार्ग", "वृक्क, बड़ी आँत, मूत्राशय, फेफड़े", "वृक्क, फेफड़े, मूत्राशय, हृदय", "वृक्क, यकृत, मूत्राशय, त्वचा"], correct: 0 },
+            { id: 29, question: "शरीर के किस अंग में त्वचा सर्वाधिक पतली पाई जाती है?", options: ["इनमें से कोई नहीं", "हथेली", "तलुए", "चेहरे"], correct: 3 },
+            { id: 30, question: "वृक्क की भीतरी अवतल सतह के प्रवेश स्थल को क्या कहते हैं?", options: ["मेडुला", "वृक्क स्तंभ", "नाभि", "वल्कुट"], correct: 2 },
+            { id: 31, question: "निम्नांकित जोड़े में से किसका सुमेल नहीं है?", options: ["आँख-केराटोमलेशिया", "यकृत-पीलिया", "हृदय-मधुमेह", "फेफड़े-निमोनिया"], correct: 2 },
+            { id: 32, question: "वृक्क नलिका का पहला प्याले के आकार का भाग कौन-सा होता है?", options: ["हेनले का लूप", "संग्राहक नलिका", "दूरस्थ कुंडलित नलिका", "बोमन संपुट"], correct: 3 },
+            { id: 33, question: "सामान्य व्यक्ति में जठर रस की स्रावित होने वाली मात्रा है—", options: ["500-1000 मिली प्रतिदिन", "2500-3000 मिली प्रतिदिन", "1500-2500 मिली प्रतिदिन", "1000-1500 मिली प्रतिदिन"], correct: 2 },
+            { id: 34, question: "नेफ्रॉन के किस भाग का अधिकांश हिस्सा वृक्क वल्कुट में रहता है?", options: ["वासा रेक्टा की लंबी शाखाएँ", "वृक्क श्रोणि और मूत्रवाहिनी", "हेनले का लंबा लूप", "बोमन संपुट और कुंडलित नलिकाएँ"], correct: 3 },
+            { id: 35, question: "बोमेन कैप्सूल मानव शरीर के किस अंग का हिस्सा है?", options: ["बड़ी आँत", "हृदय", "गुर्दा", "फेफड़ा"], correct: 2 },
+            { id: 36, question: "ग्लोमेरुलर निस्यंदन के दौरान सामान्यतः कौन-सा घटक निस्यंद में नहीं जाता?", options: ["बड़े प्लाज्मा प्रोटीन", "सोडियम के आयन", "यूरिया", "ग्लूकोज"], correct: 0 },
+            { id: 37, question: "सामान्य मूत्र का विशिष्ट घनत्व कितना हो सकता है?", options: ["1025-1038", "1038-1040", "910-1010", "1010-1025"], correct: 3 },
+            { id: 38, question: "समीपस्थ कुंडलित नलिका में लगभग कितने प्रतिशत जल और विद्युत अपघट्य पुनः अवशोषित होते हैं?", options: ["70 से 80 प्रतिशत", "10 से 20 प्रतिशत", "30 से 40 प्रतिशत", "50 से 60 प्रतिशत"], correct: 0 },
+            { id: 39, question: "निम्नलिखित कार्य गुर्दे से संबंधित होते हैं:", options: ["शर्करा की मात्रा का नियंत्रण", "प्रजनन क्रिया का नियंत्रण", "रक्त से यूरिया को अलग करना", "उपरोक्त सभी कार्य"], correct: 2 },
+            { id: 40, question: "हेनले के लूप की आरोही शाखा की प्रमुख विशेषता क्या है?", options: ["जल के लिए अधिक पारगम्य होना", "केवल ग्लूकोज छानना", "केवल प्रोटीन रोकना", "जल के लिए अपारगम्य होना"], correct: 3 },
+            { id: 41, question: "मूत्र निष्कासन की आवश्यकता का अनुभव होने से पूर्व मूत्राशय में लगभग कितना मिली मूत्र एकत्र हो जाता है?", options: ["500 - 1000 मिली", "इनमें से कोई नहीं", "200-250 मिली", "400 - 500 मिली"], correct: 2 },
+            { id: 42, question: "नलिकीय स्रवण में कौन-से पदार्थ निस्यंद में छोड़े जा सकते हैं?", options: ["ग्लूकोज, प्रोटीन और वसा", "हाइड्रोजन, पोटैशियम और अमोनिया", "हीमोग्लोबिन, वसा और लोहा", "श्वेत कोशिका, कैल्सियम और वसा"], correct: 1 },
+            { id: 43, question: "शरीर में से व्यर्थ एवं हानिकारक पदार्थों को बाहर निकालने वाले तन्त्र को कहते हैं:", options: ["परिसंचरण तन्त्र", "श्वसन तन्त्र", "उत्सर्जन तन्त्र", "इनमें से सभी"], correct: 2 },
+            { id: 44, question: "शरीर में जल की अधिक हानि होने पर किस हार्मोन का स्राव बढ़ सकता है?", options: ["प्रतिमूत्रल हार्मोन", "थायरॉक्सिन", "ऑक्सिटोसिन", "इंसुलिन"], correct: 0 },
+            { id: 45, question: "निम्न में से किस वस्तु का उत्सर्जन स्वस्थ व्यक्ति के मूत्र में नहीं होता?", options: ["यूरिया", "यूरिक एसिड", "ग्लूकोज", "नमक"], correct: 2 },
+            { id: 46, question: "वृक्क की मेडुला में परासरणीय प्रवणता का प्रमुख योगदान किनसे होता है?", options: ["सोडियम क्लोराइड और यूरिया से", "ग्लूकोज और प्रोटीन से", "कैल्सियम और वसा से", "ऑक्सीजन और ग्लूकोज से"], correct: 0 },
+            { id: 47, question: "वृक्क की खराबी से रक्त में यूरिया जमा होने की दशा को क्या कहते हैं?", options: ["मधुमेह", "हीमोफीलिया", "रतौंधी", "यूरेमिया"], correct: 3 },
+            { id: 48, question: "त्वचा की स्वेद ग्रंथियों से निकलने वाले द्रव में सामान्यतः क्या मिलता है?", options: ["जल, नमक और थोड़ी यूरिया", "केवल वसा और प्रोटीन", "पित्त लवण और बिलिरुबिन", "केवल ग्लूकोज और प्रोटीन"], correct: 0 },
+            { id: 49, question: "मानव शरीर में यूरिया का निर्माण मुख्यतः कहाँ होता है?", options: ["मूत्राशय में", "वृक्क में", "यकृत में", "फेफड़ों में"], correct: 2 },
+            { id: 50, question: "मनुष्य मुख्यतः किस नाइट्रोजनी अपशिष्ट को मूत्र द्वारा बाहर निकालता है?", options: ["यूरिया", "यूरिक अम्ल", "क्रिएटिन", "अमोनिया"], correct: 0 }
+        ];
+    </script>
+
+    <!-- ✅ JS Logic Control File Path -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
