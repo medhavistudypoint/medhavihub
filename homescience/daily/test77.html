@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ CSS Control File Path -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- Security Watermark Screen -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. Login Gate Screen -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ Back Button Path -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. Exam Workspace Screen -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 Responsive, Centered Header -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">रोग एवं प्रतिरक्षा</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Report Dashboard Screen -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point <br> रोग एवं प्रतिरक्षा </div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ Dashboard Back Button -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 50 Questions Dataset (बिना explanation, 1-Line Format) -->
+    <script>
+        const QUIZ_KEY = "medhavi_free_test_d77"; 
+
+        const dataset = [
+            { id: 1, question: "हैजा मुख्यतः किस मार्ग से फैल सकता है?", options: ["दूषित जल से", "मच्छर के काटने से", "आनुवंशिक प्रभाव से", "त्वचा के स्पर्श से"], correct: 0 },
+            { id: 2, question: "संक्रमण के बाद शरीर में प्रतिरक्षा स्मृति बनना किसका उदाहरण है?", options: ["बाह्य निष्क्रियता", "जन्मजात प्रतिरक्षा", "अर्जित प्रतिरक्षा", "निष्क्रिय प्रतिरक्षा"], correct: 2 },
+            { id: 3, question: "हेपेटाइटिस (यकृत शोथ) किसके द्वारा फैलता है?", options: ["फफूँद", "शैवाल", "विषाणु", "जीवाणु"], correct: 2 },
+            { id: 4, question: "एक पदार्थ जिसमें जीवाणु के साथ संयोजन करने और उन्हें ‘फेगोसाइटिस’ के लिये अति संवेदनशील बनाने का गुण होता है, वह है-", options: ["प्रेसिपिटिन", "एप्सोनिन", "एण्टीटॉक्सिन", "भक्षककोशिकीय"], correct: 1 },
+            { id: 5, question: "थायरॉक्सिन की कमी से क्या होता है?", options: ["हाइपरथायराइडिज्म", "डायबिटीज", "हाइपोथायराइडिज्म", "स्कर्वी"], correct: 2 },
+            { id: 6, question: "विशिष्ट पदार्थ के प्रति ऊतकों की प्रतिक्रिया .............. कहलाती है।", options: ["टिटनेस", "पित्त", "एलर्जी", "एक्जिमा"], correct: 2 },
+            { id: 7, question: "त्वचा का रंग और यकृत पीलिया .............. के कारण पीले हो जाते हैं।", options: ["हिपेटो सेलुलर", "सभी", "अवरोधक", "हीमोलाइटिक"], correct: 1 },
+            { id: 8, question: "एड्स (AIDS) के सही विस्तारण पर निशान लगाइए—", options: ["एसोसिएशन ऑफ इम्यूनो डिफिसिएन्सी सिंड्रोम", "ऑल इंडिया डिजीज सर्विलेंस", "एक्वायर्ड इम्यूनो डिफिसिएन्सी सिंड्रोम", "एक्वायर्ड अर्जेन्ट डिजीज सिस्टम"], correct: 2 },
+            { id: 9, question: "शरीर के टिश्यू में पानी के जमा होने को कहते हैं।", options: ["ऑस्टियोमलेशिया", "पैटिंग", "ओडीमा", "स्कर्वी"], correct: 2 },
+            { id: 10, question: "अंधेपन की विधिवत परिभाषा के अनुसार दृष्टि न्यूनता किसके बराबर या कम होनी चाहिए?", options: ["20/200", "20/100", "20/40", "20/20"], correct: 0 },
+            { id: 11, question: "रोगी को तात्कालिक आघात के फलस्वरूप अत्यधिक रक्त स्राव हो सकता है:", options: ["एनीमिया में", "अल्प रक्त दाब में", "धमनी रक्त स्राव में", "हीमोफीलिया में"], correct: 3 },
+            { id: 12, question: "निकट दृष्टि दोष वाले व्यक्ति को किस लेंस का चश्मा लगवाना चाहिए?", options: ["इनमें से सभी", "नतोदर", "उत्तलोदर", "समतल"], correct: 1 },
+            { id: 13, question: "एड्स से बचाव केवल इससे सफल हो सकता है-", options: ["विवाह", "जागरूकता", "नियंत्रण", "शिक्षा"], correct: 1 },
+            { id: 14, question: "कशेरुकी से मनुष्य में संचरणयोग्य संक्रमण का उदाहरण है—", options: ["पोलियो", "मम्प्स", "डिप्थीरिया", "रेबीज"], correct: 3 },
+            { id: 15, question: "रेबीज को .......... भी कहते हैं।", options: ["अतिभय", "जलभय", "वायुभय", "संज्ञाहानि"], correct: 1 },
+            { id: 16, question: "शक्कर और नमक के साथ जल की थोड़ी मात्रा .......... के दौरान दी जा सकती है।", options: ["कोलिक", "सामान्य जुकाम", "टॉन्सिल", "उल्टी"], correct: 3 },
+            { id: 17, question: "निम्न में से कौन सा रोग वायु द्वारा संचारित नहीं होता है।", options: ["जुकाम और खाँसी", "टाइफाइड", "वायरल बुखार", "छोटी माता"], correct: 1 },
+            { id: 18, question: "क्षय रोग से ग्रसित व्यक्ति का आहार होना चाहिए—", options: ["कम प्रोटीन तथा अधिक कैलोरी युक्त", "अधिक प्रोटीन तथा अधिक कैलोरी युक्त", "कम प्रोटीन तथा कम कैलोरी युक्त", "अधिक प्रोटीन तथा कम कैलोरी युक्त"], correct: 1 },
+            { id: 19, question: "बैक्टीरिया से फैलने वाला रोग है:", options: ["न्यूमोनिया", "मलेरिया", "अमीबियासिस", "जुकाम"], correct: 0 },
+            { id: 20, question: "वर्णान्ध व्यक्ति किन रंगों के भेद नहीं कर सकता है:", options: ["लाल और हरा", "सभी रंग", "हरा और पीला", "लाल और पीला"], correct: 0 },
+            { id: 21, question: "एण्टीबॉडीज किसके विरुद्ध लड़ते हैं?", options: ["विपत्ति", "संक्रमण", "पोषक पदार्थों की कमी", "वातावरणीय दशाएँ"], correct: 1 },
+            { id: 22, question: "बॉर्डेटेला परट्यूसिस से होने वाली बीमारी है:", options: ["काली खाँसी", "पोलियो मायलाइटिस", "छोटी माता", "शीतला"], correct: 0 },
+            { id: 23, question: "निम्नलिखित में से कौन जीवाणुओं द्वारा उत्पन्न रोग हैं?", options: ["चेचक, हैजा, जुकाम", "खसरा, कर्णफोर, कुकुरखाँसी", "टायफाइड, तपेदिक, डिप्थीरिया", "निमोनिया, पोलियो, मलेरिया"], correct: 2 },
+            { id: 24, question: "निम्न में विषाणुजनित रोग है—", options: ["टिटनेस", "टी.बी.", "मलेरिया बुखार", "एड्स"], correct: 3 },
+            { id: 25, question: "पायरिया रोग में:", options: ["पैरों में दर्द होता है", "बुखार होता है", "पेट खराब होता है", "मसूड़ों से खून आता है"], correct: 3 },
+            { id: 26, question: "संक्रामक रोगों के जीवाणुओं से लड़ने में कौन-सी रक्त प्रोटीन सहायता करती है?", options: ["फाइब्रिनोजन", "ग्लोब्युलिन", "मायोसिन", "एल्ब्यूमिन"], correct: 1 },
+            { id: 27, question: "अशुद्ध जल के माध्यम से कौन-सा रोग हो सकता है:", options: ["क्षय रोग", "इनमें से कोई नहीं", "हैजा", "चेचक"], correct: 2 },
+            { id: 28, question: "तम्बाकू के अधिक सेवन से होता है:", options: ["हृदय की धड़कन बढ़ जाती है", "मुख में कैंसर हो सकता है", "उपर्युक्त सभी", "रक्तचाप बढ़ जाता है"], correct: 2 },
+            { id: 29, question: "मलेरिया रोग किस जीव द्वारा फैलता है:", options: ["सी. सी. मक्खी", "साल्मोनेला जीवाणु", "इनमें से सभी", "माता एनोफिलीज"], correct: 3 },
+            { id: 30, question: "कुष्ठ रोग के लक्षण हैं।", options: ["संवेदन की अनुभूति का समाप्त हो जाना", "नाड़ियों का जाना तथा कोमल हो जाना", "त्वचा पर बड़ी धारियाँ तथा फोड़े होना", "उपरोक्त सभी"], correct: 3 },
+            { id: 31, question: "'बदहजमी (डाइस्पेप्सिया) का अर्थ है'", options: ["बदहजमी", "मंद दृष्टि", "नींद की कमी", "भूख की कमी"], correct: 0 },
+            { id: 32, question: "प्रतिजैविक औषधि है—", options: ["स्ट्रेप्टोमाइसिन", "थायरॉक्सिन", "एनाल्जिन", "एप्रिन"], correct: 0 },
+            { id: 33, question: "अतिसार किस ऋतु में अधिक फैलता है।", options: ["तीनों में", "गर्मी", "वर्षा", "शीत"], correct: 2 },
+            { id: 34, question: "टाइफाइड में कैसा आहार दिया जाना चाहिए—", options: ["पौष्टिक तथा गरिष्ठ", "हल्का तथा सुपाच्य", "कोई भी नहीं", "मिर्च-मसालेदार"], correct: 1 },
+            { id: 35, question: "रोगी का कमरा घर के अन्य कमरों से दूर होना चाहिए, ताकि—", options: ["इनमें से कोई नहीं", "रोगी को पूर्ण आराम व शान्ति मिलती रहे", "परिवार के अन्य सदस्यों का संक्रामक रोग से बचाव हो सके", "लोग एक-दूसरे को छू सकें"], correct: 2 },
+            { id: 36, question: "धूम्रपान से किस रोग के बढ़ने की सम्भावना होती है?", options: ["कैंसर", "टिटनेस", "बुखार", "अतिसार"], correct: 0 },
+            { id: 37, question: "विब्रियो कोलेरी नामक जीवाणु फैलाता है—", options: ["मलेरिया", "टाइफाइड", "पैराब्रोंकाइटिस", "हैजा"], correct: 3 },
+            { id: 38, question: "शरीर में रोगों से लड़ने की क्षमता को कहा जाता है—", options: ["निःसंक्रमण", "संक्रमण", "उद्भवन शक्ति", "रोग प्रतिरोधक क्षमता"], correct: 3 },
+            { id: 39, question: "शल्य क्रिया में अर्थोप्लास्टी क्या है?", options: ["इनमें से कोई नहीं", "रुधिर आधान", "ओपन हार्ट सर्जरी", "पूर्व प्रत्यरोपण"], correct: 0 },
+            { id: 40, question: "स्वाइन फ्लू फैलता है—", options: ["एन टू एच टू से", "एच वन एन टू से", "एन टू एन वन से", "एच वन एन वन से"], correct: 3 },
+            { id: 41, question: "एचआईवी का संक्रमण इनमें से किस स्थिति में हो सकता है?", options: ["सुरक्षित रक्तदान करने से", "साथ बैठकर भोजन करने से", "सामान्य स्पर्श करने से", "संक्रमित रक्त चढ़ाने से"], correct: 3 },
+            { id: 42, question: "वायु द्वारा फैलने वाला एक रोग है:", options: ["खसरा", "सिफलिस", "मलेरिया", "पेचिश"], correct: 0 },
+            { id: 43, question: "टाइफाइड की पुष्टि के लिए सामान्यतः किस परीक्षण का उल्लेख किया जाता है?", options: ["पैप परीक्षण", "एलाइजा परीक्षण", "मैन्टू परीक्षण", "विडाल परीक्षण"], correct: 3 },
+            { id: 44, question: "मलेरिया परजीवी की संक्रामक अवस्था मनुष्य में किससे पहुँचती है?", options: ["घरेलू मक्खी से", "मादा एनोफिलीज से", "नर एनोफिलीज से", "रेत मक्खी से"], correct: 1 },
+            { id: 45, question: "जन्म के समय शिशु को प्राप्त मातृ प्रतिपिंड किस प्रतिरक्षा का उदाहरण हैं?", options: ["प्राकृतिक निष्क्रिय", "अर्जित सक्रिय", "कृत्रिम सक्रिय", "जन्मजात सक्रिय"], correct: 0 },
+            { id: 46, question: "प्रतिपिंड बनाने वाली कोशिकाएँ किस वर्ग से संबंधित हैं?", options: ["रक्त प्लेटलेट", "बी लसीकाणु", "लाल रक्ताणु", "तंत्रिका कोशिका"], correct: 1 },
+            { id: 47, question: "दाद का रोगकारक किस समूह में रखा जाता है?", options: ["कवक", "प्रोटोजोआ", "विषाणु", "जीवाणु"], correct: 0 },
+            { id: 48, question: "संक्रमित व्यक्ति से हाथ मिलाने पर किस रोग का संक्रमण नहीं होता?", options: ["साधारण जुकाम", "त्वचा संक्रमण", "नेत्र संक्रमण", "एड्स"], correct: 3 },
+            { id: 49, question: "एलर्जी की प्रतिक्रिया में मुख्य रूप से कौन-सा पदार्थ निकलता है?", options: ["इंसुलिन", "थायरॉक्सिन", "हिस्टामिन", "हीमोग्लोबिन"], correct: 2 },
+            { id: 50, question: "जन्म के बाद मिलने वाला पहला दूध प्रतिरक्षा की दृष्टि से क्यों महत्त्वपूर्ण है?", options: ["उसमें प्रोटीन अनुपस्थित रहता", "उसमें प्रतिपिंड मिलते हैं", "उसमें रोगाणु बढ़ते हैं", "उसमें जल बिल्कुल नहीं होता"], correct: 1 }
+        ];
+    </script>
+
+    <!-- ✅ JS Logic Control File Path -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
