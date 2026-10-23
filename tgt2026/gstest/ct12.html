@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">अगस्त 2026 — करेंट अफेयर्स विशेष टेस्ट</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">करेंट अफेयर्स (अगस्त 2026)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY (अगस्त 2026 - 50 प्रश्न) -->
+    <script>
+        const QUIZ_KEY = "medhavi_august_2026_ca_test"; 
+
+        const dataset = [
+            { id: 1, tag: "", question: "अगस्त 2026 में स्वीकृत गोबरधन राष्ट्रीय चक्रीय जैव ऊर्जा योजना के संबंध में विचार कीजिए:<br>1. इसका कुल परिव्यय ₹23,731 करोड़ है।<br>2. इसका कार्यान्वयन 2026–27 से 2035–36 तक निर्धारित है।<br>3. इसका प्रमुख उद्देश्य जैविक संसाधनों से संपीडित बायोगैस उत्पादन बढ़ाना है।<br><br>सही विकल्प चुनिए:", options: ["(a) केवल 1 और 2", "(b) 1, 2 और 3", "(c) केवल 2 और 3", "(d) केवल 1 और 3"], correct: 1, explanation: "केंद्रीय मंत्रिमंडल ने 6 अगस्त को गोबरधन योजना को मंजूरी दी (परिव्यय ₹23,731 करोड़, अवधि 2026–27 से 2035–36)। तीनों कथन सही हैं।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2295480' target='_blank'>PIB Release</a>" },
+            
+            { id: 2, tag: "", question: "अगस्त में स्वीकृत गुवाहाटी–तेजपुर सड़क कॉरिडोर का सही राज्य–राष्ट्रीय राजमार्ग युग्म कौन-सा है?", options: ["(a) अरुणाचल प्रदेश — राष्ट्रीय राजमार्ग 13", "(b) मेघालय — राष्ट्रीय राजमार्ग 6", "(c) असम — राष्ट्रीय राजमार्ग 27", "(d) असम — राष्ट्रीय राजमार्ग 15"], correct: 3, explanation: "लगभग 135.87 किलोमीटर लंबा चार लेन कॉरिडोर असम में राष्ट्रीय राजमार्ग 15 पर विकसित किया जाएगा।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2295482' target='_blank'>PIB Release</a>" },
+            
+            { id: 3, tag: "", question: "मुजफ्फरपुर–सीतामढ़ी–सोनबरसा सड़क परियोजना के बारे में कौन-सा कथन सही है?", options: ["(a) यह बिहार में राष्ट्रीय राजमार्ग 22 पर है और नेपाल सीमा से संपर्क सुधारती है।", "(b) यह उत्तर प्रदेश में राष्ट्रीय राजमार्ग 27 पर है और नेपाल सीमा से संपर्क सुधारती है।", "(c) यह बिहार में राष्ट्रीय राजमार्ग 31 पर है और बांग्लादेश सीमा से संपर्क सुधारती है।", "(d) यह पश्चिम बंगाल में राष्ट्रीय राजमार्ग 22 पर है और भूटान सीमा से संपर्क सुधारती है।"], correct: 0, explanation: "यह बिहार में राष्ट्रीय राजमार्ग 22 पर है (सोनबरसा के माध्यम से भारत–नेपाल सीमा से संपर्क)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2301144' target='_blank'>PIB Release</a>" },
+            
+            { id: 4, tag: "", question: "अगस्त में स्वीकृत चार रेल मल्टीट्रैकिंग परियोजनाओं को उनके राज्यों से मिलाइए:<br>1. खड़गपुर–भद्रक — पश्चिम बंगाल और ओडिशा<br>2. गुम्मिडीपुंडी–गुडूर — तमिलनाडु और आंध्र प्रदेश<br>3. कटक–पारदीप — ओडिशा<br><br>सही मिलान चुनिए:", options: ["(a) a–2, b–1, c–3", "(b) a–1, b–3, c–2", "(c) a–1, b–2, c–3", "(d) a–3, b–2, c–1"], correct: 2, explanation: "चार परियोजनाओं में खड़गपुर–भद्रक, भद्रक–हरिदासपुर, गुम्मिडीपुंडी–गुडूर और कटक–पारादीप खंड शामिल हैं (परिव्यय ₹9,450 करोड़)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2301142' target='_blank'>PIB Release</a>" },
+            
+            { id: 5, tag: "", question: "अगस्त 2026 में शुरू ‘ई-समुद्र’ मंच के प्रमुख उपयोगकर्ताओं का सही समूह कौन-सा है?", options: ["(a) मछली किसान, कृषि मंडियाँ और खाद्य प्रसंस्करण इकाइयाँ", "(b) समुद्री नाविक, जहाजरानी कंपनियाँ और बंदरगाह हितधारक", "(c) भूजल विभाग, सिंचाई समितियाँ और पेयजल उपभोक्ता", "(d) समुद्री वैज्ञानिक, मौसम केंद्र और विद्यालय प्रयोगशालाएँ"], correct: 1, explanation: "‘ई-समुद्र’ समुद्री प्रशासन के डिजिटलीकरण के लिए शुरू किया गया मंच है (नाविक, जहाजरानी कंपनियाँ और बंदरगाह हितधारक)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2296568' target='_blank'>PIB Release</a>" },
+            
+            { id: 6, tag: "", question: "अगस्त में हथकरघा प्रौद्योगिकी उत्कृष्टता केंद्र का उद्घाटन किस संस्थान में हुआ?", options: ["(a) भारतीय प्रौद्योगिकी संस्थान दिल्ली", "(b) भारतीय प्रौद्योगिकी संस्थान कानपुर", "(c) भारतीय प्रौद्योगिकी संस्थान मद्रास", "(d) भारतीय प्रौद्योगिकी संस्थान गुवाहाटी"], correct: 0, explanation: "वस्त्र मंत्री ने 3 अगस्त को IIT दिल्ली में हथकरघा प्रौद्योगिकी उत्कृष्टता केंद्र का उद्घाटन किया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2294005' target='_blank'>PIB Release</a>" },
+            
+            { id: 7, tag: "", question: "बारहवें राष्ट्रीय हथकरघा दिवस 2026 के संदर्भ में विचार कीजिए:<br>1. इसका आयोजन 7 अगस्त को हुआ।<br>2. यह 1905 के स्वदेशी आंदोलन की शुरुआत का स्मरण करता है।<br>3. घोषित 22 पुरस्कारों में 3 संत कबीर और 19 राष्ट्रीय हथकरघा पुरस्कार थे。<br><br>सही विकल्प चुनिए:", options: ["(a) केवल 1 और 2", "(b) केवल 1 और 3", "(c) केवल 2 और 3", "(d) 1, 2 और 3"], correct: 3, explanation: "राष्ट्रीय हथकरघा दिवस 7 अगस्त को मनाया जाता है (स्वदेशी आंदोलन की शुरुआत का स्मरण; 22 पुरस्कार घोषित)। तीनों कथन सही हैं।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2295532' target='_blank'>PIB Release</a>" },
+            
+            { id: 8, tag: "", question: "‘हर घर तिरंगा 2026’ अभियान किस विशेष सांस्कृतिक वर्षगाँठ को समर्पित था?", options: ["(a) राष्ट्रगान की रचना के 125 वर्ष", "(b) संविधान लागू होने के 75 वर्ष", "(c) राष्ट्रीय गीत वंदे मातरम् के 150 वर्ष", "(d) भारत छोड़ो आंदोलन के 100 वर्ष"], correct: 2, explanation: "2026 का अभियान राष्ट्रीय गीत ‘वंदे मातरम्’ के 150 वर्ष को समर्पित था (9–17 अगस्त)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2295801' target='_blank'>PIB Release</a>" },
+            
+            { id: 9, tag: "", question: "लोकमान्य तिलक राष्ट्रीय पुरस्कार 2026 किसे प्रदान किया गया?", options: ["(a) अजीत डोभाल", "(b) एस. जयशंकर", "(c) राजनाथ सिंह", "(d) टी. वी. सोमनाथन"], correct: 0, explanation: "राष्ट्रीय सुरक्षा सलाहकार अजीत डोभाल को 1 अगस्त को पुणे में यह पुरस्कार प्रदान किया गया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2293016' target='_blank'>PIB Release</a>" },
+            
+            { id: 10, tag: "", question: "ICTP के डिराक पदक 2026 के भारतीय प्राप्तकर्ता कौन हैं?", options: ["(a) अशोक सेन", "(b) दीपक धर", "(c) रोहिणी गोडबोले", "(d) राजेश गोपाकुमार"], correct: 1, explanation: "दीपक धर चार संयुक्त प्राप्तकर्ताओं में शामिल हैं (सांख्यिकीय यांत्रिकी में योगदान)।<br><br><b>स्रोत:</b> <a href='https://www.ictp.it/news/2026/8/ictp-announces-2026-dirac-medal-recipients' target='_blank'>ICTP News</a>" },
+            
+            { id: 11, tag: "", question: "अगस्त में विमोचित ‘ट्रायम्फ ऑफ द इंडियन रिपब्लिक: माय लाइफ, माय स्ट्रगल्स’ किसकी आत्मकथा है?", options: ["(a) एम. वेंकैया नायडू", "(b) प्रणब मुखर्जी", "(c) प्रतिभा पाटिल", "(d) रामनाथ कोविंद"], correct: 3, explanation: "यह भारत के पूर्व राष्ट्रपति रामनाथ कोविंद की आत्मकथा है (विमोचन 12 अगस्त)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298663' target='_blank'>PIB Release</a>" },
+            
+            { id: 12, tag: "", question: "अगस्त 2026 में राष्ट्रपति द्वारा प्रदान संगीत नाटक अकादमी फेलोशिप और पुरस्कार किन वर्षों से संबंधित थे?", options: ["(a) 2022 और 2023", "(b) 2023 और 2024", "(c) 2024 और 2025", "(d) 2025 और 2026"], correct: 2, explanation: "राष्ट्रपति द्रौपदी मुर्मु ने 13 अगस्त को 2024 और 2025 के लिए फेलोशिप तथा पुरस्कार प्रदान किए।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298868' target='_blank'>PIB Release</a>" },
+            
+            { id: 13, tag: "", question: "अगस्त में घोषित राष्ट्रीय खेल पुरस्कार 2025 के अर्जुन पुरस्कार प्राप्तकर्ताओं को खेलों से मिलाइए:<br>1. दिव्या देशमुख — शतरंज<br>2. ट्रीसा जॉली — बैडमिंटन<br>3. अरविंद सिंह — रोइंग<br>4. अखिल श्योराण — निशानेबाजी<br><br>सही मिलान चुनिए:", options: ["(a) a–2, b–1, c–4, d–3", "(b) a–1, b–2, c–3, d–4", "(c) a–1, b–3, c–2, d–4", "(d) a–4, b–2, c–3, d–1"], correct: 1, explanation: "दिव्या देशमुख (शतरंज), ट्रीसा जॉली (बैडमिंटन), अरविंद सिंह (रोइंग), अखिल श्योराण (निशानेबाजी)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2300762' target='_blank'>PIB Release</a>" },
+            
+            { id: 14, tag: "", question: "अगस्त में घोषित राष्ट्रीय शिक्षक पुरस्कार 2026 के लिए कितने स्कूली शिक्षकों का चयन हुआ?", options: ["(a) 48", "(b) 50", "(c) 54", "(d) 60"], correct: 0, explanation: "शिक्षा मंत्रालय ने 21 अगस्त को 48 स्कूली शिक्षकों के चयन की जानकारी दी।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2302212' target='_blank'>PIB Release</a>" },
+            
+            { id: 15, tag: "", question: "अगस्त में रामसर सूची में शामिल ग्लॉ झील के बारे में कौन-सा कथन गलत है?", options: ["(a) यह अरुणाचल प्रदेश का पहला रामसर स्थल है।", "(b) इसके जुड़ने से भारत में रामसर स्थलों की संख्या 101 हुई।", "(c) यह राजस्थान की खारे पानी की झील है।", "(d) यह कमलांग टाइगर रिजर्व और वन्यजीव अभयारण्य में स्थित है।"], correct: 2, explanation: "ग्लॉ झील अरुणाचल प्रदेश में पूर्वी हिमालय की मीठे पानी की झील है; अतः 'राजस्थान की खारे पानी की झील' कथन गलत है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2294036' target='_blank'>PIB Release</a>" },
+            
+            { id: 16, tag: "", question: "विश्व हाथी दिवस 2026 के राष्ट्रीय समारोह और संरक्षण स्थिति के संबंध में विचार कीजिए:<br>1. राष्ट्रीय समारोह विशाखापत्तनम में आयोजित हुआ।<br>2. गज गौरव पुरस्कार हाथी संरक्षण और प्रबंधन से संबंधित हैं।<br>3. अगस्त की आधिकारिक जानकारी में भारत के 33 हाथी रिजर्व का उल्लेख था。<br><br>सही विकल्प चुनिए:", options: ["(a) केवल 1 और 2", "(b) केवल 1 और 3", "(c) केवल 2 और 3", "(d) 1, 2 और 3"], correct: 3, explanation: "विशाखापत्तनम समारोह में गज गौरव पुरस्कार दिए गए; भारत में 33 हाथी रिजर्व हैं। तीनों कथन सही हैं।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298830' target='_blank'>PIB Release</a>" },
+            
+            { id: 17, tag: "", question: "‘शून्य पुराने संचित कचरे’ की उपलब्धि के लिए अगस्त में चर्चित देपालपुर को किस नगर निगम ने मार्गदर्शन दिया?", options: ["(a) इंदौर नगर निगम", "(b) भोपाल नगर निगम", "(c) सूरत नगर निगम", "(d) नागपुर नगर निगम"], correct: 0, explanation: "स्वच्छ शहर जोड़ी पहल के अंतर्गत इंदौर नगर निगम ने देपालपुर नगर परिषद को मार्गदर्शन दिया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2304919' target='_blank'>PIB Release</a>" },
+            
+            { id: 18, tag: "", question: "अगस्त में शुरू एनीमिया मुक्त भारत अभियान के नए ऐप और पोर्टल का प्रमुख उद्देश्य क्या है?", options: ["(a) अस्पतालों की भूमि खरीद और भवन निर्माण का प्रबंधन", "(b) औषधियों के निर्यात और आयात प्रमाणपत्र का प्रबंधन", "(c) लाभार्थियों की निगरानी, उपचार और समय पर अनुवर्ती देखभाल", "(d) स्वास्थ्य बीमा कंपनियों के प्रीमियम और निवेश का निर्धारण"], correct: 2, explanation: "नए डिजिटल मंच का उद्देश्य लाभार्थी स्तर पर एनीमिया की पहचान और उपचार की निगरानी करना है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2298947' target='_blank'>PIB Release</a>" },
+            
+            { id: 19, tag: "", question: "अगस्त में भारतीय भेषज संहिता आयोग द्वारा शुरू नए संदर्भ मानकों का सही संख्या-युग्म चुनिए:", options: ["(a) पाँच फाइटोकेमिकल — सात वनस्पति मानक", "(b) सात फाइटोकेमिकल — पाँच वनस्पति मानक", "(c) सात फाइटोकेमिकल — सात वनस्पति मानक", "(d) पाँच फाइटोकेमिकल — पाँच वनस्पति मानक"], correct: 1, explanation: "आयोग ने सात फाइटोकेमिकल और पाँच वनस्पति संदर्भ मानक शुरू किए।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2304237' target='_blank'>PIB Release</a>" },
+            
+            { id: 20, tag: "", question: "‘शाइन 2026’ कार्यक्रम के संबंध में सही विकल्प चुनिए:", options: ["(a) यह ISRO का विश्वविद्यालय उपग्रह निर्माण कार्यक्रम है।", "(b) यह CSIR का औद्योगिक पेटेंट मूल्यांकन कार्यक्रम है।", "(c) यह ICAR का किसानों के खेत प्रदर्शन का कार्यक्रम है।", "(d) यह DHR–ICMR का विद्यार्थियों को स्वास्थ्य अनुसंधान से परिचित कराने वाला कार्यक्रम है।"], correct: 3, explanation: "SHINE (Science and Health Innovation for NextGen Explorers) DHR-ICMR का विद्यार्थियों को स्वास्थ्य अनुसंधान से परिचित कराने वाला कार्यक्रम है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297527' target='_blank'>PIB Release</a>" },
+            
+            { id: 21, tag: "", question: "भारत का पहला गैर-GMO, अधिक फैलाव वाला पॉपकॉर्न मक्का संकर बीज अगस्त में कहाँ प्रस्तुत किया गया?", options: ["(a) आनंद, गुजरात", "(b) मुसुनूरु, आंध्र प्रदेश", "(c) करनाल, हरियाणा", "(d) कोयंबटूर, तमिलनाडु"], correct: 1, explanation: "उपराष्ट्रपति ने 24 अगस्त को आंध्र प्रदेश के एलुरु जिले के मुसुनूरु में इस बीज की शुरुआत की।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2302659' target='_blank'>PIB Release</a>" },
+            
+            { id: 22, tag: "", question: "क्रिटिकल मिनरल्स इनोवेशन हैकाथॉन 2026 का आयोजन एवं मेजबानी किस संस्था को दी गई?", options: ["(a) जवाहरलाल नेहरू एल्युमिनियम अनुसंधान विकास एवं अभिकल्प केंद्र, नागपुर", "(b) केंद्रीय खान योजना एवं अभिकल्प संस्थान, राँची", "(c) राष्ट्रीय धातुकर्म प्रयोगशाला, जमशेदपुर", "(d) भारतीय भूवैज्ञानिक सर्वेक्षण, कोलकाता"], correct: 0, explanation: "JNARDDC नागपुर इस हैकाथॉन की आयोजक और मेजबान संस्था है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2303174' target='_blank'>PIB Release</a>" },
+            
+            { id: 23, tag: "", question: "‘टेरियर साइबर क्वेस्ट 2026’ के प्रतियोगिता क्षेत्रों को उनके उद्देश्यों से मिलाइए:<br>1. बग हंटिंग — साइबर कमजोरियों की पहचान<br>2. एआई कवच — कृत्रिम बुद्धिमत्ता से खतरे पहचानना<br>3. क्रिएटर्स चैलेंज — डिजिटल खतरों पर जागरूकता सामग्री<br><br>सही मिलान चुनिए:", options: ["(a) a–2, b–1, c–3", "(b) a–1, b–3, c–2", "(c) a–3, b–2, c–1", "(d) a–1, b–2, c–3"], correct: 3, explanation: "बग हंटिंग (कमजोरियाँ पहचानना), एआई कवच (खतरे पहचानना), क्रिएटर्स चैलेंज (जागरूकता सामग्री)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2301829' target='_blank'>PIB Release</a>" },
+            
+            { id: 24, tag: "", question: "अगस्त में जलावतरण किया गया ‘श्रुति’ किस प्रकार का नौसैनिक पोत है?", options: ["(a) उथले जल का पनडुब्बीरोधी पोत", "(b) गोताखोरी सहायता पोत", "(c) अगली पीढ़ी का अपतटीय गश्ती पोत", "(d) निर्देशित मिसाइल विध्वंसक"], correct: 2, explanation: "‘श्रुति’ अगली पीढ़ी का अपतटीय गश्ती पोत है (GRSE कोलकाता द्वारा जलावतरण)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297905' target='_blank'>PIB Release</a>" },
+            
+            { id: 25, tag: "", question: "अगस्त में जलावतरण किए गए DSC A24 के बारे में सही कथन कौन-सा है?", options: ["(a) यह पाँच डाइविंग सपोर्ट क्राफ्ट परियोजना का पाँचवाँ पोत है।", "(b) यह आठ पनडुब्बीरोधी पोत परियोजना का तीसरा पोत है।", "(c) यह प्रोजेक्ट 17A युद्धपोत परियोजना का छठा पोत है।", "(d) यह अगली पीढ़ी की गश्ती पोत परियोजना का दूसरा पोत है।"], correct: 0, explanation: "DSC A24 पाँच डाइविंग सपोर्ट क्राफ्ट परियोजना का पाँचवाँ और अंतिम पोत है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2293085' target='_blank'>PIB Release</a>" },
+            
+            { id: 26, tag: "", question: "अगस्त में नौसेना को सौंपे गए ‘मांगरोल’ के लिए सही निर्माता–भूमिका युग्म चुनिए:", options: ["(a) GRSE — अगली पीढ़ी का अपतटीय गश्ती पोत", "(b) मझगाँव डॉक — निर्देशित मिसाइल विध्वंसक", "(c) टीटागढ़ रेल सिस्टम्स — गोताखोरी सहायता पोत", "(d) कोचीन शिपयार्ड — उथले जल का पनडुब्बीरोधी पोत"], correct: 3, explanation: "कोचीन शिपयार्ड ने मांगरोल नौसेना को सौंपा (उथले जल का पनडुब्बीरोधी पोत)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2302075' target='_blank'>PIB Release</a>" },
+            
+            { id: 27, tag: "", question: "अगस्त में DRDO-विकसित मिसाइल तकनीक के हस्तांतरण संबंधी निर्णय का सही विवरण क्या है?", options: ["(a) केवल विदेशी कंपनियों को निर्माण अधिकार दिए गए।", "(b) केवल परमाणु हथियारों की तकनीक हस्तांतरित हुई।", "(c) सभी पारंपरिक मिसाइल प्रणालियों की तकनीक घरेलू उत्पादन हेतु हस्तांतरण को मंजूरी मिली।", "(d) केवल प्रशिक्षण मॉडल बनाने की तकनीक हस्तांतरित हुई।"], correct: 2, explanation: "रक्षा मंत्री ने DRDO की सभी पारंपरिक मिसाइल प्रणालियों की तकनीक भारतीय रक्षा उद्योग को देने की मंजूरी दी।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2303014' target='_blank'>PIB Release</a>" },
+            
+            { id: 28, tag: "", question: "अगस्त में CVRDE द्वारा सौंपे गए स्वदेशी उत्पादों में कौन-सा शामिल था?", options: ["(a) अर्जुन टैंक का नया मुख्य तोप बैरल", "(b) मिग-29K/KUB विमानों के स्वदेशी फिल्टर एलिमेंट", "(c) पिनाका रॉकेट का नया प्रक्षेपण वाहन", "(d) तेजस विमान का नया ईजेक्शन सीट तंत्र"], correct: 1, explanation: "CVRDE ने मिग-29K/KUB विमानों के स्वदेशी फिल्टर एलिमेंट सहित अन्य स्वदेशी उत्पाद सौंपे।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2300877' target='_blank'>PIB Release</a>" },
+            
+            { id: 29, tag: "", question: "भारत–कुवैत संयुक्त रक्षा समिति की पहली बैठक अगस्त में कहाँ हुई?", options: ["(a) कुवैत सिटी", "(b) मुंबई", "(c) अबू धाबी", "(d) नई दिल्ली"], correct: 3, explanation: "भारत–कुवैत संयुक्त रक्षा समिति की पहली बैठक 28 अगस्त को नई दिल्ली में हुई।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2304285' target='_blank'>PIB Release</a>" },
+            
+            { id: 30, tag: "", question: "अगस्त में भारत आए जापान के रक्षा मंत्री कौन थे?", options: ["(a) शिंजीरो कोइजुमी", "(b) शिगेरु इशिबा", "(c) फुमियो किशिदा", "(d) योशिहिदे सुगा"], correct: 0, explanation: "शिंजीरो कोइजुमी ने 20 अगस्त को नई दिल्ली में रक्षा मंत्री राजनाथ सिंह से बैठक की।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2301459' target='_blank'>PIB Release</a>" },
+            
+            { id: 31, tag: "", question: "अगस्त में संयुक्त सहयोग, नवाचार और रक्षा अनुसंधान बढ़ाने के लिए भारत ने किस देश के साथ समझौता किया?", options: ["(a) जॉर्जिया", "(b) आर्मेनिया", "(c) अजरबैजान", "(d) मोल्दोवा"], correct: 1, explanation: "रक्षा सचिव की आर्मेनिया यात्रा के दौरान दोनों रक्षा मंत्रालयों का रक्षा सहयोग समझौता संपन्न हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2301346' target='_blank'>PIB Release</a>" },
+            
+            { id: 32, tag: "", question: "आठवें ब्रिक्स युवा ऊर्जा शिखर सम्मेलन 2026 में भारत के ऊर्जा विषय ‘सर्वेषां ऊर्जम्’ का आशय क्या है?", options: ["(a) केवल उद्योगों के लिए ऊर्जा", "(b) केवल निर्यात के लिए ऊर्जा", "(c) सभी के लिए ऊर्जा", "(d) केवल परिवहन के लिए ऊर्जा"], correct: 2, explanation: "‘सर्वेषां ऊर्जम्’ का आशय 'सभी के लिए ऊर्जा' (किफायती और समावेशी ऊर्जा पहुँच) से है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2301116' target='_blank'>PIB Release</a>" },
+            
+            { id: 33, tag: "", question: "ब्रिक्स महासागर एवं ध्रुवीय विज्ञान और प्रौद्योगिकी कार्यसमूह की आठवीं बैठक के लिए सही स्थान–मेजबान संस्था युग्म कौन-सा है?", options: ["(a) चेन्नई — राष्ट्रीय समुद्र प्रौद्योगिकी संस्थान", "(b) हैदराबाद — भारतीय राष्ट्रीय महासागर सूचना सेवा केंद्र", "(c) पुणे — भारतीय उष्णदेशीय मौसम विज्ञान संस्थान", "(d) गोवा — राष्ट्रीय ध्रुवीय एवं समुद्री अनुसंधान केंद्र"], correct: 3, explanation: "यह बैठक 12–14 अगस्त को गोवा में NCPOR की मेजबानी में हुई।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2301591' target='_blank'>PIB Release</a>" },
+            
+            { id: 34, tag: "", question: "दक्षिणी क्षेत्रीय परिषद की 31वीं बैठक अगस्त में किस स्थान पर हुई?", options: ["(a) तिरुवनंतपुरम, केरल", "(b) महाबलीपुरम, तमिलनाडु", "(c) विजयवाड़ा, आंध्र प्रदेश", "(d) मैसूरु, कर्नाटक"], correct: 1, explanation: "दक्षिणी क्षेत्रीय परिषद की 31वीं बैठक 20 अगस्त को महाबलीपुरम में हुई।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2301631' target='_blank'>PIB Release</a>" },
+            
+            { id: 35, tag: "", question: "अगस्त में पृथ्वी विज्ञान मंत्रालय के सचिव का पदभार किस वैज्ञानिक ने संभाला?", options: ["(a) डॉ. श्रीनिवास कुमार तुम्माला", "(b) डॉ. एम. रविचंद्रन", "(c) डॉ. एन. कलैसेल्वी", "(d) डॉ. वी. नारायणन"], correct: 0, explanation: "महासागर वैज्ञानिक डॉ. श्रीनिवास कुमार तुम्माला ने 10 अगस्त को पदभार संभाला।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297234' target='_blank'>PIB Release</a>" },
+            
+            { id: 36, tag: "", question: "अगस्त में प्रकाशित UDISE+ 2025–26 रिपोर्ट संबंधी आधिकारिक विवरण के अनुसार कौन-सा कथन गलत है?", options: ["(a) रिपोर्ट में लगभग 14.67 लाख विद्यालय शामिल हैं।", "(b) छात्र नामांकन लगभग 24.72 करोड़ बताया गया है।", "(c) महिला शिक्षकों का हिस्सा पुरुष शिक्षकों से कम बताया गया है।", "(d) छात्र नामांकन में लड़कियों का हिस्सा 48.4 प्रतिशत था।"], correct: 2, explanation: "महिला शिक्षकों की हिस्सेदारी 54.9 प्रतिशत थी (पुरुषों से कम नहीं, बल्कि अधिक); अतः विकल्प C गलत है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2300408' target='_blank'>PIB Release</a>" },
+            
+            { id: 37, tag: "", question: "अगस्त में पुनर्निर्मित ‘इंडिया कोड’ पोर्टल की प्रमुख विशेषताओं का सही समूह कौन-सा है?", options: ["(a) फसल बीमा, मंडी मूल्य और मौसम चेतावनी", "(b) एआई सहायता से कानूनी खोज, वाणी खोज और बहुभाषी पहुँच", "(c) विद्यालय प्रवेश, छात्रवृत्ति और परीक्षा परिणाम", "(d) पासपोर्ट आवेदन, वीजा शुल्क और यात्रा बीमा"], correct: 1, explanation: "पुनर्निर्मित ‘इंडिया कोड’ पोर्टल में एआई-सहायता प्राप्त कानूनी खोज और बहुभाषी पहुँच जैसी सुविधाएँ हैं।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2299217' target='_blank'>PIB Release</a>" },
+            
+            { id: 38, tag: "", question: "‘ऐपकॉम्स 2.0’ किस संस्था और कानून से संबंधित है?", options: ["(a) राष्ट्रीय उपभोक्ता आयोग — उपभोक्ता संरक्षण अधिनियम", "(b) निर्वाचन आयोग — जनप्रतिनिधित्व अधिनियम", "(c) राष्ट्रीय मानवाधिकार आयोग — मानवाधिकार संरक्षण अधिनियम", "(d) केंद्रीय सूचना आयोग — सूचना का अधिकार अधिनियम"], correct: 3, explanation: "केंद्रीय सूचना आयोग ने RTI अधिनियम 2005 के तहत AppCoMS 2.0 शुरू किया।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2300631' target='_blank'>PIB Release</a>" },
+            
+            { id: 39, tag: "", question: "अगस्त में पाँच वर्ष पूरे करने वाले ई-श्रम पोर्टल के संबंध में विचार कीजिए:<br>1. यह असंगठित श्रमिकों का राष्ट्रीय डेटाबेस है।<br>2. पंजीकृत श्रमिकों को विशिष्ट सार्वभौमिक खाता संख्या मिलती है।<br>3. इसका संचालन केवल सरकारी कर्मचारियों की पेंशन के लिए होता है।<br><br>सही विकल्प चुनिए:", options: ["(a) केवल 2 और 3", "(b) केवल 1 और 3", "(c) केवल 1 और 2", "(d) 1, 2 और 3"], correct: 2, explanation: "ई-श्रम असंगठित श्रमिकों का राष्ट्रीय डेटाबेस है और सार्वभौमिक खाता संख्या मिलती है (तीसरा कथन गलत है)।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2303053' target='_blank'>PIB Release</a>" },
+            
+            { id: 40, tag: "", question: "जनजातीय भाषाओं और संग्रहालयों पर राष्ट्रीय सम्मेलन के लिए अगस्त में कौन-सा स्थान निर्धारित था?", options: ["(a) मैसूरु, कर्नाटक", "(b) भोपाल, मध्य प्रदेश", "(c) राँची, झारखंड", "(d) गुवाहाटी, असम"], correct: 0, explanation: "जनजातीय भाषाओं और संग्रहालयों पर राष्ट्रीय सम्मेलन मैसूरु में आयोजित हुआ।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2302514' target='_blank'>PIB Release</a>" },
+            
+            { id: 41, tag: "", question: "31 अगस्त को जारी वित्त वर्ष 2026–27 की पहली तिमाही के GDP अनुमान के लिए सही वृद्धि-युग्म कौन-सा है?", options: ["(a) वास्तविक GDP 10.3 प्रतिशत — नाममात्र GDP 7.8 प्रतिशत", "(b) वास्तविक GDP 7.8 प्रतिशत — नाममात्र GDP 7.8 प्रतिशत", "(c) वास्तविक GDP 10.3 प्रतिशत — नाममात्र GDP 10.3 प्रतिशत", "(d) वास्तविक GDP 7.8 प्रतिशत — नाममात्र GDP 10.3 प्रतिशत"], correct: 3, explanation: "अप्रैल–जून 2026 की वास्तविक GDP वृद्धि 7.8% और नाममात्र GDP वृद्धि 10.3% अनुमानित हुई।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2304949' target='_blank'>PIB Release</a>" },
+            
+            { id: 42, tag: "", question: "अगस्त में जारी ‘राष्ट्रीय लेखा सांख्यिकी–2026’ प्रकाशन किस आधार वर्ष पर आधारित है?", options: ["(a) 2011–12", "(b) 2022–23", "(c) 2024–25", "(d) 2017–18"], correct: 1, explanation: "यह प्रकाशन 2022–23 आधार वर्ष पर आधारित है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2304948' target='_blank'>PIB Release</a>" },
+            
+            { id: 43, tag: "", question: "अगस्त में संपन्न ग्लासगो राष्ट्रमंडल खेल 2026 में भारत के प्रदर्शन का सही विवरण चुनिए:", options: ["(a) तीसरा स्थान — 39 पदक — 17 स्वर्ण", "(b) चौथा स्थान — 39 पदक — 17 स्वर्ण", "(c) चौथा स्थान — 39 पदक — 13 स्वर्ण", "(d) पाँचवाँ स्थान — 39 पदक — 13 स्वर्ण"], correct: 2, explanation: "भारत ने 13 स्वर्ण, 17 रजत और 9 कांस्य सहित कुल 39 पदक जीते और चौथे स्थान पर रहा।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressNoteDetails.aspx?ModuleId=3&NoteId=159409&id=159409&lang=2&reg=48' target='_blank'>PIB Release</a>" },
+            
+            { id: 44, tag: "", question: "पुरुष हॉकी विश्व कप 2026 के फाइनल का सही परिणाम कौन-सा है?", options: ["(a) जर्मनी ने स्पेन को 1–0 से हराया।", "(b) स्पेन ने जर्मनी को 1–0 से हराया।", "(c) नीदरलैंड ने जर्मनी को 2–1 से हराया।", "(d) बेल्जियम ने स्पेन को 2–1 से हराया।"], correct: 0, explanation: "वाव्र में हुए फाइनल में जर्मनी ने स्पेन को 1–0 से हराकर चौथा पुरुष विश्व कप खिताब जीता।<br><br><b>स्रोत:</b> <a href='https://www.fih.hockey/' target='_blank'>FIH Official</a>" },
+            
+            { id: 45, tag: "", question: "स्वतंत्रता दिवस 2026 की पूर्व संध्या पर राष्ट्रपति द्वारा स्वीकृत वीरता पुरस्कारों के बारे में विचार कीजिए:<br>1. कुल 78 वीरता पुरस्कार स्वीकृत हुए।<br>2. इनमें 13 मरणोपरांत पुरस्कार शामिल थे।<br>3. नौ कीर्ति चक्रों में सात मरणोपरांत थे。<br><br>सही विकल्प चुनिए:", options: ["(a) केवल 1 और 2", "(b) 1, 2 और 3", "(c) केवल 2 और 3", "(d) केवल 1 और 3"], correct: 1, explanation: "78 वीरता पुरस्कार स्वीकृत हुए जिनमें 13 मरणोपरांत और 9 में से 7 कीर्ति चक्र मरणोपरांत थे। तीनों कथन सही हैं।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2299540' target='_blank'>PIB Release</a>" },
+            
+            { id: 46, tag: "", question: "राष्ट्रीय खेल दिवस 2026 के तीन दिवसीय अभियान की विषय-श्रृंखला क्या थी?", options: ["(a) सीखें, दौड़ें और जीतें", "(b) अभ्यास, प्रदर्शन और पुरस्कार", "(c) श्रद्धांजलि, खेलें और सक्रिय रहें", "(d) चयन, प्रशिक्षण और प्रतियोगिता"], correct: 2, explanation: "28–30 अगस्त का अभियान 'श्रद्धांजलि, खेलें और सक्रिय रहें' (Tribute, Play and Move) पर केंद्रित था।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2304313' target='_blank'>PIB Release</a>" },
+            
+            { id: 47, tag: "", question: "अगस्त में शुरू ‘नशा मुक्त युवा–विकसित भारत संकल्प अभियान’ की घोषित अवधि कितनी थी?", options: ["(a) 100 सप्ताह", "(b) 100 दिन", "(c) 52 सप्ताह", "(d) 36 महीने"], correct: 0, explanation: "प्रधानमंत्री ने 2 अगस्त को 100 सप्ताह के इस अभियान की शुरुआत की।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2293495' target='_blank'>PIB Release</a>" },
+            
+            { id: 48, tag: "", question: "तीसरे राष्ट्रीय अंतरिक्ष दिवस 2026 की विषयवस्तु का सही भाव कौन-सा है?", options: ["(a) चंद्र अन्वेषण से वैश्विक अंतरिक्ष पर्यटन की ओर", "(b) अंतरिक्ष व्यापार से निजी उपग्रह निर्माण की ओर", "(c) मानव अंतरिक्ष उड़ान से अंतरग्रहीय बसावट की ओर", "(d) विकसित भारत के लिए नवाचार, सहयोग और वैश्विक अंतरिक्ष नेतृत्व की आकांक्षा"], correct: 3, explanation: "2026 की विषयवस्तु 'Towards Viksit Bharat: Innovating, Collaborating and Aspiring to Global Space Leadership' थी।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2302469' target='_blank'>PIB Release</a>" },
+            
+            { id: 49, tag: "", question: "अगस्त में भारतीय खेल प्राधिकरण की शासी निकाय बैठक में स्वीकृत राष्ट्रीय प्रशिक्षक प्रत्यायन बोर्ड का प्रमुख कार्य क्या है?", options: ["(a) राष्ट्रीय खेल महासंघों की सदस्यता समाप्त करना", "(b) अंतरराष्ट्रीय प्रतियोगिताओं के आयोजन स्थल चुनना", "(c) खिलाड़ियों की नागरिकता और पासपोर्ट प्रमाणित करना", "(d) प्रशिक्षकों के प्रत्यायन और पेशेवर विकास का ढाँचा मजबूत करना"], correct: 3, explanation: "बोर्ड का उद्देश्य कोचों के प्रत्यायन और पेशेवर विकास के लिए अधिक व्यवस्थित ढाँचा तैयार करना है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2301644' target='_blank'>PIB Release</a>" },
+            
+            { id: 50, tag: "", question: "अगस्त के अंत में शुरू प्रधानमंत्री की यात्रा के देशों और कार्यक्रमों का सही मिलान चुनिए:<br>1. उज्बेकिस्तान — द्विपक्षीय यात्रा<br>2. किर्गिज गणराज्य — 26वाँ SCO शिखर सम्मेलन<br><br>सही विकल्प चुनिए:", options: ["(a) a–2, b–1", "(b) a–1, b–2", "(c) दोनों देशों में केवल द्विपक्षीय यात्रा", "(d) दोनों देशों में केवल SCO सम्मेलन"], correct: 1, explanation: "उज्बेकिस्तान की द्विपक्षीय यात्रा और किर्गिज गणराज्य में 26वें SCO शिखर सम्मेलन में भाग लेना।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/PressReleasePage.aspx?PRID=2304395' target='_blank'>PIB Release</a>" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
