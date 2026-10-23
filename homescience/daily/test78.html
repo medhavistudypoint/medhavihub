@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ CSS Control File Path -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- Security Watermark Screen -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. Login Gate Screen -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ Back Button Path -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. Exam Workspace Screen -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 Responsive, Centered Header -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">आनुवंशिकी एवं आनुवंशिक विकार</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Report Dashboard Screen -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point <br> आनुवंशिकी एवं आनुवंशिक विकार</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ Dashboard Back Button -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 50 Questions Dataset (बिना explanation, 1-Line Format) -->
+    <script>
+        const QUIZ_KEY = "medhavi_free_test_d78"; 
+
+        const dataset = [
+            { id: 1, question: "वंशाणुक्रम (आनुवंशिकता) का अणु है—", options: ["डी. एन. ए.", "आर. एन. ए.", "ए. टी. पी.", "उपर्युक्त में से कोई नहीं"], correct: 0 },
+            { id: 2, question: "वर्णान्धता है, एक—", options: ["हीनताजन्य रोग", "चयापचयनिक रोग", "आनुवंशिक रोग", "उपर्युक्त में से कोई नहीं"], correct: 2 },
+            { id: 3, question: "निम्न में से कौन-सा गुणसूत्र बच्चे के लिंग का निर्धारण करता है?", options: ["Rh", "केवल X", "केवल Y", "X और Y दोनों"], correct: 3 },
+            { id: 4, question: "आनुवंशिकता की आधारभूत इकाई है—", options: ["क्रोमोसोम", "जीन", "डी. एन. ए.", "जाइगोट"], correct: 1 },
+            { id: 5, question: "प्रत्येक विकास का एक प्रारूप होता है—", options: ["वंशानुक्रम", "वातावरण", "क्रोमोसोम", "नमूना"], correct: 0 },
+            { id: 6, question: "Rh असंगतता उत्पन्न होती है जब—", options: ["माँ Rh⁺ और भ्रूण Rh⁻ हो", "माँ Rh⁻ और भ्रूण Rh⁺ हो", "माँ Rh⁻ और भ्रूण Rh⁻ हो", "माँ Rh⁺ और भ्रूण Rh⁺ हो"], correct: 1 },
+            { id: 7, question: "नीचे दो कथन दिए गए हैं:<br><b>अभिकथन (A):</b> गर्भधारण से पूर्व दम्पति को आनुवंशिक विज्ञान सम्बन्धी परामर्श की आवश्यकता होती है।<br><b>कारण (R):</b> आनुवंशिक दोष एक से ज्यादा बच्चों के जन्म की ओर प्रेरित करते हैं।", options: ["(A) और (R) दोनों सही हैं।", "(A) सही है, परन्तु (R) गलत है।", "(A) गलत है, परन्तु (R) सही है।", "(A) और (R) दोनों गलत हैं।"], correct: 1 },
+            { id: 8, question: "सूची-I में दिए शब्दों का मिलान सूची-II में दी गई उनकी प्रकृतियों से करें—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>A. डाउन सिंड्रोम</td><td>i. XYY</td></tr><tr><td>B. टर्नर सिंड्रोम</td><td>ii. XXY</td></tr><tr><td>C. क्लाइनफेल्टर सिंड्रोम</td><td>iii. ट्राइसोमी 16</td></tr><tr><td>D. सुपरमेल</td><td>iv. XO<br>v. ट्राइसोमी 21</td></tr></tbody></table>", options: ["A–v, B–iv, C–ii, D–i", "A–v, B–ii, C–iv, D–i", "A–iii, B–iv, C–ii, D–i", "A–iv, B–v, C–ii, D–i"], correct: 0 },
+            { id: 9, question: "निम्नलिखित में से कौन-कौन सी सबसे अधिक आम रूप में होने वाली गुणसूत्री असंगतियाँ हैं?<br>1. मल्टीपल स्क्लेरोसिस<br>2. डाउन सिंड्रोम<br>3. क्लाइनफेल्टर सिंड्रोम<br>4. टर्नर सिंड्रोम", options: ["2, 3 और 4", "1, 2 और 4", "1, 3 और 4", "1, 2 और 3"], correct: 0 },
+            { id: 10, question: "इनमें आनुवंशिक प्रोग्राम के कारण विश्वव्यापी एवं अनुकूल परिवर्तन शामिल हैं—", options: ["प्रोजेरिया", "सेकेंडरी एजिंग", "एजिंग ऑफसेट", "सेनेसेंस"], correct: 3 },
+            { id: 11, question: "सूची-I का सूची-II से मिलान करें—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>A. क्लाइनफेल्टर सिंड्रोम</td><td>i. ट्राइसोमी 21</td></tr><tr><td>B. टर्नर सिंड्रोम</td><td>ii. एम.एस.वाई.</td></tr><tr><td>C. डाउन सिंड्रोम</td><td>iii. एक्स.ओ.</td></tr><tr><td>D. फिनाइलकीटोनूरिया</td><td>iv. एक्स.एक्स.वाई.<br>v. अमीनो अम्ल के उपापचय की अयोग्यता</td></tr></tbody></table>", options: ["A–iv, B–iii, C–i, D–v", "A–iv, B–ii, C–i, D–v", "A–iii, B–iv, C–i, D–v", "A–iv, B–ii, C–v, D–i"], correct: 0 },
+            { id: 12, question: "डाउन सिंड्रोम एक आनुवंशिक विकार है, जो होता है—", options: ["गुणसूत्रों की संख्या में परिवर्तन के कारण", "गुणसूत्रों की संरचना में परिवर्तन के कारण", "डी. एन. ए. की संरचना में परिवर्तन के कारण", "आर. एन. ए. की संरचना में परिवर्तन के कारण"], correct: 0 },
+            { id: 13, question: "नीचे दो कथन दिए गए हैं:<br><b>अभिकथन (A):</b> X-सम्बन्धित विकारों से पुरुषों का प्रभावित होना ज्यादा सम्भावित है।<br><b>कारण (R):</b> क्योंकि उनके लैंगिक गुणसूत्र अलिंगसमूह होते हैं।", options: ["(A) असत्य है, परन्तु (R) सत्य है।", "(A) और (R) दोनों सत्य हैं।", "(A) और (R) दोनों असत्य हैं।", "(A) सत्य है, परन्तु (R) असत्य है।"], correct: 1 },
+            { id: 14, question: "नीचे दो कथन दिए गए हैं:<br><b>अभिकथन (A):</b> जन्म पर लिंग अनुपात कन्याओं के विरुद्ध भेदभाव तथा घृणात्मक अपराध, जैसे कि कन्या भ्रूणहत्या का सूचक है।<br><b>कारण (R):</b> जेंडर समता को कम विषम लिंग अनुपात की ओर प्रवृत्त करना चाहिए।", options: ["(A) और (R) दोनों सही हैं।", "(R) सही है और (A) गलत है।", "(A) सही है और (R) गलत है।", "(A) और (R) दोनों गलत हैं।"], correct: 0 },
+            { id: 15, question: "बच्चे की अनुवांशिकता और वातावरण में यह सम्बन्ध है—", options: ["बच्चा पूरी तरह से अनुवांशिकता से प्रभावित होता है।", "बच्चा पूरी तरह से वातावरण से प्रभावित होता है।", "बच्चा अनुवांशिकता और वातावरण से प्रभावित होता है।", "बच्चा अपनी अनुवांशिकता से वातावरण को प्रभावित करता है।"], correct: 2 },
+            { id: 16, question: "हमारी वंशागत जैविक विरासत की मात्रा और गुणवत्ता पर असर निम्नलिखित कारणों से होगा—<br>(i) विकास की परियोजना में संग्रह का प्रयास और प्राकृतिक अनुकूलता द्वारा प्रायश्चित करना।<br>(ii) जंगलों का अनाच्छादन।<br>(iii) आवास का विनाश।<br>(iv) दूसरी जातियों के प्रति असंवेदनशीलता।", options: ["(i), (ii) और (iii)", "(i), (iii) और (iv)", "(ii), (iii) और (iv)", "ऊपर लिखे सभी"], correct: 2 },
+            { id: 17, question: "बाइस जोड़े क्रोमोसोम को जाना जाता है—", options: ["ऑटोसोम", "जीनोम", "लिंग क्रोमोसोम", "उपरोक्त में से कोई नहीं"], correct: 0 },
+            { id: 18, question: "आनुवंशिकता की कार्यात्मक इकाई क्या है?", options: ["रक्तकण", "केन्द्रक", "जीन", "गुणसूत्र"], correct: 2 },
+            { id: 19, question: "मेंडल ने आनुवंशिकता के प्रयोगों के लिए किस पौधे का उपयोग किया था?", options: ["मटर", "सरसों", "गेहूँ", "चना"], correct: 0 },
+            { id: 20, question: "एक ही लक्षण के दो वैकल्पिक रूपों को नियंत्रित करने वाले जीन कहलाते हैं—", options: ["एलील", "कोडॉन", "हिस्टोन", "राइबोसोम"], correct: 0 },
+            { id: 21, question: "विषमयुग्मजी अवस्था में जो लक्षण प्रकट होता है, उसे कहते हैं—", options: ["अप्रभावी लक्षण", "प्रभावी लक्षण", "अर्जित लक्षण", "सहलग्न लक्षण"], correct: 1 },
+            { id: 22, question: "शुद्ध लंबे मटर के पौधे और शुद्ध बौने पौधे के संकरण से प्रथम पीढ़ी में सामान्यतः पौधे होंगे—", options: ["सभी लंबे", "सभी बौने", "आधे लंबे", "आधे बौने"], correct: 0 },
+            { id: 23, question: "एकल संकर के स्वयं परागण से प्राप्त दूसरी पीढ़ी में सामान्य फीनोटाइप अनुपात है—", options: ["1 : 1", "1 : 2", "3 : 1", "9 : 3"], correct: 2 },
+            { id: 24, question: "एकल संकर की दूसरी पीढ़ी का जीनोटाइप अनुपात क्या होता है?", options: ["1 : 1 : 1", "1 : 2 : 1", "2 : 1 : 1", "3 : 1 : 1"], correct: 1 },
+            { id: 25, question: "दो लक्षणों वाले मेंडलीय संकरण में दूसरी पीढ़ी का फीनोटाइप अनुपात सामान्यतः होता है—", options: ["3 : 1 : 3 : 1", "9 : 3 : 3 : 1", "1 : 2 : 2 : 1", "9 : 1 : 3 : 3"], correct: 1 },
+            { id: 26, question: "मेंडल के पृथक्करण नियम के अनुसार युग्मक बनते समय—", options: ["दोनों एलील साथ रहते हैं", "दोनों एलील अलग होते हैं", "एलील पूर्णतः नष्ट होते हैं", "एलील संख्या में बढ़ते हैं"], correct: 1 },
+            { id: 27, question: "मनुष्य के सामान्य देह कोशिका में गुणसूत्रों की संख्या कितनी होती है?", options: ["22", "23", "44", "46"], correct: 3 },
+            { id: 28, question: "मानव अंडाणु में सामान्यतः कौन-सा लैंगिक गुणसूत्र होता है?", options: ["केवल X", "केवल Y", "X या Y", "X और Y"], correct: 0 },
+            { id: 29, question: "पिता से Y गुणसूत्र पाने वाले मानव शिशु का सामान्य लैंगिक गुणसूत्र संयोजन होगा—", options: ["XX", "XY", "XO", "YY"], correct: 1 },
+            { id: 30, question: "हीमोफीलिया सामान्यतः किस प्रकार की वंशागति दर्शाता है?", options: ["X-सहलग्न अप्रभावी", "X-सहलग्न प्रभावी", "Y-सहलग्न प्रभावी", "अलिंगसूत्री प्रभावी"], correct: 0 },
+            { id: 31, question: "मानव में ABO रक्त समूह किसका उदाहरण है?", options: ["केवल अपूर्ण प्रभाविता", "केवल बहुजनी वंशागति", "बहु एलील तथा सहप्रभाविता", "केवल लिंग सहलग्नता"], correct: 2 },
+            { id: 32, question: "AB रक्त समूह वाले व्यक्ति का जीनोटाइप क्या होता है?", options: ["IᴬIᴬ", "IᴬIᴮ", "Iᴮi", "ii"], correct: 1 },
+            { id: 33, question: "जब विषमयुग्मजी संतान में दोनों जनकों के बीच का लक्षण दिखाई दे, तब उसे कहते हैं—", options: ["पूर्ण प्रभाविता", "अपूर्ण प्रभाविता", "स्वतंत्र वर्गीकरण", "गुणसूत्र पृथक्करण"], correct: 1 },
+            { id: 34, question: "दो लक्षणों के जीन एक ही गुणसूत्र पर पास-पास स्थित हों तो उनके साथ विरासत में मिलने की प्रवृत्ति कहलाती है—", options: ["सहलग्नता", "उत्परिवर्तन", "अपूर्णता", "प्रतिलेखन"], correct: 0 },
+            { id: 35, question: "समजात गुणसूत्रों के बीच आनुवंशिक पदार्थ का आदान-प्रदान किस प्रक्रिया में होता है?", options: ["प्रतिकृति", "पारगमन", "क्रॉसिंग ओवर", "अनुवादन"], correct: 2 },
+            { id: 36, question: "न्यूक्लियोटाइड के घटक कौन-से हैं?", options: ["क्षार, शर्करा और फॉस्फेट", "क्षार, अम्ल और प्रोटीन", "शर्करा, वसा और फॉस्फेट", "अम्ल, प्रोटीन और शर्करा"], correct: 0 },
+            { id: 37, question: "DNA में एडेनिन सामान्यतः किस क्षार के साथ युग्म बनाता है?", options: ["ग्वानिन", "साइटोसिन", "थाइमिन", "यूरेसिल"], correct: 2 },
+            { id: 38, question: "DNA में ग्वानिन और साइटोसिन के बीच कितने हाइड्रोजन बंध होते हैं?", options: ["एक", "दो", "तीन", "चार"], correct: 2 },
+            { id: 39, question: "DNA प्रतिकृति को अर्धसंरक्षी क्यों कहा जाता है?", options: ["दोनों नई श्रृंखलाएँ पुरानी होती हैं", "दोनों पुरानी श्रृंखलाएँ नष्ट होती हैं", "हर अणु में एक पुरानी श्रृंखला रहती है", "हर अणु में आधे जीन घट जाते हैं"], correct: 2 },
+            { id: 40, question: "DNA से RNA बनने की प्रक्रिया क्या कहलाती है?", options: ["प्रतिकृति", "प्रतिलेखन", "अनुवादन", "पुनर्संयोजन"], correct: 1 },
+            { id: 41, question: "RNA के संदेश के अनुसार प्रोटीन बनने की प्रक्रिया कहलाती है—", options: ["अनुवादन", "प्रतिलेखन", "प्रतिकृति", "पृथक्करण"], correct: 0 },
+            { id: 42, question: "प्रोटीन निर्माण में अमीनो अम्लों को राइबोसोम तक लाने वाला RNA है—", options: ["संदेशवाहक RNA", " स्थानांतरण RNA", "राइबोसोमीय RNA", "पूर्वगामी RNA"], correct: 1 },
+            { id: 43, question: "आनुवंशिक कूट का एक कोडॉन सामान्यतः कितने क्षारों का होता है?", options: ["एक", "दो", "तीन", "चार"], correct: 2 },
+            { id: 44, question: "प्रोटीन संश्लेषण आरंभ कराने वाला प्रमुख कोडॉन कौन-सा है?", options: ["AUG", "UAA", "UAG", "UGA"], correct: 0 },
+            { id: 45, question: "DNA में अचानक होने वाला वंशागत परिवर्तन कहलाता है—", options: ["प्रतिलेखन", "उत्परिवर्तन", "अनुवादन", "सहलग्नता"], correct: 1 },
+            { id: 46, question: "फिनाइलकीटोनूरिया मुख्यतः किससे संबंधित आनुवंशिक विकार है?", options: ["अमीनो अम्ल उपापचय", "वसा का अवशोषण", "कैल्शियम का उत्सर्जन", "जल का पुनरवशोषण"], correct: 0 },
+            { id: 47, question: "थैलेसीमिया में मुख्य रूप से किसका निर्माण प्रभावित होता है?", options: ["हीमोग्लोबिन श्रृंखला", "इंसुलिन श्रृंखला", "कोलेजन श्रृंखला", "केराटिन श्रृंखला"], correct: 0 },
+            { id: 48, question: "टर्नर सिंड्रोम का सामान्य गुणसूत्रीय रूप क्या है?", options: ["XXY", "XYY", "XO", "XXX"], correct: 2 },
+            { id: 49, question: "क्लाइनफेल्टर सिंड्रोम का सामान्य गुणसूत्रीय रूप क्या है?", options: ["XO", "XXY", "XYY", "XXX"], correct: 1 },
+            { id: 50, question: "DNA फिंगरप्रिंटिंग में मुख्यतः किसका तुलनात्मक अध्ययन किया जाता है?", options: ["DNA के परिवर्ती अनुक्रम", "रक्त के समान प्रतिजन", "अस्थियों के खनिज लवण", "त्वचा के सामान्य प्रोटीन"], correct: 0 }
+        ];
+    </script>
+
+    <!-- ✅ JS Logic Control File Path -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+          </html>
+          
