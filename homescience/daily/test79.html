@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ CSS Control File Path -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- Security Watermark Screen -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. Login Gate Screen -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ Back Button Path -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. Exam Workspace Screen -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 Responsive, Centered Header -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">पर्यावरण एवं सामाजिक कार्यर्ता</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Report Dashboard Screen -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point <br> पर्यावरण एवं पारिस्थितिकी</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ Dashboard Back Button -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 50 Questions Dataset (बिना explanation, 1-Line Format) -->
+    <script>
+        const QUIZ_KEY = "medhavi_free_test_d79"; 
+
+        const dataset = [
+            { id: 1, question: "आवश्यक वस्तु अधिनियम में सूचीबद्ध वस्तुओं का समूह कौन-सा है?", options: ["कोयला, कपास वस्त्र, लोहा, पेट्रोलियम उत्पाद", "कोयला, इस्पात, कपास, इस्पात की वस्तुएँ", "लोहा, इस्पात, पेट्रोलियम, एल्युमिनियम", "कागज, औषधि, पीतल, इस्पात"], correct: 0 },
+            { id: 2, question: "सूची-I को सूची-II से सुमेलित कीजिए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I</th><th>सूची-II</th></tr></thead><tbody><tr><td>A. एल नीनो</td><td>I. एक अन्योन्यक्रिया जहाँ एक जीव दूसरे जीव को लाभकारी रूप से प्रभावित करता है</td></tr><tr><td>B. ग्रीन हाउस इफेक्ट</td><td>II. गैर-वन भूमि उपयोग हेतु वनों का रूपांतरण</td></tr><tr><td>C. मरुस्थलीकरण</td><td>III. कार्बन डाइऑक्साइड जैसी गैसों से पृथ्वी के तापमान में वृद्धि</td></tr><tr><td>D. निर्वनीकरण</td><td>IV. पूर्वी प्रशांत के तापमान में असाधारण वृद्धि</td></tr><tr><td>E. सहजीविता</td><td>V. उर्वर भूमि का निम्नीकरण</td></tr></tbody></table>", options: ["A–I, B–II, C–III, D–V, E–IV", "A–III, B–I, C–IV, D–II, E–V", "A–II, B–I, C–V, D–II, E–IV", "A–IV, B–III, C–V, D–II, E–I"], correct: 3 },
+            { id: 3, question: "परियोजना का आकार किसके द्वारा तय किया जाता है?", options: ["वित्तीय संस्था", "सरकार", "परियोजना अभिकर्ता", "परियोजना निरूपण दल"], correct: 3 },
+            { id: 4, question: "‘पर्यावरण स्वच्छता’ का नाम बदलकर रखा गया है—", options: ["मानसिक स्वास्थ्य", "पर्यावरण स्वास्थ्य", "सकारात्मक पर्यावरण", "शुद्ध पर्यावरण"], correct: 1 },
+            { id: 5, question: "पर्यावरण में उपस्थित आवश्यक तत्वों का असंतुलन कहलाता है—", options: ["प्रदूषण", "रासायनिक प्रदूषण", "सांस्कृतिक प्रदूषण", "भौतिक प्रदूषण"], correct: 0 },
+            { id: 6, question: "वायुमंडल में घुलित सल्फर-डाइऑक्साइड किस पर अधिक असर डालती है?", options: ["पौधों पर", "मानव पर", "भौतिक साधनों पर", "उपर्युक्त सभी पर"], correct: 0 },
+            { id: 7, question: "अम्लीय वर्षा की खोज की थी—", options: ["रॉबर्ट एंगस स्मिथ", "रॉबर्ट माल्थस", "रॉबर्ट डिडनम", "रॉबर्ट ब्राउन"], correct: 0 },
+            { id: 8, question: "निम्नलिखित कारक सूक्ष्मजीवों की वृद्धि को प्रभावित करते हैं—", options: ["तापमान", "हवा", "नमी", "सभी विकल्प सही हैं"], correct: 3 },
+            { id: 9, question: "‘व्यक्तिगत निपुणता का ज्ञान’ शिक्षण का गुण निम्न में से किससे संबंधित है?", options: ["वैयक्तिक गुण", "व्यावसायिक गुण", "सामाजिक गुण", "उपर्युक्त में से कोई नहीं"], correct: 1 },
+            { id: 10, question: "भवन निर्माण सामग्री का उसके विवरण से मिलान कीजिए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सामग्री</th><th>विवरण</th></tr></thead><tbody><tr><td>A. ईंट</td><td>i. नारियल के बाहरी भाग की रेशेदार सामग्री</td></tr><tr><td>B. लकड़ी</td><td>ii. आंवले के प्रयोग से बने रंग से रंगी सामग्री</td></tr><tr><td>C. नारियल जटा</td><td>iii. मिट्टी को गूँथकर, सुखाकर और पकाकर बनी सामग्री</td></tr><tr><td>D. पार्टिकल बोर्ड</td><td>iv. टीक, देवदार और महोगनी<br>v. चूरा और कणों का मिश्रण</td></tr></tbody></table>", options: ["A–i, B–iii, C–ii, D–v", "A–iii, B–iv, C–i, D–v", "A–iv, B–ii, C–i, D–v", "A–ii, B–iii, C–v, D–i"], correct: 1 },
+            { id: 11, question: "अस्वीकरण के कारण उत्पादों से बचना जैसे प्रायुक्तकारी कारण संबंधित हैं—", options: ["सकारात्मक खरीद", "नकारात्मक खरीद", "लाभपूर्ण खरीद", "प्रेरक खरीद"], correct: 1 },
+            { id: 12, question: "देश में पहले चरण में कितने ‘बॉन रिस्टोरेशन’ का अनुमान किया गया था?", options: ["150", "186", "प्रति राज्य/यू.टी. में 1 हेक्टेयर", "166"], correct: 2 },
+            { id: 13, question: "अध्ययन अक्षमता का कारण हो सकता है—<br>i. जैविक<br>ii. आनुवंशिक<br>iii. पर्यावरणीय<br>iv. अन्य", options: ["i, ii, iii, iv", "i, ii, iii", "i, ii", "i, iv"], correct: 0 },
+            { id: 14, question: "पर्यावरण की किस परत में ओजोन के अणु मौजूद होते हैं?", options: ["एक्सोस्फेयर", "मेसोस्फेयर", "ट्रोपोस्फेयर", "स्ट्रेटोस्फेयर"], correct: 3 },
+            { id: 15, question: "एक टन कार्बन डाइऑक्साइड उत्सर्जन के समकक्ष ऊर्जा अवशोषण बताने के लिए किस माप का प्रयोग किया जाता है?", options: ["ग्रीन हाउस पोटेंशियल", "ग्लोबल वार्मिंग इफेक्ट", "ग्रीन हाउस इफेक्ट", "ग्लोबल वार्मिंग पोटेंशियल"], correct: 2 },
+            { id: 16, question: "क्लोरोफिल इसके सम्पर्क से फियोफाइटिन में बदल जाता है—", options: ["नींबू का रस", "सोडा बाई कार्ब", "दूध", "आँच"], correct: 3 },
+            { id: 17, question: "नॉन-पॉइंट सोर्स प्रदूषण का उदाहरण निम्न में से कौन-सा नहीं है?", options: ["ट्रांसमिशन स्पिल्स", "लीकेज टैंक", "कई इस्पात कारखानों से अपवाह", "ग्रामीण घर"], correct: 3 },
+            { id: 18, question: "निम्नलिखित में पाए जाने वाला रासायनिक घटक जो क्लोरोफ्लोरोकार्बन से ओजोन परत की कमी में सहायता करता है—", options: ["हाइड्रोजन मोनोऑक्साइड", "क्लोरोफ्लोरोकार्बन", "इथाइल अल्कोहल", "मिथाइल अल्कोहल"], correct: 1 },
+            { id: 19, question: "घर के आमुख को प्रभावित करने वाले प्रमुख कारक हैं—", options: ["सूर्य का भ्रमण चक्र", "हवा की दिशा तथा वर्षा की गति", "भूखंड की स्थिति", "उपर्युक्त सभी"], correct: 3 },
+            { id: 20, question: "वायु मंडल में सर्वाधिक प्रतिशत मात्रा किस गैस की होती है?", options: ["ऑक्सीजन", "कार्बन डाइऑक्साइड", "नाइट्रोजन", "ओजोन"], correct: 2 },
+            { id: 21, question: "ध्वनि प्रदूषण नापने की इकाई है—", options: ["कैलोरी", "मीटर", "डेसीबल", "ग्राम"], correct: 2 },
+            { id: 22, question: "सल्फर डाइऑक्साइड और कार्बन डाइऑक्साइड कारक हैं—", options: ["वायु प्रदूषण के", "जल प्रदूषण के", "मृदा प्रदूषण के", "ध्वनि प्रदूषण के"], correct: 0 },
+            { id: 23, question: "समाचार एजेंसियों का उनके उद्गम देश से मिलान कीजिए—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>एजेंसी</th><th>देश</th></tr></thead><tbody><tr><td>A. रायटर्स</td><td>i. संयुक्त राज्य अमेरिका</td></tr><tr><td>B. ए.पी.</td><td>ii. ब्रिटेन</td></tr><tr><td>C. यू.एन.आई.</td><td>iii. फ्रांस</td></tr><tr><td>D. ए.एफ.पी.</td><td>iv. भारत</td></tr></tbody></table>", options: ["A–i, B–ii, C–iii, D–iv", "A–ii, B–i, C–iv, D–iii", "A–ii, B–iii, C–iv, D–i", "A–iii, B–i, C–iv, D–ii"], correct: 1 },
+            { id: 24, question: "सूची-I को सूची-II से सुमेलित करें—<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>नाम</th><th>कार्य</th></tr></thead><tbody><tr><td>A. मेधा पाटकर</td><td>i. नर्मदा बचाओ</td></tr><tr><td>B. सुन्दरलाल बहुगुणा</td><td>ii. भूदान</td></tr><tr><td>C. महात्मा गांधी</td><td>iii. भ्रष्टाचार</td></tr><tr><td>D. विनोबा भावे</td><td>iv. स्वतंत्रता<br>v. चिपको</td></tr></tbody></table>", options: ["A–iii, B–iv, C–ii, D–i", "A–ii, B–i, C–iii, D–iv", "A–i, B–v, C–iv, D–ii", "A–i, B–v, C–ii, D–iv"], correct: 2 },
+            { id: 25, question: "आंतरिक स्थानिक संरचना-निर्माण में निम्नलिखित का विश्लेषण शामिल है—", options: ["अधिवासियों की संख्या", "कार्यकलाप के लिए अपेक्षित न्यूनतम जगह", "अलग-अलग स्थानों का परस्पर संबंध", "(a), (b) और (c)"], correct: 3 },
+            { id: 26, question: "निम्नलिखित में से पर्यावरण हितैषी भवन निर्माण सामग्री चुनिए—", options: ["वाणिज्यिक बोर्ड, पोज़ोलैनिक सामग्री, बाँस के बोर्ड", "वाणिज्यिक बोर्ड, प्लास्टिक बोर्ड, पोज़ोलैनिक सामग्री", "प्लास्टिक बोर्ड, पोज़ोलैनिक सामग्री, सीमेंट", "पोज़ोलैनिक सामग्री, सीमेंट, बाँस के बोर्ड"], correct: 0 },
+            { id: 27, question: "भारत में विकास के लिए आई.सी.टी. का उपयोग सीमित है क्योंकि—<br>A. कमजोर टेलीकॉम अवसंरचना<br>B. जनता की निरक्षरता<br>C. विशाल भौगोलिक क्षेत्र<br>D. देश की विशाल जनसंख्या", options: ["A और B", "B और C", "C और D", "A और D"], correct: 0 },
+            { id: 28, question: "पदार्थों के उपयोग को कम करना, विषाक्त विसर्जण को न्यूनतम स्तर तक लाना तथा पुनर्चक्रण निम्न में से किससे संबंधित है?", options: ["ऊर्जा संरक्षण", "पारिस्थितिकीय दक्षता", "ऊर्जा की दक्षता", "पदार्थ दक्षता"], correct: 1 },
+            { id: 29, question: "भारत में वायु से संबंधित विधिक उपबंधों को पहचानिए—", options: ["वायु अधिनियम 1981, मोटर-यान अधिनियम 1939, कारखाना अधिनियम 1948", "वन्यजीव संशोधन अधिनियम 2002, मोटर-यान अधिनियम 1939", "वायु अधिनियम 1981, वन निवासी अधिकार अधिनियम 2006", "वन्यजीव संशोधन अधिनियम 2002, वन निवासी अधिकार अधिनियम 2006"], correct: 0 },
+            { id: 30, question: "नीचे दो कथन दिए गए हैं:<br><b>अभिकथन:</b> विकास का आधुनिकीकरण प्रतिरूप गरीब देशों में व्यक्तियों की मानसिकता में परिवर्तन की पैरोकारी करता है।<br><b>कारण:</b> आधुनिकीकरण के लिए लोगों को बाहरी दबाव के बजाय अपनी सांस्कृतिक और परंपराओं से निर्देशित होना चाहिए।", options: ["अभिकथन सही, कारण गलत", "अभिकथन गलत, कारण सही", "दोनों सही", "दोनों गलत"], correct: 0 },
+            { id: 31, question: "अन्य गैसें जो न्यून मात्रा में वायु में हैं—<br>i. आर्गन<br>ii. नियॉन<br>iii. अमोनिया<br>iv. सल्फर डाइऑक्साइड", options: ["i और ii", "ii और iii", "iii और iv", "i और iv"], correct: 0 },
+            { id: 32, question: "प्राकृतिक निःसंक्रमण क्या है?", options: ["रोगाणुओं को जलाना", "रोगाणुओं को उबालकर नष्ट करना", "अल्ट्रावायलेट किरणों द्वारा रोगाणुओं को नष्ट करना", "फिनायल द्वारा रोगाणुओं को नष्ट करना"], correct: 2 },
+            { id: 33, question: "ऑटोमोबाइल दहन, घरेलू ईंधन का जलना प्रदूषण के स्रोत हैं—", options: ["जल", "मृदा", "वायु", "ध्वनि"], correct: 2 },
+            { id: 34, question: "धूल, धुआँ, कुहासा और वाष्प किसमें उपस्थित अशुद्धियाँ हैं?", options: ["मृदा", "जल", "वायु", "जल और वायु"], correct: 2 },
+            { id: 35, question: "खाद्य श्रृंखला में उत्पादक का उदाहरण कौन-सा है?", options: ["हरे पौधे", "शाकाहारी जीव", "मांसाहारी जीव", "अपघटक जीव"], correct: 0 },
+            { id: 36, question: "पारितंत्र में ऊर्जा का प्राथमिक स्रोत सामान्यतः क्या है?", options: ["सूर्य का प्रकाश", "मृदा का खनिज", "वर्षा का पानी", "वायु की गति"], correct: 0 },
+            { id: 37, question: "खाद्य श्रृंखला के क्रमिक स्तरों को क्या कहा जाता है?", options: ["जैविक क्षेत्र", "पोषी स्तर", "आवास क्षेत्र", "समुदाय स्तर"], correct: 1 },
+            { id: 38, question: "ऊर्जा का पिरामिड सामान्यतः कैसा होता है?", options: ["सदैव सीधा", "सदैव उल्टा", "दोनों प्रकार का", "आकारहीन"], correct: 0 },
+            { id: 39, question: "मृत पौधों और जीवों के पदार्थों का विघटन मुख्यतः कौन करते हैं?", options: ["उत्पादक जीव", "अपघटक जीव", "परभक्षी जीव", "शाकाहारी जीव"], correct: 1 },
+            { id: 40, question: "जीवों और उनके भौतिक परिवेश से मिलकर बनने वाली क्रियात्मक इकाई है—", options: ["जनसंख्या", "समुदाय", "पारितंत्र", "प्रजाति"], correct: 2 },
+            { id: 41, question: "निम्न में से कौन अजैविक घटक है?", options: ["कवक", "शैवाल", "खनिज लवण", "जीवाणु"], correct: 2 },
+            { id: 42, question: "एक प्रजाति के सभी जीव जो एक क्षेत्र में रहते हैं, कहलाते हैं—", options: ["जनसंख्या", "समुदाय", "जीवमंडल", "पारितंत्र"], correct: 0 },
+            { id: 43, question: "अनेक प्रजातियों की जनसंख्याओं से मिलकर बनता है—", options: ["जीन समूह", "जैव समुदाय", "अजैव घटक", "पोषक पदार्थ"], correct: 1 },
+            { id: 44, question: "किसी क्षेत्र में पाई जाने वाली प्रजातियों की विविधता किसका स्तर है?", options: ["आनुवंशिक विविधता", "प्रजातीय विविधता", "पारितंत्रीय विविधता", "मौसमी विविधता"], correct: 1 },
+            { id: 45, question: "एक ही प्रजाति के सदस्यों में जीन संबंधी भिन्नता कहलाती है—", options: ["प्रजातीय विविधता", "आनुवंशिक विविधता", "पारितंत्रीय विविधता", "आवासीय विविधता"], correct: 1 },
+            { id: 46, question: "राष्ट्रीय उद्यान में प्रजातियों को उनके प्राकृतिक आवास में बचाना किस प्रकार का संरक्षण है?", options: ["बाह्य-स्थल संरक्षण", "स्व-स्थाने संरक्षण", "कृत्रिम संरक्षण", "प्रयोगशाला संरक्षण"], correct: 1 },
+            { id: 47, question: "वनस्पति उद्यान में दुर्लभ पौधे संरक्षित करना किसका उदाहरण है?", options: ["स्व-स्थाने संरक्षण", "बाह्य-स्थल संरक्षण", "केवल प्राकृतिक चयन", "केवल अनुकूलन"], correct: 1 },
+            { id: 48, question: "जैव विविधता के हॉटस्पॉट की पहचान का प्रमुख आधार है—", options: ["अधिक स्थानिक प्रजातियाँ और अधिक संकट", "कम स्थानिक प्रजातियाँ और कम संकट", "केवल अधिक वर्षा और अधिक ताप", "केवल बड़ा क्षेत्र और अधिक जनसंख्या"], correct: 0 },
+            { id: 49, question: "किसी क्षेत्र में अलग-अलग प्रजातियों की संख्या अधिक होने पर सामान्यतः क्या बढ़ता है?", options: ["प्रजातीय समृद्धि", "एकल प्रजाति घनत्व", "अजैव घटक संख्या", "केवल भूमि का क्षेत्रफल"], correct: 0 },
+            { id: 50, question: "सामाजिक कार्यकर्ताओं और उनके कार्यक्षेत्र का कौन-सा मिलान सही है?<br>A. मेधा पाटकर — बाँध और पुनर्वास<br>B. वर्गीज कुरियन — दुग्ध सहकारिता<br>C. राजेन्द्र सिंह — जलस्रोतों का संरक्षण<br>D. इला भट्ट — महिला सशक्तीकरण<br>E. अरुणा राय — सूचना का अधिकार", options: ["केवल A और B", "केवल A, B और C", "केवल C, D और E", "उपर्युक्त सभी A, B, C, D, E सही हैं"], correct: 3 }
+        ];
+    </script>
+
+    <!-- ✅ JS Logic Control File Path -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
