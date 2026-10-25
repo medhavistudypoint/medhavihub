@@ -1,0 +1,1277 @@
+<!doctype html>
+<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Medhavi Study Point | TGT Full Mock Test</title>
+<style>
+:root{--navy:#0b1e47;--blue:#2563eb;--gold:#facc15;--green:#15803d;--red:#dc2626;--purple:#9333ea;--line:#e2e8f0}*{box-sizing:border-box}body{margin:0;background:#f8fafc;color:#1e293b;font:16px/1.6 'Segoe UI',Arial,sans-serif}button,input,select{font:inherit}button,a,input,select{touch-action:manipulation}button{cursor:pointer;border:0}button:disabled{opacity:.45;cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #f59e0b;outline-offset:3px}[hidden]{display:none!important}header{background:var(--navy);color:white;padding:18px max(16px,calc((100vw - 1180px)/2));display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border-bottom:3px solid var(--gold)}.brand{font-size:clamp(20px,4.5vw,28px);font-weight:900;color:var(--gold);letter-spacing:.5px}.tagline{font-size:12px;opacity:.9}.header-right{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.timer{background:#1e3a8a;border:2px solid #3b82f6;padding:5px 14px;border-radius:9px;color:var(--gold);font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}.timer.danger{background:#991b1b;color:white;border-color:#fecaca}.watermark{position:fixed;inset:0;pointer-events:none;z-index:10;display:flex;flex-direction:column;justify-content:space-around;align-items:center;overflow:hidden;opacity:.055}.watermark span{transform:rotate(-22deg);font-size:clamp(18px,4vw,30px);font-weight:900;color:var(--navy);white-space:nowrap;letter-spacing:2px}.wrap{max-width:1180px;margin:24px auto;padding:0 16px}.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:0 5px 18px #0b1e4708;margin-bottom:18px}h1,h2,h3{color:var(--navy);line-height:1.35}h1{font-size:26px;margin:0 0 10px}h2{font-size:21px;margin:0 0 16px}h3{font-size:17px;margin:0 0 12px}p{margin:8px 0}.muted{color:#64748b;font-size:14px}.gate{max-width:560px;margin:36px auto}.eyebrow{color:#2563eb;font-size:12px;font-weight:800;letter-spacing:1px;margin-bottom:10px}.rule{background:#eff6ff;border-left:4px solid var(--blue);padding:12px 16px;margin:16px 0;border-radius:6px}.form-field{display:block;text-align:left;font-weight:600;margin:16px 0 6px}input[type=text]{width:100%;padding:12px;border:2px solid #cbd5e1;border-radius:8px;background:white}.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 17px;border-radius:8px;background:#eef2f7;color:var(--navy);text-decoration:none;font-weight:700;border:1px solid var(--line)}.primary{background:var(--navy);color:white;border-color:var(--navy)}.green{background:#16a34a;color:white;border-color:#16a34a}.orange{background:#ea580c;color:white;border-color:#ea580c}.purple{background:#f3e8ff;color:#6b21a8}.red{background:#fee2e2;color:#991b1b}.full{width:100%}.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:18px}.error{color:#b91c1c}.badge{display:inline-block;background:#eff6ff;color:#1e40af;border-radius:6px;padding:4px 10px;font-size:13px;font-weight:700}.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.tabs button{flex:1;min-width:140px;text-align:left;background:white;color:var(--navy);padding:12px 16px;border:2px solid var(--line);border-radius:10px;font-weight:700}.tabs button.active{border-color:var(--blue);background:#eff6ff}.tabs small{display:block;font-size:12px;font-weight:400}.exam-grid{display:grid;grid-template-columns:minmax(0,2.6fr) minmax(250px,1fr);gap:18px;align-items:start}.q-meta{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:20px}.question{font-size:20px;font-weight:650;line-height:1.8;margin-bottom:22px;overflow-wrap:anywhere}.option{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;border:2px solid var(--line);border-radius:10px;margin:10px 0;cursor:pointer;min-height:54px}.option.selected{border-color:var(--blue);background:#eff6ff}.option input{margin-top:7px;accent-color:var(--blue);flex-shrink:0}.letter{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;border-radius:50%;background:#f1f5f9;font-weight:700;font-size:13px}.option.selected .letter{background:var(--blue);color:white}.option>span:last-child{overflow-wrap:anywhere}.palette{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:16px 0}.pal{height:40px;border-radius:7px;background:white;border:2px solid #cbd5e1;color:#475569;font-size:14px;font-weight:750;position:relative}.answered{background:#16a34a!important;color:white!important;border-color:#15803d!important}.unanswered{background:#ef4444!important;color:white!important;border-color:#dc2626!important}.marked{background:#9333ea!important;color:white!important;border-color:#7e22ce!important}.marked.answered:after{content:'✓';position:absolute;right:-3px;bottom:-5px;border:2px solid white;background:#16a34a;color:white;border-radius:50%;width:17px;height:17px;font-size:11px;line-height:13px}.pal.current{outline:3px solid var(--navy);outline-offset:2px}.legend{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px}.legend i{display:inline-block;width:13px;height:13px;border:1px solid #cbd5e1;vertical-align:middle;margin-right:4px;border-radius:3px}.progress{height:7px;background:#e2e8f0;overflow:hidden;border-radius:10px;margin-top:10px}.progress span{display:block;height:100%;background:#16a34a}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:20px 0}.metric{padding:16px 12px;background:#eff6ff;border-radius:10px;text-align:center;border:1px solid #dbeafe}.metric strong{display:block;font-size:24px;font-variant-numeric:tabular-nums;color:var(--navy)}.metric small{font-size:12px;color:#475569}.metric.good{background:#f0fdf4}.metric.good strong{color:var(--green)}.metric.bad{background:#fef2f2}.metric.bad strong{color:var(--red)}.table-scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px;white-space:nowrap}td,th{padding:11px 12px;border:1px solid var(--line);text-align:center}th{background:var(--navy);color:white}td:first-child{text-align:left}tfoot{font-weight:800;background:#f1f5f9}.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.filters select{padding:9px;border:1px solid #cbd5e1;border-radius:8px;background:white;max-width:100%}.review{border-left:5px solid #94a3b8;padding:20px;margin-bottom:12px;background:white;border-radius:10px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.review.good{border-left-color:#16a34a}.review.bad{border-left-color:#dc2626}.review .q{font-size:17px;font-weight:700;margin:10px 0}.review-option{padding:8px 12px;border:1px solid #e2e8f0;border-radius:6px;margin:6px 0;font-size:14px}.review-option.correct{background:#f0fdf4;border-color:#86efac}.review-option.wrong{background:#fef2f2;border-color:#fca5a5}.section-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}.section-cards .panel{margin:0}.section-cards strong{color:var(--blue)}dialog{border:0;border-radius:16px;padding:0;max-width:780px;width:calc(100% - 24px);max-height:90vh;box-shadow:0 20px 80px #0b1e4766}dialog::backdrop{background:#0b1e4799}dialog .panel{margin:0;border:0}.notice{padding:10px 14px;border:1px solid #fde68a;background:#fffbeb;color:#92400e;border-radius:8px;font-size:13px;margin:12px 0}.report-identity{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px;background:#f1f5f9;border-radius:8px;margin-top:16px}.footer{text-align:center;color:#64748b;font-size:12px;padding:22px}.candidate{padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}.sticky{position:sticky;top:12px}.small{font-size:12px}.report-title{text-align:center}.report-title .brand{color:var(--navy)}.save-state{font-size:12px;color:#64748b;margin-top:10px}ul{padding-left:23px}li{margin:8px 0}#instructions{max-width:860px}#storageNotice{max-width:1148px;margin:12px auto}.summary-note{font-size:14px;margin-top:16px}.review-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+@media(max-width:800px){.exam-grid{grid-template-columns:1fr}.sticky{position:static}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.section-cards{grid-template-columns:1fr}.panel{padding:18px}.question{font-size:18px}.wrap{margin-top:16px}.gate{margin-top:20px}.palette{grid-template-columns:repeat(6,minmax(0,1fr))}header{padding:14px 16px}.header-right{width:100%;justify-content:space-between}.metric strong{font-size:22px}}@media(max-width:380px){.palette{grid-template-columns:repeat(5,minmax(0,1fr))}.btn{padding:10px 12px}.option{padding:11px 10px;gap:8px}}@media print{header,.watermark,.no-print,.footer,#storageNotice{display:none!important}body{background:white}.wrap{max-width:100%;padding:0}.panel{box-shadow:none;break-inside:avoid}.review{break-inside:avoid}.stats{grid-template-columns:repeat(4,1fr)}.table-scroll{overflow:visible}table{font-size:11px}td,th{padding:6px}.section-cards{grid-template-columns:1fr 1fr}}
+</style></head><body>
+<div class="watermark" aria-hidden="true"><span>MEDHAVI STUDY POINT</span><span>MEDHAVI STUDY POINT</span><span>MEDHAVI STUDY POINT</span><span>MEDHAVI STUDY POINT</span></div>
+<header><div><div class="brand">MEDHAVI STUDY POINT</div><div class="tagline">Path to Knowledge &amp; Success · TGT गृह विज्ञान पूर्ण अभ्यास टेस्ट</div></div><div id="examHeader" class="header-right" hidden><button id="languageButton" class="btn" onclick="toggleLanguage()">🌐 English</button><div class="timer" id="timer" role="timer" aria-label="शेष समय">120:00</div><button class="btn orange" onclick="openSubmit()">टेस्ट सबमिट करें</button></div></header>
+<div id="storageNotice" class="notice" role="status" hidden></div>
+<main>
+<section id="login" class="wrap gate"><div class="panel"><div class="eyebrow">TGT FULL MOCK TEST</div><h1>परीक्षार्थी प्रवेश</h1><p class="muted">सामान्य अध्ययन एवं गृह विज्ञान</p><div class="rule"><b>120 प्रश्न · 360 अंक · 120 मिनट</b><br>सही +3 &nbsp;|&nbsp; गलत −1 &nbsp;|&nbsp; छोड़ा 0</div><div id="savedActions" hidden></div><form id="loginForm"><label class="form-field" for="name">पूरा नाम</label><input id="name" type="text" maxlength="100" placeholder="अपना पूरा नाम लिखें" autocomplete="name" required><label class="form-field" for="roll">रोल नंबर / पंजीकरण संख्या</label><input id="roll" type="text" maxlength="60" placeholder="अपना रोल नंबर लिखें" required><p id="loginError" class="error" role="alert"></p><button class="btn primary full" type="submit">निर्देश पढ़ें →</button></form><div class="actions"><a class="btn full" href="../../homescience.html">विषय चयन पर वापस जाएँ</a></div></div></section>
+<section id="instructions" class="wrap" lang="en" hidden><div class="panel"><div class="eyebrow">EXAMINATION INSTRUCTIONS</div><h1>Examination Instructions</h1><p id="instructionIdentity"></p><div class="table-scroll"><table><thead><tr><th>Section</th><th>Question Numbers</th><th>Questions</th><th>Maximum Marks</th></tr></thead><tbody><tr><td>General Studies</td><td>1–30</td><td>30</td><td>90</td></tr><tr><td>Home Science</td><td>31–120</td><td>90</td><td>270</td></tr></tbody><tfoot><tr><td>Total</td><td>1–120</td><td>120</td><td>360</td></tr></tfoot></table></div><ul><li>The total duration is <b>120 minutes</b>. You may switch between both sections at any time. There is no separate sectional timer.</li><li>Each correct answer earns <b>3 marks</b>. Each incorrect answer incurs a deduction of <b>1 mark</b>, equal to one-third of the marks assigned to a question. Unanswered questions receive zero marks.</li><li>Net score = (Correct answers × 3) − (Incorrect answers × 1). A negative net score will be displayed as calculated.</li><li>Your response is saved immediately when you select an option. Answered questions marked for review will also be evaluated. Use Clear to remove a response.</li><li>Question palette: White = Not visited; Red = Visited but unanswered; Green = Answered; Purple = Marked for review. A tick on a purple button indicates an answered question marked for review.</li><li>The test is submitted automatically when time expires. Before manual submission, you will see a response summary for both sections. Once submitted, responses for that attempt cannot be changed.</li><li>Progress is saved in this browser. You can resume after refreshing; the timer continues while the page is closed. Clearing browser data can remove saved progress.</li><li>After a completed attempt, your name and roll number remain locked in this browser for this test. Additional attempts are labelled <b>Re-attempt</b>. This is a browser-based restriction, not a device-wide or account-based lock.</li></ul><label><input id="agree" type="checkbox"> I have read the instructions and am ready to begin.</label><p id="instructionError" class="error" role="alert"></p><div class="actions"><button class="btn" onclick="showView('login')">← Back</button><button class="btn green" onclick="beginExam()">Start Examination →</button></div></div></section>
+<section id="exam" class="wrap" hidden><nav id="sectionTabs" class="tabs" aria-label="टेस्ट सेक्शन"></nav><div class="exam-grid"><div class="panel"><div class="q-meta"><span id="questionNumber" class="badge"></span><span class="muted">सही <b style="color:#15803d">+3</b> · गलत <b style="color:#dc2626">−1</b></span></div><div id="questionText" class="question" tabindex="-1"></div><div id="options" role="radiogroup" aria-label="उत्तर विकल्प"></div><div class="actions"><button id="prev" class="btn" onclick="go(state.index-1)">◀ पिछला</button><button class="btn red" onclick="clearAnswer()">Clear</button><button id="markBtn" class="btn purple" onclick="toggleMark()">☆ समीक्षा</button></div><button id="next" class="btn primary full" style="margin-top:14px" onclick="nextQuestion()">अगला ▶</button><div id="saveState" class="save-state" role="status"></div></div><aside class="panel sticky"><div id="candidate" class="candidate"></div><h3 id="paletteTitle"></h3><div class="legend"><span><i style="background:#16a34a"></i>उत्तर दिया</span><span><i style="background:#ef4444"></i>उत्तर नहीं दिया</span><span><i style="background:#9333ea"></i>समीक्षा</span><span><i></i>नहीं देखा</span></div><p class="muted small">बैंगनी पर ✓ = उत्तर सहित समीक्षा</p><div id="palette" class="palette"></div><div id="liveSummary" class="muted"></div><div class="progress"><span id="progressBar"></span></div><button class="btn orange full" style="margin-top:18px" onclick="openSubmit()">✔ टेस्ट सबमिट करें</button></aside></div></section>
+<section id="report" class="wrap" hidden><div class="panel" id="captureTarget"><div class="report-title"><div class="brand">MEDHAVI STUDY POINT</div><div class="muted">Path to Knowledge &amp; Success</div><h1 style="margin-top:12px">TGT पूर्ण अभ्यास टेस्ट — परिणाम</h1><p class="muted">सामान्य अध्ययन + गृह विज्ञान · 120 प्रश्न · 360 अंक</p></div><div id="reportIdentity" class="report-identity"></div><div id="metrics" class="stats"></div><div class="rule" id="scoreFormula"></div><h2>सेक्शनवार विस्तृत विश्लेषण</h2><div id="sectionTable" class="table-scroll"></div><div id="sectionInsights" class="section-cards"></div><p class="summary-note">सटीकता = सही ÷ प्रयास × 100। अंक प्रतिशत = नेट अंक ÷ पूर्णांक × 100। प्रश्न/सेक्शन का समय उस पर सक्रिय रहते हुए दर्ज समय है; कुल समय में पेज बंद या निष्क्रिय रहने का समय भी शामिल हो सकता है।</p></div><div class="panel no-print"><div class="actions" style="margin:0"><button class="btn primary" onclick="downloadResultImage()">📥 रिजल्ट इमेज</button><button class="btn" onclick="copyResultImage()">📋 इमेज कॉपी करें</button><a class="btn" href="https://t.me/medhaviStudyPoint" target="_blank" rel="noopener">टेलीग्राम समूह</a><button class="btn" onclick="window.print()">प्रिंट / PDF</button><button class="btn orange" onclick="reattempt()">पुनः प्रयास</button><a class="btn" href="../../homescience.html">मुख्य डैशबोर्ड</a></div><p id="imageStatus" class="muted" role="status"></p><p id="syncStatus" class="muted" role="status"></p></div><div class="panel"><h2>प्रश्नवार उत्तर समीक्षा</h2><div class="filters no-print"><select id="reviewSection" aria-label="समीक्षा सेक्शन" onchange="renderReview()"><option value="all">दोनों सेक्शन</option><option value="0">सामान्य अध्ययन</option><option value="1">गृह विज्ञान</option></select><select id="reviewStatus" aria-label="उत्तर स्थिति" onchange="renderReview()"><option value="all">सभी प्रश्न</option><option value="correct">सही उत्तर</option><option value="wrong">गलत उत्तर</option><option value="skipped">छोड़े प्रश्न</option><option value="marked">समीक्षा में रखे प्रश्न</option></select><span id="reviewCount" class="muted"></span></div><div id="reviews"></div></div></section>
+</main><dialog id="submitDialog" aria-labelledby="submitHeading"><div class="panel"><h2 id="submitHeading">क्या आप टेस्ट सबमिट करना चाहते हैं?</h2><p id="submitIdentity"></p><p class="muted">जमा करने से पहले अपना उत्तर-सार देख लें। समीक्षा में चुने गए उत्तर भी गिने जाएँगे।</p><div id="submitMetrics" class="stats"></div><div id="submitTable" class="table-scroll"></div><div class="notice">सबमिट करने के बाद इस प्रयास के उत्तर बदले नहीं जा सकेंगे।</div><div class="actions"><button id="continueBtn" class="btn" onclick="closeSubmit()">टेस्ट जारी रखें</button><button class="btn orange" onclick="finishExam(false)">हाँ, अंतिम सबमिट करें</button></div></div></dialog>
+<footer class="footer">MEDHAVI STUDY POINT · TGT Practice Test</footer>
+<script>
+'use strict';
+// Self-contained quiz. Shared global-style.css/global-quiz.js are intentionally not loaded.
+const CONFIG={key:'medhavi_tgt_gs30_hs90_120q_v4',duration:7200,marks:3,penalty:1,sheetUrl:'https://script.google.com/macros/s/AKfycbz1Rg1CjzNnB9bqXSyF552kFhG87JFk8D_NlRN07gtE7Yft70mQiZfzyeH2PevcFyo_/exec'};
+const rawQuestions=[
+ [
+  "सिंधु सभ्यता का वह कौन-सा स्थल है जहाँ ईंटों से निर्मित गोदीवाड़ा मिलने का दावा किया गया है?",
+  [
+   "लोथल",
+   "धौलावीरा",
+   "कालीबंगा",
+   "राखीगढ़ी"
+  ],
+  0
+ ],
+ [
+  "जैन धर्म के 24वें तीर्थंकर कौन थे?",
+  [
+   "पार्श्वनाथ",
+   "ऋषभदेव",
+   "महावीर स्वामी",
+   "नेमिनाथ"
+  ],
+  2
+ ],
+ [
+  "दिल्ली सल्तनत में चाँदी का ‘टंका’ और ताँबे का ‘जीतल’ किस शासक ने प्रचलित किया?",
+  [
+   "कुतुबुद्दीन ऐबक",
+   "इल्तुतमिश",
+   "बलबन",
+   "अलाउद्दीन खिलजी"
+  ],
+  1
+ ],
+ [
+  "मुगलकालीन ‘जब्त’ भू-राजस्व व्यवस्था के व्यवस्थित विकास का संबंध किससे था?",
+  [
+   "बैरम खाँ और मानसिंह",
+   "अबुल फजल और फैजी",
+   "बीरबल और तानसेन",
+   "अकबर और टोडरमल"
+  ],
+  3
+ ],
+ [
+  "भारत में वर्ष 1916 के होमरूल आंदोलन का नेतृत्व मुख्यतः किन नेताओं ने किया?",
+  [
+   "बाल गंगाधर तिलक और एनी बेसेंट",
+   "महात्मा गांधी और सरोजिनी नायडू",
+   "लाला लाजपत राय और बिपिनचंद्र पाल",
+   "गोपाल कृष्ण गोखले और फिरोजशाह मेहता"
+  ],
+  0
+ ],
+ [
+  "संसद की संविधान संशोधन शक्ति के संबंध में कौन-सा कथन सही है?",
+  [
+   "संसद संविधान के प्रत्येक भाग को असीमित रूप से बदल सकती है।",
+   "संविधान संशोधन की किसी न्यायालय द्वारा समीक्षा नहीं हो सकती।",
+   "संशोधन से संविधान की मूल संरचना नष्ट नहीं की जा सकती।",
+   "प्रत्येक संशोधन के लिए सभी राज्यों की स्वीकृति आवश्यक है।"
+  ],
+  2
+ ],
+ [
+  "प्रतिषेध रिट का प्रमुख उद्देश्य क्या है?",
+  [
+   "सार्वजनिक अधिकारी को कर्तव्य करने का आदेश देना",
+   "अधीनस्थ न्यायालय को अधिकार-सीमा से बाहर जाने से रोकना",
+   "अवैध हिरासत में रखे व्यक्ति को न्यायालय में प्रस्तुत करना",
+   "सार्वजनिक पद धारण करने का वैधानिक अधिकार पूछना"
+  ],
+  1
+ ],
+ [
+  "भारत के राष्ट्रपति का निर्वाचन किस पद्धति से किया जाता है?",
+  [
+   "प्रत्यक्ष निर्वाचन और साधारण बहुमत",
+   "सूची प्रणाली और आनुपातिक प्रतिनिधित्व",
+   "खुला मतदान और संचयी मत पद्धति",
+   "आनुपातिक प्रतिनिधित्व और एकल संक्रमणीय मत"
+  ],
+  3
+ ],
+ [
+  "पंचायतों में महिलाओं के लिए संविधान द्वारा निर्धारित न्यूनतम आरक्षण कितना है?",
+  [
+   "कुल स्थानों का कम-से-कम एक-तिहाई",
+   "कुल स्थानों का कम-से-कम दो-पाँचवाँ",
+   "कुल स्थानों का कम-से-कम आधा",
+   "कुल स्थानों का कम-से-कम दो-तिहाई"
+  ],
+  0
+ ],
+ [
+  "भारत की संचित निधि से धन निकालने के लिए सामान्यतः किसकी आवश्यकता होती है?",
+  [
+   "केवल वित्त आयोग की अनुशंसा",
+   "केवल राष्ट्रपति की प्रशासनिक अनुमति",
+   "विधि द्वारा किए गए विनियोग की",
+   "नियंत्रक एवं महालेखा परीक्षक की अनुमति"
+  ],
+  2
+ ],
+ [
+  "माँग-प्रेरित मुद्रास्फीति सामान्यतः कब उत्पन्न होती है?",
+  [
+   "उत्पादन लागत में अचानक कमी होने पर",
+   "समग्र माँग के उत्पादन क्षमता से अधिक होने पर",
+   "मुद्रा की माँग मुद्रा आपूर्ति से अधिक होने पर",
+   "आयातित वस्तुओं के शुल्क समाप्त होने पर"
+  ],
+  1
+ ],
+ [
+  "प्राथमिक घाटे की गणना कैसे की जाती है?",
+  [
+   "राजस्व घाटा घटाकर राजकोषीय घाटा",
+   "पूँजीगत व्यय घटाकर राजस्व प्राप्तियाँ",
+   "कुल उधारी घटाकर पूँजीगत प्राप्तियाँ",
+   "ब्याज भुगतान घटाकर राजकोषीय घाटा"
+  ],
+  3
+ ],
+ [
+  "भारत में न्यूनतम समर्थन मूल्य की सिफारिश मुख्यतः कौन करता है?",
+  [
+   "कृषि लागत एवं मूल्य आयोग",
+   "भारतीय खाद्य निगम",
+   "राष्ट्रीय कृषि विकास परिषद",
+   "भारतीय रिजर्व बैंक"
+  ],
+  0
+ ],
+ [
+  "उत्तर भारत में ग्रीष्मकाल के दौरान चलने वाली ‘लू’ किस प्रकार की स्थानीय पवन है?",
+  [
+   "ठंडी और आर्द्र पवन",
+   "ठंडी और शुष्क पवन",
+   "गर्म और शुष्क पवन",
+   "गर्म और आर्द्र पवन"
+  ],
+  2
+ ],
+ [
+  "निम्नलिखित में से कौन-सी नदी सामान्यतः डेल्टा के स्थान पर ज्वारनदमुख बनाती है?",
+  [
+   "महानदी",
+   "नर्मदा",
+   "गोदावरी",
+   "कावेरी"
+  ],
+  1
+ ],
+ [
+  "क्षोभमंडल में सामान्य पर्यावरणीय ताप-पतन दर लगभग कितनी मानी जाती है?",
+  [
+   "4.5°C प्रति 1,000 मीटर",
+   "5.5°C प्रति 1,000 मीटर",
+   "7.5°C प्रति 1,000 मीटर",
+   "6.5°C प्रति 1,000 मीटर"
+  ],
+  3
+ ],
+ [
+  "पारिस्थितिकी में ‘कीस्टोन प्रजाति’ से क्या अभिप्राय है?",
+  [
+   "जिसका प्रभाव उसकी संख्या की तुलना में अनुपातहीन रूप से अधिक हो",
+   "जो प्रत्येक पारितंत्र में संख्या की दृष्टि से सर्वाधिक पाई जाए",
+   "जो केवल कृत्रिम पारितंत्रों में जीवित रह सके",
+   "जो खाद्य शृंखला में सदैव प्राथमिक उत्पादक हो"
+  ],
+  0
+ ],
+ [
+  "झीलों में सुपोषण की समस्या मुख्यतः किन पोषक तत्त्वों की अधिकता से उत्पन्न होती है?",
+  [
+   "कैल्शियम और मैग्नीशियम",
+   "सोडियम और पोटैशियम",
+   "नाइट्रेट और फॉस्फेट",
+   "लौह और ताँबा"
+  ],
+  2
+ ],
+ [
+  "किसी समजातीय श्रेणी के यौगिकों की प्रमुख विशेषता क्या होती है?",
+  [
+   "सभी यौगिकों का आणविक द्रव्यमान समान होता है।",
+   "क्रियात्मक समूह समान और क्रमिक सदस्यों में CH₂ का अंतर होता है।",
+   "सभी यौगिकों के भौतिक और रासायनिक गुण समान होते हैं।",
+   "प्रत्येक सदस्य में कार्बन परमाणुओं की संख्या समान होती है।"
+  ],
+  1
+ ],
+ [
+  "यदि तीन प्रतिरोधक श्रेणीक्रम में जुड़े हों, तो उनका तुल्य प्रतिरोध कितना होगा?",
+  [
+   "सबसे छोटे प्रतिरोध के बराबर",
+   "सबसे बड़े प्रतिरोध के बराबर",
+   "प्रतिरोधों के व्युत्क्रमों के योग के बराबर",
+   "सभी प्रतिरोधों के योग के बराबर"
+  ],
+  3
+ ],
+ [
+  "निकट दृष्टिदोष के सुधार के लिए किस लेंस का प्रयोग किया जाता है?",
+  [
+   "अवतल लेंस",
+   "उत्तल लेंस",
+   "बेलनाकार लेंस",
+   "द्विफोकसी लेंस"
+  ],
+  0
+ ],
+ [
+  "लाल रक्त कोशिकाओं के आधान के संदर्भ में सामान्यतः सार्वत्रिक दाता कौन-सा रक्त समूह माना जाता है?",
+  [
+   "ए धनात्मक",
+   "एबी ऋणात्मक",
+   "ओ ऋणात्मक",
+   "एबी धनात्मक"
+  ],
+  2
+ ],
+ [
+  "विटामिन डी का प्रमुख पोषण संबंधी कार्य क्या है?",
+  [
+   "रक्त में थक्का बनने की प्रक्रिया बढ़ाना",
+   "कैल्शियम और फॉस्फोरस के अवशोषण में सहायता करना",
+   "कार्बोहाइड्रेट को सीधे ग्लूकोज में बदलना",
+   "हीमोग्लोबिन में लौह का स्थान ग्रहण करना"
+  ],
+  1
+ ],
+ [
+  "कम्पाइलर का प्रमुख कार्य क्या होता है?",
+  [
+   "एक समय में केवल एक पंक्ति निष्पादित करना",
+   "कंप्यूटर की अस्थायी स्मृति बढ़ाना",
+   "नेटवर्क के सभी संदेश कूटबद्ध करना",
+   "उच्चस्तरीय भाषा को मशीन या ऑब्जेक्ट कोड में बदलना"
+  ],
+  3
+ ],
+ [
+  "कंप्यूटर नेटवर्क में फायरवॉल का प्रमुख उद्देश्य क्या है?",
+  [
+   "निर्धारित नियमों के आधार पर नेटवर्क यातायात नियंत्रित करना",
+   "कंप्यूटर की संग्रह क्षमता को स्वतः बढ़ाना",
+   "सभी उपयोगकर्ता फाइलों का स्थायी बैकअप बनाना",
+   "खराब हार्डवेयर को सॉफ्टवेयर द्वारा ठीक करना"
+  ],
+  0
+ ],
+ [
+  "अक्टूबर 2026 में भारतीय नौसेना के पहले स्वदेशी बहुउद्देशीय पोत के रूप में किसे नौसेना में शामिल किया गया?",
+  [
+   "आईएनएस माहे",
+   "आईएनएस समर्थक",
+   "आईएनएस अर्नाला",
+   "आईएनएस सूरत"
+  ],
+  1
+ ],
+ [
+  "अक्टूबर 2026 में जीसैट-7सी उपग्रह और वरुणास्त्र भारी टॉरपीडो के लिए रक्षा मंत्रालय ने कुल कितनी राशि के अनुबंध किए?",
+  [
+   "₹2,563 करोड़",
+   "₹3,350 करोड़",
+   "₹3,925 करोड़",
+   "₹4,106 करोड़"
+  ],
+  3
+ ],
+ [
+  "आवधिक श्रम बल सर्वेक्षण के अनुसार सितंबर 2026 में 15 वर्ष और उससे अधिक आयु की समग्र श्रम बल भागीदारी दर कितनी थी?",
+  [
+   "55.5 प्रतिशत",
+   "52.7 प्रतिशत",
+   "50.7 प्रतिशत",
+   "34.6 प्रतिशत"
+  ],
+  0
+ ],
+ [
+  "नाइपर रायबरेली और एस्ट्राजेनेका इंडिया के सहयोग से नैदानिक अनुसंधान क्षमताएँ कितने उभरते भौगोलिक क्षेत्रों तक विस्तारित की जाएँगी?",
+  [
+   "15 क्षेत्र",
+   "20 क्षेत्र",
+   "25 क्षेत्र",
+   "30 क्षेत्र"
+  ],
+  2
+ ],
+ [
+  "अक्टूबर 2026 में केंद्रीय मंत्रिमंडल ने राष्ट्रीय सामाजिक सहायता कार्यक्रम को किस वित्तीय वर्ष तक जारी रखने की स्वीकृति दी?",
+  [
+   "2028–29",
+   "2030–31",
+   "2032–33",
+   "2034–35"
+  ],
+  1
+ ],
+ [
+  "निम्नलिखित में से किस स्थिति में ऋणात्मक नाइट्रोजन संतुलन की संभावना सर्वाधिक है?",
+  [
+   "बाल्यावस्था में तीव्र वृद्धि",
+   "गंभीर जलन और ऊतक-क्षति",
+   "गर्भावस्था के मध्य चरण",
+   "रोगमुक्ति के दौरान ऊतक-निर्माण"
+  ],
+  1
+ ],
+ [
+  "प्रोटीन की प्रत्यक्ष पाचनशीलता किस अनुपात से ज्ञात की जाती है?",
+  [
+   "ग्रहण किए नाइट्रोजन में से अवशोषित नाइट्रोजन",
+   "अवशोषित नाइट्रोजन में से रोका गया नाइट्रोजन",
+   "ग्रहण किए नाइट्रोजन में से रोका गया नाइट्रोजन",
+   "मल-नाइट्रोजन में से मूत्रीय नाइट्रोजन"
+  ],
+  0
+ ],
+ [
+  "शरीर में लिनोलिक अम्ल से सीमित मात्रा में कौन-सा वसीय अम्ल बनाया जा सकता है?",
+  [
+   "ओलिक अम्ल",
+   "पामिटिक अम्ल",
+   "अल्फा-लिनोलेनिक अम्ल",
+   "एराकिडोनिक अम्ल"
+  ],
+  3
+ ],
+ [
+  "वसीय अम्लों का बीटा-ऑक्सीकरण मुख्यतः कोशिका के किस भाग में होता है?",
+  [
+   "केंद्रक",
+   "राइबोसोम",
+   "माइटोकॉन्ड्रिया",
+   "गोल्जी तंत्र"
+  ],
+  2
+ ],
+ [
+  "भोजन से प्राप्त ट्राइग्लिसराइड को आंत्र से ऊतकों तक पहुँचाने वाला प्रमुख लिपोप्रोटीन कौन-सा है?",
+  [
+   "उच्च घनत्व लिपोप्रोटीन",
+   "निम्न घनत्व लिपोप्रोटीन",
+   "काइलोमाइक्रॉन",
+   "बहुत निम्न घनत्व लिपोप्रोटीन"
+  ],
+  2
+ ],
+ [
+  "यकृत में संचित ग्लाइकोजन का मुख्य कार्य क्या है?",
+  [
+   "केवल यकृत को ऊर्जा देना",
+   "भोजन के बीच रक्त-ग्लूकोज बनाए रखना",
+   "मांसपेशियों को प्रत्यक्ष ग्लाइकोजन देना",
+   "वसा के आंत्रीय अवशोषण को बढ़ाना"
+  ],
+  1
+ ],
+ [
+  "लैक्टोज किन दो मोनोसैकराइड से बना है?",
+  [
+   "ग्लूकोज और गैलेक्टोज",
+   "ग्लूकोज और फ्रक्टोज",
+   "फ्रक्टोज और गैलेक्टोज",
+   "ग्लूकोज और राइबोज"
+  ],
+  0
+ ],
+ [
+  "सुक्रोज के जल-अपघटन से कौन-सी दो शर्कराएँ प्राप्त होती हैं?",
+  [
+   "ग्लूकोज और गैलेक्टोज",
+   "दो ग्लूकोज अणु",
+   "गैलेक्टोज और फ्रक्टोज",
+   "ग्लूकोज और फ्रक्टोज"
+  ],
+  3
+ ],
+ [
+  "प्रतिरोधी स्टार्च की प्रमुख विशेषता क्या है?",
+  [
+   "छोटी आंत में पूर्ण पाचन न होकर बड़ी आंत में किण्वित होना",
+   "आमाशय में प्रोटीन में परिवर्तित होना",
+   "छोटी आंत में तुरंत ग्लूकोज बन जाना",
+   "बड़ी आंत में बिना परिवर्तन उत्सर्जित होना"
+  ],
+  0
+ ],
+ [
+  "बायोटिन मुख्यतः किस प्रकार की एंजाइमी अभिक्रियाओं में सहएंजाइम है?",
+  [
+   "डीकार्बोक्सीलेशन",
+   "ट्रांसएमिनेशन",
+   "कार्बोक्सीलेशन",
+   "प्रोटीन जल-अपघटन"
+  ],
+  2
+ ],
+ [
+  "पैंटोथेनिक अम्ल किस महत्त्वपूर्ण सहएंजाइम का घटक है?",
+  [
+   "थायमिन पाइरोफॉस्फेट",
+   "पाइरिडॉक्सल फॉस्फेट",
+   "फ्लेविन एडेनिन डाइन्यूक्लियोटाइड",
+   "कोएंजाइम-A"
+  ],
+  3
+ ],
+ [
+  "विटामिन C कोलेजन निर्माण में किस प्रक्रिया के लिए आवश्यक है?",
+  [
+   "ग्लाइसीन के डीएमीनेशन में",
+   "प्रोलिन और लाइसिन के हाइड्रॉक्सिलेशन में",
+   "कोलेजन के वसा में परिवर्तन में",
+   "कैल्शियम के मूत्रीय उत्सर्जन में"
+  ],
+  1
+ ],
+ [
+  "विटामिन A का कौन-सा कार्य दृष्टि से स्वतंत्र है?",
+  [
+   "रोडोप्सिन निर्माण",
+   "अंधकार अनुकूलन",
+   "उपकला कोशिकाओं का विभेदन",
+   "रेटिना में प्रकाश ग्रहण"
+  ],
+  2
+ ],
+ [
+  "कैल्सिटोनिन का सामान्य प्रभाव क्या है?",
+  [
+   "रक्त-कैल्शियम कम करने की दिशा में कार्य करना",
+   "रक्त-कैल्शियम और फॉस्फेट दोनों अनिवार्यतः बढ़ाना",
+   "आंत्र से लौह अवशोषण बढ़ाना",
+   "वृक्क से सोडियम उत्सर्जन रोकना"
+  ],
+  0
+ ],
+ [
+  "सोडियम-पोटैशियम पंप की क्रिया का सही वर्णन कौन-सा है?",
+  [
+   "दो सोडियम बाहर और तीन पोटैशियम अंदर",
+   "तीन सोडियम बाहर और दो पोटैशियम अंदर",
+   "तीन सोडियम अंदर और दो पोटैशियम बाहर",
+   "सोडियम और पोटैशियम समान मात्रा में बाहर"
+  ],
+  1
+ ],
+ [
+  "निम्नलिखित में से कौन-सी स्थिति मिश्रित प्रकार के गंभीर प्रोटीन-ऊर्जा कुपोषण को दर्शाती है?",
+  [
+   "केवल रतौंधी और शुष्क नेत्र",
+   "केवल सूक्ष्मकोशिकीय रक्ताल्पता",
+   "सामान्य भार के साथ केवल शोफ",
+   "गंभीर क्षीणता के साथ शोफ"
+  ],
+  3
+ ],
+ [
+  "केंद्रीय मोटापे के आकलन में कमर की परिधि उपयोगी क्यों है?",
+  [
+   "यह उदरीय वसा और उपापचयी जोखिम का संकेत देती है",
+   "यह शरीर की कुल अस्थि-मात्रा सीधे मापती है",
+   "यह केवल ऊँचाई में परिवर्तन दिखाती है",
+   "यह रक्तचाप का प्रत्यक्ष मापन करती है"
+  ],
+  0
+ ],
+ [
+  "आहार-विविधता पोषण-स्थिति सुधारने में क्यों सहायक है?",
+  [
+   "प्रत्येक खाद्य पदार्थ सभी पोषक तत्त्व देता है",
+   "इससे भोजन की ऊर्जा अनिवार्यतः घटती है",
+   "विभिन्न खाद्य समूह एक-दूसरे की पोषक कमियों की पूर्ति कर सकते हैं",
+   "इससे भोजन का पाचन पूर्णतः समाप्त हो जाता है"
+  ],
+  2
+ ],
+ [
+  "खाद्य-विनिमय सूची का मुख्य उपयोग क्या है?",
+  [
+   "भोजन की सूक्ष्मजीवी सुरक्षा मापना",
+   "समान पोषण-मूल्य वाले खाद्य पदार्थों के बीच विकल्प देना",
+   "सभी खाद्य पदार्थों का बाजार मूल्य निर्धारित करना",
+   "भोजन की शेल्फ-लाइफ ज्ञात करना"
+  ],
+  1
+ ],
+ [
+  "आहार नियोजन में पोषक-सघनता का क्या अर्थ है?",
+  [
+   "भोजन में केवल जल की मात्रा",
+   "भोजन का प्रति ग्राम कुल भार",
+   "भोजन में केवल प्रोटीन की मात्रा",
+   "दी गई ऊर्जा के अनुपात में उपलब्ध पोषक तत्त्व"
+  ],
+  3
+ ],
+ [
+  "स्पष्ट तरल आहार की प्रमुख विशेषता क्या है?",
+  [
+   "यह लंबे समय तक संपूर्ण पोषण प्रदान करता है",
+   "इसमें अधिक मात्रा में रेशा और वसा होती है",
+   "यह आसानी से पचने वाले, कम अवशेष वाले पारदर्शी तरल देता है",
+   "इसमें केवल दूध और गाढ़े सूप होते हैं"
+  ],
+  2
+ ],
+ [
+  "लंबे ज्वर में सामान्यतः किस प्रकार का आहार अधिक उपयुक्त होता है?",
+  [
+   "पर्याप्त ऊर्जा, प्रोटीन और तरल वाला सुपाच्य आहार",
+   "अत्यधिक वसा और बहुत कम तरल वाला आहार",
+   "केवल कच्ची सब्जियों पर आधारित आहार",
+   "पूर्ण उपवास और बिना जल का आहार"
+  ],
+  0
+ ],
+ [
+  "स्टार्च की कौन-सी संरचना ठंडा होने पर अपेक्षाकृत दृढ़ जेल बनाने में अधिक सहायक होती है?",
+  [
+   "एमाइलोपेक्टिन की अत्यधिक शाखित शृंखला",
+   "एमाइलोज की अपेक्षाकृत सीधी शृंखला",
+   "सेल्यूलोज की बीटा शृंखला",
+   "पेक्टिन की मिथाइलित शृंखला"
+  ],
+  1
+ ],
+ [
+  "चीनी को अमीनो यौगिक की अनुपस्थिति में उच्च ताप पर गर्म करने से कौन-सी प्रक्रिया होती है?",
+  [
+   "मायलार्ड अभिक्रिया",
+   "एंजाइमी भूरापन",
+   "लिपिड ऑक्सीकरण",
+   "कैरेमलीकरण"
+  ],
+  3
+ ],
+ [
+  "मायलार्ड अभिक्रिया की गति सामान्यतः किस परिस्थिति में अधिक होती है?",
+  [
+   "अपचायक शर्करा, अमीनो समूह और उपयुक्त ऊष्मा की उपस्थिति में",
+   "केवल संतृप्त वसा और जल की उपस्थिति में",
+   "अत्यधिक ठंड और पूर्णतः अम्लरहित माध्यम में",
+   "ऑक्सीजन की पूर्ण अनुपस्थिति में बिना ऊष्मा के"
+  ],
+  0
+ ],
+ [
+  "अंडे को अधिक ताप देने पर उसकी बनावट कठोर और रबड़ जैसी क्यों हो सकती है?",
+  [
+   "वसा का स्टार्च में परिवर्तन होने से",
+   "खनिज लवणों के वाष्पीकरण से",
+   "प्रोटीन के अत्यधिक जमाव और जल-निष्कासन से",
+   "लैक्टोज के कैरेमलीकरण से"
+  ],
+  2
+ ],
+ [
+  "दूध के समांगीकरण का मुख्य प्रभाव क्या है?",
+  [
+   "दूध के सभी सूक्ष्मजीव नष्ट हो जाते हैं",
+   "लैक्टोज ग्लूकोज में बदल जाता है",
+   "केसीन पूर्णतः अवक्षेपित हो जाता है",
+   "वसा-गोलिकाएँ छोटी होकर समान रूप से वितरित हो जाती हैं"
+  ],
+  3
+ ],
+ [
+  "दही बनने के दौरान मुख्य जैव-रासायनिक परिवर्तन क्या होता है?",
+  [
+   "प्रोटीन का वसा में परिवर्तन",
+   "लैक्टोज का लैक्टिक अम्ल में किण्वन",
+   "वसा का ग्लूकोज में परिवर्तन",
+   "खनिजों का पूर्ण विघटन"
+  ],
+  1
+ ],
+ [
+  "सिरके वाले अचार में सूक्ष्मजीवी वृद्धि मुख्यतः किस कारण नियंत्रित होती है?",
+  [
+   "अधिक क्षारीयता",
+   "अधिक प्रोटीन सांद्रता",
+   "कम कार्बोहाइड्रेट",
+   "एसीटिक अम्ल से उत्पन्न कम पीएच"
+  ],
+  3
+ ],
+ [
+  "खाद्य विकिरण का मुख्य उद्देश्य क्या है?",
+  [
+   "कीट, परजीवी या सूक्ष्मजीवी भार कम कर संरक्षण बढ़ाना",
+   "भोजन को रेडियोधर्मी बनाना",
+   "भोजन में प्रोटीन की मात्रा दोगुनी करना",
+   "भोजन की समस्त नमी हटाना"
+  ],
+  0
+ ],
+ [
+  "परिवर्तित वातावरण पैकेजिंग में किस सिद्धांत का उपयोग होता है?",
+  [
+   "भोजन को पूर्ण निर्वात में स्थायी रखना",
+   "पैकेट के भीतर गैसों के अनुपात को नियंत्रित करना",
+   "भोजन में केवल ऑक्सीजन की मात्रा बढ़ाना",
+   "भोजन को सीधे धूप में रखना"
+  ],
+  1
+ ],
+ [
+  "बाधा प्रौद्योगिकी का सही अर्थ क्या है?",
+  [
+   "केवल अत्यधिक ताप का प्रयोग",
+   "केवल रासायनिक संरक्षक का प्रयोग",
+   "अनेक हल्के संरक्षण कारकों का संयुक्त प्रयोग",
+   "खाद्य पदार्थ को पूर्णतः निर्जीव बनाना"
+  ],
+  2
+ ],
+ [
+  "वृक्क की निकटस्थ कुंडलित नलिका का प्रमुख कार्य क्या है?",
+  [
+   "निस्यंदित जल और पोषक पदार्थों का व्यापक पुनरवशोषण",
+   "केवल मूत्र को अंतिम रूप से सांद्र करना",
+   "प्रतिमूत्रवर्धक हार्मोन का निर्माण करना",
+   "रक्त कोशिकाओं का निस्यंदन करना"
+  ],
+  0
+ ],
+ [
+  "वासा रेक्टा वृक्क में मुख्यतः क्या कार्य करती है?",
+  [
+   "ग्लूकोज को मूत्र में स्रावित करती है",
+   "ग्लोमेरुलर निस्यंदन प्रारंभ करती है",
+   "प्रतिधारा विनिमय द्वारा मज्जीय परासरणीय प्रवणता सुरक्षित रखती है",
+   "रेनिन को मूत्र में उत्सर्जित करती है"
+  ],
+  2
+ ],
+ [
+  "आलिंदीय नैट्रियूरेटिक पेप्टाइड का प्रभाव क्या है?",
+  [
+   "सोडियम और जल-धारण बढ़ाना",
+   "सोडियम उत्सर्जन बढ़ाकर रक्त-आयतन कम करना",
+   "ग्लूकोज पुनरवशोषण बढ़ाना",
+   "पोटैशियम उत्सर्जन पूर्णतः रोकना"
+  ],
+  1
+ ],
+ [
+  "इंसुलिन मांसपेशी और वसा कोशिकाओं में ग्लूकोज ग्रहण किस प्रकार बढ़ाता है?",
+  [
+   "ग्लूकोज को रक्त में वापस भेजकर",
+   "ग्लूकागॉन का निर्माण बढ़ाकर",
+   "ग्लूकोज परिवाहकों को कोशिका-झिल्ली तक लाकर",
+   "ग्लाइकोजन का विघटन बढ़ाकर"
+  ],
+  2
+ ],
+ [
+  "ग्लूकागॉन का प्रमुख प्रभाव क्या है?",
+  [
+   "रक्त-ग्लूकोज कम करने के लिए ग्लाइकोजन निर्माण बढ़ाना",
+   "वसा और ग्लूकोज के अवशोषण को रोकना",
+   "मांसपेशी में ग्लूकोज ग्रहण अनिवार्यतः बढ़ाना",
+   "यकृत में ग्लाइकोजन विघटन और ग्लूकोज निर्माण बढ़ाना"
+  ],
+  3
+ ],
+ [
+  "आमाशय में हाइड्रोक्लोरिक अम्ल का स्राव कौन-सी कोशिकाएँ करती हैं?",
+  [
+   "पैराइटल कोशिकाएँ",
+   "मुख्य कोशिकाएँ",
+   "गोब्लेट कोशिकाएँ",
+   "जी-कोशिकाएँ"
+  ],
+  0
+ ],
+ [
+  "आंतरिक कारक की कमी से विटामिन B₁₂ का अवशोषण कहाँ प्रभावित होता है?",
+  [
+   "ड्यूओडेनम",
+   "जेजुनम",
+   "बड़ी आंत",
+   "अंतिम इलियम"
+  ],
+  3
+ ],
+ [
+  "पित्त का निर्माण और भंडारण क्रमशः कहाँ होता है?",
+  [
+   "पित्ताशय और यकृत",
+   "यकृत और पित्ताशय",
+   "अग्नाशय और यकृत",
+   "ड्यूओडेनम और पित्ताशय"
+  ],
+  1
+ ],
+ [
+  "लंबी-शृंखला वसा के पाचन से बने काइलोमाइक्रॉन सबसे पहले कहाँ प्रवेश करते हैं?",
+  [
+   "यकृत की पोर्टल शिरा",
+   "वृक्कीय धमनी",
+   "आमाशय की केशिकाएँ",
+   "आंत्र विल्ली की लसिका वाहिका"
+  ],
+  3
+ ],
+ [
+  "हेमेटोक्रिट क्या दर्शाता है?",
+  [
+   "रक्त में केवल हीमोग्लोबिन की रासायनिक मात्रा",
+   "कुल रक्त आयतन में लाल रक्त कोशिकाओं का प्रतिशत",
+   "रक्त में प्लेटलेट का कुल भार",
+   "प्लाज्मा में प्रोटीन का प्रतिशत"
+  ],
+  1
+ ],
+ [
+  "रक्त-जमाव में प्लेटलेट की प्रारंभिक भूमिका क्या है?",
+  [
+   "ऑक्सीजन का परिवहन करना",
+   "प्रतिरक्षी निर्माण करना",
+   "क्षतिग्रस्त स्थान पर प्लेटलेट प्लग बनाना",
+   "फाइब्रिन को सीधे हीमोग्लोबिन में बदलना"
+  ],
+  2
+ ],
+ [
+  "मानव विकास में प्रकृति और पालन-पोषण का आधुनिक दृष्टिकोण क्या है?",
+  [
+   "विकास जीन और पर्यावरण की पारस्परिक क्रिया का परिणाम है",
+   "विकास केवल आनुवंशिकता से निर्धारित होता है",
+   "विकास केवल पारिवारिक वातावरण से निर्धारित होता है",
+   "आनुवंशिकता और पर्यावरण स्वतंत्र तथा असंबंधित हैं"
+  ],
+  0
+ ],
+ [
+  "विकासात्मक प्लास्टिसिटी से क्या अभिप्राय है?",
+  [
+   "अनुभव और परिस्थितियों के अनुसार विकास में परिवर्तन की क्षमता",
+   "सभी बच्चों का एक समान गति से विकास",
+   "परिपक्वता के बाद किसी परिवर्तन का न होना",
+   "केवल शारीरिक वृद्धि का आनुवंशिक नियंत्रण"
+  ],
+  0
+ ],
+ [
+  "संवेदनशील अवधि, कठोर निर्णायक अवधि से किस प्रकार भिन्न है?",
+  [
+   "संवेदनशील अवधि में अनुभव का कोई प्रभाव नहीं होता",
+   "संवेदनशील अवधि केवल जन्म से पहले होती है",
+   "निर्णायक अवधि में सीखना हर समय समान रूप से संभव है",
+   "संवेदनशील अवधि में सीखना सर्वाधिक अनुकूल होता है, पर बाद में भी संभव हो सकता है"
+  ],
+  3
+ ],
+ [
+  "नवजात के गाल को छूने पर उसका सिर उसी दिशा में मुड़ना कौन-सा प्रतिवर्त है?",
+  [
+   "मोरो प्रतिवर्त",
+   "रूटिंग प्रतिवर्त",
+   "बैबिन्स्की प्रतिवर्त",
+   "टॉनिक नेक प्रतिवर्त"
+  ],
+  1
+ ],
+ [
+  "अंगूठे और तर्जनी से छोटी वस्तु पकड़ने की क्षमता क्या कहलाती है?",
+  [
+   "पाल्मर पकड़",
+   "स्थूल पकड़",
+   "चिमटी पकड़",
+   "द्विपार्श्व पकड़"
+  ],
+  2
+ ],
+ [
+  "बच्चा किसी वस्तु को देखकर वयस्क की ओर देखता है और फिर दोनों का ध्यान उसी वस्तु पर होता है। यह क्या है?",
+  [
+   "सामाजिक संदर्भण",
+   "आत्मकेंद्रिता",
+   "संयुक्त अवधान",
+   "समानांतर खेल"
+  ],
+  2
+ ],
+ [
+  "बच्चा बोले गए निर्देश समझता है, लेकिन अभी उतने शब्द बोल नहीं पाता। यह किस अंतर को दर्शाता है?",
+  [
+   "ग्रहणशील भाषा अभिव्यक्त भाषा से आगे है",
+   "अभिव्यक्त भाषा ग्रहणशील भाषा से आगे है",
+   "दोनों प्रकार की भाषा अनुपस्थित हैं",
+   "भाषा केवल अनुकरण पर आधारित है"
+  ],
+  0
+ ],
+ [
+  "पूर्व-संक्रियात्मक अवस्था की आत्मकेंद्रिता का अर्थ क्या है?",
+  [
+   "बच्चा केवल अपने लाभ की योजना बनाता है",
+   "बच्चा जानबूझकर दूसरों की उपेक्षा करता है",
+   "बच्चा सामाजिक संबंध बनाना नहीं चाहता",
+   "बच्चा दूसरे व्यक्ति का दृष्टिकोण समझने में कठिनाई अनुभव करता है"
+  ],
+  3
+ ],
+ [
+  "समान मात्रा की मिट्टी को अलग आकार देने के बाद भी मात्रा समान समझना किस संरक्षण से संबंधित है?",
+  [
+   "संख्या संरक्षण",
+   "द्रव्यमान संरक्षण",
+   "आयतन संरक्षण",
+   "लंबाई संरक्षण"
+  ],
+  1
+ ],
+ [
+  "छोटे बच्चे का नियमों को स्थिर और अधिकारियों द्वारा बनाया हुआ मानना किस नैतिक अवस्था से संबंधित है?",
+  [
+   "स्वायत्त नैतिकता",
+   "पराधीन नैतिकता",
+   "उत्तर-परंपरागत नैतिकता",
+   "नैतिक सापेक्षता"
+  ],
+  1
+ ],
+ [
+  "समवयस्क समूह में स्वीकार्यता बढ़ाने वाला व्यवहार कौन-सा है?",
+  [
+   "निरंतर आक्रामक नियंत्रण",
+   "सभी गतिविधियों से अलग रहना",
+   "सहयोग, संवाद और भावनात्मक नियंत्रण",
+   "दूसरों की आवश्यकताओं की उपेक्षा"
+  ],
+  2
+ ],
+ [
+  "पहचान उपलब्धि की अवस्था किसे दर्शाती है?",
+  [
+   "विकल्पों के अन्वेषण के बाद स्पष्ट प्रतिबद्धता",
+   "बिना अन्वेषण परिवार का चुनाव स्वीकार करना",
+   "न अन्वेषण करना और न प्रतिबद्धता बनाना",
+   "अन्वेषण करना लेकिन कोई निर्णय न लेना"
+  ],
+  0
+ ],
+ [
+  "फ्लैक्स से लिनन रेशा अलग करने की रेटिंग प्रक्रिया का उद्देश्य क्या है?",
+  [
+   "रेशे में कृत्रिम ऐंठन देना",
+   "कपड़े पर स्थायी प्लीट बनाना",
+   "रेशे को विरंजित करना",
+   "पेक्टिनयुक्त पदार्थ विघटित कर बास्ट रेशे अलग करना"
+  ],
+  3
+ ],
+ [
+  "कपास के जिनिंग का प्रमुख उद्देश्य क्या है?",
+  [
+   "रेशों को धागे में कातना",
+   "रेशों पर रंग चढ़ाना",
+   "कपास रेशों को बीज से अलग करना",
+   "छोटे रेशों को कंघी से निकालना"
+  ],
+  2
+ ],
+ [
+  "रेशम-उत्पादन में रीलिंग का क्या अर्थ है?",
+  [
+   "कोकून से रेशम फिलामेंट निकालकर एकत्र करना",
+   "रेशम से सेरिसिन पूर्णतः हटाना",
+   "रेशम पर धात्विक लवण चढ़ाना",
+   "तैयार कपड़े को रोलर से दबाना"
+  ],
+  0
+ ],
+ [
+  "ऊन की कार्बोनाइजिंग प्रक्रिया में मुख्यतः क्या हटाया जाता है?",
+  [
+   "ऊन का प्राकृतिक क्रिम्प",
+   "वानस्पतिक अशुद्धियाँ",
+   "केराटिन की बाहरी परत",
+   "ऊन की संपूर्ण प्राकृतिक वसा"
+  ],
+  1
+ ],
+ [
+  "विस्कोस रेयॉन को गीली अवस्था में सावधानी से धोने का कारण क्या है?",
+  [
+   "गीली अवस्था में इसकी मजबूती घट सकती है",
+   "यह गीला होते ही ऊन में बदल जाता है",
+   "इसमें स्थायी फेल्टिंग प्रारंभ हो जाती है",
+   "यह गीला होकर ताप-सुघट्य बनता है"
+  ],
+  0
+ ],
+ [
+  "स्पैन्डेक्स रेशे की प्रमुख विशेषता क्या है?",
+  [
+   "अत्यधिक प्रत्यास्थता और खिंचाव के बाद पुनर्प्राप्ति",
+   "अत्यधिक नमी-अवशोषण और कठोरता",
+   "प्राकृतिक स्केल और फेल्टिंग क्षमता",
+   "प्रबल क्षार में अधिक मजबूती"
+  ],
+  0
+ ],
+ [
+  "सूत की असमानता का कपड़े पर संभावित प्रभाव क्या है?",
+  [
+   "कपड़े की प्रत्येक जगह समान मोटाई",
+   "केवल रंग-स्थिरता में वृद्धि",
+   "मोटे-पतले स्थान और असमान रूप",
+   "ताना तनाव का पूर्ण अभाव"
+  ],
+  2
+ ],
+ [
+  "कंघीकृत सूत, कार्डेड सूत से सामान्यतः किस प्रकार भिन्न होता है?",
+  [
+   "उसमें छोटे रेशे और अधिक अशुद्धियाँ होती हैं",
+   "वह अधिक समान, चिकना और कम रोएँदार होता है",
+   "उसमें ऐंठन का पूर्ण अभाव होता है",
+   "वह केवल कृत्रिम रेशों से बनता है"
+  ],
+  1
+ ],
+ [
+  "बुने कपड़े में सर्वाधिक खिंचाव सामान्यतः किस दिशा में मिलता है?",
+  [
+   "केवल ताना दिशा",
+   "केवल बाना दिशा",
+   "किनारी दिशा",
+   "तिरछी बायस दिशा"
+  ],
+  3
+ ],
+ [
+  "टविल कपड़ा साधारण बुनाई की तुलना में सामान्यतः अधिक लचीला क्यों होता है?",
+  [
+   "उसमें कोई अंतर्ग्रंथन नहीं होता",
+   "उसमें अंतर्ग्रंथन-बिंदु कम और फ्लोट लंबे होते हैं",
+   "उसमें केवल एक ही धागा उपयोग होता है",
+   "उसमें ताना और बाना परस्पर नहीं मिलते"
+  ],
+  1
+ ],
+ [
+  "साटिन वस्त्र के फँसने की संभावना अधिक क्यों होती है?",
+  [
+   "सतह पर लंबे फ्लोट होने के कारण",
+   "प्रत्येक धागे के अत्यधिक अंतर्ग्रंथन के कारण",
+   "कपड़े में केवल छोटे रेशे होने के कारण",
+   "ताना और बाना की संख्या समान होने के कारण"
+  ],
+  0
+ ],
+ [
+  "ताना-बुनाई और बाना-बुनाई में मुख्य अंतर क्या है?",
+  [
+   "दोनों में प्रत्येक फंदा अलग कपड़े से बनता है",
+   "ताना-बुनाई में केवल एक अनुप्रस्थ धागा होता है",
+   "ताना-बुनाई में अनेक लंबवत धागों से फंदे बनते हैं",
+   "बाना-बुनाई में ताना और बाना अंतर्ग्रंथित होते हैं"
+  ],
+  2
+ ],
+ [
+  "ब्लॉक छपाई में डिजाइन कपड़े पर किस प्रकार स्थानांतरित होता है?",
+  [
+   "रंगे ताना-बाना धागों की बुनाई से",
+   "कपड़े के कुछ भाग बाँधकर",
+   "पूरे कपड़े को रंग-स्नान में डुबोकर",
+   "उभरे हुए डिजाइन वाले ब्लॉक पर रंग लगाकर दबाने से"
+  ],
+  3
+ ],
+ [
+  "जटिल निर्णय में निर्णय-वृक्ष का प्रमुख उपयोग क्या है?",
+  [
+   "केवल एक पूर्वनिर्धारित विकल्प लागू करना",
+   "परिवार की आय का लेखा बनाना",
+   "विकल्पों और संभावित परिणामों को क्रमबद्ध दिखाना",
+   "सभी अनिश्चितताओं को समाप्त करना"
+  ],
+  2
+ ],
+ [
+  "साधनात्मक लक्ष्य और अंतिम लक्ष्य में क्या संबंध है?",
+  [
+   "साधनात्मक लक्ष्य अंतिम लक्ष्य प्राप्त करने का माध्यम होता है",
+   "अंतिम लक्ष्य सदैव अल्पकालीन होता है",
+   "दोनों एक-दूसरे से पूर्णतः असंबंधित होते हैं",
+   "साधनात्मक लक्ष्य का कोई व्यावहारिक उपयोग नहीं होता"
+  ],
+  0
+ ],
+ [
+  "ऊर्जा-प्रबंधन में भारी कार्य के लिए कार्य-सतह सामान्यतः अपेक्षाकृत नीची क्यों रखी जाती है?",
+  [
+   "शरीर के भार और बड़ी मांसपेशियों का उपयोग संभव बनाने के लिए",
+   "सूक्ष्म दृष्टि की आवश्यकता बढ़ाने के लिए",
+   "कोहनियों को कंधों से ऊपर रखने के लिए",
+   "काम करते समय रीढ़ को अधिक मोड़ने के लिए"
+  ],
+  0
+ ],
+ [
+  "नियमित घरेलू लेखा रखने का मुख्य लाभ क्या है?",
+  [
+   "सभी आकस्मिक व्यय समाप्त हो जाते हैं",
+   "परिवार की आय स्वतः बढ़ जाती है",
+   "प्रत्येक वस्तु की कीमत स्थिर हो जाती है",
+   "वास्तविक व्यय की बजट से तुलना संभव होती है"
+  ],
+  3
+ ],
+ [
+  "किसी निवेश की तरलता से क्या अभिप्राय है?",
+  [
+   "उसे कम समय और कम मूल्य-हानि में नकदी में बदलने की क्षमता",
+   "निवेश पर मिलने वाली अधिकतम ब्याज-दर",
+   "निवेश की कर-मुक्त अवधि",
+   "निवेश में होने वाली निश्चित पूँजी-वृद्धि"
+  ],
+  0
+ ],
+ [
+  "निवेश में जोखिम और प्रतिफल के बीच सामान्य संबंध क्या है?",
+  [
+   "अधिक प्रतिफल सदैव बिना जोखिम मिलता है",
+   "संभावित अधिक प्रतिफल के साथ सामान्यतः अधिक जोखिम जुड़ सकता है",
+   "कम जोखिम वाले निवेश में हमेशा पूँजी-हानि होती है",
+   "जोखिम का प्रतिफल से कोई संबंध नहीं होता"
+  ],
+  1
+ ],
+ [
+  "प्राकृतिक वेंटिलेशन सबसे अधिक किस पर निर्भर करता है?",
+  [
+   "केवल कमरे की सजावट",
+   "केवल दीवारों के रंग",
+   "खुलावों की स्थिति, वायु-दिशा और तापांतर",
+   "केवल फर्नीचर की संख्या"
+  ],
+  2
+ ],
+ [
+  "कार्य-विशिष्ट प्रकाश व्यवस्था का उद्देश्य क्या है?",
+  [
+   "पूरे भवन को समान रूप से अत्यधिक प्रकाशित करना",
+   "प्राकृतिक प्रकाश पूर्णतः रोकना",
+   "केवल सजावटी प्रभाव उत्पन्न करना",
+   "विशेष कार्य-क्षेत्र पर पर्याप्त नियंत्रित प्रकाश देना"
+  ],
+  3
+ ],
+ [
+  "पुष्प-सज्जा में विकिरणीय संतुलन कब बनता है?",
+  [
+   "सभी सामग्री एक सीधी क्षैतिज रेखा में हो",
+   "दोनों ओर केवल समान फूल रखे जाएँ",
+   "कोई केंद्र-बिंदु न बनाया जाए",
+   "सामग्री केंद्रीय बिंदु से विभिन्न दिशाओं में फैलती दिखाई दे"
+  ],
+  3
+ ],
+ [
+  "फर्नीचर के आयाम निर्धारित करते समय मानवमिति का उपयोग क्यों किया जाता है?",
+  [
+   "फर्नीचर को उपयोगकर्ता के शारीरिक माप और सुविधा के अनुकूल बनाने के लिए",
+   "केवल फर्नीचर का रंग निर्धारित करने के लिए",
+   "भवन की लागत दोगुनी करने के लिए",
+   "सभी व्यक्तियों के लिए बिल्कुल समान आकार बनाने के लिए"
+  ],
+  0
+ ],
+ [
+  "एल-आकार की रसोई का प्रमुख लाभ क्या है?",
+  [
+   "चारों दीवारों पर कार्यक्षेत्र अनिवार्य बनाना",
+   "दो संलग्न दीवारों पर कार्यक्षेत्र देकर खुला आवागमन बनाए रखना",
+   "सभी उपकरण कमरे के मध्य रखना",
+   "कार्य-त्रिकोण को पूर्णतः समाप्त करना"
+  ],
+  1
+ ],
+ [
+  "नवाचार के प्रसार में संचार माध्यम का चयन किस आधार पर होना चाहिए?",
+  [
+   "केवल माध्यम की लागत",
+   "केवल कार्यकर्ता की व्यक्तिगत पसंद",
+   "नवाचार की अवस्था, श्रोता और संदेश की प्रकृति",
+   "सभी स्थितियों में केवल जनसंचार"
+  ],
+  2
+ ],
+ [
+  "विलंबित बहुमत वर्ग की प्रमुख विशेषता क्या है?",
+  [
+   "वह सबसे पहले जोखिम लेकर नवाचार अपनाता है",
+   "वह अधिकांश लोगों के बाद सामाजिक या आर्थिक दबाव में अपनाता है",
+   "वह नवाचार कभी स्वीकार नहीं करता",
+   "वह केवल वैज्ञानिक अनुसंधान संस्थान से जुड़ा होता है"
+  ],
+  1
+ ],
+ [
+  "भूमिका-अभिनय किस उद्देश्य के लिए विशेष रूप से उपयोगी है?",
+  [
+   "केवल लिखित तथ्यों को याद कराने के लिए",
+   "व्यक्तिगत आँकड़ों का सांख्यिकीय विश्लेषण करने के लिए",
+   "बड़े जनसमूह तक एकमार्गी सूचना पहुँचाने के लिए",
+   "सामाजिक परिस्थिति और व्यवहार का अनुभवात्मक अभ्यास कराने के लिए"
+  ],
+  3
+ ],
+ [
+  "संगोष्ठी में सामान्यतः क्या होता है?",
+  [
+   "विभिन्न वक्ता एक विषय के अलग-अलग पक्षों पर क्रमबद्ध प्रस्तुति देते हैं",
+   "केवल एक व्यक्ति कौशल का चरणबद्ध प्रदर्शन करता है",
+   "प्रतिभागी बिना विषय के अनौपचारिक बातचीत करते हैं",
+   "केवल लिखित पुस्तिका वितरित की जाती है"
+  ],
+  0
+ ],
+ [
+  "प्रसार बुलेटिन और पत्रक में मुख्य अंतर क्या है?",
+  [
+   "पत्रक सदैव बुलेटिन से अधिक विस्तृत होता है",
+   "बुलेटिन में कोई चित्र नहीं हो सकता",
+   "बुलेटिन विषय को पत्रक की अपेक्षा अधिक विस्तार से प्रस्तुत करता है",
+   "दोनों केवल व्यक्तिगत संपर्क विधियाँ हैं"
+  ],
+  2
+ ],
+ [
+  "नवाचार-निर्णय प्रक्रिया में ज्ञान अवस्था का क्या अर्थ है?",
+  [
+   "व्यक्ति पहली बार नवाचार के अस्तित्व और कार्य के बारे में जानता है",
+   "व्यक्ति नवाचार को स्थायी रूप से अपनाता है",
+   "व्यक्ति सीमित स्तर पर उसका परीक्षण करता है",
+   "व्यक्ति अपने निर्णय की पुष्टि करता है"
+  ],
+  0
+ ],
+ [
+  "विधि-प्रदर्शन की सफलता के लिए कौन-सा क्रम सर्वाधिक उपयुक्त है?",
+  [
+   "निष्कर्ष–अभ्यास–परिचय–प्रदर्शन",
+   "अभ्यास–परिचय–मूल्यांकन–प्रदर्शन",
+   "मूल्यांकन–प्रदर्शन–परिचय–अभ्यास",
+   "परिचय–चरणबद्ध प्रदर्शन–प्रतिभागी अभ्यास–पुनरावलोकन"
+  ],
+  3
+ ],
+ [
+  "वृत्ताकार संचार मॉडल की प्रमुख विशेषता क्या है?",
+  [
+   "संदेश केवल प्रेषक से प्राप्तकर्ता तक जाता है",
+   "प्राप्तकर्ता की प्रतिक्रिया को संचार नहीं माना जाता",
+   "प्रेषक और प्राप्तकर्ता की भूमिकाएँ कभी नहीं बदलतीं",
+   "प्रतिपुष्टि के साथ दोनों पक्ष क्रमशः प्रेषक और प्राप्तकर्ता बनते हैं"
+  ],
+  3
+ ],
+ [
+  "प्रसार कार्यकर्ता में समानुभूति का अर्थ क्या है?",
+  [
+   "समुदाय की परिस्थिति और दृष्टिकोण को उसके संदर्भ से समझना",
+   "समुदाय की प्रत्येक बात से बिना विचार सहमत होना",
+   "केवल वैज्ञानिक शब्दावली में संवाद करना",
+   "अपनी मान्यताओं को समुदाय पर लागू करना"
+  ],
+  0
+ ],
+ [
+  "सामाजिक मानचित्र से मुख्यतः कौन-सी जानकारी मिलती है?",
+  [
+   "केवल मौसम का वार्षिक क्रम",
+   "बस्ती, परिवारों, सेवाओं और सामाजिक संरचना का स्थानिक चित्र",
+   "केवल परिवारों की मासिक आय",
+   "केवल कृषि फसलों का उत्पादन"
+  ],
+  1
+ ],
+ [
+  "कार्यक्रम प्रारंभ होने से पहले किया गया आधाररेखा सर्वेक्षण क्यों आवश्यक है?",
+  [
+   "कार्यक्रम की अंतिम सफलता पहले ही घोषित करने के लिए",
+   "प्रतिभागियों को कार्यक्रम से अलग करने के लिए",
+   "प्रारंभिक स्थिति दर्ज करके बाद के परिवर्तन की तुलना करने के लिए",
+   "केवल प्रचार सामग्री की संख्या जानने के लिए"
+  ],
+  2
+ ]
+];
+const dataset=rawQuestions.map((q,i)=>({id:i+1,question:q[0],options:q[1],correct:q[2],section:i<30?0:1}));
+const sections=[{name:'सामान्य अध्ययन',start:0,end:30},{name:'गृह विज्ञान',start:30,end:120}];
+let state=null,ticker=null,activeSince=0,previousFocus=null,storageOkay=true;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=sec=>{sec=Math.max(0,Math.round(sec));return `${Math.floor(sec/60).toString().padStart(2,'0')}:${(sec%60).toString().padStart(2,'0')}`;};
+const percent=(a,b)=>b?(a/b*100).toFixed(1):'0.0';
+function showView(id){['login','instructions','exam','report'].forEach(v=>$(v).hidden=v!==id);$('examHeader').hidden=id!=='exam';window.scrollTo(0,0);}
+function storageWarning(){storageOkay=false;$('storageNotice').hidden=false;$('storageNotice').textContent='इस ब्राउज़र में प्रगति सेव नहीं हो पा रही है। टेस्ट जारी रख सकते हैं; रिफ्रेश करने से प्रगति खो सकती है।';}
+function save(){if(!state)return;try{localStorage.setItem(CONFIG.key,JSON.stringify(state));$('saveState').textContent='✓ प्रगति इस ब्राउज़र में सुरक्षित है';}catch(e){storageWarning();$('saveState').textContent='प्रगति सेव नहीं हो सकी';}}
+function validState(s){return s&&s.version===4&&['running','finished'].includes(s.status)&&typeof s.name==='string'&&typeof s.roll==='string'&&Number.isFinite(s.deadline)&&Number.isFinite(s.started)&&s.deadline-s.started===CONFIG.duration*1000&&Number.isInteger(s.index)&&s.index>=0&&s.index<120&&Array.isArray(s.answers)&&s.answers.length===120&&s.answers.every(a=>a===null||Number.isInteger(a)&&a>=0&&a<4)&&Array.isArray(s.marked)&&s.marked.length===120&&s.marked.every(a=>typeof a==='boolean')&&Array.isArray(s.visited)&&s.visited.length===120&&s.visited.every(a=>typeof a==='boolean')&&Array.isArray(s.times)&&s.times.length===120&&s.times.every(a=>Number.isFinite(a)&&a>=0)&&(s.status!=='finished'||Number.isFinite(s.finished));}
+function loadSaved(){try{const raw=localStorage.getItem(CONFIG.key);if(!raw)return;const s=JSON.parse(raw);if(!validState(s))return;state=s;$('name').value=s.name;$('roll').value=s.roll;$('name').readOnly=true;$('roll').readOnly=true;$('savedActions').hidden=false;$('savedActions').innerHTML=`<div class="rule"><b>${s.status==='finished'?'पिछला प्रयास पूरा हो चुका है।':'आपका अधूरा टेस्ट उपलब्ध है।'}</b><p>${esc(s.name)} · ${esc(s.roll)}</p><div class="actions"><button class="btn green" type="button" onclick="${s.status==='finished'?'viewSaved()':'resumeExam()'}">${s.status==='finished'?'पिछला परिणाम देखें':'टेस्ट जारी रखें'}</button><button type="button" class="btn" onclick="newAttemptForm()">${s.status==='finished'?'Re-attempt Test':'टेस्ट जारी रखें'}</button></div></div>`;$('loginForm').hidden=true;}catch(e){storageWarning();}}
+function newAttemptForm(){if(state?.status==='running'){resumeExam();return;}if(state?.status==='finished'){reattempt();return;}$('savedActions').hidden=true;$('loginForm').hidden=false;}
+$('loginForm').addEventListener('submit',e=>{e.preventDefault();const name=$('name').value.trim(),roll=$('roll').value.trim();if(!name||!roll){$('loginError').textContent='कृपया पूरा नाम और रोल नंबर लिखें।';return;}$('loginError').textContent='';$('instructionIdentity').textContent=`Candidate: ${name} · Roll Number: ${roll}`;$('agree').checked=false;$('instructionError').textContent='';showView('instructions');});
+function beginExam(){if(!$('agree').checked){$('instructionError').textContent='Please confirm that you have read the instructions before starting.';return;}const now=Date.now();const lockedIdentity=state&&state.attempt>0?{name:state.name,roll:state.roll}:null;const attempt=(state?.attempt||0)+1;state={version:4,status:'running',name:lockedIdentity?lockedIdentity.name:$('name').value.trim(),roll:lockedIdentity?lockedIdentity.roll:$('roll').value.trim(),attempt,started:now,deadline:now+CONFIG.duration*1000,index:0,answers:Array(120).fill(null),marked:Array(120).fill(false),visited:Array(120).fill(false),times:Array(120).fill(0),syncAttempted:false};save();launchExam();}
+function remaining(){return Math.max(0,Math.ceil((state.deadline-Date.now())/1000));}
+function accountTime(){if(!state||state.status!=='running'||!activeSince)return;const stop=Math.min(Date.now(),state.deadline);state.times[state.index]+=Math.max(0,stop-activeSince)/1000;activeSince=document.hidden?0:Date.now();}
+function launchExam(){clearInterval(ticker);showView('exam');activeSince=document.hidden?0:Date.now();renderQuestion();tick();if(state.status==='running')ticker=setInterval(tick,1000);}
+function resumeExam(){if(!state||state.status!=='running')return;launchExam();}
+function tick(){if(!state||state.status!=='running')return;const left=remaining();$('timer').textContent=fmt(left);$('timer').classList.toggle('danger',left<=300);if(!left){finishExam(true);return;}accountTime();save();}
+function ensureRunning(){if(!state||state.status!=='running')return false;if(!remaining()){finishExam(true);return false;}return true;}
+function renderTabs(){const sec=dataset[state.index].section;$('sectionTabs').innerHTML=sections.map((s,i)=>{const ans=state.answers.slice(s.start,s.end).filter(a=>a!==null).length;return `<button class="${sec===i?'active':''}" aria-pressed="${sec===i}" onclick="go(${s.start})">सेक्शन ${i+1}: ${s.name}<small>प्रश्न ${s.start+1}–${s.end} · उत्तर ${ans}/${s.end-s.start}</small></button>`;}).join('');}
+function renderQuestion(){const q=dataset[state.index];state.visited[state.index]=true;renderTabs();$('questionNumber').textContent=`प्रश्न ${q.id} / 120 · ${sections[q.section].name}`;$('questionText').textContent=q.question;$('options').innerHTML=q.options.map((o,i)=>`<label class="option ${state.answers[state.index]===i?'selected':''}"><input type="radio" name="answer" value="${i}" ${state.answers[state.index]===i?'checked':''} onchange="choose(${i})"><span class="letter">${'ABCD'[i]}</span><span>${esc(o)}</span></label>`).join('');$('prev').disabled=state.index===0;$('next').textContent=state.index===119?'✔ सबमिट करें':state.index===29?'गृह विज्ञान सेक्शन पर जाएँ ▶':'अगला ▶';$('markBtn').textContent=state.marked[state.index]?'★ समीक्षा हटाएँ':'☆ समीक्षा';$('markBtn').setAttribute('aria-pressed',String(state.marked[state.index]));$('candidate').innerHTML=`<b>${esc(state.name)}</b><div class="muted">रोल: ${esc(state.roll)}</div><div class="muted small">प्रयास ${state.attempt} · 120 प्रश्न / 360 अंक</div>`;renderPalette();save();}
+function renderPalette(){const s=sections[dataset[state.index].section];$('paletteTitle').textContent=`${s.name} · प्रश्न ${s.start+1}–${s.end}`;let html='';for(let i=s.start;i<s.end;i++){const answered=state.answers[i]!==null;const status=state.marked[i]?'समीक्षा'+(answered?' और उत्तर दिया':''):answered?'उत्तर दिया':state.visited[i]?'उत्तर नहीं दिया':'नहीं देखा';html+=`<button class="pal ${answered?'answered':state.visited[i]?'unanswered':''} ${state.marked[i]?'marked':''} ${state.index===i?'current':''}" aria-label="प्रश्न ${i+1}: ${status}" ${state.index===i?'aria-current="true"':''} onclick="go(${i})">${i+1}</button>`;}$('palette').innerHTML=html;const a=state.answers.filter(x=>x!==null).length;$('liveSummary').textContent=`पूरे टेस्ट में उत्तर: ${a}/120 · शेष: ${120-a}`;$('progressBar').style.width=`${a/120*100}%`;}
+function go(i){if(!ensureRunning()||i<0||i>=120)return;accountTime();state.index=i;renderQuestion();$('questionText').focus({preventScroll:true});}
+function choose(i){if(!ensureRunning())return;state.answers[state.index]=i;renderQuestion();}
+function clearAnswer(){if(!ensureRunning())return;state.answers[state.index]=null;renderQuestion();}
+function toggleMark(){if(!ensureRunning())return;state.marked[state.index]=!state.marked[state.index];renderQuestion();}
+function nextQuestion(){if(state.index===119)openSubmit();else go(state.index+1);}
+function summary(s){const out={total:s.end-s.start,attempted:0,correct:0,wrong:0,skipped:0,unvisited:0,marked:0,answeredMarked:0,time:0};for(let i=s.start;i<s.end;i++){out.time+=state.times[i];if(state.marked[i]){out.marked++;if(state.answers[i]!==null)out.answeredMarked++;}if(!state.visited[i])out.unvisited++;if(state.answers[i]===null)out.skipped++;else{out.attempted++;if(state.answers[i]===dataset[i].correct)out.correct++;else out.wrong++;}}out.gross=out.correct*CONFIG.marks;out.deduction=out.wrong*CONFIG.penalty;out.net=out.gross-out.deduction;out.max=out.total*CONFIG.marks;out.accuracy=percent(out.correct,out.attempted);return out;}
+function metric(value,label,kind=''){return `<div class="metric ${kind}"><strong>${value}</strong><small>${label}</small></div>`;}
+function openSubmit(){if(!ensureRunning())return;accountTime();save();const a=summary({start:0,end:120});$('submitIdentity').textContent=`${state.name} · रोल: ${state.roll} · शेष समय: ${fmt(remaining())}`;$('submitMetrics').innerHTML=metric(120,'कुल प्रश्न')+metric(a.attempted,'उत्तर दिए','good')+metric(a.skipped,'बिना उत्तर','bad')+metric(a.marked,'समीक्षा में');$('submitTable').innerHTML=`<table><thead><tr><th>सेक्शन</th><th>कुल</th><th>उत्तर दिए</th><th>बिना उत्तर</th><th>नहीं देखे</th><th>समीक्षा</th><th>उत्तर सहित समीक्षा</th></tr></thead><tbody>${sections.map(s=>{const x=summary(s);return `<tr><td>${s.name}</td><td>${x.total}</td><td>${x.attempted}</td><td>${x.skipped}</td><td>${x.unvisited}</td><td>${x.marked}</td><td>${x.answeredMarked}</td></tr>`;}).join('')}</tbody></table>`;previousFocus=document.activeElement;$('submitDialog').showModal();$('continueBtn').focus();}
+function closeSubmit(){if($('submitDialog').open)$('submitDialog').close();previousFocus?.focus();}
+function finishExam(auto){if(!state||state.status!=='running')return;accountTime();clearInterval(ticker);activeSince=0;state.finished=Math.min(Date.now(),state.deadline);state.automatic=!!auto;state.status='finished';closeSubmit();save();renderReport();syncResult();}
+function renderReport(){showView('report');const a=summary({start:0,end:120});const used=Math.min(CONFIG.duration,Math.max(0,(state.finished-state.started)/1000));$('reportIdentity').innerHTML=`<div><b>परीक्षार्थी: ${esc(state.name)}</b><br>रोल नंबर: ${esc(state.roll)}<br><span class="muted">प्रयास ${state.attempt}${state.attempt>1?' · Re-attempt':''}</span></div><div>दिनांक: ${esc(new Date(state.finished).toLocaleString('hi-IN',{timeZone:'Asia/Kolkata'}))}<br><span class="muted">${state.automatic?'समय समाप्त होने पर स्वतः सबमिट':'परीक्षार्थी द्वारा सबमिट'}</span></div>`;$('metrics').innerHTML=metric(`${a.net} / 360`,'नेट अंक')+metric(a.attempted,'प्रयास किए')+metric(a.correct,'सही','good')+metric(a.wrong,'गलत','bad')+metric(a.skipped,'छोड़े प्रश्न')+metric(a.accuracy+'%','सटीकता')+metric(percent(a.net,360)+'%','अंक प्रतिशत')+metric(fmt(used),'कुल समय');$('scoreFormula').innerHTML=`<b>अंक गणना:</b> ${a.correct} × 3 = ${a.gross} प्राप्त अंक &nbsp;−&nbsp; ${a.wrong} × 1 = ${a.deduction} कटौती &nbsp;=&nbsp; <b>${a.net} नेट अंक</b>`;const row=(name,x)=>`<tr><td>${name}</td><td>${x.total}</td><td>${x.attempted}</td><td>${x.correct}</td><td>${x.wrong}</td><td>${x.skipped}</td><td>${x.gross}</td><td>−${x.deduction}</td><td><b>${x.net} / ${x.max}</b></td><td>${x.accuracy}%</td><td>${fmt(x.time)}</td></tr>`;$('sectionTable').innerHTML=`<table><thead><tr><th>सेक्शन</th><th>कुल</th><th>प्रयास</th><th>सही</th><th>गलत</th><th>छोड़े</th><th>प्राप्त अंक</th><th>कटौती</th><th>नेट अंक</th><th>सटीकता</th><th>सक्रिय समय</th></tr></thead><tbody>${sections.map(s=>row(s.name,summary(s))).join('')}</tbody><tfoot>${row('कुल',a)}</tfoot></table>`;$('sectionInsights').innerHTML=sections.map(s=>{const x=summary(s);return `<div class="panel"><h3>${s.name}</h3><strong>${x.net} / ${x.max} अंक · ${percent(x.net,x.max)}%</strong><p class="muted">प्रश्न प्रयास: ${percent(x.attempted,x.total)}% · गलत उत्तरों में कटौती: ${x.deduction} अंक</p><p class="muted">प्रति प्रयास औसत सक्रिय समय: ${x.attempted?fmt(x.time/x.attempted):'—'}</p><p>${x.wrong||x.skipped?`${x.wrong} गलत और ${x.skipped} छोड़े प्रश्नों की समीक्षा करें।`:'इस सेक्शन के सभी उत्तर सही हैं।'}</p></div>`;}).join('');$('reviewSection').value='all';$('reviewStatus').value='all';renderReview();$('syncStatus').textContent=state.syncAttempted?'परिणाम भेजने का अनुरोध पहले किया जा चुका है; शीट में दर्ज होने की पुष्टि यहाँ उपलब्ध नहीं है।':'';}
+function renderReview(){if(!state||state.status!=='finished')return;const sec=$('reviewSection').value,filter=$('reviewStatus').value;let count=0;$('reviews').innerHTML=dataset.map((q,i)=>{const a=state.answers[i],status=a===null?'skipped':a===q.correct?'correct':'wrong';if(sec!=='all'&&q.section!==Number(sec)||filter!=='all'&&(filter==='marked'?!state.marked[i]:filter!==status))return '';count++;const title=status==='correct'?'✓ सही · +3 अंक':status==='wrong'?'✕ गलत · −1 अंक':'○ छोड़ा · 0 अंक';return `<article class="review ${status==='correct'?'good':status==='wrong'?'bad':''}"><div class="review-head"><span class="badge">${title}</span><span class="muted small">${sections[q.section].name} · समय ${fmt(state.times[i])}${state.marked[i]?' · ★ समीक्षा':''}</span></div><div class="q">प्रश्न ${q.id}. ${esc(q.question)}</div>${q.options.map((o,j)=>`<div class="review-option ${j===q.correct?'correct':j===a?'wrong':''}"><b>${'ABCD'[j]}.</b> ${esc(o)} ${j===q.correct?' · ✓ सही उत्तर':''}${j===a?' · आपका उत्तर':''}</div>`).join('')}<p class="muted">आपका उत्तर: ${a===null?'अनुत्तरित':'ABCD'[a]+' — '+esc(q.options[a])}</p></article>`;}).join('');$('reviewCount').textContent=`${count} प्रश्न` ;if(!count)$('reviews').innerHTML='<p class="muted">इस चयन में कोई प्रश्न नहीं है।</p>';}
+function viewSaved(){if(state?.status==='finished')renderReport();}
+function reattempt(){if(!confirm('इसी नाम और रोल नंबर से नया प्रयास शुरू करें? पिछला स्थानीय परिणाम नए प्रयास से बदल जाएगा।'))return;$('name').value=state.name;$('roll').value=state.roll;$('name').readOnly=true;$('roll').readOnly=true;$('instructionIdentity').textContent=`Candidate: ${state.name} · Roll Number: ${state.roll} · Re-attempt`;$('agree').checked=false;$('instructionError').textContent='';showView('instructions');}
+function syncResult(){if(!CONFIG.sheetUrl||state.syncAttempted)return;state.syncAttempted=true;save();const a=summary({start:0,end:120});const postData={quizKey:'medhavi_full_test_120q',studentName:state.name,studentMobile:state.attempt>1?'Re-attempt':'Not Provided',rollNumber:state.roll,score:a.net,correct:a.correct,incorrect:a.wrong,skipped:a.skipped,total:120,maxMarks:360,timeUsed:fmt((state.finished-state.started)/1000),attempt:state.attempt,isReattempt:state.attempt>1,sections:sections.map(s=>({name:s.name,...summary(s)}))};$('syncStatus').textContent='परिणाम भेजने का अनुरोध किया जा रहा है…';fetch(CONFIG.sheetUrl,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(postData)}).then(()=>{$('syncStatus').textContent='परिणाम भेजने का अनुरोध पूरा हुआ। शीट में दर्ज होने की पुष्टि यहाँ उपलब्ध नहीं है।';}).catch(()=>{$('syncStatus').textContent='ऑनलाइन परिणाम भेजना संभव नहीं हुआ। आपका परिणाम इस ब्राउज़र में सुरक्षित है।';});}
+// Native canvas result image: no CDN or screenshot library required.
+function resultCanvas(){const a=summary({start:0,end:120});const c=document.createElement('canvas');c.width=1200;c.height=1340;const x=c.getContext('2d');x.fillStyle='#f8fafc';x.fillRect(0,0,c.width,c.height);x.fillStyle='#0b1e47';x.fillRect(0,0,1200,210);x.textAlign='center';x.fillStyle='#facc15';x.font='bold 46px Arial';x.fillText('MEDHAVI STUDY POINT',600,80);x.fillStyle='white';x.font='24px Arial';x.fillText('Path to Knowledge & Success',600,125);x.font='bold 30px Arial';x.fillText('TGT Full Mock · 120 Questions · 360 Marks',600,175);function line(text,y,size=25,color='#0b1e47'){x.fillStyle=color;x.font=`${size}px Arial`;x.fillText(text,600,y,1100);}line(`परीक्षार्थी: ${state.name}`,270,30);line(`रोल: ${state.roll}  |  प्रयास: ${state.attempt}${state.attempt>1?' · Re-attempt':''}`,315,24);line(new Date(state.finished).toLocaleString('hi-IN',{timeZone:'Asia/Kolkata'}),355,21,'#64748b');line(`${a.net} / 360`,455,76);line('नेट अंक / Net Score',500,23);const items=[[a.correct,'सही'],[a.wrong,'गलत'],[a.skipped,'छोड़े'],[a.accuracy+'%','सटीकता']];items.forEach(([v,label],i)=>{const left=55+i*280;x.fillStyle=['#dcfce7','#fee2e2','#ffedd5','#dbeafe'][i];x.fillRect(left,545,250,130);x.fillStyle='#0b1e47';x.font='bold 39px Arial';x.fillText(v,left+125,602);x.font='25px Arial';x.fillText(label,left+125,645);});line(`समय: ${fmt((state.finished-state.started)/1000)}  |  सही +3 · गलत −1 · छोड़ा 0`,730,25);line(`प्राप्त अंक ${a.gross} − कटौती ${a.deduction} = नेट अंक ${a.net}`,780,28);sections.forEach((s,i)=>{const z=summary(s),top=830+i*165;x.fillStyle='white';x.fillRect(55,top,1090,145);line(s.name,top+40,30);line(`${z.net} / ${z.max} अंक  |  सही ${z.correct}  |  गलत ${z.wrong}  |  छोड़े ${z.skipped}`,top+85,26);line(`सटीकता ${z.accuracy}%  |  सक्रिय समय ${fmt(z.time)}`,top+120,22,'#64748b');});line('MEDHAVI STUDY POINT · TGT Practice Test',1260,23,'#64748b');return c;}
+function safeFilename(){return 'Medhavi_TGT_'+state.name.replace(/[^\p{L}\p{N}_-]/gu,'_').slice(0,50)+'_Result.png';}
+async function downloadResultImage(){try{if(document.fonts?.ready)await document.fonts.ready;const c=resultCanvas();const a=document.createElement('a');a.download=safeFilename();a.href=c.toDataURL('image/png');a.click();$('imageStatus').textContent='रिजल्ट इमेज डाउनलोड तैयार है।';}catch(e){$('imageStatus').textContent='इमेज तैयार नहीं हो सकी। प्रिंट / PDF का उपयोग करें।';}}
+async function copyResultImage(){try{if(!navigator.clipboard?.write||typeof ClipboardItem==='undefined')throw Error('unsupported');const promise=(async()=>{if(document.fonts?.ready)await document.fonts.ready;return await new Promise((resolve,reject)=>resultCanvas().toBlob(b=>b?resolve(b):reject(Error('image')),'image/png'));})();await navigator.clipboard.write([new ClipboardItem({'image/png':promise})]);$('imageStatus').textContent='रिजल्ट इमेज कॉपी हो गई है। जहाँ चाहें पेस्ट करें।';}catch(e){$('imageStatus').textContent='इस ब्राउज़र में इमेज कॉपी नहीं हो सकी। रिजल्ट इमेज डाउनलोड बटन का उपयोग करें।';}}
+document.addEventListener('visibilitychange',()=>{if(state?.status==='running'){accountTime();if(!document.hidden){activeSince=Date.now();tick();}save();}});
+window.addEventListener('pagehide',()=>{if(state?.status==='running'){accountTime();save();}});
+window.addEventListener('storage',e=>{if(e.key===CONFIG.key&&state?.status==='running'){clearInterval(ticker);accountTime();state=null;alert('इस टेस्ट का डेटा दूसरे टैब में बदला है। एक ही टैब में टेस्ट जारी रखें।');location.reload();}});
+$('submitDialog').addEventListener('cancel',()=>{previousFocus?.focus();});
+// Translation loads only when requested. Original Hindi questions remain the source.
+let translationEnglish=false,translationLoading=false;
+window.googleTranslateElementInit=function(){new google.translate.TranslateElement({pageLanguage:'hi',includedLanguages:'en,hi',autoDisplay:false},'google_translate_element');translationLoading=false;tryTranslate(0);};
+function tryTranslate(n){const select=document.querySelector('.goog-te-combo');if(!select){if(n<20)setTimeout(()=>tryTranslate(n+1),250);else{translationLoading=false;alert('अनुवादक उपलब्ध नहीं है। इंटरनेट जाँचें और फिर प्रयास करें।');}return;}translationEnglish=!translationEnglish;select.value=translationEnglish?'en':'hi';select.dispatchEvent(new Event('change'));$('languageButton').textContent=translationEnglish?'🌐 हिंदी':'🌐 English';}
+function toggleLanguage(){if(document.querySelector('.goog-te-combo')){tryTranslate(0);return;}if(translationLoading)return;translationLoading=true;const holder=document.createElement('div');holder.id='google_translate_element';holder.hidden=true;document.body.appendChild(holder);const script=document.createElement('script');script.src='https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';script.onerror=()=>{translationLoading=false;holder.remove();script.remove();alert('अनुवाद के लिए इंटरनेट आवश्यक है। अभी अनुवादक लोड नहीं हो सका।');};document.head.appendChild(script);}
+loadSaved();
+</script></body></html>
