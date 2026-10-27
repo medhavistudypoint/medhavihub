@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ CSS Control File Path -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- Security Watermark Screen -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. Login Gate Screen -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ Back Button Path -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. Exam Workspace Screen -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 Responsive, Centered Header -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">उत्सर्जन तंत्र </span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Report Dashboard Screen -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point <br> उत्सर्जन तंत्र </div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ Dashboard Back Button -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 50 Questions Dataset (बिना explanation, 1-Line Format) -->
+    <script>
+        const QUIZ_KEY = "medhavi_free_test_d81"; 
+
+        const dataset = [
+            { id: 1, question: "मानव शरीर में उत्सर्जन तंत्र का प्रमुख अंग कौन-सा है?", options: ["हृदय", "वृक्क (गुर्दे)", "अग्न्याशय", "प्लीहा"], correct: 1 },
+            { id: 2, question: "मानव शरीर में वृक्कों की सामान्य संख्या कितनी होती है?", options: ["एक", "तीन", "दो", "चार"], correct: 2 },
+            { id: 3, question: "वृक्क की संरचनात्मक एवं क्रियात्मक इकाई क्या है?", options: ["न्यूरॉन", "नेफ्रॉन", "एल्वियोलस", "ऑस्टियोन"], correct: 1 },
+            { id: 4, question: "मानव वृक्क का आकार सामान्यतः कैसा होता है?", options: ["गोलाकार", "बेलनाकार", "सेम के बीज जैसा", "त्रिकोणाकार"], correct: 2 },
+            { id: 5, question: "वृक्क का बाहरी भाग मुख्यतः किस नाम से जाना जाता है?", options: ["मेडुला", "कॉर्टेक्स", "पेल्विस", "कैलिक्स"], correct: 1 },
+            { id: 6, question: "वृक्क का भीतरी क्षेत्र क्या कहलाता है?", options: ["कॉर्टेक्स", "कैप्सूल", "मेडुला", "हाइलम"], correct: 2 },
+            { id: 7, question: "वृक्क से मूत्र को मूत्राशय तक कौन पहुँचाता है?", options: ["मूत्रमार्ग", "मूत्रवाहिनी", "वृक्क धमनी", "वृक्क शिरा"], correct: 1 },
+            { id: 8, question: "मूत्र अस्थायी रूप से किस अंग में संग्रहित होता है?", options: ["वृक्क", "मूत्रवाहिनी", "मूत्राशय", "मूत्रमार्ग"], correct: 2 },
+            { id: 9, question: "मूत्राशय से मूत्र शरीर के बाहर किसके माध्यम से निकलता है?", options: ["मूत्रवाहिनी", "मूत्रमार्ग", "वृक्क शिरा", "वृक्क धमनी"], correct: 1 },
+            { id: 10, question: "वृक्क में वह स्थान जहाँ से मूत्रवाहिनी, रक्त वाहिकाएँ एवं तंत्रिकाएँ गुजरती हैं, क्या कहलाता है?", options: ["हाइलम", "ग्लोमेरुलस", "बोमन कैप्सूल", "हेनले का लूप"], correct: 0 },
+            { id: 11, question: "ग्लोमेरुलस मुख्यतः किससे बना होता है?", options: ["पेशी तंतुओं से", "रक्त केशिकाओं के गुच्छे से", "तंत्रिका कोशिकाओं से", "उपास्थि से"], correct: 1 },
+            { id: 12, question: "ग्लोमेरुलस को प्यालेनुमा संरचना में कौन घेरता है?", options: ["बोमन कैप्सूल", "मूत्राशय", "वृक्क पेल्विस", "मूत्रवाहिनी"], correct: 0 },
+            { id: 13, question: "ग्लोमेरुलस में रक्त किस छोटी धमनी द्वारा प्रवेश करता है?", options: ["अपवाही धमनिका (Efferent arteriole)", "अभिवाही धमनिका (Afferent arteriole)", "वृक्क शिरा", "केशिका शिरिका"], correct: 1 },
+            { id: 14, question: "ग्लोमेरुलस से रक्त बाहर किसके द्वारा जाता है?", options: ["अभिवाही धमनिका", "अपवाही धमनिका", "मूत्रवाहिनी", "वृक्क पेल्विस"], correct: 1 },
+            { id: 15, question: "मूत्र निर्माण की प्रथम प्रमुख प्रक्रिया कौन-सी है?", options: ["मूत्र का संग्रह", "ग्लोमेरुलर निस्यंदन", "मूत्रत्याग", "पसीने का निर्माण"], correct: 1 },
+            { id: 16, question: "ग्लोमेरुलर निस्यंदन में मुख्य रूप से किस बल की भूमिका होती है?", options: ["गुरुत्वाकर्षण बल", "ग्लोमेरुलर रक्तचाप", "पेशियों का संकुचन", "वायुमंडलीय दाब"], correct: 1 },
+            { id: 17, question: "स्वस्थ वयस्क मानव में सामान्यतः प्रतिदिन कितना ग्लोमेरुलर निस्यंद बनता है?", options: ["लगभग 1.5 लीटर", "लगभग 18 लीटर", "लगभग 180 लीटर", "लगभग 500 लीटर"], correct: 2 },
+            { id: 18, question: "नेफ्रॉन के किस भाग में अधिकांश उपयोगी पदार्थों का पुनःअवशोषण होता है?", options: ["समीपस्थ कुंडलित नलिका ", "मूत्राशय", "मूत्रमार्ग", "वृक्क पेल्विस"], correct: 0 },
+            { id: 19, question: "ग्लूकोज और अमीनो अम्ल जैसे उपयोगी पदार्थ सामान्यतः कहाँ पुनःअवशोषित होते हैं?", options: ["मूत्राशय में", "समीपस्थ कुंडलित नलिका में", "मूत्रवाहिनी में", "मूत्रमार्ग में"], correct: 1 },
+            { id: 20, question: "मूत्र निर्माण की तीन प्रमुख प्रक्रियाओं का सही क्रम कौन-सा है?", options: ["पुनःअवशोषण → निस्यंदन → स्रवण", "स्रवण → मूत्रत्याग → निस्यंदन", "निस्यंदन → पुनःअवशोषण → नलिकीय स्रवण", "मूत्रत्याग → निस्यंदन → पुनःअवशोषण"], correct: 2 },
+            { id: 21, question: "हेनले के लूप का प्रमुख कार्य क्या है?", options: ["रक्त में ऑक्सीजन पहुँचाना", "वृक्क के मेडुला में परासरण प्रवणता बनाए रखने में सहायता करना", "पित्त का निर्माण करना", "लाल रक्त कोशिकाओं का निर्माण करना"], correct: 1 },
+            { id: 22, question: "हेनले के लूप की अवरोही भुजा सामान्यतः किसके लिए अधिक पारगम्य होती है?", options: ["जल", "प्रोटीन", "लाल रक्त कोशिकाएँ", "प्लेटलेट्स"], correct: 0 },
+            { id: 23, question: "हेनले के लूप की आरोही भुजा की प्रमुख विशेषता क्या है?", options: ["यह जल के लिए अत्यधिक पारगम्य होती है।", "यह जल के लिए लगभग अपारगम्य होती है।", "इसमें मूत्र का संग्रह होता है।", "इसमें रक्त कोशिकाओं का निर्माण होता है।"], correct: 1 },
+            { id: 24, question: "ADH हार्मोन का प्रमुख कार्य क्या है?", options: ["मूत्र में ग्लूकोज बढ़ाना", "वृक्क की नलिकाओं में जल के पुनःअवशोषण को बढ़ाना", "पित्त का स्राव करना", "रक्त में कैल्शियम का निर्माण करना"], correct: 1 },
+            { id: 25, question: "ADH की कमी से सामान्यतः कौन-सा विकार हो सकता है?", options: ["मधुमेह इंसिपिडस", "रिकेट्स", "स्कर्वी", "रतौंधी"], correct: 0 },
+            { id: 26, question: "एल्डोस्टेरोन हार्मोन मुख्यतः किस प्रक्रिया को प्रभावित करता है?", options: ["सोडियम के पुनःअवशोषण और पोटैशियम के उत्सर्जन को", "हीमोग्लोबिन के निर्माण को", "भोजन के पाचन को", "दृष्टि की प्रक्रिया को"], correct: 0 },
+            { id: 27, question: "जक्स्टाग्लोमेरुलर उपकरण (JGA) किसके नियमन में महत्त्वपूर्ण भूमिका निभाता है?", options: ["ग्लोमेरुलर निस्यंदन दर", "फेफड़ों की क्षमता", "भोजन का अवशोषण", "शरीर की लंबाई"], correct: 0 },
+            { id: 28, question: "रेनिन हार्मोन का स्राव मुख्यतः वृक्क की किस संरचना से संबंधित है?", options: ["जक्स्टाग्लोमेरुलर कोशिकाएँ", "मूत्राशय की पेशियाँ", "बोमन कैप्सूल की बाहरी दीवार", "मूत्रमार्ग की उपकला"], correct: 0 },
+            { id: 29, question: "मूत्राशय से मूत्र बाहर निकालने की प्रक्रिया क्या कहलाती है?", options: ["निस्यंदन", "परासरण", "मूत्रत्याग ", "विसरण"], correct: 2 },
+            { id: 30, question: "मूत्रत्याग की प्रक्रिया के नियंत्रण में किसका महत्त्वपूर्ण योगदान होता है?", options: ["केंद्रीय तंत्रिका तंत्र", "केवल प्लीहा", "केवल अग्न्याशय", "केवल थायरॉइड ग्रंथि"], correct: 0 },
+            { id: 31, question: "मनुष्य में नाइट्रोजनयुक्त प्रमुख उत्सर्जी पदार्थ कौन-सा है?", options: ["ग्लाइकोजन", "यूरिया", "स्टार्च", "हीमोग्लोबिन"], correct: 1 },
+            { id: 32, question: "अमोनिया को यूरिया में परिवर्तित करने का प्रमुख कार्य किस अंग में होता है?", options: ["हृदय", "यकृत", "फेफड़े", "प्लीहा"], correct: 1 },
+            { id: 33, question: "यूरिया का निर्माण मुख्यतः किस चक्र द्वारा होता है?", options: ["क्रेब्स चक्र", "यूरिया चक्र", "कैल्विन चक्र", "ग्लाइकोलाइसिस"], correct: 1 },
+            { id: 34, question: "यूरिया का रक्त से निस्यंदन करके उसे मूत्र के माध्यम से बाहर निकालने में प्रमुख भूमिका किसकी है?", options: ["वृक्क", "हृदय", "अग्न्याशय", "पित्ताशय"], correct: 0 },
+            { id: 35, question: "फेफड़े उत्सर्जन में किस पदार्थ को बाहर निकालते हैं?", options: ["यूरिया की अधिकांश मात्रा", "कार्बन डाइऑक्साइड और जलवाष्प", "पित्त वर्णक", "यूरिक अम्ल के क्रिस्टल"], correct: 1 },
+            { id: 36, question: "त्वचा के माध्यम से कौन-से पदार्थ पसीने के साथ बाहर निकलते हैं?", options: ["जल और लवण", "केवल ग्लूकोज", "केवल हीमोग्लोबिन", "केवल प्रोटीन"], correct: 0 },
+            { id: 37, question: "अमोनिया के उत्सर्जन के लिए सामान्यतः किसकी अधिक आवश्यकता होती है?", options: ["जल", "वसा", "कैल्शियम", "विटामिन D"], correct: 0 },
+            { id: 38, question: "यूरिक अम्ल के रूप में नाइट्रोजनयुक्त अपशिष्ट उत्सर्जित करने वाले जीवों का उदाहरण कौन-सा है?", options: ["अधिकांश पक्षी", "मनुष्य", "गाय", "कुत्ता"], correct: 0 },
+            { id: 39, question: "मनुष्य किस प्रकार का नाइट्रोजनयुक्त उत्सर्जी जीव है?", options: ["अमोनोटेलिक", "यूरियोटेलिक", "यूरिकोटेलिक", "इनमें से कोई नहीं"], correct: 1 },
+            { id: 40, question: "पित्त वर्णकों और कुछ अन्य अपशिष्ट पदार्थों के उत्सर्जन में कौन-सा अंग महत्त्वपूर्ण है?", options: ["यकृत", "हृदय", "थाइमस", "थायरॉइड"], correct: 0 },
+            { id: 41, question: "रक्त में यूरिया तथा अन्य नाइट्रोजनयुक्त अपशिष्टों की असामान्य वृद्धि से संबंधित अवस्था क्या कहलाती है?", options: ["यूरेमिया", "एनीमिया", "स्कर्वी", "रतौंधी"], correct: 0 },
+            { id: 42, question: "वृक्क की पथरी को अंग्रेजी में क्या कहते हैं?", options: ["ग्लोमेरुलोनेफ्राइटिस", "रीनल कैल्कुली", "यूरेमिया", "सिस्टाइटिस"], correct: 1 },
+            { id: 43, question: "ग्लोमेरुलस में सूजन से संबंधित रोग कौन-सा है?", options: ["ग्लोमेरुलोनेफ्राइटिस", "मधुमेह इंसिपिडस", "हीमोफीलिया", "गठिया"], correct: 0 },
+            { id: 44, question: "वृक्क की कार्यक्षमता गंभीर रूप से घटने पर रक्त से अपशिष्ट हटाने के लिए कौन-सी प्रक्रिया अपनाई जा सकती है?", options: ["प्रकाश संश्लेषण", "डायलिसिस", "किण्वन", "परागण"], correct: 1 },
+            { id: 45, question: "हीमोडायलिसिस में मुख्यतः किसका उपयोग किया जाता है?", options: ["कृत्रिम खनन झिल्ली", "पित्ताशय", "लाल रक्त कोशिकाओं का निर्माण", "फेफड़ों की वायुकोशिकाएँ"], correct: 0 },
+            { id: 46, question: "सामान्य वयस्क मनुष्य में 24 घंटे में मूत्र की मात्रा सामान्यतः लगभग कितनी हो सकती है?", options: ["10–50 मिलीलीटर", "1–2 लीटर", "8–10 लीटर", "15–20 लीटर"], correct: 1 },
+            { id: 47, question: "स्वस्थ व्यक्ति के मूत्र में सामान्यतः कौन-सा पदार्थ नहीं पाया जाना चाहिए या केवल नगण्य मात्रा में होना चाहिए?", options: ["जल", "यूरिया", "बड़ी मात्रा में ग्लूकोज", "घुले हुए लवण"], correct: 2 },
+            { id: 48, question: "सामान्यतः वृक्क की धमनी किस प्रकार का रक्त वृक्क तक पहुँचाती है?", options: ["अपशिष्ट पदार्थों सहित रक्त, जिसे वृक्क छानता है", "केवल शुद्ध मूत्र", "केवल लसीका", "केवल ऑक्सीजन रहित वायु"], correct: 0 },
+            { id: 49, question: "वृक्क प्रत्यारोपण का मुख्य उद्देश्य क्या है?", options: ["मूत्राशय का आकार बढ़ाना", "खराब वृक्क के स्थान पर कार्यशील वृक्क उपलब्ध कराना", "यकृत को हटाना", "फेफड़ों की क्षमता घटाना"], correct: 1 },
+            { id: 50, question: "वृक्क शरीर में जल एवं लवण संतुलन बनाए रखने में किस प्रक्रिया द्वारा प्रमुख भूमिका निभाते हैं?", options: ["परासरण नियमन ", "प्रकाश संश्लेषण", "वाष्पोत्सर्जन", "पाचन"], correct: 0 }
+        ];
+    </script>
+
+    <!-- ✅ JS Logic Control File Path -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+                                                                                                                                                                                     </html>
+                                                                                                                                                                                     
