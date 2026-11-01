@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Home Science Test</title>
+    <!-- ✅ CSS Control File Path -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- Security Watermark Screen -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. Login Gate Screen -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ Back Button Path -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. Exam Workspace Screen -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 Responsive, Centered Header -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">हमारे परिधान एवं वस्त्र (अध्याय 5)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Report Dashboard Screen -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point <br> हमारे परिधान एवं वस्त्र (अध्याय 5)</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ Dashboard Back Button -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 50 Questions Dataset (बिना explanation, 1-Line Format) -->
+    <script>
+        const QUIZ_KEY = "medhavi_free_test_d86"; 
+
+        const dataset = [
+            { id: 1, question: "सभी वस्त्रों (Textiles) की सबसे सूक्ष्मतम एवं आधारभूत मूल इकाई क्या होती है?", options: ["सूत (Yarn)", "रेशा (Fibre)", "कपड़ा (Fabric)", "परिष्करण (Finish)"], correct: 1 },
+            { id: 2, question: "किसी रेशे को वस्त्र उपयोगी (Textile Fibre) बनाने के लिए उसमें निम्नलिखित में से कौन-सा 'सबसे अनिवार्य गुण' होना चाहिए?", options: ["डाई अवशोषण की क्षमता", "कताई योग्यता (Spinnability)", "अत्यधिक चमक", "अग्निरोधकता"], correct: 1 },
+            { id: 3, question: "सुमेलित कीजिए (प्राकृतिक सेलुलोसिक रेशे एवं उनके स्रोत/प्रकार):<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची I (रेशा)</th><th>सूची II (प्राकृतिक स्रोत/प्रकार)</th></tr></thead><tbody><tr><td>p. कॉटन (कपास)</td><td>1. बास्ट रेशा (Bast fibre)</td></tr><tr><td>q. फ्लैक्स (लिनेन)</td><td>2. बीज के रुएँ (Seed hairs)</td></tr><tr><td>r. सीसल (अगेव)</td><td>3. नट हस्क रेशा (Nut husk)</td></tr><tr><td>s. कॉयर (नारियल)</td><td>4. पत्ती रेशा (Leaf fibre)</td></tr></tbody></table>", options: ["p-2, q-1, r-4, s-3", "p-1, q-2, r-3, s-4", "p-2, q-4, r-1, s-3", "p-4, q-3, r-2, s-1"], correct: 0 },
+            { id: 4, question: "निम्नलिखित में से कौन-सा प्राकृतिक रेशा 'खनिज रेशा' (Mineral Fibre) की श्रेणी में आता है?", options: ["कापोक", "एस्बेस्टस", "हेम्प", "अजलॉन"], correct: 1 },
+            { id: 5, question: "प्राकृतिक रेशों के अंतर्गत 'प्रोटीन रेशों' के स्रोत के संदर्भ में कौन-सा मिलान सही है?", options: ["ऊन – जंतु स्राव", "रेशम – जंतु स्राव", "लिनेन – जंतु रोम", "कापोक – जंतु रोम"], correct: 1 },
+            { id: 6, question: "वाणिज्यिक रूप से निर्मित होने वाला विश्व का 'सबसे पहला विनिर्मित रेशा' कौन-सा था और इसका उत्पादन किस वर्ष शुरू हुआ?", options: ["नायलॉन, 1940 में", "रेयान, 1895 में", "पोलीएस्टर, 1920 में", "एक्रीलिक, 1950 में"], correct: 1 },
+            { id: 7, question: "रेयान को प्रारंभिक समय में 'कृत्रिम रेशम' या 'कलात्मक (आर्ट) रेशम' क्यों कहा जाता था?", options: ["क्योंकि इसे सीधे रेशम के कीड़ों से प्राप्त किया जाता था।", "क्योंकि यह शहतूत की पत्तियों को खाकर बनाए गए रेशम जैसा दिखने वाला मानव-निर्मित सेलुलोसिक रेशा था।", "क्योंकि यह नायलॉन से भी अधिक मजबूत था।", "क्योंकि इसका रासायनिक सूत्र प्रोटीन जैसा था।"], correct: 1 },
+            { id: 8, question: "विनिर्मित रेशों के निर्माण में वह तरल क्या कहलाता है जिसे स्पिनरेट के सूक्ष्म छिद्रों से गुजारा जाता है?", options: ["स्कवरिंग घोल (Scouring solution)", "चक्रण घोल (Spinning solution)", "लैप्स (Laps)", "रोविंग मिश्रण (Roving mix)"], correct: 1 },
+            { id: 9, question: "स्पिनरेट (Spinneret) क्या होता है?", options: ["धागे की कताई करने वाला हाथ से चलने वाला चरखा।", "बहुत छोटे-छोटे छिद्रों की श्रृंखला वाला थिम्बिल (अंगुश्ताना) के आकार का एक चंचु (Nozzle)।", "कपड़ों को समकोण पर बुनने वाला करघा।", "ऊन से ग्रीस और पसीना निकालने की एक मशीन।"], correct: 1 },
+            { id: 10, question: "सुमेलित कीजिए (विनिर्मित रेशे एवं उनके विशिष्ट प्रकार/व्यापारिक नाम):<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची I (रेशे का वर्ग)</th><th>सूची II (उदाहरण / ट्रेड नाम)</th></tr></thead><tbody><tr><td>p. पुनर्योजित सेलुलोसिक</td><td>1. क्यूप्रैमोनियम, विस्कोस</td></tr><tr><td>q. गैर-सेलुलोसिक (सिंथेटिक)</td><td>2. ऑर्लान, कैशमीलॉन</td></tr><tr><td>r. एक्रीलिक</td><td>3. नायलॉन, पोलीएस्टर</td></tr><tr><td>s. खनिज/धात्विक रेशा</td><td>4. ल्यूरेक्स, फाइबर ग्लास</td></tr></tbody></table>", options: ["p-1, q-3, r-2, s-4", "p-2, q-1, r-4, s-3", "p-1, q-2, r-3, s-4", "p-4, q-3, r-2, s-1"], correct: 0 },
+            { id: 11, question: "निम्नलिखित में से कौन-सा रेशा 'आशोधित सेलुलोसिक' (Modified Cellulosic) वर्ग के अंतर्गत आता है?", options: ["विस्कोस रेयान", "एसीटेट (सैकेंडरी एसीटेट, ट्राईएसीटेट)", "अजलॉन", "स्पैंडेक्स"], correct: 1 },
+            { id: 12, question: "सूत (Yarn) की सही तकनीकी परिभाषा क्या है?", options: ["बिना बुने हुए रेशों की समतल शीट।", "वस्त्र रेशों अथवा फिलामेंट की लंबी-लंबी बटें जो कपड़ा बनाने हेतु धागों की बुनाई के लिए उपयुक्त होती हैं।", "केवल कपड़ों की सिलाई करने के लिए बाजार में मिलने वाली 40 नंबर की रील।", "पौधों के तने से निकाला गया अन-संसाधित गूदा।"], correct: 1 },
+            { id: 13, question: "ऐतिहासिक रूप से अविवाहित महिलाओं के लिए 'स्पिन्सटर' (Spinster) शब्द का उद्भव किस कार्य के संदर्भ में हुआ था?", options: ["वे खेतों से कपास बीनने का कार्य करती थीं।", "उनकी उंगलियां दक्ष होने के कारण वे बेहतरीन सूत की कताई (Spinning) करती थीं।", "वे कपड़ों पर हाथ से छपाई करती थीं।", "वे करघे पर ताना सूत चढ़ाने का कार्य करती थीं।"], correct: 1 },
+            { id: 14, question: "सूत प्रसंस्करण (Spinning process) में 'सफाई' (Cleaning) के उपरांत बनने वाली ढीले रेशों की वेल्लित शीट को क्या कहा जाता है?", options: ["पूनी (Sliver)", "लैप्स (Laps)", "रोविंग (Roving)", "शंकु (Cone)"], correct: 1 },
+            { id: 15, question: "कार्डिंग (धुनना) और कॉम्बिंग (झाड़न) प्रक्रियाओं के संदर्भ में निम्नलिखित में से कौन-सा कथन सत्य है?", options: ["कार्डिंग से सभी छोटे रेशे पूरी तरह बाहर निकल जाते हैं।", "कॉम्बिंग बालों में ब्रश करने के समान है जिससे छोटी अशुद्धियाँ और छोटे रेशे दूर हो जाते हैं और केवल लंबे रेशे समानांतर बचते हैं।", "कार्डिंग हमेशा कॉम्बिंग के बाद की जाने वाली प्रक्रिया है।", "कॉम्बिंग से कपड़े की सतह खुरदरी बन जाती है।"], correct: 1 },
+            { id: 16, question: "'पूनी' (Sliver) की सही भौतिक संरचना क्या होती है?", options: ["1/8 व्यास का कसकर बटा हुआ धागा।", "खुले रेशों की रस्सी जैसा ढेर जिसका व्यास 2 से 4 सेंटीमीटर होता है।", "करघे पर लंबवत खिंचा हुआ मजबूत ताना सूत।", "स्पिनरेट से निकला हुआ चिपचिपा तरल।"], correct: 1 },
+            { id: 17, question: "जब दो अलग-अलग प्रकार के रेशों (जैसे कपास और ऊन को मिलाकर कॉट्सवूल) का मिश्रित सूत तैयार करना होता है, तो यह मिश्रण किस चरण में किया जाता है?", options: ["केवल ओटाई (Ginning) के समय", "तनुकरण और तानने (Drawing and roving) के दौरान पूनियों को जोड़ते समय", "कपड़ा बुनने के बाद परिष्करण में", "कपड़ों की सिलाई के समय"], correct: 1 },
+            { id: 18, question: "रोविंग मशीन (Roving machine) में पूनी को तब तक तनु किया जाता है जब तक कि वह अपने मूल व्यास के कितने माप की न हो जाए?", options: ["1/2 से 1/3", "1/4 से 1/8", "1/10 से 1/20", "3/4 से 5/8"], correct: 1 },
+            { id: 19, question: "'सूत संख्या' (Yarn Number) के संदर्भ में निम्नलिखित कथनों पर विचार कीजिए:<br>1. सूत संख्या रेशे के भार और उससे बनाए गए सूत की लंबाई के बीच का निश्चित संबंध दर्शाती है।<br>2. अधिक संख्या वाली रील का धागा अपेक्षाकृत अधिक मोटा और खुरदरा होता है।<br>उपरोक्त में से कौन-सा/से कथन सही है/हैं?", options: ["केवल 1", "केवल 2", "1 और 2 दोनों", "न तो 1 और न ही 2"], correct: 0 },
+            { id: 20, question: "जीन्स की डेनिम (Denim) सामग्री में पाई जाने वाली स्पष्ट उभरी हुई लकीरें सूत की किस विशेषता का परिणाम हैं?", options: ["ढीली बटें (Loose twist)", "अत्यधिक कसकर बटे गए सूत (Tight twist / उच्च TPI)", "बिना बटे हुए सीधे फिलामेंट", "बिना बुने हुए फेल्ट रेशे"], correct: 1 },
+            { id: 21, question: "सीधे रेशों से बिना सूत बनाए (Without yarn stage) तैयार किए जाने वाले कपड़े कौन-से हैं?", options: ["पापलीन और कैम्ब्रिक", "फेल्ट्स (नमदा) और बॉन्डेड/बिना बुने कपड़े", "मखमल और कॉर्डरॉय", "डेनिम और केसमेंट"], correct: 1 },
+            { id: 22, question: "बुनाई (Weaving) के संदर्भ में 'ताना' (Warp) और 'बाना/पूरक' (Weft/Filling) के संबंध में कौन-सा कथन असत्य है?", options: ["ताना सूत करघे पर लंबाई के बल निर्धारित प्रतिबल में लगाया जाता है।", "बाना सूत चौड़ाई के बल ताना सूत के समकोण पर अंतर्ग्रथित किया जाता है।", "बुने हुए कपड़े में बाना सूत की दिशा में कपड़ा सबसे अधिक मजबूत होता है।", "कपड़े के आबद्ध (सुलझे न होने वाले) किनारे को 'सेल्वेज' (किनारा) कहते हैं।"], correct: 2 },
+            { id: 23, question: "करघे (Loom) में जटिल और प्रतीकात्मक डिज़ाइन बनाने के लिए किन विशिष्ट अटैचमेंट्स (संलग्नकों) का उपयोग किया जाता है?", options: ["कार्डिंग और कॉम्बिंग", "डोबी (Dobby) और जैक्वार्ड (Jacquard)", "रोविंग और स्पिनरेट", "टेंटरिंग और कैलेंडरिंग"], correct: 1 },
+            { id: 24, question: "तौलिए (बिना कटे लूप) तथा मखमल/कॉर्डरॉय (कटे हुए लूप) की विशिष्ट सतह बुनाई के किस तरीके से तैयार की जाती है?", options: ["केवल बास्ट रेशों को चिपकाकर", "बुनाई के दौरान अतिरिक्त सूत को लूप के रूप में छोड़कर (जिसे काटा या बिना काटा रखा जाता है)", "केवल दो सलाइयों से गोलाकार निटिंग करके", "बिना सूत के सीधे रासायनिक बंध बनाकर"], correct: 1 },
+            { id: 25, question: "'निटिंग' (बुनाई/Knitting) की बुनियादी संरचनात्मक परिभाषा क्या है?", options: ["सूत के दो सेटों का समकोण पर अंतर्ग्रथन।", "सूत के कम-से-कम एक सेट की आपस में फंदे डालकर इंटरलूपिंग (Interlooping) करना।", "तीन या अधिक धागों को विकर्ण रूप में गूँथना।", "सूतों के बीच बड़े ज्यामितीय अंतराल बनाकर गाँठ लगाना।"], correct: 1 },
+            { id: 26, question: "ताना निटिंग (Warp knitting) और बाना निटिंग (Weft knitting) में क्या मुख्य तकनीकी अंतर है?", options: ["वेफ्ट निटिंग केवल औद्योगिक मशीनों पर होती है, वार्प निटिंग हाथ से होती है।", "वेफ्ट निटिंग में चौड़ाई के साथ फंदे बनते हैं और इसे आकार दिया जा सकता है, जबकि वार्प निटिंग से सतत लंबाई का कपड़ा बनता है जिसे काटकर सिला जा सकता है।", "वार्प निटिंग में लचीलापन बिल्कुल नहीं होता।", "वेफ्ट निटिंग कभी उधड़ नहीं सकती।"], correct: 1 },
+            { id: 27, question: "खेलकूद के वस्त्रों (Sportswear) और अंतःवस्त्रों (Innerwear) के लिए बुने हुए (Knitted) कपड़े सबसे उपयुक्त क्यों माने जाते हैं?", options: ["क्योंकि ये अत्यधिक कठोर और अभेद्य होते हैं।", "क्योंकि फंदों के कारण इनमें अधिक लचीलापन/सुनम्यता होती है तथा ये सरंध्र होने से वायु का आवागमन सुगम बनाते हैं।", "क्योंकि ये पानी बिल्कुल नहीं सोखते।", "क्योंकि इन पर कभी प्रेस करने की आवश्यकता नहीं होती।"], correct: 1 },
+            { id: 28, question: "जूते के फीते, रस्सियाँ और तारों के रोधन (Insulation) में आमतौर पर किस कपड़ा निर्माण विधि का उपयोग दिखता है?", options: ["नेट्स (जाल)", "ब्रेडिंग (गूँथना / वेणी)", "लेस", "फेल्टिंग"], correct: 1 },
+            { id: 29, question: "'सूत बटने, अंतरवयन (आर-पार बुनाई) और गाँठ बाँधने (नॉटिंग) की प्रक्रियाओं के सम्मिश्रण से बना विवृत कार्य वाला सूक्ष्म डिज़ाइनों का कपड़ा' क्या कहलाता है?", options: ["लेस (Lace)", "नेट (Net)", "ब्रेड", "फेल्ट"], correct: 0 },
+            { id: 30, question: "कपड़ों के परिष्करण (Finishing) के अंतर्गत 'नवीकरणीय परिष्करण' (Renewable Finish) का उदाहरण कौन-सा है?", options: ["पक्की डाई करना", "कपड़ों में मांड (स्टार्च) लगाना अथवा नील चढ़ाना", "सैनफोराइजेशन (सिकुड़न मुक्ति)", "अग्निमंदक परिष्करण"], correct: 1 },
+            { id: 31, question: "वस्त्र परिष्करण में 'सैनफोराइज़ेशन' (Sanforization) का मुख्य उद्देश्य क्या होता है?", options: ["कपड़े को अग्निरोधक बनाना", "कपड़े को जल विकर्षक बनाना", "कपड़े को सिकुड़न-मुक्त (Shrink-resistant) बनाना", "कपड़े की सतह पर रोएँ उठाना"], correct: 2 },
+            { id: 32, question: "डाई करने (Dyeing) और छपाई करने (Printing) के बीच मुख्य तकनीकी अंतर क्या है?", options: ["डाई केवल रसायनों से होती है, छपाई केवल प्राकृतिक रंगों से।", "डाई में पूरे कपड़े को एक समान रंगा जाता है, जबकि प्रिंटिंग में रंगों का अनुप्रयोग केवल डिज़ाइन वाले विशिष्ट क्षेत्रों तक सीमित (स्थानीकृत) होता है।", "प्रिंटिंग केवल रेशे के स्तर पर की जा सकती है।", "डाई कभी पक्की नहीं होती, प्रिंटिंग हमेशा पक्की होती है।"], correct: 1 },
+            { id: 33, question: "कपास के रेशे के भौतिक गुणों के संबंध में कौन-सा कथन असत्य है?", options: ["कपास एक प्राकृतिक सेलुलोसिक स्टेपल रेशा है।", "यह सबसे छोटा रेशा है जिसकी लंबाई 1 सेमी से 5 सेमी तक होती है।", "कपास का कपड़ा वजन में अन्य अधिकांश रेशों की तुलना में बहुत हल्का होता है।", "इसमें नमी सोखने की अच्छी क्षमता होती है और यह सरलता से सूख जाता है।"], correct: 2 },
+            { id: 34, question: "कपास के रेशों से बने कुछ प्रमुख पारंपरिक कपड़ों का सही समूह कौन-सा है?", options: ["टसर, मूंगा, शिफॉन", "मसलिन, कैम्ब्रिक, पापलीन, केसमेंट, डेनिम", "टेरीलीन, डेकरान, कैशमीलॉन", "ल्यूरेक्स, स्पैंडेक्स, विस्कोस"], correct: 1 },
+            { id: 35, question: "लिनेन (Linen) प्राप्त करने के लिए फ्लैक्स के पौधों के तनों को पानी में गलाने की प्रक्रिया को क्या कहा जाता है?", options: ["ओटाई (Ginning)", "अपगलन (रैटिंग - Retting)", "शीयरिंग (कतरना)", "अभिमार्जन (Scouring)"], correct: 1 },
+            { id: 36, question: "कपास की तुलना में लिनेन के गुणों के संदर्भ में कौन-सा कथन सही है?", options: ["लिनेन का रेशा कपास से छोटा और कमजोर होता है।", "लिनेन कपास से लंबा, सूक्ष्म और अधिक मजबूत होता है, लेकिन यह रंगों को बहुत जल्दी अवशोषित नहीं करता।", "लिनेन नमी बिल्कुल नहीं सोखता।", "लिनेन एक जंतु प्रोटीन रेशा है।"], correct: 1 },
+            { id: 37, question: "भेड़ से उतारे गए उस ऊन को क्या कहते हैं जिसे एक ही टुकड़े (Single piece) में रखने का प्रयास किया जाता है?", options: ["लैप", "कर्तित ऊन (फ्लीस - Fleece)", "पूनी", "रोविंग"], correct: 1 },
+            { id: 38, question: "ऊन के प्रसंस्करण में 'अभिमाजन' (Scouring) और 'कार्बनीकरण' (Carbonization) का क्रमशः क्या उद्देश्य है?", options: ["ऊन को रंगना और उसकी कताई करना।", "धूल, ग्रीस व पसीना हटाना; तथा फंसी हुई सूखी पत्तियां व डंठल दूर करना।", "ऊन को सीधा करना और उस पर मांड लगाना।", "ऊन को अग्निरोधक बनाना।"], correct: 1 },
+            { id: 39, question: "ऊन के रेशे में ऐसा कौन-सा अनूठा गुण होता है जिसके कारण यह काफी पानी सोखने के बाद भी सतह पर गीला महसूस नहीं होता?", options: ["इसके आंतरिक भाग में नायलॉन का सम्मिश्रण होना।", "इसकी सतह पर जल-विकर्षक शल्क (Surface scales) का होना।", "रेशे का पूरी तरह से खोखला होना।", "इस पर कृत्रिम मोम की परत चढ़ी होना।"], correct: 1 },
+            { id: 40, question: "रेशम उत्पादन (Sericulture) के संदर्भ में कौन-सा कथन गलत है?", options: ["शहतूत की नियंत्रित खेती से मुलायम और लंबे रेशे प्राप्त होते हैं।", "वन्य या प्राकृतिक दशाओं में टसर जैसा खुरदरा और मजबूत रेशम प्राप्त होता है।", "प्राकृतिक तंतु रेशा होने के कारण पूर्ण कोकून से प्राप्त रेशम को सामान्य कताई की आवश्यकता नहीं होती।", "कीड़े द्वारा तोड़े गए क्षतिग्रस्त कोकूनों से कभी कोई धागा नहीं बनाया जा सकता।"], correct: 3 },
+            { id: 41, question: "इतिहास के अनुसार, चीनियों ने रेशम उत्पादन की तकनीक को विश्व से कितने वर्षों तक गोपनीय रखा था?", options: ["लगभग 500 वर्षों तक", "1000 वर्षों तक", "2000 वर्षों से भी अधिक समय तक", "केवल 100 वर्षों तक"], correct: 2 },
+            { id: 42, question: "पूर्णतः रसायनों से संश्लेषित पहला वास्तविक कृत्रिम रेशा कौन-सा था और 1940 में इसका पहला सफल व्यावसायिक परिधान उत्पाद क्या था?", options: ["रेयान; शर्ट्स", "नायलॉन; जुराबें और स्टॉकिंग्स", "पोलीएस्टर; साड़ियां", "एक्रीलिक; कंबल"], correct: 1 },
+            { id: 43, question: "पोलीएस्टर (टेरीलीन/टेरीन) रेशे का सबसे प्रमुख और लाभदायक गुणधर्म क्या है?", options: ["यह गर्मियों में अत्यधिक पसीना सोखता है।", "इसमें सलवटें (Wrinkles) नहीं पड़तीं।", "यह जलने पर राख नहीं छोड़ता।", "यह ऊन से भी अधिक भारी होता है।"], correct: 1 },
+            { id: 44, question: "वह कौन-सा कृत्रिम रेशा है जो दिखने और छूने में ऊन से इतना मिलता-जुलता है कि विशेषज्ञ भी आसानी से अंतर नहीं बता पाते और जिसे प्रायः 'कैशमीलॉन' कहा जाता है?", options: ["नायलॉन", "स्पैंडेक्स", "एक्रीलिक", "विस्कोस"], correct: 2 },
+            { id: 45, question: "प्राकृतिक रबड़ का कृत्रिम समरूप (इलैस्टोमरी रेशा) कौन-सा है जिसका उपयोग अत्यधिक खिंचाव और सुनम्यता वाले वस्त्रों में होता है?", options: ["टेरीलीन", "स्पैंडेक्स अथवा लाइक्रा", "क्यूप्रैमोनियम", "अजलॉन"], correct: 1 },
+            { id: 46, question: "दहन परीक्षण (Burning Test) में कपास और लिनेन के रेशे आग के संपर्क में आने पर कैसी प्रतिक्रिया और गंध देते हैं?", options: ["सिकुड़ जाते हैं और तीक्ष्ण गंध देते हैं।", "सिकुड़ते नहीं, तुरंत आग पकड़ते हैं, जलते कागज जैसी गंध देते हैं तथा हल्की मृदु राख छोड़ते हैं।", "पिघलकर कत्थई रंग का कड़ा दाना बनाते हैं।", "आग से दूर हटते ही तुरंत बुझ जाते हैं।"], correct: 1 },
+            { id: 47, question: "दहन परीक्षण में ऊन और रेशम (प्रोटीन रेशे) को आग से हटाए जाने पर क्या प्रेक्षित होता है?", options: ["वे तेजी से जलते रहते हैं।", "उनकी ज्वाला स्वयं बुझ जाती है तथा जलते बाल जैसी गंध आती है।", "वे प्लास्टिक की तरह पिघलते हैं।", "वे कांच के समान चमकने लगते हैं।"], correct: 1 },
+            { id: 48, question: "दहन परीक्षण के दौरान 'पिघलना, प्लास्टिक के जलने जैसी गंध आना तथा जलने के बाद कठोर काला दाना (Hard black bead) बनना'—किस रेशे का विशिष्ट लक्षण है?", options: ["नायलॉन", "पोलीएस्टर", "कपास", "रेशम"], correct: 1 },
+            { id: 49, question: "दहन परीक्षण में 'तीक्ष्ण गंध और कठोर, कत्थई रंग का दाना' (Hard brown bead) निम्नलिखित में से किस रेशे की पहचान है?", options: ["नायलॉन", "लिनेन", "रेयान", "ऊन"], correct: 0 },
+            { id: 50, question: "रेयान के दहन गुणों के संबंध में कौन-सा कथन सत्य है?", options: ["यह प्रोटीन रेशा होने के कारण जलते बाल जैसी गंध देता है।", "यह सेलुलोसिक होने के कारण सिकुड़ता नहीं, तेजी से जलता है, जलते कागज जैसी गंध देता है और अत्यधिक कम मात्रा में हल्का रोएँदार अवशेष छोड़ता है।", "यह पिघलकर कठोर काले दाने में बदल जाता है।", "यह पूरी तरह से अदहनीय होता है।"], correct: 1 }
+        ];
+    </script>
+
+    <!-- ✅ JS Logic Control File Path -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
