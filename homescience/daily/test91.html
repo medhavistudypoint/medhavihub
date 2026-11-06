@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - उत्तरजीविता, वृद्धि तथा विकास</title>
+    <!-- ✅ CSS Control File Path -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- Security Watermark Screen -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. Login Gate Screen -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ Back Button Path -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. Exam Workspace Screen -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 Responsive, Centered Header -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">उत्तरजीविता, वृद्धि तथा विकास (अध्याय 8)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Report Dashboard Screen -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point <br> उत्तरजीविता, वृद्धि तथा विकास (अध्याय 8)</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ Dashboard Back Button -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 50 Questions Dataset (बिना explanation, 1-Line Format) -->
+    <script>
+        const QUIZ_KEY = "medhavi_free_test_d91";
+
+        const dataset = [
+            { id: 1, question: "यूनिसेफ के 'की-डेमोग्राफिक इंडिकेटर-भारत (2019)' आंकड़ों के अनुसार, भारत में कितने बच्चे (प्रति 1000 जीवित जन्म) अपने पाँचवें जन्मदिवस से पहले ही दम तोड़ देते हैं?", options: ["28.5", "34.3", "42.1", "50.2"], correct: 1 },
+            { id: 2, question: "यूनिसेफ (2016) की रिपोर्ट के अनुसार, वर्ष 2015 में भारत में पाँच वर्ष से कम आयु के 1,77,300 बच्चों की मृत्यु का मुख्य कारण कौन-सा रोग था, जिसमें भारत विश्व में प्रथम स्थान पर था?", options: ["मलेरिया", "तपेदिक (टीबी)", "अतिसार (डायरिया)", "डिप्थीरिया"], correct: 2 },
+            { id: 3, question: "'वृद्धि' (Growth) और 'विकास' (Development) के संप्रत्यय के संबंध में कौन-सा कथन सत्य है?", options: ["वृद्धि गुणात्मक होती है, जबकि विकास केवल परिमाणात्मक होता है।", "वृद्धि का संबंध आकार या परिमाण (भौतिक मापनीय परिवर्तन) से है, जबकि विकास का संबंध कार्यात्मक और गुणात्मक परिवर्तनों से है।", "विकास केवल 5 वर्ष की आयु तक होता है, उसके बाद केवल वृद्धि होती है।", "वृद्धि और विकास दोनों बिल्कुल एक समान और समानार्थी शब्द हैं।"], correct: 1 },
+            { id: 4, question: "विकास में प्रत्येक परिवर्तन पूर्ववर्ती विकास पर आधारित होता है और उसका एक निश्चित क्रम होता है।—विकास की यह विशेषता क्या कहलाती है?", options: ["विकासोन्मुख", "क्रमागत (Sequential)", "प्रतिवर्ती", "अल्पकालिक"], correct: 1 },
+            { id: 5, question: "भूख लगने पर शिशु का रोना और दूध पीने के तुरंत बाद रोना बंद कर देना—इसे विकास क्यों नहीं माना जा सकता?", options: ["क्योंकि यह शारीरिक परिवर्तन नहीं है।", "क्योंकि विकास कहलाने के लिए परिवर्तन पर्याप्त रूप से दीर्घकालिक होने चाहिए, जबकि यह अल्पकालिक परिवर्तन है।", "क्योंकि रोना एक संज्ञानात्मक प्रक्रिया है।", "क्योंकि इसमें कोई मांसपेशी शामिल नहीं होती।"], correct: 1 },
+            { id: 6, question: "कंधे, जांघों, उदर तथा पीठ की बड़ी मांसपेशियों की गतिविधियों पर नियंत्रण होना किस प्रकार का विकास है?", options: ["सूक्ष्म क्रियात्मक विकास (Fine motor development)", "स्थूल क्रियात्मक विकास (Gross motor development)", "संवेदनात्मक विकास", "व्यक्तिगत विकास"], correct: 1 },
+            { id: 7, question: "कलाई, उंगलियों और अंगूठे की छोटी मांसपेशियों के समन्वय से पुस्तक के पन्ने पलटना, लिखना तथा सुई में धागा डालना किसका उदाहरण है?", options: ["स्थूल क्रियात्मक विकास", "सूक्ष्म क्रियात्मक विकास (Fine motor development)", "भाषा विकास", "सामाजिक विकास"], correct: 1 },
+            { id: 8, question: "नवजात शिशु किसी चेहरे या वस्तु पर अपनी आँखें सर्वोत्तम रूप से तभी केंद्रित कर पाता है जब वह वस्तु उसके चेहरे से लगभग कितनी दूरी पर हो?", options: ["2 इंच", "8 इंच", "18 इंच", "24 इंच"], correct: 1 },
+            { id: 9, question: "शिशु के सामने से गेंद छुपा देने पर वह मान लेता है कि गेंद का कोई अस्तित्व ही नहीं है, लेकिन 1.5 से 2 वर्ष का बच्चा वस्तु के ओझल होने पर भी उसे ढूंढता है।—यह संज्ञानात्मक उपलब्धि क्या कहलाती है?", options: ["जीववाद", "वस्तु स्थायित्व (Object Permanence)", "संरक्षण", "अहम् केंद्रण"], correct: 1 },
+            { id: 10, question: "भारतीय आयुर्विज्ञान अनुसंधान परिषद (ICMR) के अनुसार, लड़कों और लड़कियों की आहार संबंधी आवश्यकताओं में किस आयु से भिन्नता आनी शुरू होती है?", options: ["5 वर्ष", "7 वर्ष", "10 वर्ष", "14 वर्ष"], correct: 2 },
+            { id: 11, question: "बच्चों के वृद्धि चार्ट (Growth Chart) की मॉनिटरिंग में यदि वृद्धि वक्र 'समतल' (Flat) हो जाता है, तो यह किस स्थिति का संकेत देता है?", options: ["तीव्र और स्वस्थ वृद्धि का", "वृद्धि के थम जाने (Stagnation) का", "बच्चे के वजन में अत्यधिक वृद्धि का", "सुधारात्मक वृद्धि के पूरा होने का"], correct: 1 },
+            { id: 12, question: "नवजात शिशु (जीवन के प्रथम माह) में पाए जाने वाले 'प्रतिवर्त' (Reflexes) के संबंध में कौन-सा कथन असत्य है?", options: ["ये साधारण और अनसीखी अनुक्रियाएं हैं।", "इनके घटित होने के लिए मस्तिष्क के उच्चतर चिंतन की आवश्यकता नहीं होती।", "चूषण प्रतिवर्त (Sucking reflex) शिशु को दुग्धपान में सहायता करता है।", "प्रतिवर्त क्रियाएं केवल 5 वर्ष की आयु के बाद सीखी जाने वाली जटिल आदतें हैं।"], correct: 3 },
+            { id: 13, question: "नवजात शिशु एक दिन (24 घंटे) में लगभग कितने घंटे सोता है?", options: ["8 से 10 घंटे", "12 से 14 घंटे", "16 से 18 घंटे", "20 से 22 घंटे"], correct: 2 },
+            { id: 14, question: "शैशवावस्था में शारीरिक वजन में होने वाली तीव्र वृद्धि के संदर्भ में कौन-सा मानक सही है?", options: ["6 माह में वजन तीन गुना तथा 1 वर्ष में चार गुना हो जाता है।", "6 माह में वजन दोगुना तथा 1 वर्ष में जन्म के वजन का तीन गुना हो जाता है।", "1 वर्ष तक वजन में कोई उल्लेखनीय परिवर्तन नहीं होता।", "2 वर्ष में वजन केवल 5 किलोग्राम बढ़ता है।"], correct: 1 },
+            { id: 15, question: "शिशु विकास में 'सिर उठाकर टिकाना' (Head control) एक अत्यंत महत्वपूर्ण उपलब्धि है। यदि कोई शिशु किस आयु तक भी अपना सिर टिकाने में असमर्थ रहता है, तो इसे विकास में विलंब (Developmental Delay) माना जाता है?", options: ["2 माह", "4 माह", "6 माह", "9 माह"], correct: 2 },
+            { id: 16, question: "सारणी 3 के अनुसार, अधिकांश शिशु बिना किसी सहायता के स्वतंत्र रूप से बैठना किस आयु सीमा में सीख लेते हैं?", options: ["जन्म से 3 माह", "4 से 6 माह", "6 से 8 माह", "12 से 15 माह"], correct: 2 },
+            { id: 17, question: "एक बच्चा वयस्कों की भांति एक सहारे को पकड़कर एक-एक पैर रखते हुए सीढ़ियाँ चढ़ना किस आयु में सीखता है?", options: ["12-18 माह", "2 वर्ष", "3-4 वर्ष", "6 वर्ष"], correct: 2 },
+            { id: 18, question: "शारीरिक संतुलन बनाकर 'दुपहिया साइकिल को पैडल मारकर चलाना' सामान्यतः किस आयु की क्रियात्मक उपलब्धि है?", options: ["3 वर्ष", "5 वर्ष", "7 वर्ष", "10 वर्ष"], correct: 2 },
+            { id: 19, question: "मानव भाषा की अन्य जीवों के संचार तंत्र (जैसे मधुमक्खियों का नृत्य या पक्षियों का चहचहाना) से सबसे बड़ी विशिष्टता क्या है?", options: ["मानव भाषा पूरी तरह अपरिवर्तनीय और अंतर्जात होती है।", "अन्य प्रजातियों का संचार पूर्णतः अंतर्जात होता है, जबकि मानव शिशु परिवेश के प्रभाव से अनगिनत 'मूल' (Original) वाक्यों का उच्चारण कर सकता है।", "पशु-पक्षी केवल भविष्य काल की बातें कर सकते हैं।", "मानव भाषा में शब्दों का कोई अर्थ नहीं होता।"], correct: 1 },
+            { id: 20, question: "भाषा विकास के संदर्भ में कौन-सा नियम सार्वभौमिक रूप से सत्य है?", options: ["बच्चा पहले बोलना सीखता है, फिर समझना शुरू करता है।", "बच्चों में रचना (अभिव्यक्त भाषा) से पहले चीज़ों और स्थितियों के बोध (ग्रहणशील भाषा) की क्षमता पैदा होती है।", "बच्चे जन्म के दूसरे दिन से ही पूर्ण वाक्य बोलने लगते हैं।", "ग्रहणशील भाषा हमेशा अभिव्यक्त भाषा से पिछड़ जाती है।"], correct: 1 },
+            { id: 21, question: "शिशु द्वारा लगभग 2 माह की आयु में निकाली जाने वाली आनंदमयी स्वर ध्वनियों (जैसे आह, ऊह) को क्या कहा जाता है?", options: ["कूकना (Cooing)", "तुतलाना (Babbling)", "टेलीग्राफिक भाषा", "बड़बड़ाना"], correct: 0 },
+            { id: 22, question: "तुतलाना (Babbling) के संबंध में निम्नलिखित में से कौन-सा प्रमाण यह सिद्ध करता है कि यह एक अंतर्जात (Innate) जैविक क्षमता है?", options: ["केवल एक ही संस्कृति के बच्चे तुतलाते हैं।", "एक बहरा बच्चा भी, जो दूसरों की आवाज़ सुनने में असमर्थ होता है, प्रारंभिक महीनों में तुतलाता है।", "तुतलाना केवल 3 वर्ष की आयु में शुरू होता है।", "बच्चे केवल उन्हीं ध्वनियों को तुतलाते हैं जो उन्होंने अपनी मां से सुनी हों।"], correct: 1 },
+            { id: 23, question: "'टेलीग्राफिक-भाषा' (Telegraphic Speech) से क्या तात्पर्य है?", options: ["टेलीफोन पर की जाने वाली औपचारिक बातचीत।", "एक या दो संक्षिप्त शब्दों के ऐसे उच्चारण जो पूरे वाक्य के संपूर्ण अर्थ को व्यक्त करते हैं (जैसे माँ को देखकर 'मम्मा' कहना)।", "बिना रुके धाराप्रवाह कविता पाठ करना।", "केवल लिखित अक्षरों को पहचानना।"], correct: 1 },
+            { id: 24, question: "वयस्क और बड़े बच्चे शिशुओं से बातचीत करते समय छोटे वाक्य, सरल शब्द और आवाज़ के उतार-चढ़ाव वाली जिस विशेष भाषा का प्रयोग करते हैं, उसे क्या कहते हैं?", options: ["जीववाद", "मदरीज़ (Motherese / माता समान भाषा)", "टेलीग्राफिक भाषा", "अधिसोच"], correct: 1 },
+            { id: 25, question: "शिशु में 'अजनबी को देखने पर होने वाली व्यग्रता/उत्सुकता' (Stranger Anxiety) सामान्यतः किस आयु में अपनी चरम सीमा पर होती है?", options: ["2 से 4 माह", "8 से 12 माह", "2 से 3 वर्ष", "5 वर्ष"], correct: 1 },
+            { id: 26, question: "शिशु में देखभाल करने वालों से अलग होने पर उत्पन्न 'बिछुड़ने की चिंता' (Separation Anxiety) किस आयु वर्ग में अपनी चरम सीमा पर होती है?", options: ["जन्म से 3 माह", "6 से 8 माह", "12 से 18 माह", "3 से 4 वर्ष"], correct: 2 },
+            { id: 27, question: "शोध अध्ययनों के अनुसार, माता-पिता और बच्चे के बीच 'अपनत्व बंधन' (Attachment) का निर्धारण मुख्य रूप से किस कारक से होता है?", options: ["बच्चे के साथ बिताए गए समय की केवल भौतिक मात्रा (घंटों की संख्या)।", "बच्चे के साथ बिताए गए समय की गुणवत्ता तथा वयस्क का संवेदनशील व्यवहार और प्रतिक्रियाएं।", "बच्चे को दिए जाने वाले महंगे खिलौनों की संख्या।", "परिवार की कुल आर्थिक आय।"], correct: 1 },
+            { id: 28, question: "वह प्रक्रिया जिसके द्वारा बच्चे अपनी संस्कृति के अनुरूप उपयुक्त और वांछनीय व्यवहार, कौशल, मान्यताएँ और मानक सीखते हैं, क्या कहलाती है?", options: ["संवेदी अनुकूलन", "समाजीकरण (Socialization)", "प्रतिवर्ती क्रिया", "मानसिक निरूपण"], correct: 1 },
+            { id: 29, question: "जो माता-पिता बच्चों को अनुशासित करने के लिए कार्यों के परिणाम समझाते हैं, तर्क करते हैं तथा दृढ़ होते हुए भी स्नेहमय और कोमल व्यवहार रखते हैं, उनका दृष्टिकोण क्या कहलाता है?", options: ["शक्ति-उन्मुखी दृष्टिकोण (Power assertive)", "स्नेहोन्मुखी अनुशासनात्मक दृष्टिकोण (Love oriented / Authoritative)", "उपेक्षापूर्ण दृष्टिकोण", "अनुमतिदाता दृष्टिकोण"], correct: 1 },
+            { id: 30, question: "जीन पियाजे (Jean Piaget) के अनुसार, संज्ञानात्मक विकास के चार चरणों का सही कालानुक्रमिक क्रम कौन-सा है?", options: ["पूर्व प्रचालनात्मक → संवेदी क्रियात्मक → औपचारिक → ठोस", "संवेदी क्रियात्मक → पूर्व प्रचालनात्मक → ठोस प्रचालनात्मक → औपचारिक प्रचालनात्मक", "ठोस प्रचालनात्मक → संवेदी क्रियात्मक → पूर्व प्रचालनात्मक → औपचारिक", "संवेदी क्रियात्मक → ठोस प्रचालनात्मक → पूर्व प्रचालनात्मक → अमूर्त"], correct: 1 },
+            { id: 31, question: "पियाजे के अनुसार, संवेदी-क्रियात्मक अवस्था में 'मानसिक निरूपण' (Mental Representation - दिमाग में विचार या चित्र बनाना) का विकास किस आयु में होता है?", options: ["जन्म से 2 माह", "4 से 8 माह", "8 से 12 माह", "18 से 24 माह"], correct: 3 },
+            { id: 32, question: "संज्ञानात्मक विकास के संदर्भ में 'प्रचालन' (Operation) शब्द का क्या अर्थ है?", options: ["किसी अंग की शल्य चिकित्सा करना।", "ऐसी मानसिक क्रियाएं जिनमें वस्तुएं परिवर्तित होकर पुनः अपनी मूल स्थिति में लाई जा सकें (प्रतिवर्तनीयता/Reversibility)।", "केवल गिनती को रटना।", "इंद्रियों द्वारा बाहरी वस्तुओं को छूना।"], correct: 1 },
+            { id: 33, question: "समान मात्रा के पानी को एक चौड़े गिलास से संकरे व ऊँचे गिलास में डालने पर 4-5 वर्ष के बच्चे द्वारा यह कहना कि 'ऊँचे गिलास में पानी अधिक है', पियाजे के किस सिद्धांत की कमी को दर्शाता है?", options: ["वस्तु स्थायित्व का अभाव", "संरक्षण (Conservation) की समझ का अभाव", "जीववाद का प्रभाव", "अमूर्त चिंतन का अभाव"], correct: 1 },
+            { id: 34, question: "पूर्व-विद्यालयी बच्चा यह मानकर चलता है कि दूसरे लोग भी स्थिति को बिल्कुल उसी प्रकार देखते हैं जैसे वह स्वयं देखता है।—सोच की यह विशेषता क्या कहलाती है?", options: ["जीववाद", "अहम् संकेंद्रण (Egocentrism)", "संरक्षण", "अधि-सोच"], correct: 1 },
+            { id: 35, question: "निर्जीव वस्तुओं (जैसे बादलों, पेड़ों, खिलौनों) को सजीव समझना और उनमें जीवन की कल्पना करना पियाजे के अनुसार क्या कहलाता है?", options: ["जीववाद (Animism)", "क्रमांकन", "अधिसोच", "प्रतिवर्तनीयता"], correct: 0 },
+            { id: 36, question: "ठोस प्रचालनात्मक अवस्था (7-11 वर्ष) में बच्चे की सोच में आने वाला सबसे बड़ा गुणात्मक परिवर्तन कौन-सा है?", options: ["वह केवल एक समय में एक ही आयाम पर सोच पाता है।", "वह मानसिक रूप से कार्यों को प्रतिवर्तित (Reverse) कर सकता है तथा संरक्षण और बहु-आयामी वर्गीकरण कर सकता है।", "वह अहम् केंद्रित हो जाता है।", "वह जीववाद में अंधविश्वास करने लगता है।"], correct: 1 },
+            { id: 37, question: "'प्राक्कल्पना-निगमनात्मक तर्क' (Hypothetico-Deductive Reasoning) तथा अमूर्त चिंतन (Abstract Thinking) का विकास किस अवस्था की प्रमुख पहचान है?", options: ["संवेदी क्रियात्मक चरण", "पूर्व प्रचालनात्मक चरण", "ठोस प्रचालनात्मक चरण", "औपचारिक प्रचालनों की अवस्था (किशोरावस्था)"], correct: 3 },
+            { id: 38, question: "स्वयं की सोच-विचार की प्रक्रिया के बारे में सोचना या आत्म-प्रतिबिंबन करना (Thinking about thinking) क्या कहलाता है?", options: ["टेलीग्राफिक भाषा", "अधि-सोच (Metacognition)", "वस्तु स्थायित्व", "समाजीकरण"], correct: 1 },
+            { id: 39, question: "किशोरों का यह मानना कि 'सभी लोग केवल उन्हीं को देख रहे हैं और उनकी हर गतिविधि पर ध्यान दे रहे हैं', किस मनोवैज्ञानिक संप्रत्यय को दर्शाता है?", options: ["व्यक्तिगत चोला (Personal Fable)", "काल्पनिक श्रोतागण (Imaginary Audience)", "जीववाद", "संरक्षण"], correct: 1 },
+            { id: 40, question: "मेरी भावनाएं और दर्द इतना अनोखा है कि दुनिया में कोई भी इसे महसूस या समझ नहीं सकता क्योंकि मैं सबसे अलग हूँ।—किशोर की यह भावना क्या कहलाती है?", options: ["काल्पनिक श्रोतागण", "व्यक्तिगत चोला (Personal Fable)", "अहम् संकेंद्रण", "अधि-सोच"], correct: 1 },
+            { id: 41, question: "सुमेलित कीजिए (क्रियात्मक विकास की उपलब्धियाँ एवं संबंधित आयु सीमा):<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची I (क्रियात्मक उपलब्धि)</th><th>सूची II (अर्जन आयु)</th></tr></thead><tbody><tr><td>p. पेट के बल लेटे हुए छाती ऊपर उठाना</td><td>1. 6 से 8 माह</td></tr><tr><td>q. बिना सहायता के बैठना</td><td>2. 2 माह</td></tr><tr><td>r. रेंगना (घुटनों के बल चलना)</td><td>3. 5 वर्ष</td></tr><tr><td>s. तिपहिया साइकिल को पैडल मारकर चलाना</td><td>4. 8 से 9 माह</td></tr></tbody></table>", options: ["p-2, q-1, r-4, s-3", "p-1, q-2, r-3, s-4", "p-2, q-4, r-1, s-3", "p-4, q-3, r-2, s-1"], correct: 0 },
+            { id: 42, question: "सुमेलित कीजिए (भाषा विकास की अवस्थाएँ एवं उनकी विशेषताएँ):<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची I (भाषा चरण)</th><th>सूची II (विशेषता/उदाहरण)</th></tr></thead><tbody><tr><td>p. कूकना (Cooing)</td><td>1. व्यंजन-स्वर संयोजन जैसे 'दादादा', 'मामामा'</td></tr><tr><td>q. तुतलाना (Babbling)</td><td>2. संक्षिप्त शब्दों द्वारा संपूर्ण वाक्य का अर्थ प्रकट करना</td></tr><tr><td>r. प्रथम शब्द</td><td>3. लगभग 2 माह पर आह-ऊह जैसी सुखद स्वर ध्वनियां</td></tr><tr><td>s. टेलीग्राफिक भाषा</td><td>4. लगभग 1 वर्ष पर निरंतर एक ही संदर्भ में प्रयुक्त उच्चारण</td></tr></tbody></table>", options: ["p-3, q-1, r-4, s-2", "p-1, q-2, r-3, s-4", "p-3, q-4, r-1, s-2", "p-2, q-1, r-4, s-3"], correct: 0 },
+            { id: 43, question: "सुमेलित कीजिए (पियाजे के संज्ञानात्मक चरण एवं उनकी आयु सीमा):<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची I (पियाजे के चरण)</th><th>सूची II (आयु सीमा)</th></tr></thead><tbody><tr><td>p. संवेदी-क्रियात्मक चरण</td><td>1. 7 से 11 वर्ष</td></tr><tr><td>q. पूर्व-प्रचालनात्मक चरण</td><td>2. 11 से 18 वर्ष</td></tr><tr><td>r. ठोस प्रचालनात्मक चरण</td><td>3. जन्म से 2 वर्ष</td></tr><tr><td>s. औपचारिक प्रचालनात्मक चरण</td><td>4. 2 से 7 वर्ष</td></tr></tbody></table>", options: ["p-3, q-4, r-1, s-2", "p-1, q-2, r-3, s-4", "p-4, q-3, r-2, s-1", "p-3, q-1, r-4, s-2"], correct: 0 },
+            { id: 44, question: "सुमेलित कीजिए (पूर्व-प्रचालनात्मक सोच की सीमाएं/लक्षण एवं उनके अर्थ):<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची I (संकल्पना)</th><th>सूची II (अर्थ/परिभाषा)</th></tr></thead><tbody><tr><td>p. संरक्षण का अभाव</td><td>1. केवल अपने ही नजरिए से सोचना, दूसरे का दृष्टिकोण न समझ पाना</td></tr><tr><td>q. अहम् संकेंद्रण</td><td>2. भौतिक स्वरूप बदलने पर भी पदार्थ की मात्रा समान न समझ पाना</td></tr><tr><td>r. जीववाद</td><td>3. वस्तुओं को लंबाई या आकार के अनुसार सही क्रम में न लगा पाना</td></tr><tr><td>s. सीमित क्रमांकन</td><td>4. निर्जीव वस्तुओं (पेड़, बादल) में जीवन की कल्पना करना</td></tr></tbody></table>", options: ["p-2, q-1, r-4, s-3", "p-1, q-2, r-3, s-4", "p-3, q-4, r-1, s-2", "p-2, q-4, r-1, s-3"], correct: 0 },
+            { id: 45, question: "सुमेलित कीजिए (लालना-पालन शैलियां एवं उनके लक्षण):<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची I (लालना-पालन शैली)</th><th>सूची II (मुख्य लक्षण)</th></tr></thead><tbody><tr><td>p. प्रतिबंधात्मक अभिभावक</td><td>1. थोड़े नियम लगाना और बच्चों को स्वयं निर्णय लेने की पूरी छूट देना</td></tr><tr><td>q. अनुमतिदाता अभिभावक</td><td>2. कारण बताए बिना कठोर आदेश देना, धमकाना या शारीरिक दंड देना</td></tr><tr><td>r. स्नेहोन्मुखी अनुशासन</td><td>3. अत्यधिक नियम थोपना, कड़ी निगरानी रखना और स्वतंत्रता न देना</td></tr><tr><td>s. शक्ति-उन्मुखी दृष्टिकोण</td><td>4. अनुशासन में दृढ़ रहते हुए भी तर्क समझाना और कोमल व्यवहार करना</td></tr></tbody></table>", options: ["p-3, q-1, r-4, s-2", "p-1, q-2, r-3, s-4", "p-4, q-3, r-2, s-1", "p-3, q-4, r-1, s-2"], correct: 0 },
+            { id: 46, question: "सुमेलित कीजिए (विकास के क्षेत्र एवं उनके प्राथमिक अंग/कार्य):<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची I (विकास का क्षेत्र)</th><th>सूची II (मुख्य सरोकार)</th></tr></thead><tbody><tr><td>p. शारीरिक विकास</td><td>1. ज्ञानेन्द्रियों (देखने, सुनने, स्वाद) की क्षमताओं का परिष्कार</td></tr><tr><td>q. क्रियात्मक विकास</td><td>2. समाज की प्रत्याशाओं के अनुसार संबंध बनाना व निभाना</td></tr><tr><td>r. संवेदनात्मक विकास</td><td>3. शरीर की मांसपेशियों की गतिविधियों और समन्वय पर नियंत्रण</td></tr><tr><td>s. सामाजिक विकास</td><td>4. गर्भधारण से आगे तक शरीर के आकार और अनुपात में भौतिक परिवर्तन</td></tr></tbody></table>", options: ["p-4, q-3, r-1, s-2", "p-1, q-2, r-3, s-4", "p-4, q-1, r-2, s-3", "p-3, q-4, r-1, s-2"], correct: 0 },
+            { id: 47, question: "सुमेलित कीजिए (शैशवावस्था के संवेगात्मक विकास के मील के पत्थर):<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची I (संवेगात्मक अभिव्यक्ति)</th><th>सूची II (चरम सीमा / आयु)</th></tr></thead><tbody><tr><td>p. अजनबी को देखकर उत्सुकता का आरंभ</td><td>1. 12 से 18 माह</td></tr><tr><td>q. अजनबी की चिंता की चरम सीमा</td><td>2. लगभग 6 माह</td></tr><tr><td>r. बिछुड़ने की चिंता की चरम सीमा</td><td>3. लगभग 20-24 माह</td></tr><tr><td>s. बिछुड़ने के भय का स्वतः दूर होना</td><td>4. 8 से 12 माह</td></tr></tbody></table>", options: ["p-2, q-4, r-1, s-3", "p-1, q-2, r-3, s-4", "p-4, q-3, r-2, s-1", "p-2, q-1, r-4, s-3"], correct: 0 },
+            { id: 48, question: "सुमेलित कीजिए (ICMR द्वारा वर्गीकृत बाल्यावस्था के चरण एवं आयु):<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची I (बाल्यावस्था के चरण)</th><th>सूची II (आयु वर्ग)</th></tr></thead><tbody><tr><td>p. शैशवावस्था</td><td>1. 1-3 वर्ष तथा 4-6 वर्ष तक</td></tr><tr><td>q. पूर्व-विद्यालयी वर्ष</td><td>2. 7-9 वर्ष तथा 10-12 वर्ष तक</td></tr><tr><td>r. विद्यालयी वर्ष</td><td>3. जन्म से 6 माह, तथा 6-12 माह तक</td></tr></tbody></table>", options: ["p-3, q-1, r-2", "p-1, q-2, r-3", "p-2, q-3, r-1", "p-3, q-2, r-1"], correct: 0 },
+            { id: 49, question: "सुमेलित कीजिए (आयु एवं शब्द भंडार की प्रगति):<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची I (आयु सीमा)</th><th>सूची II (अनुमानित शब्द भंडार)</th></tr></thead><tbody><tr><td>p. 18 माह की आयु</td><td>1. लगभग 250 शब्द (तथा 2 शब्द वाले वाक्य)</td></tr><tr><td>q. 2 वर्ष की आयु</td><td>2. लगभग 10,000 शब्द</td></tr><tr><td>r. 6 वर्ष की आयु</td><td>3. लगभग दो दर्जन (24) शब्द</td></tr><tr><td>s. 7 से 9 वर्ष की आयु</td><td>4. पहेलियों व द्वि-अर्थी शब्दों का आनंद लेना</td></tr></tbody></table>", options: ["p-3, q-1, r-2, s-4", "p-1, q-2, r-3, s-4", "p-4, q-3, r-1, s-2", "p-3, q-2, r-1, s-4"], correct: 0 },
+            { id: 50, question: "सुमेलित कीजिए (किशोरावस्था के संज्ञानात्मक लक्षण एवं उनके अर्थ):<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची I (लक्षण)</th><th>सूची II (अर्थ/प्रकटीकरण)</th></tr></thead><tbody><tr><td>p. प्राक्कल्पना-निगमनात्मक तर्क</td><td>1. अमूर्त आदर्शवादी सोच तथा संसार को बदलने की कल्पनाएं</td></tr><tr><td>q. काल्पनिक श्रोतागण</td><td>2. यह मानना कि मेरी भावनाएं अद्वितीय हैं और कोई मुझे समझ नहीं सकता</td></tr><tr><td>r. व्यक्तिगत चोला</td><td>3. प्रणालीबद्ध ढंग से परिकल्पना बनाकर समस्याओं का समाधान खोजना</td></tr><tr><td>s. प्राक्ल्पनिक सोच</td><td>4. यह मानना कि सभी लोग लगातार उन्हीं के रूप-रंग को देख रहे हैं</td></tr></tbody></table>", options: ["p-3, q-4, r-2, s-1", "p-1, q-2, r-3, s-4", "p-4, q-3, r-1, s-2", "p-3, q-1, r-4, s-2"], correct: 0 }
+        ];
+    </script>
+
+    <!-- ✅ JS Logic Control File Path -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
+      
