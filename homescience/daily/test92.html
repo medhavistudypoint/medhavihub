@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - पोषण, स्वास्थ्य एवं स्वस्थता</title>
+    <!-- ✅ CSS Control File Path -->
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <!-- Security Watermark Screen -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. Login Gate Screen -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Home Science Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <!-- ✅ Back Button Path -->
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. Exam Workspace Screen -->
+    <div id="quizWorkspace" class="hidden">
+        <!-- 🌟 Responsive, Centered Header -->
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">TGT / PGT / NET / DSSSB</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">50</span></span>
+                        <span class="subject-badge">पोषण, स्वास्थ्य एवं स्वस्थता (अध्याय 9)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Report Dashboard Screen -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point <br> पोषण, स्वास्थ्य एवं स्वस्थता (अध्याय 9)</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 50</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <!-- ✅ Dashboard Back Button -->
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 50 Questions Dataset (बिना explanation, 1-Line Format) -->
+    <script>
+        const QUIZ_KEY = "medhavi_free_test_d92";
+
+        const dataset = [
+            { id: 1, question: "शरीर में भोजन का कार्य करने और पोषण तत्वों के उपापचयन की संपूर्ण प्रक्रिया क्या कहलाती है?", options: ["संतुलित आहारिकी कहलाती है", "कायिक पोषण कहलाती है", "उपापचयी पाचन कहलाती है", "शारीरिक वृद्धि कहलाती है"], correct: 1 },
+            { id: 2, question: "प्रारंभिक शैशवावस्था के दौरान शिशुओं को प्रति किलोग्राम शरीर भार के लिए कितनी कैलोरी चाहिए?", options: ["सामान्य वयस्क से आधी मात्रा", "लगभग दुगुनी कैलोरी की मात्रा", "लगभग तीन गुनी ऊर्जा की मात्रा", "चार गुनी अधिक ऊर्जा की मात्रा"], correct: 1 },
+            { id: 3, question: "शिशुओं के शरीर में रुधिर आयतन में विस्तार तथा वृद्धि के लिए कौन सा खनिज तत्व अनिवार्य है?", options: ["संरचनात्मक प्रोटीन तत्व", "रुधिरवर्धक लौह तत्व", "अस्थिमूलक कैल्सियम तत्व", "आवश्यक वसा अम्ल तत्व"], correct: 1 },
+            { id: 4, question: "हड्डियों एवं पेशियों की तीव्र वृद्धि हेतु शैशवावस्था में किस पोषक तत्व की आपूर्ति आवश्यक है?", options: ["केवल खनिज लवण तत्व", "शारीरिक प्रोटीन तत्व", "केवल विटामिन सी तत्व", "केवल साधारण वसा तत्व"], correct: 1 },
+            { id: 5, question: "जन्म के समय सामान्य और स्वस्थ शिशु का कद सामान्यतः कितने सेंटीमीटर के मध्य पाया जाता है?", options: ["तीस से पैंतीस सेंटीमीटर", "पचास से पचपन सेंटीमीटर", "साठ से पैंसठ सेंटीमीटर", "सत्तर से पचहत्तर सेंटीमीटर"], correct: 1 },
+            { id: 6, question: "एक वर्ष की आयु पूरी होने पर स्वस्थ शिशु की लंबाई बढ़कर सामान्यतः कितनी हो जाती है?", options: ["लगभग साठ सेंटीमीटर तक", "लगभग पचहत्तर सेंटीमीटर तक", "लगभग पचासी सेंटीमीटर तक", "लगभग नब्बे सेंटीमीटर तक"], correct: 1 },
+            { id: 7, question: "सुपोषित माता के कितने मिलीलीटर दूध में प्रथम चार से छह माह के सभी पोषक तत्व उपलब्ध होते हैं?", options: ["छह सौ पचास मिलीलीटर दूध", "आठ सौ पचास मिलीलीटर दूध", "एक हजार मिलीलीटर का दूध", "बारह सौ मिलीलीटर का दूध"], correct: 1 },
+            { id: 8, question: "आईसीएमआर के अनुसार जन्म से छह माह के शिशु हेतु प्रति किलो कितनी दैनिक ऊर्जा अनुशंसित है?", options: ["अठासी किलो कैलोरी की मात्रा", "एक सौ आठ किलो कैलोरी मात्रा", "एक सौ अठारह किलो कैलोरी", "एक सौ अठासी किलो कैलोरी"], correct: 1 },
+            { id: 9, question: "छह से बारह माह के शिशु के लिए दैनिक प्रोटीन की संस्तुत मात्रा प्रति किलोग्राम कितनी होती है?", options: ["एक दशमलव शून्य शून्य ग्राम", "एक दशमलव पैंसठ ग्राम मात्रा", "दो दशमलव शून्य पांच ग्राम", "दो दशमलव पचास ग्राम मात्रा"], correct: 1 },
+            { id: 10, question: "जन्म से बारह माह तक के शिशुओं हेतु दैनिक कैल्सियम की अनुशंसित मात्रा कितनी निर्धारित है?", options: ["तीन सौ मिलीग्राम की मात्रा", "पांच सौ मिलीग्राम की मात्रा", "सात सौ मिलीग्राम की मात्रा", "आठ सौ मिलीग्राम की मात्रा"], correct: 1 },
+            { id: 11, question: "शिशुओं के लिए दैनिक एस्कॉर्बिक अम्ल की अनुशंसित मात्रा पाठ्य-पुस्तक की सारणी 1 में क्या दी गई है?", options: ["पंद्रह माइक्रोग्राम की मात्रा", "पच्चीस माइक्रोग्राम की मात्रा", "पैंतीस माइक्रोग्राम की मात्रा", "पचास माइक्रोग्राम की मात्रा"], correct: 1 },
+            { id: 12, question: "विश्व स्वास्थ्य संगठन कितने माह की आयु तक नवजात को केवल विशेष स्तनपान कराने की सिफारिश करता है?", options: ["तीन माह की आयु तक केवल", "छह माह की आयु तक पूर्णतः", "नौ माह की आयु तक लगातार", "बारह माह की आयु तक केवल"], correct: 1 },
+            { id: 13, question: "प्रसव के प्रथम दो से तीन दिनों में स्रावित होने वाला गाढ़ा पीला विशेष तरल क्या कहलाता है?", options: ["संतुलित पूरक आहार कहलाता", "प्राकृतिक कोलॉस्ट्रम कहलाता", "भारतीय बाल आहार कहलाता", "टोन्ड दुग्ध आहार कहलाता"], correct: 1 },
+            { id: 14, question: "स्तनपान कराने से माता को भविष्य में किन दो गंभीर रोगों के विरुद्ध सुरक्षा प्राप्त होती है?", options: ["मलेरिया और संक्रामक हैजा", "स्तन तथा अंडाशय का कैंसर", "टाइफाइड और तीव्र पेचिश", "त्वचा के जीवाणु संक्रमण"], correct: 1 },
+            { id: 15, question: "कम लागत वाले भारतीय बहुद्देशीय आटे में मूंगफली और चने के आटे का क्या अनुपात होता है?", options: ["पचास और पचास का अनुपात", "पचहत्तर और पच्चीस अनुपात", "साठ और चालीस का अनुपात", "अस्सी और बीस का अनुपात"], correct: 1 },
+            { id: 16, question: "कम लागत वाले पूरक आहार बाल आहार में प्रयुक्त सामग्री गेहूं, मूंगफली व चने का सही अनुपात क्या है?", options: ["पांच दो दो का सही अनुपात", "सात दो दो का सही अनुपात", "चार चार दो का सही अनुपात", "चार दो एक का सही अनुपात"], correct: 1 },
+            { id: 17, question: "कितने किलोग्राम से कम जन्म भार वाले नवजात शिशु को जन्म के समय कम वजन वाला माना जाता है?", options: ["एक दशमलव आठ किलोग्राम", "दो दशमलव पांच किलोग्राम", "तीन दशमलव शून्य किलोग्राम", "तीन दशमलव पांच किलोग्राम"], correct: 1 },
+            { id: 18, question: "शिशुओं को माता के दूध के साथ धीरे-धीरे अन्य खाद्य पदार्थ देना किस आयु से शुरू किया जाता है?", options: ["तीन माह की आयु पूरी होने पर", "छह माह की आयु पूरी होने पर", "नौ माह की आयु पूरी होने पर", "बारह माह की आयु पूरी होने पर"], correct: 1 },
+            { id: 19, question: "चार माह के शिशु को सिट्रस फलों के ताजे रस की कितनी मात्रा से शुरुआत कराने की संस्तुति है?", options: ["दो मिलीलीटर की अल्प मात्रा", "पांच मिलीलीटर की अल्प मात्रा", "पंद्रह मिलीलीटर की मात्रा", "पच्चीस मिलीलीटर की मात्रा"], correct: 1 },
+            { id: 20, question: "शिशु के पूरक आहार में उबले अंडे की पीली जर्दी देना किस आयु से शुरू किया जाना चाहिए?", options: ["चार माह की आयु होने पर", "सात माह की आयु होने पर", "दस माह की आयु होने पर", "चौदह माह की आयु होने पर"], correct: 1 },
+            { id: 21, question: "शिशु के आहार में पकाई गई और मसली हुई मछली या मांस देना किस समय शुरू किया जाता है?", options: ["छह माह की आयु पूरी होने पर", "एक वर्ष की आयु पूरी होने पर", "आठ माह की आयु पूरी होने पर", "नौ माह की आयु पूरी होने पर"], correct: 1 },
+            { id: 22, question: "शिशुओं के पूरक भोजन से प्रोटीन के रूप में कम से कम कितने प्रतिशत ऊर्जा प्राप्त होनी चाहिए?", options: ["पांच प्रतिशत ऊर्जा का अंश", "दस प्रतिशत ऊर्जा का अंश", "बीस प्रतिशत ऊर्जा का अंश", "पच्चीस प्रतिशत ऊर्जा अंश"], correct: 1 },
+            { id: 23, question: "राष्ट्रीय प्रतिरक्षण कार्यक्रम के अंतर्गत नवजात शिशु को जन्म के तुरंत बाद कौन सा टीका लगता है?", options: ["खसरा निवारक पहला टीका", "बीसीजी प्रतिरोधी टीका", "टाइफाइड निवारक टीका", "टिटनेस टॉक्सॉइड टीका"], correct: 1 },
+            { id: 24, question: "शिशुओं को खसरे के संक्रामक रोग से बचाव का टीका किस आयु अवधि में लगाया जाता है?", options: ["छह सप्ताह की आयु होने पर", "नौ से बारह माह की आयु में", "चौदह सप्ताह की आयु होने पर", "पंद्रह से अठारह माह की आयु"], correct: 1 },
+            { id: 25, question: "राष्ट्रीय प्रतिरक्षण कार्यक्रम के अनुसार बीसीजी का टीका मुख्य रूप से किस रोग से रक्षा करता है?", options: ["पोलियो के संक्रामक रोग से", "क्षय रोग के संक्रमण से", "डिप्थीरिया के गंभीर रोग से", "काली खांसी के गंभीर रोग से"], correct: 1 },
+            { id: 26, question: "शिशुओं में अतिसार के कारण जल तथा इलेक्ट्रोलाइट्स की अत्यधिक कमी होने की स्थिति क्या कहलाती है?", options: ["गंभीर रक्ताल्पता कहलाती", "तीव्र निर्जलीकरण कहलाती", "पोषणात्मक अंधापन कहलाती", "थाइरॉइड गलगंड कहलाती"], correct: 1 },
+            { id: 27, question: "विटामिन डी तथा कैल्सियम की कमी से बच्चों की हड्डियों से संबंधित कौन सा सूखा रोग होता है?", options: ["गंभीर रक्ताल्पता का रोग", "रिकेट्स तथा ओस्टोपीनिया", "घेंघा या गलगंड की बीमारी", "बेरीबेरी की घातक बीमारी"], correct: 1 },
+            { id: 28, question: "आहार में आयोडीन की कमी के कारण थाइरॉइड ग्रंथि के असामान्य रूप से बढ़ जाने को क्या कहते हैं?", options: ["सूखा रोग की विकृति होना", "गलगंड रोग की विकृति होना", "एनीमिया की विकृति होना", "अंधापन की विकृति होना"], correct: 1 },
+            { id: 29, question: "आईसीएमआर के अनुसार एक से तीन वर्ष के विद्यालय-पूर्व बच्चे की दैनिक अनुशंसित ऊर्जा कितनी है?", options: ["एक हजार किलो कैलोरी", "बारह सौ चालीस किलो कैलोरी", "चौदह सौ बीस किलो कैलोरी", "सोलह सौ नब्बे किलो कैलोरी"], correct: 1 },
+            { id: 30, question: "चार से छह वर्ष के विद्यालय-पूर्व बच्चे के लिए दैनिक प्रोटीन की संस्तुत मात्रा कितनी होती है?", options: ["बाईस ग्राम प्रोटीन मात्रा", "तीस ग्राम प्रोटीन मात्रा", "चालीस ग्राम प्रोटीन मात्रा", "पचास ग्राम प्रोटीन मात्रा"], correct: 1 },
+            { id: 31, question: "चार से छह वर्ष के विद्यालय-पूर्व बच्चों के लिए दैनिक लौह तत्व की आवश्यकता कितनी निर्धारित है?", options: ["बारह मिलीग्राम की मात्रा", "अठारह मिलीग्राम की मात्रा", "चौबीस मिलीग्राम की मात्रा", "तीस मिलीग्राम की मात्रा"], correct: 1 },
+            { id: 32, question: "सारणी 5 के अनुसार एक से तीन वर्ष के बच्चे के लिए दैनिक अनाज व मिलेट की संतुलित मात्रा क्या है?", options: ["साठ ग्राम अनाज की मात्रा", "एक सौ बीस ग्राम की मात्रा", "एक सौ अस्सी ग्राम मात्रा", "दो सौ दस ग्राम की मात्रा"], correct: 1 },
+            { id: 33, question: "सारणी 5 के अनुसार चार से छह वर्ष के बच्चे हेतु दैनिक अनाज व मिलेट की अनुशंसित मात्रा क्या है?", options: ["एक सौ बीस ग्राम की मात्रा", "दो सौ दस ग्राम की मात्रा", "दो सौ पचास ग्राम मात्रा", "तीन सौ ग्राम की कुल मात्रा"], correct: 1 },
+            { id: 34, question: "सारणी 5 के अनुसार विद्यालय-पूर्व बच्चों के संतुलित आहार में दूध की दैनिक मात्रा कितनी होनी चाहिए?", options: ["दो सौ पचास मिलीलीटर दूध", "पांच सौ मिलीलीटर की मात्रा", "सात सौ पचास मिलीलीटर दूध", "एक हजार मिलीलीटर का दूध"], correct: 1 },
+            { id: 35, question: "विशेष आवश्यकताओं वाले स्पास्टिक बच्चों के आहार प्रबंधन में सामान्यतः क्या उपाय किया जाता है?", options: ["अत्यधिक सूखा आहार देना", "पतले तरल पदार्थ गाढ़े करना", "आहार में मिर्च मसाले बढ़ाना", "केवल ठोस रोटियां खिलाना"], correct: 1 },
+            { id: 36, question: "स्वलीनता रोग से ग्रस्त विशेष आवश्यकता वाले बच्चों में आहार को प्रभावित करने वाला मुख्य लक्षण क्या है?", options: ["सुनने की क्षमता कम होना", "स्वाद व गंध इंद्रियां बदलना", "दांतों का समय से पूर्व गिरना", "अत्यधिक भूख लगना शामिल है"], correct: 1 },
+            { id: 37, question: "पंद्रह से अठारह माह की आयु के बच्चे को प्रतिरक्षण कार्यक्रम के तहत कौन सा टीका लगाया जाता है?", options: ["बीसीजी का प्राथमिक टीका", "एमएमआर का संयुक्त टीका", "केवल हैजा निवारक टीका", "केवल टिटनेस टॉक्सॉइड"], correct: 1 },
+            { id: 38, question: "एमएमआर का संयुक्त टीका बच्चे को किन तीन संचारी रोगों से जीवन रक्षक सुरक्षा प्रदान करता है?", options: ["पोलियो, हैजा और प्लेग", "खसरा, कनपेड़ा और रूबेला", "चेचक, मलेरिया और दस्त", "टिटनेस, क्षयरोग और पेचिश"], correct: 1 },
+            { id: 39, question: "विद्यालय-पूर्व बच्चों को डीपीटी और ओपीवी की बूस्टर खुराक किस आयु सीमा में दी जाती है?", options: ["नौ से बारह माह की आयु में", "सोलह माह से दो वर्ष में", "तीन से चार वर्ष की आयु में", "पांच से छह वर्ष की आयु में"], correct: 1 },
+            { id: 40, question: "सारणी 6 के अनुसार पांच वर्ष की आयु पूरी होने पर बच्चे को कौन सा टीका लगाया जाता है?", options: ["बीसीजी का टीका लगाना", "डीटी का टीका लगाया जाना", "एमएमआर का टीका लगाना", "खसरे का टीका लगाया जाना"], correct: 1 },
+            { id: 41, question: "आईसीएमआर के अनुसार सात से नौ वर्ष के बच्चों के लिए अनुशंसित दैनिक ऊर्जा कितनी होती है?", options: ["चौदह सौ पचास किलो कैलोरी", "उन्नीस सौ पचास किलो कैलोरी", "बाईस सौ पचास किलो कैलोरी", "पच्चीस सौ पचास किलो कैलोरी"], correct: 1 },
+            { id: 42, question: "दस से बारह वर्ष के बालकों हेतु दैनिक ऊर्जा की संस्तुत मात्रा सारणी 7 के अनुसार क्या है?", options: ["उन्नीस सौ सत्तर किलो कैलोरी", "इक्कीस सौ नब्बे किलो कैलोरी", "तेईस सौ पचास किलो कैलोरी", "पच्चीस सौ नब्बे किलो कैलोरी"], correct: 1 },
+            { id: 43, question: "दस से बारह वर्ष की बालिकाओं के लिए दैनिक लौह तत्व की आवश्यकता कितनी अनुशंसित की गई है?", options: ["उन्नीस मिलीग्राम की मात्रा", "चौंतीस मिलीग्राम की मात्रा", "छब्बीस मिलीग्राम की मात्रा", "चालीस मिलीग्राम की मात्रा"], correct: 1 },
+            { id: 44, question: "सारणी 8 के अनुसार सात से नौ वर्ष के बच्चों के लिए दैनिक अनाज की संतुलित मात्रा क्या है?", options: ["दो सौ दस ग्राम की मात्रा", "दो सौ सत्तर ग्राम की मात्रा", "तीन सौ तीस ग्राम की मात्रा", "चार सौ ग्राम की कुल मात्रा"], correct: 1 },
+            { id: 45, question: "मध्याह्न भोजन योजना के अंतर्गत प्राथमिक विद्यालयों में किन कक्षाओं के छात्रों को भोजन मिलता है?", options: ["पहली से पांचवीं कक्षा तक", "पहली से आठवीं कक्षा तक", "पहली से दसवीं कक्षा तक", "पहली से बारहवीं कक्षा तक"], correct: 1 },
+            { id: 46, question: "सूची-I को सूची-II से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I (टीका)</th><th>सूची-II (सुरक्षा)</th></tr></thead><tbody><tr><td>a. बीसीजी का टीका</td><td>1. खसरा, कनपेड़ा, रूबेला</td></tr><tr><td>b. ओपीवी की खुराक</td><td>2. क्षय रोग से सुरक्षा</td></tr><tr><td>c. डीपीटी का टीका</td><td>3. पोलियो से सुरक्षा</td></tr><tr><td>d. एमएमआर का टीका</td><td>4. डिप्थीरिया, टिटनेस, परट्यूटिस</td></tr></tbody></table>", options: ["a-2, b-3, c-4, d-1", "a-3, b-2, c-1, d-4", "a-2, b-4, c-3, d-1", "a-4, b-3, c-2, d-1"], correct: 0 },
+            { id: 47, question: "सूची-I को सूची-II से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I (पोषक तत्व की कमी)</th><th>सूची-II (रोग/लक्षण)</th></tr></thead><tbody><tr><td>a. लौह तत्व की कमी</td><td>1. थाइरॉइड ग्रंथि गलगंड</td></tr><tr><td>b. विटामिन ए की कमी</td><td>2. सूखा रोग रिकेट्स</td></tr><tr><td>c. कैल्सियम की कमी</td><td>3. रक्त की कमी एनीमिया</td></tr><tr><td>d. आयोडीन की कमी</td><td>4. पोषणात्मक अंधापन</td></tr></tbody></table>", options: ["a-3, b-4, c-2, d-1", "a-4, b-3, c-1, d-2", "a-3, b-1, c-4, d-2", "a-2, b-4, c-1, d-3"], correct: 0 },
+            { id: 48, question: "सूची-I को सूची-II से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I (आहार प्रकार)</th><th>सूची-II (घटक)</th></tr></thead><tbody><tr><td>a. बहुद्देशीय आटा</td><td>1. गेहूं, मूंगफली व चना</td></tr><tr><td>b. बाल आहार मिश्रण</td><td>2. ज्वार, बाजरा, मूंग दाल</td></tr><tr><td>c. विन आहार मिश्रण</td><td>3. मूंगफली व चने का आटा</td></tr><tr><td>d. खमीरीकृत भोजन</td><td>4. खमीरीकृत अनाज मूंगफली</td></tr></tbody></table>", options: ["a-3, b-1, c-2, d-4", "a-1, b-3, c-4, d-2", "a-3, b-4, c-1, d-2", "a-2, b-1, c-3, d-4"], correct: 0 },
+            { id: 50, question: "सूची-I को सूची-II से सुमेलित कीजिए:<br><br><table style='width:100%; border-collapse:collapse; margin:10px 0; font-size:15px;' border='1' cellpadding='6'><thead><tr style='background:#f1f5f9; text-align:left;'><th>सूची-I (आयु वर्ग)</th><th>सूची-II (दैनिक ऊर्जा)</th></tr></thead><tbody><tr><td>a. एक से तीन वर्ष</td><td>1. उन्नीस सौ पचास कैलोरी</td></tr><tr><td>b. चार से छह वर्ष</td><td>2. इक्कीस सौ नब्बे कैलोरी</td></tr><tr><td>c. सात से नौ वर्ष</td><td>3. बारह सौ चालीस कैलोरी</td></tr><tr><td>d. दस से बारह वर्ष बालक</td><td>4. सोलह सौ नब्बे कैलोरी</td></tr></tbody></table>", options: ["a-3, b-4, c-1, d-2", "a-4, b-3, c-2, d-1", "a-3, b-1, c-4, d-2", "a-2, b-4, c-1, d-3"], correct: 0 }
+        ];
+    </script>
+
+    <!-- ✅ JS Logic Control File Path -->
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
