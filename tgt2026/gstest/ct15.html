@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medhavi Study Point - Online Test</title>
+    <link rel="stylesheet" href="../../global-style.css?v=3.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 🔒 एक्सेस कंट्रोल कोड -->
+    <script>
+        const userPlan = localStorage.getItem("user_plan");
+        if (userPlan !== "FULL" && userPlan !== "GS") {
+            alert("इस टेस्ट को देखने के लिए कृपया पहले लॉगिन करें या GS/FULL बैच जॉइन करें!");
+            window.location.href = "../gs.html"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- सुरक्षा वॉटरमार्क स्क्रीन -->
+    <div class="watermark-overlay">
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+        <div class="watermark-text">MEDHAVI STUDY POINT</div>
+    </div>
+
+    <!-- 1. लॉगिन गेट स्क्रीन -->
+    <div id="boxLoginGate" class="login-card">
+        <h2>Medhavi Study Point Test Gate</h2>
+        <p>कृपया अपना पूरा नाम दर्ज करें और टेस्ट शुरू करें.</p>
+        <input type="text" id="txtStudentName" placeholder="अपना नाम यहाँ लिखें..." required>
+        <button class="btn-main-action" onclick="validateAndStartQuiz()">परीक्षा शुरू करें 🚀</button>
+        <br><br>
+        <a href="../../homescience.html" style="color:#64748b; font-weight:600; text-decoration:none;">🔙 विषय चयन पर वापस जाएं</a>
+    </div>
+
+    <!-- 2. परीक्षा वर्कस्पेस स्क्रीन -->
+    <div id="quizWorkspace" class="hidden">
+        <div class="cbt-header" style="background: #0b1e47; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="header-left" style="text-align: center; flex: 1; min-width: 220px;">
+                <h1 style="color: #facc15; font-size: clamp(18px, 4.8vw, 28px); font-weight: 900; margin: 0; letter-spacing: 0.5px; white-space: nowrap;">MEDHAVI STUDY POINT</h1>
+                <p style="color: #ffffff; font-size: clamp(11px, 2.8vw, 14px); margin: 3px 0 0 0; opacity: 0.95; font-weight: 600; white-space: nowrap;">नवंबर 2026 — करेंट अफेयर्स विशेष टेस्ट</p>
+            </div>
+            <div class="timer-box" id="countdownTimer" style="background: #1e3a8a; border: 2px solid #3b82f6; color: #facc15; padding: 6px 14px; border-radius: 8px; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin: 0 auto;">50:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="card-panel">
+                <div class="meta-row">
+                    <div>
+                        <span class="q-badge">प्रश्न: <span id="lblCurrentNum">1</span> / <span id="lblTotalNum">0</span></span>
+                        <span class="subject-badge">करेंट अफेयर्स (नवंबर 2026)</span>
+                        <span id="lblQuestionTag" class="tag-badge"></span>
+                    </div>
+                </div>
+                <div id="boxQuestionText" class="question-text">प्रश्न लोड हो रहा है...</div>
+                <div id="boxOptionsList"></div>
+                <div class="btn-tri-grid">
+                    <button class="btn btn-prev" onclick="doNavigatePrev()">◀ पिछला</button>
+                    <button class="btn btn-clear" onclick="doClearAnswer()">Clear</button>
+                    <button class="btn btn-mark" onclick="doToggleMark()">⭐ Mark</button>
+                </div>
+                <button id="btnMainNav" class="btn-main-action" onclick="handleMainAction()">अगला ▶</button>
+            </div>
+            <div class="card-panel">
+                <div class="palette-heading">प्रश्न पैलेट ग्रिड</div>
+                <div id="boxPaletteGrid" class="grid-matrix"></div>
+                <button class="btn-submit-trigger" onclick="triggerTestSubmission()">✔ Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. रिपोर्ट डैशबोर्ड स्क्रीन -->
+    <div id="boxReportDashboard" class="report-view">
+        <div id="captureTarget" style="padding: 25px; background: white; border-radius: 12px;">
+            <div class="report-header-title">Medhavi Study Point — Result Dashboard</div>
+            <p id="lblReportStudentName" style="font-size: 18px; font-weight: bold; text-align: center; color: #0b1e47; margin-bottom: 20px;"></p>
+            <div class="grid-5-columns">
+                <div class="metric-card-wrapper"><div class="metric-card m-blue"><div id="valNetScore" class="metric-val">0 / 0</div><div class="metric-title">Score</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-green"><div id="valCorrectCount" class="metric-val">0</div><div class="metric-title">Correct</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-red"><div id="valIncorrectCount" class="metric-val">0</div><div class="metric-title">Incorrect</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-orange"><div id="valSkippedCount" class="metric-val">0</div><div class="metric-title">Skipped</div></div></div>
+                <div class="metric-card-wrapper"><div class="metric-card m-purple"><div id="valTimeConsumed" class="metric-val">00:00</div><div class="metric-title">Time</div></div></div>
+            </div>
+        </div>
+        <button class="btn-telegram-share" onclick="captureCardAndOpenGroup()">📸 रिजल्ट इमेज कॉपी करें</button>
+        <a href="../../homescience.html" class="btn-dashboard-redirect">🔙 मुख्य डैशबोर्ड पर वापस जाएं</a>
+        <div id="boxReviewAnswersList"></div>
+    </div>
+
+    <!-- 🎯 टेस्ट डेटासेट और QUIZ_KEY (नवंबर 2026 - 50 प्रश्न) -->
+    <script>
+        const QUIZ_KEY = "medhavi_november_2026_ca_test";
+
+        const dataset = [
+            { id: 1, tag: "", question: "नवंबर 2026 में मनाए गए ‘जनजातीय गौरव दिवस 2026’ के संबंध में विचार कीजिए:<br>1. यह प्रतिवर्ष 15 नवंबर को भगवान बिरसा मुंडा की जयंती के उपलक्ष्य में मनाया जाता है।<br>2. इस अवसर पर धरती आबा जनजातीय ग्राम उत्कर्ष अभियान की प्रगति की समीक्षा की गई।<br>3. यह दिवस पहली बार वर्ष 2021 में घोषित किया गया था।<br><br>सही विकल्प चुनिए:", options: ["(a) केवल 1 और 2", "(b) केवल 2 और 3", "(c) 1, 2 और 3", "(d) केवल 1 और 3"], correct: 2, explanation: "भगवान बिरसा मुंडा की जयंती 15 नवंबर को जनजातीय गौरव दिवस के रूप में मनाई जाती है। इसकी शुरुआत 2021 में हुई थी और 2026 में धरती आबा अभियान के अंतर्गत जनजातीय गांवों के समग्र विकास की समीक्षा की गई। तीनों कथन सही हैं।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/' target='_blank'>PIB Release</a>" },
+
+            { id: 2, tag: "", question: "नवंबर 2026 में ‘राष्ट्रीय कैंसर जागरूकता दिवस’ किस तिथि को मनाया गया?", options: ["(a) 4 फरवरी", "(b) 7 नवंबर", "(c) 14 नवंबर", "(d) 19 नवंबर"], correct: 1, explanation: "भारत में प्रतिवर्ष 7 नवंबर को नोबेल पुरस्कार विजेता वैज्ञानिक मैरी क्यूरी की जयंती के उपलक्ष्य में राष्ट्रीय कैंसर जागरूकता दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.mohfw.gov.in/' target='_blank'>MoHFW Official</a>" },
+
+            { id: 3, tag: "", question: "5 नवंबर 2026 को मनाए जाने वाले ‘विश्व सुनामी जागरूकता दिवस’ की स्थापना संयुक्त राष्ट्र महासभा द्वारा किस वर्ष की गई थी?", options: ["(a) 2015", "(b) 2011", "(c) 2018", "(d) 2020"], correct: 0, explanation: "संयुक्त राष्ट्र महासभा ने दिसंबर 2015 में प्रस्ताव पारित कर 5 नवंबर को विश्व सुनामी जागरूकता दिवस के रूप में नामित किया था, ताकि आपदा जोखिम न्यूनीकरण और प्रारंभिक चेतावनी प्रणालियों को मजबूत किया जा सके।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/observances/tsunami-awareness-day' target='_blank'>UN Official</a>" },
+
+            { id: 4, tag: "", question: "नवंबर 2026 में आयोजित 45वें ‘भारतीय अंतरराष्ट्रीय व्यापार मेला’ (IITF 2026) का आयोजन स्थल और तिथियाँ क्या थीं?", options: ["(a) यशोभूमि, द्वारका — 1 से 14 नवंबर 2026", "(b) जिओ वर्ल्ड सेंटर, मुंबई — 10 से 23 नवंबर 2026", "(c) भारत मंडपम, नई दिल्ली — 14 से 27 नवंबर 2026", "(d) महात्मा मंदिर, गांधीनगर — 15 से 28 नवंबर 2026"], correct: 2, explanation: "भारत व्यापार संवर्धन संगठन (ITPO) द्वारा प्रतिवर्ष 14 से 27 नवंबर तक नई दिल्ली के भारत मंडपम (प्रगति मैदान) में भारतीय अंतरराष्ट्रीय व्यापार मेले का आयोजन किया जाता है।<br><br><b>स्रोत:</b> <a href='https://indiatradefair.com/' target='_blank'>ITPO Official</a>" },
+
+            { id: 5, tag: "", question: "नवंबर 2026 में भारत के 57वें ‘भारतीय अंतरराष्ट्रीय फिल्म महोत्सव’ (IFFI 2026) का आयोजन किस राज्य में किया गया?", options: ["(a) महाराष्ट्र", "(b) केरल", "(c) कर्नाटक", "(d) गोवा"], correct: 3, explanation: "भारतीय अंतरराष्ट्रीय फिल्म महोत्सव (IFFI) का स्थायी आयोजन स्थल गोवा (पणजी) है, जहाँ प्रतिवर्ष 20 से 28 नवंबर तक यह महोत्सव आयोजित होता है।<br><br><b>स्रोत:</b> <a href='https://iffigoa.org/' target='_blank'>IFFI Official</a>" },
+
+            { id: 6, tag: "", question: "9 नवंबर 2026 को किस राज्य ने अपना 26वाँ स्थापना दिवस मनाया?", options: ["(a) उत्तराखंड", "(b) झारखंड", "(c) छत्तीसगढ़", "(d) तेलंगाना"], correct: 0, explanation: "उत्तराखंड का गठन 9 नवंबर 2000 को भारत के 27वें राज्य के रूप में हुआ था। 9 नवंबर 2026 को राज्य ने अपना 26वाँ स्थापना दिवस मनाया।<br><br><b>स्रोत:</b> <a href='https://uk.gov.in/' target='_blank'>Uttarakhand Govt</a>" },
+
+            { id: 7, tag: "", question: "15 नवंबर 2026 को झारखंड राज्य ने अपनी स्थापना के कितने वर्ष पूरे किए?", options: ["(a) 25 वर्ष", "(b) 26 वर्ष", "(c) 27 वर्ष", "(d) 24 वर्ष"], correct: 1, explanation: "झारखंड का गठन 15 नवंबर 2000 को बिहार से अलग होकर हुआ था। 15 नवंबर 2026 को राज्य ने अपनी स्थापना के 26 वर्ष पूरे किए।<br><br><b>स्रोत:</b> <a href='https://www.jharkhand.gov.in/' target='_blank'>Jharkhand Govt</a>" },
+
+            { id: 8, tag: "", question: "1 नवंबर 2026 को किन राज्यों/केंद्रशासित प्रदेशों ने अपना स्थापना/गठन दिवस मनाया?<br>1. मध्य प्रदेश और छत्तीसगढ़<br>2. कर्नाटक और केरल<br>3. हरियाणा और पंजाब<br>4. आंध्र प्रदेश और तमिलनाडु<br><br>सही विकल्प चुनिए:", options: ["(a) केवल 1 और 2", "(b) केवल 1, 2 और 3", "(c) 1, 2, 3 और 4 सभी", "(d) केवल 2 और 4"], correct: 2, explanation: "1 नवंबर को मध्य प्रदेश, छत्तीसगढ़, कर्नाटक, केरल, हरियाणा, पंजाब, आंध्र प्रदेश और तमिलनाडु सहित कई राज्यों का स्थापना दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/' target='_blank'>PIB Official</a>" },
+
+            { id: 9, tag: "", question: "नवंबर 2026 में मनाए गए ‘राष्ट्रीय विधिक सेवा दिवस’ (National Legal Services Day) के संबंध में सही कथन चुनिए:", options: ["(a) यह प्रतिवर्ष 9 नवंबर को विधिक सेवा प्राधिकरण अधिनियम, 1987 के लागू होने की स्मृति में मनाया जाता है", "(b) यह प्रतिवर्ष 26 नवंबर को मनाया जाता है", "(c) इसका संचालन केवल उच्चतम न्यायालय के न्यायाधीशों द्वारा किया जाता है", "(d) यह केवल व्यावसायिक कर विवादों के निपटारे से जुड़ा है"], correct: 0, explanation: "विधिक सेवा प्राधिकरण अधिनियम, 1987 (जो 9 नवंबर 1995 को लागू हुआ) के उपलक्ष्य में प्रतिवर्ष 9 नवंबर को राष्ट्रीय विधिक सेवा दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://nalsa.gov.in/' target='_blank'>NALSA Official</a>" },
+
+            { id: 10, tag: "", question: "11 नवंबर 2026 को भारत में ‘राष्ट्रीय शिक्षा दिवस’ किस महान स्वतंत्रता सेनानी और देश के पहले शिक्षा मंत्री की जयंती पर मनाया गया?", options: ["(a) डॉ. सर्वपल्ली राधाकृष्णन", "(b) मौलाना अबुल कलाम आज़ाद", "(c) पं. मदन मोहन मालवीय", "(d) चक्रवर्ती राजगोपालाचारी"], correct: 1, explanation: "भारत के पहले शिक्षा मंत्री मौलाना अबुल कलाम आज़ाद की जयंती 11 नवंबर को प्रतिवर्ष ‘राष्ट्रीय शिक्षा दिवस’ के रूप में मनाई जाती है।<br><br><b>स्रोत:</b> <a href='https://www.education.gov.in/' target='_blank'>Ministry of Education</a>" },
+
+            { id: 11, tag: "", question: "14 नवंबर 2026 को मनाए जाने वाले ‘विश्व मधुमेह दिवस’ (World Diabetes Day) के संदर्भ में कौन-सा कथन सही है?", options: ["(a) यह सर फ्रेडरिक बैंटिंग के जन्मदिन पर मनाया जाता है, जिन्होंने इंसुलिन की सह-खोज की थी", "(b) इसकी शुरुआत विश्व बैंक द्वारा की गई थी", "(c) यह केवल टाइप-1 मधुमेह के बच्चों तक सीमित है", "(d) यह प्रतिवर्ष 14 अक्टूबर को मनाया जाता है"], correct: 0, explanation: "14 नवंबर को सर फ्रेडरिक बैंटिंग (जिन्होंने 1922 में चार्ल्स बेस्ट के साथ इंसुलिन की खोज की थी) के जन्मदिन पर विश्व मधुमेह दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.who.int/' target='_blank'>WHO Official</a>" },
+
+            { id: 12, tag: "", question: "नवंबर 2026 में आयोजित होने वाले संयुक्त राष्ट्र जलवायु परिवर्तन सम्मेलन (COP31) की मेजबानी के संबंध में सही विकल्प कौन-सा है?", options: ["(a) बाकू, अजरबैजान", "(b) बेलेम, ब्राजील", "(c) दुबई, संयुक्त अरब अमीरात", "(d) एडिलेड, ऑस्ट्रेलिया (प्रशांत साझेदारी के साथ)"], correct: 3, explanation: "COP29 (बाकू 2024) और COP30 (बेलेम, ब्राजील 2025) के बाद COP31 (नवंबर 2026) की मेजबानी ऑस्ट्रेलिया एवं प्रशांत द्वीप देशों के साथ जुड़ी है।<br><br><b>स्रोत:</b> <a href='https://unfccc.int/' target='_blank'>UNFCCC Official</a>" },
+
+            { id: 13, tag: "", question: "16 नवंबर 2026 को भारत में ‘राष्ट्रीय प्रेस दिवस’ किस संस्था की स्थापना के उपलक्ष्य में मनाया गया?", options: ["(a) प्रसार भारती", "(b) भारतीय प्रेस परिषद (Press Council of India)", "(c) पत्र सूचना कार्यालय (PIB)", "(d) भारतीय जनसंचार संस्थान (IIMC)"], correct: 1, explanation: "भारतीय प्रेस परिषद ने 16 नवंबर 1966 से अपना विधिवत कार्य प्रारंभ किया था, इसी उपलक्ष्य में प्रतिवर्ष 16 नवंबर को राष्ट्रीय प्रेस दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.presscouncil.nic.in/' target='_blank'>Press Council of India</a>" },
+
+            { id: 14, tag: "", question: "19 नवंबर 2026 को मनाए जाने वाले ‘विश्व शौचालय दिवस’ (World Toilet Day) का प्रमुख उद्देश्य क्या है?", options: ["(a) केवल शहरी मॉल में शौचालय बनाना", "(b) जल विद्युत परियोजनाओं का विस्तार करना", "(c) वैश्विक स्वच्छता संकट से निपटना और सतत विकास लक्ष्य 6 (SDG 6) को प्राप्त करना", "(d) समुद्री परिवहन को स्वच्छ बनाना"], correct: 2, explanation: "संयुक्त राष्ट्र द्वारा 19 नवंबर को मनाया जाने वाला विश्व शौचालय दिवस वैश्विक स्वच्छता संकट से निपटने तथा 2030 तक सभी के लिए सुरक्षित स्वच्छता (SDG 6) सुनिश्चित करने पर केंद्रित है।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/observances/toilet-day' target='_blank'>UN Official</a>" },
+
+            { id: 15, tag: "", question: "नवंबर 2026 में जारी ‘वैश्विक टीवी रिपोर्ट 2026’ (Global Tuberculosis Report 2026) किस अंतरराष्ट्रीय संस्था द्वारा प्रकाशित की जाती है?", options: ["(a) विश्व स्वास्थ्य संगठन (WHO)", "(b) यूनिसेफ (UNICEF)", "(c) विश्व बैंक (World Bank)", "(d) संयुक्त राष्ट्र विकास कार्यक्रम (UNDP)"], correct: 0, explanation: "विश्व स्वास्थ्य संगठन (WHO) प्रतिवर्ष अक्टूबर–नवंबर में वैश्विक तपेदिक (TB) रिपोर्ट जारी करता है, जिसमें भारत सहित विभिन्न देशों के टीवी नियंत्रण प्रयासों का आकलन होता है।<br><br><b>स्रोत:</b> <a href='https://www.who.int/' target='_blank'>WHO Official</a>" },
+
+            { id: 16, tag: "", question: "नवंबर 2026 में ‘सतर्कता जागरूकता सप्ताह 2026’ किस केंद्रीय संस्था के तत्वावधान में आयोजित किया गया?", options: ["(a) केंद्रीय अन्वेषण ब्यूरो (CBI)", "(b) केंद्रीय सतर्कता आयोग (CVC)", "(c) प्रवर्तन निदेशालय (ED)", "(d) भारत के नियंत्रक एवं महालेखापरीक्षक (CAG)"], correct: 1, explanation: "सरदार वल्लभभाई पटेल की जयंती (31 अक्टूबर) वाले सप्ताह में केंद्रीय सतर्कता आयोग (CVC) द्वारा प्रतिवर्ष सतर्कता जागरूकता सप्ताह मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://cvc.gov.in/' target='_blank'>CVC Official</a>" },
+
+            { id: 17, tag: "", question: "नवंबर 2026 में आयोजित ‘आदि महोत्सव’ मुख्यतः किस मंत्रालय की पहल है?", options: ["(a) संस्कृति मंत्रालय", "(b) ग्रामीण विकास मंत्रालय", "(c) जनजातीय कार्य मंत्रालय (TRIFED)", "(d) सूक्ष्म, लघु एवं मध्यम उद्यम मंत्रालय"], correct: 2, explanation: "‘आदि महोत्सव’ जनजातीय कार्य मंत्रालय के अंतर्गत TRIFED द्वारा आयोजित राष्ट्रीय जनजातीय उत्सव है, जो जनजातीय शिल्प, संस्कृति, व्यंजन और वाणिज्य को मंच प्रदान करता है।<br><br><b>स्रोत:</b> <a href='https://trifed.tribal.gov.in/' target='_blank'>TRIFED Official</a>" },
+
+            { id: 18, tag: "", question: "नवंबर 2026 में मनाए गए ‘राष्ट्रीय आयुर्वेद एवं पोषण जागरूकता’ कार्यक्रमों के संदर्भ में ‘अंतरराष्ट्रीय रेडियोलॉजी दिवस’ किस तिथि को मनाया जाता है?", options: ["(a) 5 नवंबर", "(b) 12 नवंबर", "(c) 17 नवंबर", "(d) 8 नवंबर"], correct: 3, explanation: "8 नवंबर 1895 को विल्हेम कॉनराड रॉन्टगन द्वारा एक्स-रे (X-radiation) की खोज की स्मृति में प्रतिवर्ष 8 नवंबर को अंतरराष्ट्रीय रेडियोलॉजी दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.who.int/' target='_blank'>WHO / Medical Observance</a>" },
+
+            { id: 19, tag: "", question: "12 नवंबर 2026 को भारत में ‘राष्ट्रीय पक्षी दिवस’ किस प्रसिद्ध पक्षी विज्ञानी की जयंती पर मनाया गया?", options: ["(a) डॉ. सलीम अली", "(b) डॉ. एम. एस. स्वामीनाथन", "(c) डॉ. बीरबल साहनी", "(d) डॉ. राजेंद्र सिंह"], correct: 0, explanation: "‘बर्डमैन ऑफ इंडिया’ के नाम से प्रसिद्ध डॉ. सलीम अली की जयंती 12 नवंबर को भारत में राष्ट्रीय पक्षी दिवस के रूप में मनाई जाती है।<br><br><b>स्रोत:</b> <a href='https://moef.gov.in/' target='_blank'>MoEFCC Official</a>" },
+
+            { id: 20, tag: "", question: "नवंबर 2026 में मनाए जाने वाले ‘विश्व निमोनिया दिवस’ की तिथि क्या है?", options: ["(a) 10 नवंबर", "(b) 12 नवंबर", "(c) 15 नवंबर", "(d) 20 नवंबर"], correct: 1, explanation: "बच्चों और बुजुर्गों में निमोनिया की रोकथाम व उपचार के प्रति जागरूकता बढ़ाने हेतु प्रतिवर्ष 12 नवंबर को विश्व निमोनिया दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.who.int/' target='_blank'>WHO Official</a>" },
+
+            { id: 21, tag: "", question: "नवंबर 2026 में ‘लोक सेवा प्रसारण दिवस’ (Public Service Broadcasting Day) किस ऐतिहासिक घटना की स्मृति में मनाया गया?", options: ["(a) दूरदर्शन के प्रथम प्रसारण", "(b) भारत में एफएम रेडियो की शुरुआत", "(c) 12 नवंबर 1947 को महात्मा गांधी के आकाशवाणी दिल्ली आगमन", "(d) उपग्रह संचार की शुरुआत"], correct: 2, explanation: "12 नवंबर 1947 को महात्मा गांधी पहली और एकमात्र बार आकाशवाणी (All India Radio) दिल्ली के स्टूडियो आए थे और विभाजन के विस्थापितों को संबोधित किया था।<br><br><b>स्रोत:</b> <a href='https://prasarbharati.gov.in/' target='_blank'>Prasar Bharati</a>" },
+
+            { id: 22, tag: "", question: "नवंबर 2026 में ‘राष्ट्रीय नवजात सप्ताह’ (National Newborn Week) किस अवधि में मनाया गया?", options: ["(a) 1 से 7 नवंबर", "(b) 8 से 14 नवंबर", "(c) 21 से 27 नवंबर", "(d) 15 से 21 नवंबर"], correct: 3, explanation: "नवजात शिशुओं के स्वास्थ्य, उत्तरजीविता और देखभाल के महत्व पर बल देने के लिए भारत में प्रतिवर्ष 15 से 21 नवंबर तक राष्ट्रीय नवजात सप्ताह मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.nhm.gov.in/' target='_blank'>NHM Official</a>" },
+
+            { id: 23, tag: "", question: "नवंबर 2026 में आयोजित ‘प्रवासी भारतीय दिवस’ पंजीकरण एवं तैयारी बैठकों के संदर्भ में 17 नवंबर को कौन-सा दिवस मनाया जाता है?", options: ["(a) राष्ट्रीय मिर्गी दिवस (National Epilepsy Day)", "(b) राष्ट्रीय युवा दिवस", "(c) राष्ट्रीय विज्ञान दिवस", "(d) राष्ट्रीय मतदाता दिवस"], correct: 0, explanation: "मिर्गी (Epilepsy) रोग के प्रति जागरूकता और भ्रांतियों को दूर करने के लिए भारत में प्रतिवर्ष 17 नवंबर को राष्ट्रीय मिर्गी दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.mohfw.gov.in/' target='_blank'>MoHFW Official</a>" },
+
+            { id: 24, tag: "", question: "नवंबर 2026 में भारत के किस केंद्रशासित प्रदेश में उच्च ऊँचाई वाले शीतकालीन पर्यटन और सीमा अवसंरचना समीक्षा बैठक आयोजित की गई?", options: ["(a) अंडमान और निकोबार द्वीपसमूह", "(b) लद्दाख", "(c) लक्षद्वीप", "(d) दादरा और नगर हवेली"], correct: 1, explanation: "नवंबर माह में शीत ऋतु के आगमन के साथ लद्दाख में सीमा सड़क संगठन (BRO) की कनेक्टिविटी और शीतकालीन पर्यटन व्यवस्थाओं की समीक्षा की जाती है।<br><br><b>स्रोत:</b> <a href='https://www.pib.gov.in/' target='_blank'>PIB Official</a>" },
+
+           { id: 25, tag: "", question: "नवंबर 2026 में मनाए गए ‘विश्व दर्शन दिवस’ (World Philosophy Day) के संबंध में सही कथन चुनिए:", options: ["(a) यह प्रतिवर्ष 1 नवंबर को मनाया जाता है", "(b) इसका आयोजन केवल भारतीय दर्शन परिषद करती है", "(c) यह प्रतिवर्ष नवंबर माह के तीसरे गुरुवार को UNESCO द्वारा मनाया जाता है", "(d) यह केवल प्राचीन ग्रीक दर्शन से संबंधित है"], correct: 2, explanation: "UNESCO द्वारा प्रतिवर्ष नवंबर के तीसरे गुरुवार (2026 में 19 नवंबर) को विश्व दर्शन दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.unesco.org/en/days/philosophy' target='_blank'>UNESCO Official</a>" },
+
+            { id: 26, tag: "", question: "20 नवंबर 2026 को मनाए जाने वाले ‘विश्व बाल दिवस’ (World Children's Day) के संदर्भ में संयुक्त राष्ट्र बाल अधिकार अभिसमय (UNCRC) किस वर्ष अपनाया गया था?", options: ["(a) 1979", "(b) 1985", "(c) 1995", "(d) 1989"], correct: 3, explanation: "संयुक्त राष्ट्र महासभा ने 20 नवंबर 1959 को बाल अधिकारों की घोषणा की थी और 20 नवंबर 1989 को बाल अधिकार अभिसमय (UNCRC) को अपनाया था।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/observances/world-childrens-day' target='_blank'>UN Official</a>" },
+
+            { id: 27, tag: "", question: "20 नवंबर 2026 को ‘अफ्रीका औद्योगीकरण दिवस’ (Africa Industrialization Day) के साथ भारत–अफ्रीका सहयोग में किस क्षेत्र पर विशेष ध्यान दिया जाता है?", options: ["(a) मूल्य संवर्धन, स्थानीय विनिर्माण और हरित औद्योगीकरण", "(b) केवल कच्चे खनिजों का अनप्रसंस्कृत निर्यात", "(c) केवल कृषि भूमि का अधिग्रहण", "(d) समुद्री मत्स्य पालन पर प्रतिबंध"], correct: 0, explanation: "20 नवंबर को संयुक्त राष्ट्र द्वारा अफ्रीका औद्योगीकरण दिवस मनाया जाता है, जिसमें अफ्रीका के सतत औद्योगिक विकास, मूल्य संवर्धन और वैश्विक साझेदारी पर बल दिया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/observances/africa-industrialization-day' target='_blank'>UN Official</a>" },
+
+            { id: 28, tag: "", question: "नवंबर 2026 में जारी ‘कौमी एकता सप्ताह’ (National Integration Week) की अवधि क्या है?", options: ["(a) 1 से 7 नवंबर", "(b) 19 से 25 नवंबर", "(c) 14 से 20 नवंबर", "(d) 24 से 30 नवंबर"], correct: 1, explanation: "देश में सांप्रदायिक सद्भाव, राष्ट्रीय एकता और अखंडता को बढ़ावा देने के लिए प्रतिवर्ष 19 से 25 नवंबर तक कौमी एकता सप्ताह मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.mha.gov.in/' target='_blank'>MHA Official</a>" },
+
+            { id: 29, tag: "", question: "नवंबर 2026 में मनाए जाने वाले ‘विश्व मत्स्य पालन दिवस’ (World Fisheries Day) की तिथि क्या है?", options: ["(a) 16 नवंबर", "(b) 19 नवंबर", "(c) 21 नवंबर", "(d) 26 नवंबर"], correct: 2, explanation: "सतत मत्स्य पालन, जलीय पारिस्थितिकी तंत्र के संरक्षण और मछुआरा समुदायों की आजीविका के महत्व को रेखांकित करने हेतु प्रतिवर्ष 21 नवंबर को विश्व मत्स्य पालन दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://dof.gov.in/' target='_blank'>Dept of Fisheries</a>" },
+
+            { id: 30, tag: "", question: "21 नवंबर 2026 को मनाए जाने वाले ‘विश्व टेलीविजन दिवस’ के संदर्भ में संयुक्त राष्ट्र ने किस वर्ष पहला विश्व टेलीविजन मंच आयोजित किया था?", options: ["(a) 1986", "(b) 1991", "(c) 2001", "(d) 1996"], correct: 3, explanation: "संयुक्त राष्ट्र ने 21–22 नवंबर 1996 को पहला विश्व टेलीविजन मंच आयोजित किया था, जिसके उपलक्ष्य में प्रतिवर्ष 21 नवंबर को विश्व टेलीविजन दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/observances/world-television-day' target='_blank'>UN Official</a>" },
+
+            { id: 31, tag: "", question: "नवंबर 2026 में ‘राष्ट्रीय कैडेट कोर’ (NCC) का स्थापना दिवस किस दिन मनाया जाता है?", options: ["(a) नवंबर माह के चौथे रविवार को", "(b) 15 नवंबर को", "(c) 1 नवंबर को", "(d) 30 नवंबर को"], correct: 0, explanation: "राष्ट्रीय कैडेट कोर (NCC) की स्थापना 1948 में हुई थी और इसका स्थापना दिवस प्रतिवर्ष नवंबर माह के चौथे रविवार को मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://indiancc.nic.in/' target='_blank'>NCC Official</a>" },
+
+            { id: 32, tag: "", question: "25 नवंबर 2026 को मनाए जाने वाले ‘महिलाओं के विरुद्ध हिंसा उन्मूलन के लिए अंतरराष्ट्रीय दिवस’ से प्रारंभ होने वाले 16 दिवसीय अभियान का समापन किस तिथि को होता है?", options: ["(a) 1 दिसंबर (विश्व एड्स दिवस)", "(b) 10 दिसंबर (मानवाधिकार दिवस)", "(c) 5 दिसंबर (विश्व मृदा दिवस)", "(d) 25 दिसंबर (सुशासन दिवस)"], correct: 1, explanation: "25 नवंबर (महिलाओं के विरुद्ध हिंसा उन्मूलन दिवस) से शुरू होने वाला ‘UNiTE 16 Days of Activism’ अभियान 10 दिसंबर (मानवाधिकार दिवस) को समाप्त होता है।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/observances/ending-violence-against-women-day' target='_blank'>UN Official</a>" },
+
+            { id: 33, tag: "", question: "26 नवंबर 2026 को भारत में ‘संविधान दिवस’ (Constitution Day) मनाया गया। भारत की संविधान सभा ने संविधान को किस वर्ष अंगीकृत किया था?", options: ["(a) 26 नवंबर 1947", "(b) 26 नवंबर 1948", "(c) 26 नवंबर 1949", "(d) 26 जनवरी 1950"], correct: 2, explanation: "संविधान सभा ने 26 नवंबर 1949 को भारत के संविधान को अंगीकृत, अधिनियमित और आत्मार्पित किया था, जो 26 जनवरी 1950 को पूर्णतः लागू हुआ।<br><br><b>स्रोत:</b> <a href='https://legislative.gov.in/' target='_blank'>Ministry of Law & Justice</a>" },
+
+            { id: 34, tag: "", question: "26 नवंबर 2026 को भारत में ‘राष्ट्रीय दुग्ध दिवस’ (National Milk Day) किस व्यक्ति के जन्मदिन के उपलक्ष्य में मनाया गया?", options: ["(a) डॉ. एम. एस. स्वामीनाथन", "(b) त्रिभुवनदास पटेल", "(c) अमृता पटेल", "(d) डॉ. वर्गीज कुरियन"], correct: 3, explanation: "भारत में ‘श्वेत क्रांति के जनक’ डॉ. वर्गीज कुरियन की जयंती 26 नवंबर को प्रतिवर्ष राष्ट्रीय दुग्ध दिवस के रूप में मनाई जाती है।<br><br><b>स्रोत:</b> <a href='https://dahd.nic.in/' target='_blank'>DAHD Official</a>" },
+
+            { id: 35, tag: "", question: "नवंबर 2026 में ‘भारतीय अंगदान दिवस’ (Indian Organ Donation Day) किस मंत्रालय द्वारा आयोजित किया जाता है?", options: ["(a) स्वास्थ्य एवं परिवार कल्याण मंत्रालय (NOTTO)", "(b) आयुष मंत्रालय", "(c) सामाजिक न्याय और अधिकारिता मंत्रालय", "(d) विज्ञान एवं प्रौद्योगिकी मंत्रालय"], correct: 0, explanation: "स्वास्थ्य एवं परिवार कल्याण मंत्रालय के अंतर्गत राष्ट्रीय अंग एवं ऊतक प्रत्यारोपण संगठन (NOTTO) द्वारा अंगदान के प्रति जागरूकता बढ़ाने हेतु यह दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://notto.abdm.gov.in/' target='_blank'>NOTTO Official</a>" },
+
+            { id: 36, tag: "", question: "नवंबर 2026 में ‘विश्व रोगाणुरोधी प्रतिरोध जागरूकता सप्ताह’ (WAAW 2026) प्रतिवर्ष किस निश्चित तिथि-अवधि में मनाया जाता है?", options: ["(a) 1 से 7 नवंबर", "(b) 18 से 24 नवंबर", "(c) 10 से 16 नवंबर", "(d) 24 से 30 नवंबर"], correct: 1, explanation: "विश्व स्वास्थ्य संगठन (WHO) द्वारा रोगाणुरोधी प्रतिरोध (AMR) के प्रति वैश्विक जागरूकता बढ़ाने के लिए प्रतिवर्ष 18 से 24 नवंबर तक यह सप्ताह मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.who.int/campaigns/world-amr-awareness-week' target='_blank'>WHO Official</a>" },
+
+            { id: 37, tag: "", question: "नवंबर 2026 में आयोजित ‘आसियान–भारत शिखर सम्मेलन’ एवं ‘पूर्वी एशिया शिखर सम्मेलन’ (EAS) के संदर्भ में भारत की किस नीति पर जोर दिया जाता है?", options: ["(a) नेबरहुड फर्स्ट नीति", "(b) लुक वेस्ट नीति", "(c) एक्ट ईस्ट नीति (Act East Policy)", "(d) सागरमाला नीति"], correct: 2, explanation: "आसियान और पूर्वी एशिया शिखर सम्मेलनों में भारत की ‘एक्ट ईस्ट नीति’ (Act East Policy) और हिंद-प्रशांत महासागर पहल (IPOI) केंद्रीय स्तंभ हैं।<br><br><b>स्रोत:</b> <a href='https://www.mea.gov.in/' target='_blank'>MEA Official</a>" },
+
+            { id: 38, tag: "", question: "नवंबर 2026 में मनाए जाने वाले ‘अंतरराष्ट्रीय सहिष्णुता दिवस’ (International Day for Tolerance) की तिथि क्या है?", options: ["(a) 10 नवंबर", "(b) 14 नवंबर", "(c) 21 नवंबर", "(d) 16 नवंबर"], correct: 3, explanation: "संयुक्त राष्ट्र और UNESCO द्वारा संस्कृतियों एवं लोगों के बीच आपसी समझ और सहिष्णुता को बढ़ावा देने के लिए प्रतिवर्ष 16 नवंबर को यह दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/observances/tolerance-day' target='_blank'>UN Official</a>" },
+
+            { id: 39, tag: "", question: "नवंबर 2026 में ‘विश्व सड़क यातायात पीड़ित स्मरण दिवस’ (World Day of Remembrance for Road Traffic Victims) किस दिन मनाया जाता है?", options: ["(a) नवंबर माह के तीसरे रविवार को", "(b) 1 नवंबर को", "(c) 15 नवंबर को", "(d) 30 नवंबर को"], correct: 0, explanation: "सड़क दुर्घटनाओं में मारे गए और घायल हुए लोगों तथा उनके परिवारों की स्मृति में प्रतिवर्ष नवंबर के तीसरे रविवार (2026 में 15 नवंबर) को यह दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/observances/road-traffic-victims-day' target='_blank'>UN Official</a>" },
+
+            { id: 40, tag: "", question: "नवंबर 2026 में मनाए जाने वाले ‘अंतरराष्ट्रीय पुरुष दिवस’ (International Men's Day) की तिथि क्या है?", options: ["(a) 14 नवंबर", "(b) 19 नवंबर", "(c) 25 नवंबर", "(d) 29 नवंबर"], correct: 1, explanation: "पुरुषों एवं लड़कों के स्वास्थ्य, सकारात्मक भूमिका और लैंगिक समानता को बढ़ावा देने हेतु प्रतिवर्ष 19 नवंबर को अंतरराष्ट्रीय पुरुष दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://internationalmensday.com/' target='_blank'>Global Observance</a>" },
+
+            { id: 41, tag: "", question: "नवंबर 2026 में आयोजित ‘भारतीय तटरक्षक बल’ एवं ‘भारतीय नौसेना’ के तटीय सुरक्षा अभ्यास का क्या नाम है, जो सभी तटीय राज्यों व केंद्रशासित प्रदेशों को शामिल करता है?", options: ["(a) अभ्यास मालाबार", "(b) अभ्यास वरुण", "(c) अभ्यास सी विजिल (Sea Vigil)", "(d) अभ्यास संप्रति"], correct: 2, explanation: "‘सी विजिल’ (Sea Vigil) भारतीय नौसेना और तटरक्षक बल द्वारा सभी तटीय राज्यों और केंद्रशासित प्रदेशों की भागीदारी के साथ आयोजित अखिल भारतीय तटीय रक्षा अभ्यास है।<br><br><b>स्रोत:</b> <a href='https://www.indiannavy.nic.in/' target='_blank'>Indian Navy</a>" },
+
+            { id: 42, tag: "", question: "नवंबर 2026 में ‘केंद्रीय अप्रत्यक्ष कर एवं सीमा शुल्क बोर्ड’ (CBIC) तथा राज्य कर विभागों द्वारा जीएसटी संग्रह की मासिक रिपोर्ट जारी की जाती है। भारत में वस्तु एवं सेवा कर (GST) किस संविधान संशोधन अधिनियम द्वारा लागू किया गया था?", options: ["(a) 99वाँ संशोधन अधिनियम", "(b) 100वाँ संशोधन अधिनियम", "(c) 102वाँ संशोधन अधिनियम", "(d) 101वाँ संशोधन अधिनियम"], correct: 3, explanation: "भारत में वस्तु एवं सेवा कर (GST) 101वें संविधान संशोधन अधिनियम, 2016 के माध्यम से 1 जुलाई 2017 को लागू किया गया था।<br><br><b>स्रोत:</b> <a href='https://gstcouncil.gov.in/' target='_blank'>GST Council</a>" },
+
+            { id: 43, tag: "", question: "नवंबर 2026 में ‘गुरु नानक देव जी’ के प्रकाश पर्व (गुरुपर्व) के उपलक्ष्य में किस कॉरिडोर के माध्यम से भारतीय श्रद्धालुओं की यात्रा सुगम होती है?", options: ["(a) करतारपुर साहिब कॉरिडोर", "(b) वाघा–अटारी रेल कॉरिडोर", "(c) मुनाबाव–खोखरापार कॉरिडोर", "(d) मोरेह–तामू कॉरिडोर"], correct: 0, explanation: "करतारपुर साहिब कॉरिडोर भारत के पंजाब राज्य के गुरदासपुर स्थित डेरा बाबा नानक को पाकिस्तान के नारोवाल जिले स्थित गुरुद्वारा दरबार साहिब करतारपुर से जोड़ता है।<br><br><b>स्रोत:</b> <a href='https://www.mha.gov.in/' target='_blank'>MHA Official</a>" },
+
+            { id: 44, tag: "", question: "नवंबर 2026 में ‘रानी लक्ष्मीबाई जयंती’ (19 नवंबर) के अवसर पर उत्तर प्रदेश के किस शहर में विशेष शौर्य एवं सांस्कृतिक कार्यक्रम आयोजित किए जाते हैं?", options: ["(a) कानपुर", "(b) झाँसी", "(c) मेरठ", "(d) प्रयागराज"], correct: 1, explanation: "1857 के प्रथम स्वतंत्रता संग्राम की वीरांगना रानी लक्ष्मीबाई की जयंती 19 नवंबर को झाँसी दुर्ग और उत्तर प्रदेश के विभिन्न स्थानों पर मनाई जाती है।<br><br><b>स्रोत:</b> <a href='https://up.gov.in/' target='_blank'>UP Govt</a>" },
+
+            { id: 45, tag: "", question: "नवंबर 2026 में ‘विश्व शाकाहारी दिवस’ (World Vegan Day) किस तिथि को मनाया गया?", options: ["(a) 1 अक्टूबर", "(b) 16 अक्टूबर", "(c) 1 नवंबर", "(d) 15 नवंबर"], correct: 2, explanation: "पशु कल्याण, मानव स्वास्थ्य और पर्यावरण संरक्षण हेतु वीगन जीवनशैली को बढ़ावा देने के लिए प्रतिवर्ष 1 नवंबर को विश्व शाकाहारी दिवस (World Vegan Day) मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.vegansociety.com/' target='_blank'>The Vegan Society</a>" },
+
+            { id: 46, tag: "", question: "नवंबर 2026 में ‘पत्रकारों के विरुद्ध अपराधों की दंडमुक्ति समाप्त करने का अंतरराष्ट्रीय दिवस’ किस तिथि को मनाया गया?", options: ["(a) 3 मई", "(b) 16 नवंबर", "(c) 24 अक्टूबर", "(d) 2 नवंबर"], correct: 3, explanation: "संयुक्त राष्ट्र महासभा द्वारा 2 नवंबर को पत्रकारों और मीडिया कर्मियों के विरुद्ध होने वाले अपराधों की दंडमुक्ति समाप्त करने का अंतरराष्ट्रीय दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/observances/end-impunity-crimes-against-journalists' target='_blank'>UN Official</a>" },
+
+            { id: 47, tag: "", question: "नवंबर 2026 में मनाए जाने वाले ‘शांति और विकास के लिए विश्व विज्ञान दिवस’ की तिथि क्या है?", options: ["(a) 10 नवंबर", "(b) 11 नवंबर", "(c) 28 फरवरी", "(d) 23 अगस्त"], correct: 0, explanation: "समाज में विज्ञान की महत्वपूर्ण भूमिका और उभरते वैज्ञानिक मुद्दों पर सार्वजनिक संवाद बढ़ाने हेतु UNESCO द्वारा प्रतिवर्ष 10 नवंबर को यह दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.unesco.org/en/days/science-peace-development' target='_blank'>UNESCO Official</a>" },
+
+            { id: 48, tag: "", question: "नवंबर 2026 में मनाए जाने वाले ‘विश्व मधुमेह दिवस’ का वैश्विक प्रतीक चिह्न (Logo) क्या है?", options: ["(a) लाल रिबन", "(b) नीला वृत्त (Blue Circle)", "(c) हरा त्रिकोण", "(d) गुलाबी रिबन"], correct: 1, explanation: "नीला वृत्त (Blue Circle) मधुमेह के लिए वैश्विक प्रतीक है, जो 2007 में संयुक्त राष्ट्र प्रस्ताव के बाद मधुमेह के विरुद्ध वैश्विक समुदाय की एकता को दर्शाता है।<br><br><b>स्रोत:</b> <a href='https://idf.org/' target='_blank'>International Diabetes Federation</a>" },
+
+            { id: 49, tag: "", question: "नवंबर 2026 में ‘फिलिस्तीनी लोगों के साथ एकजुटता का अंतरराष्ट्रीय दिवस’ संयुक्त राष्ट्र द्वारा किस तिथि को मनाया जाता है?", options: ["(a) 24 नवंबर", "(b) 26 नवंबर", "(c) 29 नवंबर", "(d) 30 नवंबर"], correct: 2, explanation: "संयुक्त राष्ट्र महासभा के प्रस्ताव 32/40 B के अनुसार प्रतिवर्ष 29 नवंबर को फिलिस्तीनी लोगों के साथ एकजुटता का अंतरराष्ट्रीय दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/observances/international-day-of-solidarity-with-the-palestinian-people' target='_blank'>UN Official</a>" },
+
+            { id: 50, tag: "", question: "नवंबर 2026 में ‘रासायनिक युद्ध के सभी पीड़ितों के लिए स्मरण दिवस’ (Day of Remembrance for all Victims of Chemical Warfare) कब मनाया जाता है?", options: ["(a) 5 नवंबर", "(b) 19 नवंबर", "(c) 25 नवंबर", "(d) 30 नवंबर"], correct: 3, explanation: "रासायनिक हथियारों के खतरे को समाप्त करने और शांति, सुरक्षा तथा बहुपक्षवाद को बढ़ावा देने हेतु संयुक्त राष्ट्र द्वारा प्रतिवर्ष 30 नवंबर को यह दिवस मनाया जाता है।<br><br><b>स्रोत:</b> <a href='https://www.un.org/en/observances/chemical-warfare-victims-day' target='_blank'>UN Official</a>" }
+        ];
+    </script>
+
+    <script src="../../global-quiz.js?v=3.0"></script>
+</body>
+</html>
